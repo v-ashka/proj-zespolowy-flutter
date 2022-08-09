@@ -45,7 +45,7 @@ class _DashboardState extends State<Dashboard> {
 
     // print("${data['userData']['cars']}");
     return Scaffold(
-      backgroundColor: primaryCol,
+      backgroundColor: primaryColor,
       body: SafeArea(
         child: Stack(
           children: [

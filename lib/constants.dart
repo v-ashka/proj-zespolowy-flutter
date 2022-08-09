@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 // basic color app
 
-const primaryCol = Color(0xff42a2ba);
-//background color grey-white
-const primaryBgCol = Color(0xffdedede);
-// secondary color
-const secondaryCol = Color(0xff254980);
+const primaryColor = Color(0xffffffff);
+const primaryBgColor = Color(0xffdedede); //background color grey-white
+const secondaryColor = Color(0xff254980); // secondary color
+const buttonColor = Color(0xff00B2FF); //button color

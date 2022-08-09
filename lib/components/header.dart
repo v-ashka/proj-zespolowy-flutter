@@ -27,7 +27,7 @@ class _HeaderState extends State<Header> {
             ),
             height: widget.size.height *0.1,
             decoration: BoxDecoration(
-              color: primaryCol,
+              color: primaryColor,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,

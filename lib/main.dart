@@ -22,12 +22,12 @@ class MyApp extends StatelessWidget {
       },
       title: 'myOrganizer',
       theme: ThemeData(
-          scaffoldBackgroundColor: primaryCol,
-          colorScheme: ThemeData().colorScheme.copyWith(primary: primaryCol),
+          scaffoldBackgroundColor: primaryColor,
+          fontFamily: 'Lato',
+          colorScheme: ThemeData().colorScheme.copyWith(primary: primaryColor),
           appBarTheme: AppBarTheme(
-              color: primaryCol
+              color: primaryColor
           ),
-          textTheme: Theme.of(context).textTheme.apply(bodyColor: primaryBgCol),
           visualDensity: VisualDensity.adaptivePlatformDensity
       ),
     );

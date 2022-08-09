@@ -94,7 +94,7 @@ class _DashboardContainerState extends State<DashboardContainer> {
             child: Container(
               margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
               decoration: BoxDecoration(
-                color: primaryBgCol,
+                color: primaryBgColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25),
                   topRight: Radius.circular(25),

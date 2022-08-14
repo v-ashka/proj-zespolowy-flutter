@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "carsVisible": false,
+    "documentsVisible": true,
+    "receiptVisible": true,
+    "otherProductsVisible": false},
+  "name": "Andrzej",
+  "surname": "Wąsacz",
+  "cars":
+  {
+    "name": "polonez caro", "engine": "1.8ohv", "production_data": "1989",
+    "name": "opel corsa B", "engine": "1.6", "production_data": "1999"
+},
+"medical_documents": {
+  "title": "Poziom cukrzycy we krwi",
+  "content": "Poziom za wysoki",
+  "createdAt": "26-05-2022"
+  }
+}

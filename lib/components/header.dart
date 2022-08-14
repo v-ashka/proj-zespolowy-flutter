@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:string_validator/string_validator.dart' as Validate;
 
 class Header extends StatefulWidget {
   const Header({Key? key, required this.data, required this.size})
@@ -13,10 +16,11 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
-  bool isSwitched = true;
+
   @override
   Widget build(BuildContext context) {
     void _onSettingsPressed() {
+      bool isSwitched =  Validate.toBoolean(widget.data['userData']['settings']['receiptVisible']);
       showModalBottomSheet(
           context: context,
           builder: (context) {
@@ -28,7 +32,11 @@ class _HeaderState extends State<Header> {
                   subtitle: Text("$isSwitched"),
                   value: isSwitched,
                   onChanged: (bool value) {
-                    setState(() => isSwitched = value);
+                    setState(() {
+                      isSwitched = value;
+                      print(value);
+                    }
+                    );
                   },
                 )
               ]);
@@ -36,7 +44,7 @@ class _HeaderState extends State<Header> {
           });
     };
 
-    // print("${widget.data}");
+    print("${widget.data}");
     return Container(
       height: widget.size.height * 0.3,
       child: Stack(
@@ -106,7 +114,7 @@ class _HeaderState extends State<Header> {
                 SizedBox(
                   //crossAxisAlignment: CrossAxisAlignment.center,
                   //mainAxisAlignment: MainAxisAlignment.start,
-                  height: 100,
+                  height: 50,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(15, 10, 20, 0),
                     child: Text(
@@ -115,7 +123,7 @@ class _HeaderState extends State<Header> {
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 1.0,
-                            fontSize: 20,
+                            fontSize: 12,
                           ),
                     ),
                   ),

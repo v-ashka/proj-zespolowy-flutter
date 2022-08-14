@@ -40,13 +40,13 @@ class _DashboardState extends State<Dashboard> {
     data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as Map;
     Size? size = MediaQuery.of(context).size;
 
-    // print("${data['userData']['cars']}");
+    print("isReceiptVisible? :${data['userData']['settings']['receiptVisible']}");
     return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
-            image: DecorationImage(image: AssetImage("assets/background.png"))
+            image: DecorationImage(image: AssetImage("assets/background.png"), fit: BoxFit.fill)
           ),
           child: Stack(
             children: [

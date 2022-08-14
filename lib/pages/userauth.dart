@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:http/http.dart' as http;
 
 class UserAuth extends StatefulWidget {
   const UserAuth({Key? key}) : super(key: key);
@@ -9,6 +13,20 @@ class UserAuth extends StatefulWidget {
 }
 
 class _UserAuthState extends State<UserAuth> {
+  Map _userData = {};
+
+  Future<void> readJson() async {
+    final String response = await rootBundle.loadString('assets/data/temp.json');
+    final data = await json.decode(response);
+    setState(() {
+      _userData = data;
+    });
+    Navigator.pushNamed(context, '/dashboard',
+        arguments: {"userData": _userData});
+  }
+
+
+
   void authorizeUser() async {
     Map userData = {};
     print("Check user data");
@@ -16,6 +34,7 @@ class _UserAuthState extends State<UserAuth> {
     print("login succesfull/failed");
 
     userData = {
+      "settings": {"carsVisible": "true", "documentsVisible": "false", "receiptVisible": "false", "otherProductsVisible": "false"},
       "name": "Andrzej",
       "surname": "Wąsacz",
       "cars": {
@@ -119,7 +138,7 @@ class _UserAuthState extends State<UserAuth> {
                       child: ElevatedButton(
                           style: style,
                           onPressed: () {
-                            authorizeUser();
+                            readJson();
                           },
                           child: const Text(
                             "Zaloguj się",
@@ -129,7 +148,9 @@ class _UserAuthState extends State<UserAuth> {
                      Padding(
                       padding: EdgeInsets.fromLTRB(15,37,15,22),
                       child: TextButton(
-                        onPressed: () { authorizeUser();},
+                        onPressed: () {
+                          authorizeUser();
+                          },
                         child: Text.rich(
                           TextSpan(
                             style: TextStyle(color: const Color(0xff272727)),

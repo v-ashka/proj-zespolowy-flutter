@@ -126,6 +126,7 @@ class _DashboardContainerState extends State<DashboardContainer> {
 
     print('szerokosc (px): ${widget.size.width}');
     print('wysokosc (px): ${widget.size.height}');
+    print(widget.data['userData']['settings']['receiptVisible'].runtimeType);
     return Column(
       children: [
         Expanded(
@@ -191,7 +192,7 @@ class _DashboardContainerState extends State<DashboardContainer> {
                     ],
                   ),
                   Visibility(
-                    visible: true,
+                    visible: widget.data['userData']['settings']['receiptVisible'] == true ? (true):(false),
                     child: Row(
                       children: [
                         Expanded(
@@ -199,7 +200,7 @@ class _DashboardContainerState extends State<DashboardContainer> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
                             child: Container(
-                              height: 140,
+                              height: 120,
                               width: (widget.size.width / 2),
                               margin: EdgeInsets.symmetric(horizontal: 10),
                               child: Padding(
@@ -220,12 +221,12 @@ class _DashboardContainerState extends State<DashboardContainer> {
                                     SizedBox(height: 10),
                                     Text(
                                         "Aktualna liczba paragonów: ${widget.data['userData']['cars'].length}"),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        createAlbum();
-                                      },
-                                      child: Text("kliknij mnie łobuizie"),
-                                    ),
+                                    // ElevatedButton(
+                                    //   onPressed: () {
+                                    //     createAlbum();
+                                    //   },
+                                    //   child: Text("kliknij mnie łobuizie"),
+                                    // ),
                                   ],
                                 ),
                               ),

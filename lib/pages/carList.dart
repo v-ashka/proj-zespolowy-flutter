@@ -64,12 +64,15 @@ class _carListState extends State<carList> {
                       height: 120,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                                Column(
-                                  children: [
-                                    Text("${carsData[index]['name']}"),
-                                  ],
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(25,10,0,0),
+                                  child: Column(
+                                    children: [
+                                      Text("${carsData[index]['name']}"),
+                                    ],
+                                  ),
                                 ),
                                 FittedBox(child: Image.asset("assets/asterka.jpg"), fit: BoxFit.fill)
                           ],

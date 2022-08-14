@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         '/user_auth': (context) => UserAuth(),
         '/dashboard': (context) => Dashboard(),
       },
-      title: 'myOrganizer',
+      title: 'OrganizerPRO',
       theme: ThemeData(
           scaffoldBackgroundColor: primaryColor,
           fontFamily: 'Lato',

@@ -29,9 +29,6 @@ class _DashboardState extends State<Dashboard> {
     print("rs: $test" );
   }
 
-
-
-
   @override
   void initState() {
     // TODO: implement initState
@@ -45,19 +42,24 @@ class _DashboardState extends State<Dashboard> {
 
     // print("${data['userData']['cars']}");
     return Scaffold(
-      backgroundColor: primaryColor,
+      backgroundColor: Color(0xffF8F8F8),
       body: SafeArea(
-        child: Stack(
-          children: [
-            Header(
-              data: data,
-              size: size,
-            ),
-            DashboardContainer(
-              data: data,
-              size: size,
-            )
-          ],
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(image: AssetImage("assets/background.png"))
+          ),
+          child: Stack(
+            children: [
+              Header(
+                data: data,
+                size: size,
+              ),
+              DashboardContainer(
+                data: data,
+                size: size,
+              )
+            ],
+          ),
         )
       ),
     );

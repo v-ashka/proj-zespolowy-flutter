@@ -2,50 +2,129 @@ import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 
 class Header extends StatefulWidget {
-  const Header({Key? key, required this.data, required this.size}) : super(key: key);
+  const Header({Key? key, required this.data, required this.size})
+      : super(key: key);
 
   final Map data;
   final Size size;
+
   @override
   State<Header> createState() => _HeaderState();
 }
 
 class _HeaderState extends State<Header> {
-
+  bool isSwitched = true;
   @override
   Widget build(BuildContext context) {
+    void _onSettingsPressed() {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              return Column(children: <Widget>[
+                SwitchListTile(
+                  title: Text("Moduł pojazdy"),
+                  subtitle: Text("$isSwitched"),
+                  value: isSwitched,
+                  onChanged: (bool value) {
+                    setState(() => isSwitched = value);
+                  },
+                )
+              ]);
+            });
+          });
+    };
+
     // print("${widget.data}");
     return Container(
-      height: widget.size.height * 0.1,
+      height: widget.size.height * 0.3,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Container(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               left: 10,
               right: 10,
             ),
-            height: widget.size.height *0.1,
-            decoration: BoxDecoration(
-              color: primaryColor,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
+            //height: 126,
+            child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                  child: Text(
-                    'Witaj ${widget.data['userData']['name']} ${widget.data['userData']['surname']}!',
-                    style: Theme.of(context).textTheme.headline5?.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.w300, letterSpacing: 2.0,
+                  padding: const EdgeInsets.fromLTRB(15, 25, 0, 0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: const TextSpan(
+                            text: 'Organizer',
+                            style: TextStyle(
+                                fontSize: 26,
+                                color: Colors.black,
+                                fontFamily: 'Lato'),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: 'PRO',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      color: buttonColor))
+                            ]),
+                      ),
+                      Spacer(),
+                      Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: IconButton(
+                              onPressed: () => _onSettingsPressed(),
+                              icon: Icon(Icons.notifications, size: 25))),
+                      Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: IconButton(
+                              onPressed: () => _onSettingsPressed(),
+                              icon: Icon(Icons.settings, size: 25))),
+                    ],
+                  ),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 50, 0, 0),
+                      child: Text(
+                        'Witaj ${widget.data['userData']['name']}!',
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 2.0,
+                              fontSize: 40,
+                            ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  //crossAxisAlignment: CrossAxisAlignment.center,
+                  //mainAxisAlignment: MainAxisAlignment.start,
+                  height: 100,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 10, 20, 0),
+                    child: Text(
+                      'Zarządzaj swoim ekranem głównym dodając lub usuwając moduły',
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.0,
+                            fontSize: 20,
+                          ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
         ],
       ),
-    );  }
+    );
+  }
 }

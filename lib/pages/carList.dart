@@ -12,16 +12,31 @@ class _carListState extends State<carList> {
 
   final carsData = [
      {
-      "name": "polonez",
+      "name": "Opel Astra J",
       "engine": "1.8hp",
       "production_date": "1994"
     },
      {
-      "name": "fiat 126p",
+      "name": "Mitsubishi Eclipse",
       "engine": "1.3",
       "production_date": "1980"
     },
      {
+      "name": "opel astra f",
+      "engine": "1.6",
+      "production_date": "2000"
+    },
+    {
+      "name": "opel astra f",
+      "engine": "1.6",
+      "production_date": "2000"
+    },
+    {
+      "name": "opel astra f",
+      "engine": "1.6",
+      "production_date": "2000"
+    },
+    {
       "name": "opel astra f",
       "engine": "1.6",
       "production_date": "2000"
@@ -59,27 +74,154 @@ class _carListState extends State<carList> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25),
                         color: Colors.white,
+
                       ),
-                      width: 50,
-                      height: 120,
+                      height: 130,
+                        width: 150,
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(25,10,0,0),
+                                Expanded(
+                                  flex: 7,
                                   child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text("${carsData[index]['name']}"),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(10, 10, 0 ,0),
+                                        child: Text("${carsData[index]['name']}", style: TextStyle(
+                                          fontSize: carsData[index]['name']!.length > 15 ? (14):(18),
+                                        ),),
+                                      ),
+                                          Padding(
+                                            padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text("OKRES WAŻNOŚCI", style: TextStyle(
+                                                  color: fontGrey,
+                                                  fontFamily: "Roboto",
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w300,
+                                                  letterSpacing: 1.2
+                                                )),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(25),
+                                                    color: bg35Grey
+                                                  ),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                                                    child: Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                      children: [
+                                                        Icon(Icons.text_snippet_outlined, color: icon70Black),
+                                                        Text("320 dni",
+                                                          style: TextStyle(
+                                                          fontFamily: "Lato",
+                                                          fontWeight: FontWeight.w400
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(25),
+                                                      color: bg35Grey
+                                                  ),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                                    child: Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                      children: [
+                                                        Icon(Icons.car_repair_outlined, color: icon70Black),
+                                                        Text("320 dni",
+                                                          style: TextStyle(
+                                                              fontFamily: "Lato",
+                                                              fontWeight: FontWeight.w400
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )
                                     ],
                                   ),
                                 ),
-                                FittedBox(child: Image.asset("assets/asterka.jpg"), fit: BoxFit.fill)
+                                // FittedBox(child: Image.asset("assets/asterka.jpg"), fit: BoxFit.fill)
+                                Expanded(
+                                  flex: 10,
+                                  child: SizedBox(
+                                    width: 200,
+                                    child: Stack(
+                                    children: [
+                                      Positioned.fill(
+                                        left: 8,
+                                        child: Container(
+                                          padding: const EdgeInsets.fromLTRB(0, 100, 200, 0),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(25),
+                                            color: main25Color,
+
+                                          ),
+                                          width: 90,
+                                          height: 150,
+                                        ),
+                                      ),
+                                      Positioned.fill(
+                                          right: 70,
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(25),
+                                                color: main50Color,
+                                              ),
+                                              width: 90,
+                                              height: 150,
+                                            ),
+                                          )
+                                      ),
+                                      Positioned.fill(
+                                        child: Align(
+                                          alignment: Alignment.topRight,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(25),
+                                            child: Image(
+                                              width: 170,
+                                              height: 150,
+                                              fit: BoxFit.cover,
+                                              alignment: Alignment(-0.5,0),
+                                              image: AssetImage("assets/asterka.jpg"),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                    ],
+                              ),
+                                  ),
+                                ),
                           ],
                         ),
                     );
                   },
-                  separatorBuilder: (BuildContext context, int index) => const Divider(),
+                  separatorBuilder: (BuildContext context, int index) => const Divider(color: Colors.transparent,),
           ),
         ),
       ),

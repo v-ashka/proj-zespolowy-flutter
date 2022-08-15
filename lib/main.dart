@@ -15,10 +15,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/carList',
+      initialRoute: '/',
       routes: {
         '/carList': (context) => carList(),
-        // '/': (context) => Loading(),
+        '/': (context) => Loading(),
         '/user_auth': (context) => UserAuth(),
         '/dashboard': (context) => Dashboard()
       },

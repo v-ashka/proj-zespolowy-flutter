@@ -21,7 +21,7 @@ class _UserAuthState extends State<UserAuth> {
     setState(() {
       _userData = data;
     });
-    Navigator.pushNamed(context, '/dashboard',
+    Navigator.pushNamed(context, '/carList',
         arguments: {"userData": _userData});
   }
 

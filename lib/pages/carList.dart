@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 
+import '../services/user.dart';
+
 class carList extends StatefulWidget {
   const carList({Key? key}) : super(key: key);
 
@@ -9,46 +11,17 @@ class carList extends StatefulWidget {
 }
 
 class _carListState extends State<carList> {
-
-  final carsData = [
-     {
-      "name": "Opel Astra J",
-      "engine": "1.8hp",
-      "production_date": "1994"
-    },
-     {
-      "name": "Mitsubishi Eclipse",
-      "engine": "1.3",
-      "production_date": "1980"
-    },
-     {
-      "name": "opel astra f",
-      "engine": "1.6",
-      "production_date": "2000"
-    },
-    {
-      "name": "opel astra f",
-      "engine": "1.6",
-      "production_date": "2000"
-    },
-    {
-      "name": "opel astra f",
-      "engine": "1.6",
-      "production_date": "2000"
-    },
-    {
-      "name": "opel astra f",
-      "engine": "1.6",
-      "production_date": "2000"
-    }
-  ];
+  Map data = {};
 
   @override
   Widget build(BuildContext context) {
+    data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as Map;
+    print("isReceiptVisible? :${data['userData']['cars'][0]['car_info']}");
+
     final size = MediaQuery.of(context).size;
     final width = size.width;
     final height = size.height;
-    print(carsData[0]);
+    // print(carsData[0]);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar:  AppBar(
@@ -68,7 +41,7 @@ class _carListState extends State<carList> {
           child:
                 ListView.separated(
                 padding: const EdgeInsets.all(20),
-                  itemCount: carsData.length,
+                  itemCount: data['userData']['cars'].length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       decoration: BoxDecoration(
@@ -90,9 +63,9 @@ class _carListState extends State<carList> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(10, 10, 0 ,0),
-                                        child: Text("${carsData[index]['name']}", style: TextStyle(
-                                          fontSize: carsData[index]['name']!.length > 15 ? (14):(18),
-                                        ),),
+                                        child: Text("${data['userData']['cars'][index]["name"]}", style: TextStyle(
+                                          fontSize: data['userData']['cars'][index]['name']!.length > 15 ? (14):(18),
+                                        ), overflow: TextOverflow.ellipsis),
                                       ),
                                           Padding(
                                             padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
@@ -116,13 +89,13 @@ class _carListState extends State<carList> {
                                                     color: bg35Grey
                                                   ),
                                                   child: Padding(
-                                                    padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                                                    padding: const EdgeInsets.fromLTRB(10,0,20,0),
                                                     child: Row(
                                                       crossAxisAlignment: CrossAxisAlignment.center,
                                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                       children: [
                                                         Icon(Icons.text_snippet_outlined, color: icon70Black),
-                                                        Text("320 dni",
+                                                        Text("${data['userData']['cars'][index]['insurance_time']} dni",
                                                           style: TextStyle(
                                                           fontFamily: "Lato",
                                                           fontWeight: FontWeight.w400
@@ -141,13 +114,13 @@ class _carListState extends State<carList> {
                                                       color: bg35Grey
                                                   ),
                                                   child: Padding(
-                                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                                    padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
                                                     child: Row(
                                                       crossAxisAlignment: CrossAxisAlignment.center,
                                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                       children: [
                                                         Icon(Icons.car_repair_outlined, color: icon70Black),
-                                                        Text("320 dni",
+                                                        Text("${data['userData']['cars'][index]['car_service_time']} dni",
                                                           style: TextStyle(
                                                               fontFamily: "Lato",
                                                               fontWeight: FontWeight.w400
@@ -207,7 +180,7 @@ class _carListState extends State<carList> {
                                               height: 150,
                                               fit: BoxFit.cover,
                                               alignment: Alignment(-0.5,0),
-                                              image: AssetImage("assets/asterka.jpg"),
+                                              image: NetworkImage("${data['userData']['cars'][index]['car_info']['image']}"),
                                             ),
                                           ),
                                         ),

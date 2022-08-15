@@ -51,7 +51,7 @@ class _DashboardContainerState extends State<DashboardContainer> {
           }
         };
         // var carsData = {'Usrname':'tom','Password':'pass@123'};
-        Navigator.pushReplacementNamed(context, '/product_list', arguments: {
+        Navigator.pushReplacementNamed(context, '/carList', arguments: {
           'cars': carsData,
         });
         break;
@@ -138,11 +138,11 @@ class _DashboardContainerState extends State<DashboardContainer> {
                 children: [
                   Row(
                     children: [
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     navigateTo('cars');
-                      //   },
-                      // ),
+                      GestureDetector(
+                        onTap: () {
+                          navigateTo('cars');
+                        },
+                      ),
                       Expanded(
                         child: Card(
                           shape: RoundedRectangleBorder(

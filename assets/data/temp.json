@@ -7,10 +7,278 @@
   "name": "Andrzej",
   "surname": "Wąsacz",
   "cars":
-  {
-    "name": "polonez caro", "engine": "1.8ohv", "production_data": "1989",
-    "name": "opel corsa B", "engine": "1.6", "production_data": "1999"
-},
+  [
+    {
+      "name": "Opel Astra J",
+      "car_info": {"production_date":  2017, "engine":  "1.6 Tdci", "image":  "https://www.autocentrum.pl/ac-file/car-version/5a3d2f48c74b351bc450e37e/opel-astra-j-sedan.jpg"},
+      "insurance_time": "180",
+      "insurance": [
+        {"oc_insurance_info": [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insurance_co_name": "PZU",
+            "start_time": "20.10.2021",
+            "end_time": "19.10.2022",
+            "vin_nr": "VF3WE9HZC34637643"
+          }
+        ]},
+        {"ac_insuracne_info":  [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insuracne_co_name": "PZU - Wypadki",
+            "start_time": "15.05.2021",
+            "end_time": "16.02.2022"
+          }
+        ]}
+      ],
+      "car_service_time": "17",
+      "car_service": [
+        {
+          "created_at": "21.08.2022",
+          "state": true,
+          "start_time": "20.08.2022",
+          "end_time": "21.08.2023",
+          "additional_info": ["wymiana klocków hamulcowych", "nowa gasnica", "sprężyna do wymiany"]
+        },
+        {
+          "created_at": "20.08.2022",
+          "state": true,
+          "start_time": "17.08.2021",
+          "end_time": "20.08.2022",
+          "additional_info": ["nowe żarówki", "nowy zderzak", "olej za 10 000km"]
+        }
+      ]
+    },
+    {
+      "name": "Mistubishi Eclipse",
+      "car_info": {"production_date":  2019, "engine":  "2.0 Turbo", "image":  "https://www.wyborkierowcow.pl/wp-content/uploads/2019/09/Mitsubishi-Eclipse-Cross-08.jpg"},
+      "insurance_time": "160",
+      "insurance": [
+        {"oc_insurance_info": [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insurance_co_name": "PZU",
+            "start_time": "20.10.2021",
+            "end_time": "19.10.2022",
+            "vin_nr": "VF3WE9HZC34637643"
+          }
+        ]},
+        {"ac_insuracne_info":  [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insuracne_co_name": "PZU - Wypadki",
+            "start_time": "15.05.2021",
+            "end_time": "16.02.2022"
+          }
+        ]}
+      ],
+      "car_service_time": "180",
+      "car_service": [
+        {
+          "created_at": "21.08.2022",
+          "state": true,
+          "start_time": "20.08.2022",
+          "end_time": "21.08.2023",
+          "additional_info": ["wymiana klocków hamulcowych", "nowa gasnica", "sprężyna do wymiany"]
+        },
+        {
+          "created_at": "20.08.2022",
+          "state": true,
+          "start_time": "17.08.2021",
+          "end_time": "20.08.2022",
+          "additional_info": ["nowe żarówki", "nowy zderzak", "olej za 10 000km"]
+        }
+      ]
+    },
+    {
+      "name": "Alfa Romeo Stelvio IV",
+      "car_info": {"production_date":  2022, "engine":  "1.6", "image":  "https://leasingzwysokimwykupem.pl/pub/offer/kingsmanfinance-kingsmanfinance-screenshot-2022-01-19-at-115417.png"},
+      "insurance_time": "160",
+      "insurance": [
+        {"oc_insurance_info": [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insurance_co_name": "PZU",
+            "start_time": "20.10.2021",
+            "end_time": "19.10.2022",
+            "vin_nr": "VF3WE9HZC34637643"
+          }
+        ]},
+        {"ac_insuracne_info":  [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insuracne_co_name": "PZU - Wypadki",
+            "start_time": "15.05.2021",
+            "end_time": "16.02.2022"
+          }
+        ]}
+      ],
+      "car_service_time": "180",
+      "car_service": [
+        {
+          "created_at": "21.08.2022",
+          "state": true,
+          "start_time": "20.08.2022",
+          "end_time": "21.08.2023",
+          "additional_info": ["wymiana klocków hamulcowych", "nowa gasnica", "sprężyna do wymiany"]
+        },
+        {
+          "created_at": "20.08.2022",
+          "state": true,
+          "start_time": "17.08.2021",
+          "end_time": "20.08.2022",
+          "additional_info": ["nowe żarówki", "nowy zderzak", "olej za 10 000km"]
+        }
+      ]
+    },
+    {
+      "name": "Audi A4",
+      "car_info": {"production_date":  2008, "engine":  "1.9 tdi", "image":  "https://www.wyborkierowcow.pl/wp-content/uploads/2020/02/Audi-A4-B8.jpg"},
+      "insurance_time": "160",
+      "insurance": [
+        {"oc_insurance_info": [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insurance_co_name": "PZU",
+            "start_time": "20.10.2021",
+            "end_time": "19.10.2022",
+            "vin_nr": "VF3WE9HZC34637643"
+          }
+        ]},
+        {"ac_insuracne_info":  [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insuracne_co_name": "PZU - Wypadki",
+            "start_time": "15.05.2021",
+            "end_time": "16.02.2022"
+          }
+        ]}
+      ],
+      "car_service_time": "10",
+      "car_service": [
+        {
+          "created_at": "21.08.2022",
+          "state": true,
+          "start_time": "20.08.2022",
+          "end_time": "21.08.2023",
+          "additional_info": ["wymiana klocków hamulcowych", "nowa gasnica", "sprężyna do wymiany"]
+        },
+        {
+          "created_at": "20.08.2022",
+          "state": true,
+          "start_time": "17.08.2021",
+          "end_time": "20.08.2022",
+          "additional_info": ["nowe żarówki", "nowy zderzak", "olej za 10 000km"]
+        }
+      ]
+    },
+    {
+      "name": "Peugeot 607",
+      "car_info": {"production_date":  2003, "engine":  "1.6 hdi", "image":  "https://www.auto-data.net/images/f114/Peugeot-607-Phase-II-2004_1.jpg"},
+      "insurance_time": "155",
+      "insurance": [
+        {"oc_insurance_info": [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insurance_co_name": "PZU",
+            "start_time": "20.10.2021",
+            "end_time": "19.10.2022",
+            "vin_nr": "VF3WE9HZC34637643"
+          }
+        ]},
+        {"ac_insuracne_info":  [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insuracne_co_name": "PZU - Wypadki",
+            "start_time": "15.05.2021",
+            "end_time": "16.02.2022"
+          }
+        ]}
+      ],
+      "car_service_time": "122",
+      "car_service": [
+        {
+          "created_at": "21.08.2022",
+          "state": true,
+          "start_time": "20.08.2022",
+          "end_time": "21.08.2023",
+          "additional_info": ["wymiana klocków hamulcowych", "nowa gasnica", "sprężyna do wymiany"]
+        },
+        {
+          "created_at": "20.08.2022",
+          "state": true,
+          "start_time": "17.08.2021",
+          "end_time": "20.08.2022",
+          "additional_info": ["nowe żarówki", "nowy zderzak", "olej za 10 000km"]
+        }
+      ]
+    },
+    {
+      "name": "Peugeot 207 SW",
+      "car_info": {"production_date":  2009, "engine":  "1.6 hdi", "image":  "https://i.wpimg.pl/1200x/i.wp.pl/a/f/jpeg/31956/peugeot_207_1_640.jpeg"},
+      "insurance_time": "14",
+      "insurance": [
+        {"oc_insurance_info": [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insurance_co_name": "PZU",
+            "start_time": "20.10.2021",
+            "end_time": "19.10.2022",
+            "vin_nr": "VF3WE9HZC34637643"
+          }
+        ]},
+        {"ac_insuracne_info":  [
+          {
+            "created_at": "21.08.2022",
+            "state": true,
+            "policy_nr":  "1222111499921545",
+            "insuracne_co_name": "PZU - Wypadki",
+            "start_time": "15.05.2021",
+            "end_time": "16.02.2022"
+          }
+        ]}
+      ],
+      "car_service_time": "10",
+      "car_service": [
+        {
+          "created_at": "21.08.2022",
+          "state": true,
+          "start_time": "20.08.2022",
+          "end_time": "21.08.2023",
+          "additional_info": ["wymiana klocków hamulcowych", "nowa gasnica", "sprężyna do wymiany"]
+        },
+        {
+          "created_at": "20.08.2022",
+          "state": true,
+          "start_time": "17.08.2021",
+          "end_time": "20.08.2022",
+          "additional_info": ["nowe żarówki", "nowy zderzak", "olej za 10 000km"]
+        }
+      ]
+    }
+  ],
 "medical_documents": {
   "title": "Poziom cukrzycy we krwi",
   "content": "Poziom za wysoki",

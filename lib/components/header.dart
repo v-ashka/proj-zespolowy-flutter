@@ -76,7 +76,7 @@ class _HeaderState extends State<Header> {
                                   text: 'PRO',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w900,
-                                      color: buttonColor))
+                                      color: mainColor))
                             ]),
                       ),
                       Spacer(),

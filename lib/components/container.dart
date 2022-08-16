@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_svg/flutter_svg.dart';
 
 class DashboardContainer extends StatefulWidget {
   const DashboardContainer({Key? key, required this.data, required this.size})
@@ -129,22 +130,24 @@ class _DashboardContainerState extends State<DashboardContainer> {
     print(widget.data['userData']['settings']['receiptVisible'].runtimeType);
     return Column(
       children: [
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.fromLTRB(0, 250, 0, 0),
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(5, 50, 5, 0),
-              child: Column(
-                children: [
-                  Row(
+        Container(
+          margin: EdgeInsets.fromLTRB(0, 250, 0, 0),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(5, 50, 5, 0),
+            child: Column(
+              children: [
+                Visibility(
+                  visible: true,
+                  child: Row(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          navigateTo('cars');
-                        },
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     navigateTo('cars');
+                      //   },
+                      // ),
                       Expanded(
                         child: Card(
+                          clipBehavior: Clip.hardEdge,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                           child: Container(
@@ -153,15 +156,12 @@ class _DashboardContainerState extends State<DashboardContainer> {
                             margin: EdgeInsets.symmetric(horizontal: 10),
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  // Text("${widget.data['userData']['cars'][0]['name']} ${widget.data['userData']['cars'][0]['engine']}")
-
-                                  //padding: const EdgeInsets.fromLTRB(45, 45, 0, 0),
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(70, 0, 0, 0),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        50, 0, 0, 0),
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
@@ -171,18 +171,20 @@ class _DashboardContainerState extends State<DashboardContainer> {
                                             .bodyText1
                                             ?.copyWith(
                                                 color: Colors.black,
-                                                fontWeight: FontWeight.w700,
+                                                fontWeight:
+                                                    FontWeight.w700,
                                                 fontFamily: 'Lato',
                                                 fontSize: 20),
                                       ),
                                     ),
                                   ),
-
-                                  // Text(
-                                  //     "Aktualna liczba pojazdów: ${widget.data['userData']['cars'].length}"),
-                                  // ElevatedButton(onPressed: () {
-                                  //    createAlbum();
-                                  // }, child: Text("kliknij mnie łobuizie"),),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(55, 10, 0, 0),
+                                    child: SvgPicture.asset(
+                                        'assets/car2.svg',
+                                        width: 300,
+                                        height: 100),
+                                  ),
                                 ],
                               ),
                             ),
@@ -191,69 +193,29 @@ class _DashboardContainerState extends State<DashboardContainer> {
                       ),
                     ],
                   ),
-                  Visibility(
-                    visible: widget.data['userData']['settings']['receiptVisible'] == true ? (true):(false),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Container(
-                              height: 120,
-                              width: (widget.size.width / 2),
-                              margin: EdgeInsets.symmetric(horizontal: 10),
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    // Text("${widget.data['userData']['cars'][0]['name']} ${widget.data['userData']['cars'][0]['engine']}")
-                                    SizedBox(height: 10),
-                                    Text("PARAGONY",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            ?.copyWith(
-                                                color: Colors.black45,
-                                                fontWeight: FontWeight.w600,
-                                                letterSpacing: 2.0)),
-                                    SizedBox(height: 10),
-                                    Text(
-                                        "Aktualna liczba paragonów: ${widget.data['userData']['cars'].length}"),
-                                    // ElevatedButton(
-                                    //   onPressed: () {
-                                    //     createAlbum();
-                                    //   },
-                                    //   child: Text("kliknij mnie łobuizie"),
-                                    // ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
+                ),
+                Visibility(
+                  visible: true,
+                  //widget.data['userData']['settings']['receiptVisible'] == true ? (true):(false),
+                  child: Row(
                     children: [
                       Expanded(
                         child: Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                           child: Container(
-                            height: 140,
+                            height: 120,
                             width: (widget.size.width / 2),
                             margin: EdgeInsets.symmetric(horizontal: 10),
                             child: Padding(
                               padding: EdgeInsets.all(10),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.stretch,
                                 children: [
                                   // Text("${widget.data['userData']['cars'][0]['name']} ${widget.data['userData']['cars'][0]['engine']}")
                                   SizedBox(height: 10),
-                                  Text("DOKUMENTY",
+                                  Text("PARAGONY",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyText1
@@ -263,13 +225,13 @@ class _DashboardContainerState extends State<DashboardContainer> {
                                               letterSpacing: 2.0)),
                                   SizedBox(height: 10),
                                   Text(
-                                      "Aktualna liczba dokumentów: ${widget.data['userData']['cars'].length}"),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      createAlbum();
-                                    },
-                                    child: Text("kliknij mnie łobuizie"),
-                                  ),
+                                      "Aktualna liczba paragonów: ${widget.data['userData']['cars'].length}"),
+                                  // ElevatedButton(
+                                  //   onPressed: () {
+                                  //     createAlbum();
+                                  //   },
+                                  //   child: Text("kliknij mnie łobuizie"),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -278,8 +240,50 @@ class _DashboardContainerState extends State<DashboardContainer> {
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Container(
+                          height: 140,
+                          width: (widget.size.width / 2),
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                // Text("${widget.data['userData']['cars'][0]['name']} ${widget.data['userData']['cars'][0]['engine']}")
+                                SizedBox(height: 10),
+                                Text("DOKUMENTY",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.copyWith(
+                                            color: Colors.black45,
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 2.0)),
+                                SizedBox(height: 10),
+                                Text(
+                                    "Aktualna liczba dokumentów: ${widget.data['userData']['cars'].length}"),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    createAlbum();
+                                  },
+                                  child: Text("kliknij mnie łobuizie"),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

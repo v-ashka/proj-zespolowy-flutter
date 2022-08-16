@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:flutter_svg/flutter_svg.dart' ;
 
 import '../services/user.dart';
 
@@ -26,18 +27,18 @@ class _carListState extends State<carList> {
       extendBodyBehindAppBar: true,
       appBar:  AppBar(
         elevation: 0,
-        title: Text('Pojazdy mechaniczne'),
+        title: Text('Pojazdy'),
         leading: Icon(Icons.arrow_back_ios),
-        foregroundColor: Theme.of(context).colorScheme.secondary,
+        foregroundColor: Colors.black,//Theme.of(context).colorScheme.secondary,
         backgroundColor: Colors.transparent,
-        titleTextStyle: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.1, fontFamily: 'Lato', fontSize: MediaQuery.of(context).textScaleFactor * 18),
+        titleTextStyle: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Lato', fontSize: MediaQuery.of(context).textScaleFactor * 20, color: Colors.black),
       ),
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/background2.png'), fit: BoxFit.fill)
+          image: DecorationImage(image: AssetImage('assets/background.png'), fit: BoxFit.fill)
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 100, 0, 100),
           child:
                 ListView.separated(
                 padding: const EdgeInsets.all(20),
@@ -198,6 +199,19 @@ class _carListState extends State<carList> {
           ),
         ),
       ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 10, 10),
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              // Add your onPressed code here!
+            },
+            backgroundColor: mainColor,
+            icon: const Icon(Icons.add),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(25))),
+            label: Text(' Dodaj pojazd', style: TextStyle(fontFamily: 'Lato', fontWeight: FontWeight.bold)),
+
+          ),
+        ),
     );
   }
 }

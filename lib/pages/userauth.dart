@@ -21,7 +21,7 @@ class _UserAuthState extends State<UserAuth> {
     setState(() {
       _userData = data;
     });
-    Navigator.pushNamed(context, '/carList',
+    Navigator.pushNamed(context, '/documentList',
         arguments: {"userData": _userData});
   }
 
@@ -57,7 +57,7 @@ class _UserAuthState extends State<UserAuth> {
   Widget build(BuildContext context) {
     final ButtonStyle style = ElevatedButton.styleFrom(
       textStyle: const TextStyle(fontSize: 23),
-      primary: buttonColor,
+      primary: mainColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     );
     final VoidCallback? onTap;

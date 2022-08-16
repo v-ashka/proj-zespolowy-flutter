@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
+import 'package:projzespoloey/pages/documentsList.dart';
 import 'package:projzespoloey/pages/userauth.dart';
 import 'package:projzespoloey/pages/loading.dart';
 import 'package:projzespoloey/pages/carList.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/carList': (context) => carList(),
+        '/documentList': (context) => DocumentsList(),
         '/': (context) => Loading(),
         '/user_auth': (context) => UserAuth(),
         '/dashboard': (context) => Dashboard()

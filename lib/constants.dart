@@ -26,3 +26,5 @@ const bgSmokedWhite = Color(0xffF9F9F9);
 const mainColor = Color(0xff00B2FF);
 const main25Color = Color(0x4000b2ff);
 const main50Color = Color(0x8000b2ff);
+
+const secondColor = Color.fromARGB(92, 255, 0, 229);

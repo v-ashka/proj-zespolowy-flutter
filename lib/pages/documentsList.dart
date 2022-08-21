@@ -118,7 +118,7 @@ class _DocumentsListState extends State<DocumentsList> {
                     Expanded(
                       flex: 10,
                       child: SizedBox(
-                        width: 200,
+                        width: 150,
                         child: Stack(
                           children: [
                             Positioned.fill(

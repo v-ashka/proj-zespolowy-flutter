@@ -14,9 +14,19 @@ class ModuleList extends StatefulWidget {
 }
 
 class _ModuleListState extends State<ModuleList> {
+  int daysBetween(DateTime from, DateTime to) {
+    from = DateTime(from.year, from.month, from.day);
+    to = DateTime(to.year, to.month, to.day);
+    return (to.difference(from).inHours / 24).round();
+  }
+
   @override
   Widget build(BuildContext context) {
     print(widget.data);
+    // DateTime date1 = DateTime.parse(widget.data["module_data"][1]['end_time']);
+    // print(date1);
+
+    final today = DateTime.now();
     return Padding(
           padding: const EdgeInsets.fromLTRB(0, 100, 0, 100),
           child:
@@ -37,7 +47,7 @@ class _ModuleListState extends State<ModuleList> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                                 Expanded(
-                                  flex: 7,
+                                  flex: widget.data['route_name'] == 'receipts' ? (14):(7),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -54,7 +64,81 @@ class _ModuleListState extends State<ModuleList> {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
-                                                Text("OKRES WAŻNOŚCI", style: TextStyle(
+                                              if(widget.data["route_name"] == 'documents') ...[
+                                                  if(widget.data["module_data"][index]["end_time"] != null)...[
+                                                    Text("OKRES WAŻNOŚCI", style: TextStyle(
+                                                      color: fontGrey,
+                                                      fontFamily: "Roboto",
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w300,
+                                                      letterSpacing: 1.2
+                                                      )
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(25),
+                                                        color: bg35Grey
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.fromLTRB(10,0,20,0),
+                                                        child: Row(
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                          children: [
+                                                            Icon(Icons.text_snippet_outlined, color: icon70Black),
+                                                          
+                                                               Text("${daysBetween(today,DateTime.parse(widget.data["module_data"][index]["end_time"])) } dni",
+                                                              style: TextStyle(
+                                                              fontFamily: "Lato",
+                                                              fontWeight: FontWeight.w400
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ] else ...[
+                                                    Text("DATA DODANIA", style: TextStyle(
+                                                      color: fontGrey,
+                                                      fontFamily: "Roboto",
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w300,
+                                                      letterSpacing: 1.2
+                                                      )
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(25),
+                                                        color: bg35Grey
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.fromLTRB(10,0,20,0),
+                                                        child: Row(
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                          children: [
+                                                            Padding(
+                                                            padding: EdgeInsets.all(5),
+                                                            child: Text("${widget.data["module_data"][index]["dateCreated"]}",
+                                                                style: TextStyle(
+                                                                fontFamily: "Lato",
+                                                                fontWeight: FontWeight.w400
+                                                                ),
+                                                              ),
+                                                            )  
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                 ] else if (widget.data["route_name"] == 'cars') ...[
+                                                    Text("OKRES WAŻNOŚCI", style: TextStyle(
                                                   color: fontGrey,
                                                   fontFamily: "Roboto",
                                                   fontSize: 12,
@@ -111,6 +195,68 @@ class _ModuleListState extends State<ModuleList> {
                                                     ),
                                                   ),
                                                 )
+                                                 ] else if (widget.data['route_name'] == 'receipts') ...[
+                                                      Text("PODSTAWOWE INFORMACJE", 
+                                                        style: TextStyle(
+                                                          color: fontGrey,
+                                                          fontFamily: "Roboto",
+                                                          fontSize: 10,
+                                                          fontWeight: FontWeight.w300,
+                                                          letterSpacing: 1.2
+                                                        )
+                                                      ),
+                                                    Padding(
+                                                      padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                                      child: Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Text("Okres zwrotu"),
+                                                          SizedBox(width: 10,),
+                                                          Text("${daysBetween(today,DateTime.parse(widget.data['module_data'][index]['refund_time'])) } dni",
+                                                            style: TextStyle(
+                                                                fontFamily: "Lato",
+                                                                fontWeight: FontWeight.w400
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                                      child: Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Text("Okres gwarancji"),
+                                                          SizedBox(width: 10,),
+                                                          Text("${daysBetween(today,DateTime.parse(widget.data['module_data'][index]['guarantee_time'])) }  dni",
+                                                            style: TextStyle(
+                                                                fontFamily: "Lato",
+                                                                fontWeight: FontWeight.w400
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                      child: Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Text("Cena"),
+                                                          SizedBox(width: 10,),
+                                                          Text("${widget.data['module_data'][index]['price']} zł",
+                                                            style: TextStyle(
+                                                                fontFamily: "Lato",
+                                                                fontWeight: FontWeight.w400
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                 ],
                                               ],
                                             ),
                                           )
@@ -206,7 +352,7 @@ class _ModuleListState extends State<ModuleList> {
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(25),
                                             child: Image(
-                                              width: 170,
+                                              width: 110,
                                               height: 150,
                                               fit: BoxFit.cover,
                                               alignment: Alignment(-0.5,0),

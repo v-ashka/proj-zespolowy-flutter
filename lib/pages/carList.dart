@@ -22,7 +22,7 @@ class _CarListState extends State<CarList> {
       extendBodyBehindAppBar: true,
       appBar:  AppBar(
         elevation: 0,
-        title: Text('Paragony'),
+        title: Text('Pojazdy'),
         leading: Icon(Icons.arrow_back_ios),
         foregroundColor: Colors.black,//Theme.of(context).colorScheme.secondary,
         backgroundColor: Colors.transparent,

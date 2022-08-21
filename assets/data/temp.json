@@ -383,17 +383,22 @@
     },
     {
       "name": "Abonament na telefon",
+      "start_time": "20.08.2021",
+      "end_time": "2023-12-23",
       "dateCreated": "15-03-2022",
       "image": "https://cdn-images.interviewme.pl/pages/umowa_zlecenie_wzor.jpg"
     },
 
     {
       "name": "Wniosek stypendialny",
+      "end_time": "2023-12-23",
       "dateCreated": "25-10-2020",
       "image": "https://cdn-images.interviewme.pl/pages/umowa_zlecenie_wzor.jpg"
     },
     {
       "name": "Umowa zlecenie",
+      "start_time": "20.08.2022",
+      "end_time": "2020-01-10",
       "dateCreated": "17-12-2019",
       "image": "https://cdn-images.interviewme.pl/pages/umowa_zlecenie_wzor.jpg"
     }
@@ -402,23 +407,35 @@
     {
       "name": "Mysz gaming",
       "dateCreated": "26-05-2022",
-      "image": "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2019/3/pr_2019_3_14_10_55_14_106_00.jpg"
+      "image": "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2019/3/pr_2019_3_14_10_55_14_106_00.jpg",
+      "refund_time": "2022-09-13",
+      "guarantee_time": "2022-12-13",
+      "price": "4500"
     },
     {
       "name": "Iphone 13 PRO",
       "dateCreated": "15-03-2022",
-      "image": "https://assets.swappie.com/cdn-cgi/image/width=600,height=600,fit=contain,format=auto/swappie-iphone-13-pro-graphite-back.png"
+      "image": "https://assets.swappie.com/cdn-cgi/image/width=600,height=600,fit=contain,format=auto/swappie-iphone-13-pro-graphite-back.png",
+      "refund_time": "2022-09-13",
+      "guarantee_time": "2023-10-13",
+      "price": "6000"
     },
 
     {
       "name": "Kuchenka mikrofalowa",
       "dateCreated": "25-10-2020",
-      "image": "https://www.pasaz24cdn.pl/web3801/productimages/22294728_2383.jpg"
+      "image": "https://www.pasaz24cdn.pl/web3801/productimages/22294728_2383.jpg",
+      "refund_time": "2022-10-13",
+      "guarantee_time": "2023-11-13",
+      "price": "400"
     },
     {
       "name": "Telewizor 40 cali",
       "dateCreated": "17-12-2019",
-      "image": "https://satysfakcja.stati.pl//allegro_new/RTV/video/Xiaomi/L50M6-6AEU/f1-telewizor-4K-xiaomi-mi-tv-P1-50.jpg"
+      "image": "https://satysfakcja.stati.pl//allegro_new/RTV/video/Xiaomi/L50M6-6AEU/f1-telewizor-4K-xiaomi-mi-tv-P1-50.jpg",
+      "refund_time": "2022-05-13",
+      "guarantee_time": "2023-01-26",
+      "price": "5000"
     }
   ],
   "household": [

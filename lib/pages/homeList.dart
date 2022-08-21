@@ -1,17 +1,19 @@
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:flutter/material.dart';
 import "package:projzespoloey/components/module_list.dart";
 
-class DocumentsList extends StatefulWidget {
-  const DocumentsList({Key? key}) : super(key: key);
+class HomeList extends StatefulWidget {
+  const HomeList({Key? key}) : super(key: key);
 
   @override
-  State<DocumentsList> createState() => _DocumentsListState();
+  State<HomeList> createState() => HomeListState();
 }
 
-class _DocumentsListState extends State<DocumentsList> {
+class HomeListState extends State<HomeList> {
   Map data = {};
+
   @override
   Widget build(BuildContext context) {
   data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as Map;
@@ -21,7 +23,7 @@ class _DocumentsListState extends State<DocumentsList> {
       extendBodyBehindAppBar: true,
       appBar:  AppBar(
         elevation: 0,
-        title: Text('Dokumenty'),
+        title: Text('Sprzęt domowy'),
         leading: Icon(Icons.arrow_back_ios),
         foregroundColor: Colors.black,//Theme.of(context).colorScheme.secondary,
         backgroundColor: Colors.transparent,

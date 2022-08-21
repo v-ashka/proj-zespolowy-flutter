@@ -17,22 +17,24 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
     final width = size.width;
     final height = size.height;
     final moduleItems = ['Dokumenty', 'Paraogny', 'Samochody', 'Sprzęt domowy'];
     final modulesTexts = {
       "module": [
-        {"title": "Dokumenty", "subtitle": "Ostatnio dodany dokument", "img": "assets/my_files.svg", "subtitleCount": "Ilość dokumentów"},
-        {"title": "Paragony", "subtitle": "Ostatnio dodany paragon", "img": "assets/receipt.svg", "subtitleCount": "Ilość paragonów"},
-        {"title": "Samochód", "subtitle_car": "Następny przegląd za", "img": "assets/cars.svg", "subtitleCount": "Zapisane pojazdy"},
-        {"title": "Sprzęt domowy", "subtitle": "Ostatnio dodany przedmiot", "img": "assets/house.svg", "subtitleCount": "Ilość przedmiotów"},
+        {"title": "Dokumenty", "subtitle": "Ostatnio dodany dokument", "img": "assets/my_files.svg", "subtitleCount": "Ilość dokumentów", "route": "/documentList", "dataName": "documents"},
+        {"title": "Paragony", "subtitle": "Ostatnio dodany paragon", "img": "assets/receipt.svg", "subtitleCount": "Ilość paragonów", "route": "/receiptList", "dataName": "receipts"},
+        {"title": "Samochód", "subtitle_car": "Następny przegląd za", "img": "assets/cars.svg", "subtitleCount": "Zapisane pojazdy", "route": "/carList", "dataName": "cars"},
+        {"title": "Sprzęt domowy", "subtitle": "Ostatnio dodany przedmiot", "img": "assets/house.svg", "subtitleCount": "Ilość przedmiotów", "route": "/homeList", "dataName": "household"},
       ]
     };
 
-    final colors = [main25Color, main50Color];
     print(modulesTexts["module"]!.length);
+    Map data = {};
+    data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as Map;
+
+    // print(data);
      return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
       body: SafeArea(
@@ -105,7 +107,7 @@ class _DashboardState extends State<Dashboard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                             text: 'Witaj,',
                             style: TextStyle(
                                 fontSize: 30,
@@ -115,7 +117,7 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: ' userDefault',
+                                  text: ' ${data["userData"]["name"]}!',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       color: mainColor))
@@ -142,98 +144,106 @@ class _DashboardState extends State<Dashboard> {
                         child: ListView.separated(
                           itemCount: modulesTexts["module"]!.length,
                           itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            width: width,
-                            height: height/5,
-                            decoration: BoxDecoration(
-                              color: bgSmokedWhite,
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  flex: 5,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(15,20,0,0),
-                                    child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [  
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                        child: Text(
-                                          "${modulesTexts["module"]![index]["title"]}",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600,
+                          return GestureDetector(
+                              onTap: (){
+                                Navigator.pushNamed(context, "${modulesTexts["module"]![index]['route']}", arguments: {
+                                'module_data': data["userData"]["${modulesTexts["module"]![index]['dataName']}"],
+                                'route_name': modulesTexts["module"]![index]["dataName"],
+                              });
+                            },
+                            child: Container(
+                              width: width,
+                              height: height/5,
+                              decoration: BoxDecoration(
+                                color: bgSmokedWhite,
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                    flex: 5,
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(15,20,0,0),
+                                      child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [  
+                                        Padding(
+                                          padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                          child: Text(
+                                            "${modulesTexts["module"]![index]["title"]}",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
-                                        ),
-                                      ), 
-                                      modulesTexts["module"]![index]["subtitle"] == null ? (
-                                        Text(
-                                          "${modulesTexts["module"]![index]["subtitle_car"]}",
-                                          style: TextStyle(letterSpacing: 1.2),
-                                          )
-                                        ):(
-                                          Text(
-                                            "${modulesTexts["module"]![index]["subtitle"]}",
-                                             style: TextStyle(letterSpacing: 1.2),
-                                             )
-                                        ),
-                                        // product name OR car datetime
+                                        ), 
                                         modulesTexts["module"]![index]["subtitle"] == null ? (
-                                        Text(
-                                          "20 dni",
-                                          style: TextStyle(letterSpacing: 1.2, fontWeight: FontWeight.w900),
-                                          )
-                                        ):(
                                           Text(
-                                            "Umowa o pracę",
-                                             style: TextStyle(letterSpacing: 1.2,  fontWeight: FontWeight.w900),
-                                             )
-                                        ),
-                                    ]
+                                            "${modulesTexts["module"]![index]["subtitle_car"]}",
+                                            style: TextStyle(letterSpacing: 1.2),
+                                            )
+                                          ):(
+                                            Text(
+                                              "${modulesTexts["module"]![index]["subtitle"]}",
+                                               style: TextStyle(letterSpacing: 1.2),
+                                               )
+                                          ),
+                                          // product name OR car datetime
+                                          modulesTexts["module"]![index]["subtitle"] == null ? (
+                                          Text(
+                                            "20 dni",
+                                            style: TextStyle(letterSpacing: 1.2, fontWeight: FontWeight.w900),
+                                            )
+                                          ):(
+                                            Text(
+                                              "Umowa o pracę",
+                                               style: TextStyle(letterSpacing: 1.2,  fontWeight: FontWeight.w900),
+                                               )
+                                          ),
+                                      ]
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Stack(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                                        child: ClipRRect(
-                                          child: Container(
-                                            width: 130,
-                                          height: height,
-                                          decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                            borderRadius: BorderRadius.circular(25),
-                                          ),
-                                          )
-                                        ),
-                                      ),
-                                      Positioned(      
-                                        width: 150,
-                                        left: 10,
-                                        child: Container(
-                                          height: 165,
-                                          width: 130,
-                                          alignment: Alignment(2,2),
-                                          child: SvgPicture.asset(
-                                            "${modulesTexts["module"]![index]["img"]}",
-                                             height: 170,
-                                             width: 50,
-                                               allowDrawingOutsideViewBox: true,
+                                  Expanded(
+                                    flex: 3,
+                                    child: Stack(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                                          child: ClipRRect(
+                                            child: Container(
+                                              width: 130,
+                                            height: height,
+                                            decoration: BoxDecoration(
+                                              color: Colors.transparent,
+                                              borderRadius: BorderRadius.circular(25),
                                             ),
+                                            )
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        Positioned(      
+                                          width: 150,
+                                          left: 10,
+                                          child: Container(
+                                            height: 165,
+                                            width: 130,
+                                            alignment: Alignment(2,2),
+                                            child: SvgPicture.asset(
+                                              "${modulesTexts["module"]![index]["img"]}",
+                                               height: 170,
+                                               width: 50,
+                                                 allowDrawingOutsideViewBox: true,
+                                              ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                ],
                                 ),
-                              ],
-                              ),
+                            ),
                           );
                         },
                         separatorBuilder: (BuildContext context, int index) => const Divider(color: Colors.transparent,),

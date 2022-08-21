@@ -377,25 +377,66 @@
   ],
   "documents": [
     {
-      "title": "Akt chrztu",
+      "name": "Akt chrztu",
       "dateCreated": "26-05-2022",
       "image": "https://cdn-images.interviewme.pl/pages/umowa_zlecenie_wzor.jpg"
     },
     {
-      "title": "Abonament na telefon",
+      "name": "Abonament na telefon",
       "dateCreated": "15-03-2022",
       "image": "https://cdn-images.interviewme.pl/pages/umowa_zlecenie_wzor.jpg"
     },
 
     {
-      "title": "Wniosek stypendialny",
+      "name": "Wniosek stypendialny",
       "dateCreated": "25-10-2020",
       "image": "https://cdn-images.interviewme.pl/pages/umowa_zlecenie_wzor.jpg"
     },
     {
-      "title": "Umowa zlecenie",
+      "name": "Umowa zlecenie",
       "dateCreated": "17-12-2019",
       "image": "https://cdn-images.interviewme.pl/pages/umowa_zlecenie_wzor.jpg"
+    }
+  ],
+  "receipts": [
+    {
+      "name": "Mysz gaming",
+      "dateCreated": "26-05-2022",
+      "image": "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2019/3/pr_2019_3_14_10_55_14_106_00.jpg"
+    },
+    {
+      "name": "Iphone 13 PRO",
+      "dateCreated": "15-03-2022",
+      "image": "https://assets.swappie.com/cdn-cgi/image/width=600,height=600,fit=contain,format=auto/swappie-iphone-13-pro-graphite-back.png"
+    },
+
+    {
+      "name": "Kuchenka mikrofalowa",
+      "dateCreated": "25-10-2020",
+      "image": "https://www.pasaz24cdn.pl/web3801/productimages/22294728_2383.jpg"
+    },
+    {
+      "name": "Telewizor 40 cali",
+      "dateCreated": "17-12-2019",
+      "image": "https://satysfakcja.stati.pl//allegro_new/RTV/video/Xiaomi/L50M6-6AEU/f1-telewizor-4K-xiaomi-mi-tv-P1-50.jpg"
+    }
+  ],
+  "household": [
+    {
+      "name": "Kran Jerzy",
+      "dateCreated": "26-05-2022",
+      "image": "https://ghb.pl/omedia/9/7/0/28970_0.jpg"
+    },
+    {
+      "name": "Przyłącze internetowe",
+      "dateCreated": "15-03-2022",
+      "image": "https://obrazki.elektroda.pl/9481298400_1530202017.jpg"
+    },
+
+    {
+      "name": "Syfon prysznicowy",
+      "dateCreated": "25-10-2020",
+      "image": "https://budujemydom.pl/i/2019/10/23/214412-00ff-1100x0-sc1x5_porada-syfony-kanalizacyjne7-budujemydompl.jpg"
     }
   ]
 }

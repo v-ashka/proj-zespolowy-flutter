@@ -1,17 +1,19 @@
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:flutter/material.dart';
 import "package:projzespoloey/components/module_list.dart";
 
-class DocumentsList extends StatefulWidget {
-  const DocumentsList({Key? key}) : super(key: key);
+class ReceiptList extends StatefulWidget {
+  const ReceiptList({Key? key}) : super(key: key);
 
   @override
-  State<DocumentsList> createState() => _DocumentsListState();
+  State<ReceiptList> createState() => ReceiptListState();
 }
 
-class _DocumentsListState extends State<DocumentsList> {
+class ReceiptListState extends State<ReceiptList> {
   Map data = {};
+
   @override
   Widget build(BuildContext context) {
   data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as Map;
@@ -21,7 +23,7 @@ class _DocumentsListState extends State<DocumentsList> {
       extendBodyBehindAppBar: true,
       appBar:  AppBar(
         elevation: 0,
-        title: Text('Dokumenty'),
+        title: Text('Paragony'),
         leading: Icon(Icons.arrow_back_ios),
         foregroundColor: Colors.black,//Theme.of(context).colorScheme.secondary,
         backgroundColor: Colors.transparent,

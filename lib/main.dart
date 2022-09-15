@@ -8,6 +8,8 @@ import 'package:projzespoloey/pages/homeList.dart';
 import 'package:projzespoloey/pages/receiptList.dart';
 import 'package:projzespoloey/pages/userauth.dart';
 import 'package:projzespoloey/pages/loading.dart';
+import 'package:projzespoloey/pages/form.dart';
+
 // import 'package:projzespoloey/pages/_carList.dart';
 //projzespoloey
 void main() {
@@ -27,19 +29,19 @@ class MyApp extends StatelessWidget {
         '/': (context) => Loading(),
         '/user_auth': (context) => UserAuth(),
         '/dashboard': (context) => Dashboard(),
-        '/homeList': (context) =>HomeList(),
+        '/homeList': (context) => HomeList(),
         '/receiptList': (context) => ReceiptList(),
+        '/form': (context) => DataForm(),
       },
       title: 'OrganizerPRO',
       theme: ThemeData(
           scaffoldBackgroundColor: primaryColor,
           fontFamily: 'Lato',
-          colorScheme: ThemeData().colorScheme.copyWith(primary: primaryColor, secondary: secondaryColor),
-          appBarTheme: AppBarTheme(
-              color: primaryColor
-          ),
-          visualDensity: VisualDensity.adaptivePlatformDensity
-      ),
+          colorScheme: ThemeData()
+              .colorScheme
+              .copyWith(primary: primaryColor, secondary: secondaryColor),
+          appBarTheme: AppBarTheme(color: primaryColor),
+          visualDensity: VisualDensity.adaptivePlatformDensity),
     );
   }
 }

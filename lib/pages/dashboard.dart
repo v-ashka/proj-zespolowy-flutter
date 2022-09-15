@@ -23,237 +23,286 @@ class _DashboardState extends State<Dashboard> {
     final moduleItems = ['Dokumenty', 'Paraogny', 'Samochody', 'Sprzęt domowy'];
     final modulesTexts = {
       "module": [
-        {"title": "Dokumenty", "subtitle": "Ostatnio dodany dokument", "img": "assets/my_files.svg", "subtitleCount": "Ilość dokumentów", "route": "/documentList", "dataName": "documents"},
-        {"title": "Paragony", "subtitle": "Ostatnio dodany paragon", "img": "assets/receipt.svg", "subtitleCount": "Ilość paragonów", "route": "/receiptList", "dataName": "receipts"},
-        {"title": "Samochód", "subtitle_car": "Następny przegląd za", "img": "assets/cars.svg", "subtitleCount": "Zapisane pojazdy", "route": "/carList", "dataName": "cars"},
-        {"title": "Sprzęt domowy", "subtitle": "Ostatnio dodany przedmiot", "img": "assets/house.svg", "subtitleCount": "Ilość przedmiotów", "route": "/homeList", "dataName": "household"},
+        {
+          "title": "Dokumenty",
+          "subtitle": "Ostatnio dodany dokument",
+          "img": "assets/my_files.svg",
+          "subtitleCount": "Ilość dokumentów",
+          "route": "/documentList",
+          "dataName": "documents"
+        },
+        {
+          "title": "Paragony",
+          "subtitle": "Ostatnio dodany paragon",
+          "img": "assets/receipt.svg",
+          "subtitleCount": "Ilość paragonów",
+          "route": "/receiptList",
+          "dataName": "receipts"
+        },
+        {
+          "title": "Samochód",
+          "subtitle_car": "Następny przegląd za",
+          "img": "assets/cars.svg",
+          "subtitleCount": "Zapisane pojazdy",
+          "route": "/carList",
+          "dataName": "cars"
+        },
+        {
+          "title": "Sprzęt domowy",
+          "subtitle": "Ostatnio dodany przedmiot",
+          "img": "assets/house.svg",
+          "subtitleCount": "Ilość przedmiotów",
+          "route": "/homeList",
+          "dataName": "household"
+        },
       ]
     };
 
-    print(modulesTexts["module"]!.length);
+    // print(modulesTexts["module"]!.length);
     Map data = {};
-    data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as Map;
+    data = data.isNotEmpty
+        ? data
+        : ModalRoute.of(context)?.settings.arguments as Map;
 
     // print(data);
-     return Scaffold(
+    return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
-            image: DecorationImage(image: AssetImage("assets/background.png"), fit: BoxFit.fill)
-          ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20,25,20,0),
-              child: Column(
+              image: DecorationImage(
+                  image: AssetImage("assets/background.png"),
+                  fit: BoxFit.fill)),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 25, 20, 0),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                    text: const TextSpan(
+                        text: 'Organizer',
+                        style: TextStyle(
+                            fontSize: 26,
+                            color: Colors.black,
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.w600),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'PRO',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  color: mainColor))
+                        ]),
+                  ),
+                  SizedBox(
+                    width: 50,
+                  ),
+                  Stack(
+                    children: [
+                      Positioned(
+                        top: 7,
+                        left: 25,
+                        child: Container(
+                          width: 13,
+                          height: 13,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Text(
+                            "0",
+                            style: TextStyle(color: Colors.white, fontSize: 10),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: null,
+                        icon: Icon(Icons.notifications, size: 25),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: null,
+                    icon: Icon(Icons.settings, size: 25),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RichText(
-                        text: const TextSpan(
-                            text: 'Organizer',
-                            style: TextStyle(
-                                fontSize: 26,
-                                color: Colors.black,
-                                fontFamily: 'Lato',
-                                fontWeight: FontWeight.w600
-                                ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: 'PRO',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w900,
-                                      color: mainColor))
-                            ]),
-                      ),
-                      SizedBox(
-                        width: 50,
-                      ),
-                        Stack(
+                children: [
+                  RichText(
+                    text: TextSpan(
+                        text: 'Witaj,',
+                        style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.black,
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.w300),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: ' ${data["userData"]["name"]}!',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: mainColor))
+                        ]),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Zarządzaj swoim ekranem głównym, ustawiając moduły do wyświetlenia",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 40),
+                ],
+              ),
+              // Modules column
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                child: Text(
+                  "Kategorie",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: ListView.separated(
+                  itemCount: modulesTexts["module"]!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context,
+                            "${modulesTexts["module"]![index]['route']}",
+                            arguments: {
+                              'module_data': data["userData"][
+                                  "${modulesTexts["module"]![index]['dataName']}"],
+                              'route_name': modulesTexts["module"]![index]
+                                  ["dataName"],
+                            });
+                      },
+                      child: Container(
+                        width: width,
+                        height: height / 5,
+                        decoration: BoxDecoration(
+                          color: bgSmokedWhite,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Positioned(
-                              top: 7,
-                              left: 25,
-                              child: Container(
-                                width: 13,
-                                height: 13,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Text(
-                                  "0",
-                                  style: TextStyle(color: Colors.white, fontSize: 10),
-                                  ),
+                            Expanded(
+                              flex: 5,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                        child: Text(
+                                          "${modulesTexts["module"]![index]["title"]}",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      modulesTexts["module"]![index]
+                                                  ["subtitle"] ==
+                                              null
+                                          ? (Text(
+                                              "${modulesTexts["module"]![index]["subtitle_car"]}",
+                                              style:
+                                                  TextStyle(letterSpacing: 1.2),
+                                            ))
+                                          : (Text(
+                                              "${modulesTexts["module"]![index]["subtitle"]}",
+                                              style:
+                                                  TextStyle(letterSpacing: 1.2),
+                                            )),
+                                      // product name OR car datetime
+                                      modulesTexts["module"]![index]
+                                                  ["subtitle"] ==
+                                              null
+                                          ? (Text(
+                                              "20 dni",
+                                              style: TextStyle(
+                                                  letterSpacing: 1.2,
+                                                  fontWeight: FontWeight.w900),
+                                            ))
+                                          : (Text(
+                                              "Umowa o pracę",
+                                              style: TextStyle(
+                                                  letterSpacing: 1.2,
+                                                  fontWeight: FontWeight.w900),
+                                            )),
+                                    ]),
                               ),
                             ),
-                          IconButton(
-                              onPressed: null,
-                            icon: Icon(Icons.notifications, size: 25),
-                          ),
-                          ],
-                        ),
-                        IconButton(
-                              onPressed: null,
-                            icon: Icon(Icons.settings, size: 25),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 25,),
-                    Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                        text: TextSpan(
-                            text: 'Witaj,',
-                            style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.black,
-                                fontFamily: 'Lato',
-                                fontWeight: FontWeight.w300
-                                ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: ' ${data["userData"]["name"]}!',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: mainColor))
-                            ]),
-                      ),
-                      SizedBox(height: 10,),
-                      Text("Zarządzaj swoim ekranem głównym, ustawiając moduły do wyświetlenia", style: TextStyle(fontSize: 18),),
-                      SizedBox(height: 40),
-                      ],
-                    ),
-                    // Modules column
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0,0,0,15),
-                      child: Text(
-                        "Kategorie",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                        child: ListView.separated(
-                          itemCount: modulesTexts["module"]!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                          return GestureDetector(
-                              onTap: (){
-                                Navigator.pushNamed(context, "${modulesTexts["module"]![index]['route']}", arguments: {
-                                'module_data': data["userData"]["${modulesTexts["module"]![index]['dataName']}"],
-                                'route_name': modulesTexts["module"]![index]["dataName"],
-                              });
-                            },
-                            child: Container(
-                              width: width,
-                              height: height/5,
-                              decoration: BoxDecoration(
-                                color: bgSmokedWhite,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            Expanded(
+                              flex: 3,
+                              child: Stack(
                                 children: [
-                                  Expanded(
-                                    flex: 5,
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(15,20,0,0),
-                                      child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [  
-                                        Padding(
-                                          padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                          child: Text(
-                                            "${modulesTexts["module"]![index]["title"]}",
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ), 
-                                        modulesTexts["module"]![index]["subtitle"] == null ? (
-                                          Text(
-                                            "${modulesTexts["module"]![index]["subtitle_car"]}",
-                                            style: TextStyle(letterSpacing: 1.2),
-                                            )
-                                          ):(
-                                            Text(
-                                              "${modulesTexts["module"]![index]["subtitle"]}",
-                                               style: TextStyle(letterSpacing: 1.2),
-                                               )
-                                          ),
-                                          // product name OR car datetime
-                                          modulesTexts["module"]![index]["subtitle"] == null ? (
-                                          Text(
-                                            "20 dni",
-                                            style: TextStyle(letterSpacing: 1.2, fontWeight: FontWeight.w900),
-                                            )
-                                          ):(
-                                            Text(
-                                              "Umowa o pracę",
-                                               style: TextStyle(letterSpacing: 1.2,  fontWeight: FontWeight.w900),
-                                               )
-                                          ),
-                                      ]
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: ClipRRect(
+                                        child: Container(
+                                      width: 130,
+                                      height: height,
+                                      decoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                    )),
+                                  ),
+                                  Positioned(
+                                    width: 150,
+                                    left: 10,
+                                    child: Container(
+                                      height: 165,
+                                      width: 130,
+                                      alignment: Alignment(2, 2),
+                                      child: SvgPicture.asset(
+                                        "${modulesTexts["module"]![index]["img"]}",
+                                        height: 170,
+                                        width: 50,
+                                        allowDrawingOutsideViewBox: true,
                                       ),
                                     ),
                                   ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Stack(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                                          child: ClipRRect(
-                                            child: Container(
-                                              width: 130,
-                                            height: height,
-                                            decoration: BoxDecoration(
-                                              color: Colors.transparent,
-                                              borderRadius: BorderRadius.circular(25),
-                                            ),
-                                            )
-                                          ),
-                                        ),
-                                        Positioned(      
-                                          width: 150,
-                                          left: 10,
-                                          child: Container(
-                                            height: 165,
-                                            width: 130,
-                                            alignment: Alignment(2,2),
-                                            child: SvgPicture.asset(
-                                              "${modulesTexts["module"]![index]["img"]}",
-                                               height: 170,
-                                               width: 50,
-                                                 allowDrawingOutsideViewBox: true,
-                                              ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                 ],
-                                ),
+                              ),
                             ),
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) => const Divider(color: Colors.transparent,),
+                          ],
                         ),
-                    )
-                  ]
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(
+                    color: Colors.transparent,
+                  ),
                 ),
-            ),
+              )
+            ]),
+          ),
         ),
       ),
-     );
+    );
   }
 }

@@ -3,7 +3,9 @@ import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
+import 'package:projzespoloey/pages/documentsModule/documentItem.dart';
 import 'package:projzespoloey/pages/documentsModule/documentsList.dart';
+import 'package:projzespoloey/pages/homeModule/homeItem.dart';
 // import 'package:projzespoloey/pages/_documentsList.dart';
 import 'package:projzespoloey/pages/homeModule/homeList.dart';
 import 'package:projzespoloey/pages/receiptsModule/receiptItem.dart';
@@ -35,8 +37,10 @@ class MyApp extends StatelessWidget {
         '/carItem': (context) => CarItem(),
         // Documents Routes
         '/documentList': (context) => DocumentsList(),
+        '/documentItem': (context) => DocumentItem(),
         // Home Routes
         '/homeList': (context) => HomeList(),
+        '/homeItem': (context) => HomeItem(),
         // Receipts Routes
         '/receiptList': (context) => ReceiptList(),
         '/receiptItem': (context) => ReceiptItem(),
@@ -48,7 +52,9 @@ class MyApp extends StatelessWidget {
           colorScheme: ThemeData()
               .colorScheme
               .copyWith(primary: primaryColor, secondary: secondaryColor),
-          appBarTheme: AppBarTheme(color: primaryColor),
+          appBarTheme: AppBarTheme(
+              color: primaryColor,
+              titleTextStyle: TextStyle(color: fontBlack, fontFamily: "Lato")),
           visualDensity: VisualDensity.adaptivePlatformDensity),
     );
   }

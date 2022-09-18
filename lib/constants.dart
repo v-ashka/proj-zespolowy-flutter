@@ -16,6 +16,7 @@ const icon70Black = Color(0xb3000000);
 // kolor tekstu
 const fontGrey = Color(0xff7D7D7D);
 const fontBlack = Color(0xff1E1E1E);
+const fontWhite = Color.fromARGB(255, 255, 255, 255);
 
 // kolory background
 const bg100Grey = Color(0xffb2b2b2); //button color

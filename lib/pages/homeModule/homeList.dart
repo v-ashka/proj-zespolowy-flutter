@@ -1,19 +1,21 @@
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:flutter/material.dart';
 import "package:projzespoloey/components/module_list.dart";
 
-import '../constants.dart';
+import '../../constants.dart';
 
-class DocumentsList extends StatefulWidget {
-  const DocumentsList({Key? key}) : super(key: key);
+class HomeList extends StatefulWidget {
+  const HomeList({Key? key}) : super(key: key);
 
   @override
-  State<DocumentsList> createState() => _DocumentsListState();
+  State<HomeList> createState() => HomeListState();
 }
 
-class _DocumentsListState extends State<DocumentsList> {
+class HomeListState extends State<HomeList> {
   Map data = {};
+
   @override
   Widget build(BuildContext context) {
     data = data.isNotEmpty
@@ -25,7 +27,7 @@ class _DocumentsListState extends State<DocumentsList> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         elevation: 0,
-        title: Text('Dokumenty'),
+        title: Text('Sprzęt domowy'),
         leading: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Colors.transparent,
@@ -59,7 +61,7 @@ class _DocumentsListState extends State<DocumentsList> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pushNamed(context, "/form",
-              arguments: {'form_type': 'add_document'});
+              arguments: {'form_type': 'add_home'});
         },
         backgroundColor: mainColor,
         label: Text('Dodaj nowy'),

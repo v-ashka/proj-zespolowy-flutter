@@ -408,26 +408,50 @@
       "name": "Mysz gaming",
       "dateCreated": "26-05-2022",
       "image": "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2019/3/pr_2019_3_14_10_55_14_106_00.jpg",
-      "refund_time": "2022-09-13",
+      "refund_time": "2022-10-13",
       "guarantee_time": "2022-12-13",
-      "price": "4500"
+      "price": "4500",
+      "additional_info": {
+        "purchase_date": "11-05-2022",
+        "product_category": "elektronika",
+        "purchase_type": "zakup w sklepie",
+        "purchase_place": "media-expert",
+        "info": "wykupiona gwarancja 50zł"
+      },
+      "files": [""]
     },
     {
-      "name": "Iphone 13 PRO",
+      "name": "iPhone 13 PRO",
       "dateCreated": "15-03-2022",
       "image": "https://assets.swappie.com/cdn-cgi/image/width=600,height=600,fit=contain,format=auto/swappie-iphone-13-pro-graphite-back.png",
       "refund_time": "2022-09-13",
       "guarantee_time": "2023-10-13",
-      "price": "6000"
+      "price": "6000",
+      "additional_info": {
+        "purchase_date": "11-03-2022",
+        "product_category": "elektronika",
+        "purchase_type": "zakup online",
+        "purchase_place": "x-kom",
+        "info": "dodatkowa dwuletnia gwarancja sklepu"
+      },
+      "files": [""]
     },
 
     {
       "name": "Kuchenka mikrofalowa",
       "dateCreated": "25-10-2020",
-      "image": "https://www.pasaz24cdn.pl/web3801/productimages/22294728_2383.jpg",
+      "image": "https://f01.esfr.pl/foto/3/17262566585/6a0bae6db27bbcceed41d770ffd4a6f4/amica-amgf20e1gb,17262566585_7.jpg",
       "refund_time": "2022-10-13",
       "guarantee_time": "2023-11-13",
-      "price": "400"
+      "price": "400",
+      "additional_info": {
+        "purchase_date": "21-05-2022",
+        "product_category": "elektronika",
+        "purchase_type": "zakup online",
+        "purchase_place": "skapiec.pl",
+        "info": "wgniotka przy drzwiczkach"
+      },
+      "files": [""]
     },
     {
       "name": "Telewizor 40 cali",
@@ -435,7 +459,15 @@
       "image": "https://satysfakcja.stati.pl//allegro_new/RTV/video/Xiaomi/L50M6-6AEU/f1-telewizor-4K-xiaomi-mi-tv-P1-50.jpg",
       "refund_time": "2022-05-13",
       "guarantee_time": "2023-01-26",
-      "price": "5000"
+      "price": "5000",
+      "additional_info": {
+        "purchase_date": "31-03-2022",
+        "product_category": "elektronika",
+        "purchase_type": "zakup w sklepie",
+        "purchase_place": "Media Markt",
+        "info": "z outletu"
+      },
+      "files": [""]
     }
   ],
   "household": [

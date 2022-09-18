@@ -3,16 +3,16 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import "package:projzespoloey/components/module_list.dart";
 
-import '../constants.dart';
+import '../../constants.dart';
 
-class CarList extends StatefulWidget {
-  const CarList({Key? key}) : super(key: key);
+class DocumentsList extends StatefulWidget {
+  const DocumentsList({Key? key}) : super(key: key);
 
   @override
-  State<CarList> createState() => _CarListState();
+  State<DocumentsList> createState() => _DocumentsListState();
 }
 
-class _CarListState extends State<CarList> {
+class _DocumentsListState extends State<DocumentsList> {
   Map data = {};
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class _CarListState extends State<CarList> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         elevation: 0,
-        title: Text('Pojazdy'),
+        title: Text('Dokumenty'),
         leading: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Colors.transparent,
@@ -59,7 +59,7 @@ class _CarListState extends State<CarList> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pushNamed(context, "/form",
-              arguments: {'form_type': 'add_car'});
+              arguments: {'form_type': 'add_document'});
         },
         backgroundColor: mainColor,
         label: Text('Dodaj nowy'),

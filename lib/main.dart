@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/pages/carList.dart';
+import 'package:projzespoloey/pages/carsModule/carItem.dart';
+import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
-import 'package:projzespoloey/pages/documentsList.dart';
+import 'package:projzespoloey/pages/documentsModule/documentsList.dart';
 // import 'package:projzespoloey/pages/_documentsList.dart';
-import 'package:projzespoloey/pages/homeList.dart';
-import 'package:projzespoloey/pages/receiptList.dart';
+import 'package:projzespoloey/pages/homeModule/homeList.dart';
+import 'package:projzespoloey/pages/receiptsModule/receiptItem.dart';
+import 'package:projzespoloey/pages/receiptsModule/receiptList.dart';
 import 'package:projzespoloey/pages/userauth.dart';
 import 'package:projzespoloey/pages/loading.dart';
 import 'package:projzespoloey/pages/form.dart';
@@ -24,14 +26,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/carList': (context) => CarList(),
-        '/documentList': (context) => DocumentsList(),
         '/': (context) => Loading(),
         '/user_auth': (context) => UserAuth(),
         '/dashboard': (context) => Dashboard(),
-        '/homeList': (context) => HomeList(),
-        '/receiptList': (context) => ReceiptList(),
         '/form': (context) => DataForm(),
+        // Car Routes
+        '/carList': (context) => CarList(),
+        '/carItem': (context) => CarItem(),
+        // Documents Routes
+        '/documentList': (context) => DocumentsList(),
+        // Home Routes
+        '/homeList': (context) => HomeList(),
+        // Receipts Routes
+        '/receiptList': (context) => ReceiptList(),
+        '/receiptItem': (context) => ReceiptItem(),
       },
       title: 'OrganizerPRO',
       theme: ThemeData(

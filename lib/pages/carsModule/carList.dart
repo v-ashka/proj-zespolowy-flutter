@@ -1,21 +1,19 @@
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-
 import 'package:flutter/material.dart';
 import "package:projzespoloey/components/module_list.dart";
 
-import '../constants.dart';
+import '../../constants.dart';
 
-class HomeList extends StatefulWidget {
-  const HomeList({Key? key}) : super(key: key);
+class CarList extends StatefulWidget {
+  const CarList({Key? key}) : super(key: key);
 
   @override
-  State<HomeList> createState() => HomeListState();
+  State<CarList> createState() => _CarListState();
 }
 
-class HomeListState extends State<HomeList> {
+class _CarListState extends State<CarList> {
   Map data = {};
-
   @override
   Widget build(BuildContext context) {
     data = data.isNotEmpty
@@ -27,7 +25,7 @@ class HomeListState extends State<HomeList> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         elevation: 0,
-        title: Text('Sprzęt domowy'),
+        title: Text('Pojazdy'),
         leading: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Colors.transparent,
@@ -61,7 +59,7 @@ class HomeListState extends State<HomeList> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pushNamed(context, "/form",
-              arguments: {'form_type': 'add_home'});
+              arguments: {'form_type': 'add_car'});
         },
         backgroundColor: mainColor,
         label: Text('Dodaj nowy'),

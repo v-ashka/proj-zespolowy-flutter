@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 const primaryColor = Color(0xfff8f8f8);
 const primaryBgColor = Color(0xffdedede); //background color grey-white
 const secondaryColor = Color(0xffefefef); // secondary color
+const sliderColor = Color.fromARGB(255, 211, 211, 211); // secondary color
 const buttonColor = Color(0x4000b2ff); //button color
 const errorColor = Color.fromARGB(171, 255, 0, 0);
 // Szablonowe kolory

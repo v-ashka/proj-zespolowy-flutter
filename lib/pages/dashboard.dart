@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/src/foundation/key.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projzespoloey/main.dart';
+import 'package:http/http.dart' as http;
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -64,7 +66,7 @@ class _DashboardState extends State<Dashboard> {
         ? data
         : ModalRoute.of(context)?.settings.arguments as Map;
 
-    // print(data);
+    print(data["token"]);
     return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
       body: SafeArea(
@@ -147,7 +149,8 @@ class _DashboardState extends State<Dashboard> {
                             fontWeight: FontWeight.w300),
                         children: <TextSpan>[
                           TextSpan(
-                              text: ' ${data["userData"]["name"]}!',
+                              text:
+                                  ' ${data["tokenData"]["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]}!',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: mainColor))
@@ -181,6 +184,9 @@ class _DashboardState extends State<Dashboard> {
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
+                        // Navigator.pushNamed(context,
+                        //     "${modulesTexts["module"]![index]['route']}",
+                        //     // arguments: {"token": data["token"]});
                         Navigator.pushNamed(context,
                             "${modulesTexts["module"]![index]['route']}",
                             arguments: {

@@ -22,15 +22,16 @@ class _ModuleListState extends State<ModuleList> {
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.data);
-    // DateTime date1 = DateTime.parse(widget.data["module_data"][1]['end_time']);
+    print(widget.data);
+    // DateTime date1 = DateTime.parse(widget.data["data"][1]['end_time']);
     // print(date1);
-    // print("${widget.data["module_data"][0]["name"]}");
+    // print("${widget.data["data"][0]["name"]}");
     final today = DateTime.now();
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
       child: ListView.separated(
         padding: const EdgeInsets.all(20),
+        // itemCount: widget.data['module_data'].length,
         itemCount: widget.data['module_data'].length,
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
@@ -62,7 +63,7 @@ class _ModuleListState extends State<ModuleList> {
                               "${widget.data['module_data'][index]["name"]}",
                               style: TextStyle(
                                 fontSize: widget
-                                            .data['module_data'][index]['name']!
+                                            .data['module_data'][index]['name']
                                             .length >
                                         15
                                     ? (14)
@@ -354,8 +355,8 @@ class _ModuleListState extends State<ModuleList> {
                                         ),
                                       );
                                     },
-                                    // image: Image.network("${widget.data['module_data'][index]['image']}"),
-                                    // image: NetworkImage("${widget.data['module_data'][index]['image']}"),
+                                    // image: Image.network("${widget.data['data'][index]['image']}"),
+                                    // image: NetworkImage("${widget.data['data'][index]['image']}"),
                                   ),
                                 ),
                               ),

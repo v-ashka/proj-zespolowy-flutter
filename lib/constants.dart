@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+// server ip addr
+const SERVER_IP = "10.0.2.2:5151";
+// const SERVER_IP = "192.168.0.10:5151";
+
 // basic color app
 
 const primaryColor = Color(0xfff8f8f8);
@@ -8,6 +12,8 @@ const secondaryColor = Color(0xffefefef); // secondary color
 const sliderColor = Color.fromARGB(255, 211, 211, 211); // secondary color
 const buttonColor = Color(0x4000b2ff); //button color
 const errorColor = Color.fromARGB(171, 255, 0, 0);
+const deleteBtn = Color.fromARGB(255, 219, 58, 58);
+// rgba(219, 58, 58, 1)
 // Szablonowe kolory
 
 // kolor icon

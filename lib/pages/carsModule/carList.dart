@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import "package:projzespoloey/components/module_list.dart";
+import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
 
@@ -13,14 +16,34 @@ class CarList extends StatefulWidget {
 }
 
 class _CarListState extends State<CarList> {
+  // getCars(String data) async {
+  //   var response = await http.get(
+  //     Uri.parse('http://${SERVER_IP}/api/car/GetList'),
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': "Bearer ${data}",
+  //     },
+  //   );
+  //   print("function");
+  //   print(response.body);
+  //   if (response.statusCode == 200) {
+  //     carData["data"] = jsonDecode(response.body);
+  //     features = true;
+  //   } else {
+  //     print("Can't fetch car list!");
+  //   }
+  // }
+
   Map data = {};
+
   @override
   Widget build(BuildContext context) {
     data = data.isNotEmpty
         ? data
         : ModalRoute.of(context)?.settings.arguments as Map;
     final size = MediaQuery.of(context).size;
-
+    // print(carData["data"][0]["pojemnoscSilnika"]);
+    // print("len: ${carData["data"] == null}");
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -51,11 +74,13 @@ class _CarListState extends State<CarList> {
             color: Colors.black),
       ),
       body: Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/background.png'), fit: BoxFit.fill)),
-        child: ModuleList(data: data, size: size),
-      ),
+          height: double.infinity,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/background.png'),
+                  fit: BoxFit.fill)),
+          child: ModuleList(data: data, size: size)),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pushNamed(context, "/form",

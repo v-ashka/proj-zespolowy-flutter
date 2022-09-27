@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:animations/animations.dart';
 import 'package:projzespoloey/main.dart';
@@ -25,7 +26,7 @@ class _CarItemState extends State<CarItem> {
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
 
-    print(item);
+    // print(item);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -52,7 +53,7 @@ class _CarItemState extends State<CarItem> {
             fontFamily: 'Lato',
             fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
-        title: Text("Paragon - ${item["data"]["name"]}"),
+        title: Text("Pojazd - ${item["data"]["name"]}"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -62,270 +63,16 @@ class _CarItemState extends State<CarItem> {
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
           child: ListView(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(item["data"]["car_info"]["image"]),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.circular(25),
-                    color: Colors.white),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          color: secondaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 2),
-                                        child: Text("MARKA",
-                                            style: TextStyle(
-                                              color: fontBlack,
-                                              fontSize: 6,
-                                            )),
-                                      )),
-                                  Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          color: mainColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 2),
-                                        child: Text(
-                                          "Opel",
-                                          style: TextStyle(
-                                            color: fontWhite,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      )),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Column(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          color: secondaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 2),
-                                        child: Text("NR REJ.",
-                                            style: TextStyle(
-                                              color: fontBlack,
-                                              fontSize: 6,
-                                            )),
-                                      )),
-                                  Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          color: mainColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 2),
-                                        child: Text(
-                                          "LO ASTRA",
-                                          style: TextStyle(
-                                            color: fontWhite,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      )),
-                                ],
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Column(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: secondaryColor),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 2),
-                                    child: Text("MODEL",
-                                        style: TextStyle(
-                                          color: fontBlack,
-                                          fontSize: 6,
-                                        )),
-                                  )),
-                              Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: mainColor),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 2),
-                                    child: Text(
-                                      "Astra J",
-                                      style: TextStyle(
-                                        color: fontWhite,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Column(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: secondaryColor),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 2),
-                                    child: Text("`DATA PROD`.",
-                                        style: TextStyle(
-                                          color: fontBlack,
-                                          fontSize: 6,
-                                        )),
-                                  )),
-                              Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: mainColor),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 2),
-                                    child: Text(
-                                      "2019",
-                                      style: TextStyle(
-                                        color: fontWhite,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Column(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: secondaryColor),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 2),
-                                    child: Text("SILNIK",
-                                        style: TextStyle(
-                                          color: fontBlack,
-                                          fontSize: 6,
-                                        )),
-                                  )),
-                              Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: mainColor),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 2),
-                                    child: Text(
-                                      "1.6 Turbo",
-                                      style: TextStyle(
-                                        color: fontWhite,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Column(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: secondaryColor),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 2),
-                                    child: Text("VIN",
-                                        style: TextStyle(
-                                          color: fontBlack,
-                                          fontSize: 6,
-                                        )),
-                                  )),
-                              Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: mainColor),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 2),
-                                    child: Text(
-                                      "2T1BR32E67C748616",
-                                      style: TextStyle(
-                                        color: fontWhite,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              CarImageContainer(
+                  image: item["data"]["car_info"]["image"],
+                  brand: "Opel",
+                  model: "Astra J",
+                  prodDate:
+                      item["data"]["car_info"]["production_date"].toString(),
+                  engine: item["data"]["car_info"]["engine"],
+                  vinNr: item["data"]["insurance"][0]["oc_insurance_info"][0]
+                      ["vin_nr"],
+                  carRegNumber: "LO ASTRA"),
               SizedBox(
                 height: 15,
               ),
@@ -338,7 +85,9 @@ class _CarItemState extends State<CarItem> {
                       borderRadius: BorderRadius.circular(25),
                     )),
                 onPressed: () {
-                  print("ubezpieczenie");
+                  // print("ubezpieczenie");
+                  Navigator.pushNamed(context, "/carInsurance",
+                      arguments: {"data": item["data"]});
                 },
                 child: Container(
                   child: Padding(
@@ -450,7 +199,9 @@ class _CarItemState extends State<CarItem> {
                       borderRadius: BorderRadius.circular(25),
                     )),
                 onPressed: () {
-                  print("ubezpieczenie");
+                  // print("przeglad");
+                  Navigator.pushNamed(context, "/carService",
+                      arguments: {"data": item["data"]});
                 },
                 child: Container(
                   child: Padding(
@@ -511,7 +262,7 @@ class _CarItemState extends State<CarItem> {
                           ],
                         ),
                         Icon(
-                          Icons.text_snippet_outlined,
+                          Icons.history_outlined,
                           size: 82,
                           color: bg50Grey,
                         )
@@ -519,6 +270,93 @@ class _CarItemState extends State<CarItem> {
                     ),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: bgSmokedWhite,
+                    onPrimary: bg35Grey,
+                    padding: EdgeInsets.all(0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    )),
+                onPressed: () {
+                  // print("naprawy");
+                  Navigator.pushNamed(context, "/carRepairHistory",
+                      arguments: {"data": item["data"]});
+                },
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Historia Napraw",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: fontBlack,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              "OSTATNIE NAPRAWY",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: fontGrey,
+                                  fontFamily: "Roboto",
+                                  fontWeight: FontWeight.w300),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 150,
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: secondaryColor,
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Icon(
+                                    Icons.build_outlined,
+                                    size: 20,
+                                    color: fontGrey,
+                                  ),
+                                  Text(
+                                    "320 dni temu",
+                                    style: TextStyle(
+                                      color: fontBlack,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Icon(
+                          Icons.manage_history_outlined,
+                          size: 82,
+                          color: bg50Grey,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
               )
             ],
           ),

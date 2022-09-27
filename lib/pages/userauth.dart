@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decode/jwt_decode.dart';
 
 class UserAuth extends StatefulWidget {
   const UserAuth({Key? key}) : super(key: key);
@@ -14,18 +15,43 @@ class UserAuth extends StatefulWidget {
 
 class _UserAuthState extends State<UserAuth> {
   Map _userData = {};
-
+  String userToken = "";
+  Map<String, dynamic> payload = {};
   Future<void> readJson() async {
-    final String response = await rootBundle.loadString('assets/data/temp.json');
+    final String response =
+        await rootBundle.loadString('assets/data/temp.json');
     final data = await json.decode(response);
     setState(() {
       _userData = data;
     });
-    Navigator.pushNamed(context, '/dashboard',
-        arguments: {"userData": _userData});
+    Navigator.pushNamed(context, '/dashboard', arguments: {
+      "userData": _userData,
+      "token": userToken,
+      "tokenData": payload
+    });
   }
 
-
+  void createAlbum() async {
+    print(SERVER_IP);
+    var response = await http.post(
+      Uri.parse('http://${SERVER_IP}/api/account/login'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'email': 'adam@o2.pl',
+        'haslo': 'adam',
+      }),
+    );
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      userToken = response.body;
+      payload = Jwt.parseJwt(userToken);
+      readJson();
+    } else {
+      print("Network error");
+    }
+  }
 
   void authorizeUser() async {
     Map userData = {};
@@ -34,7 +60,12 @@ class _UserAuthState extends State<UserAuth> {
     print("login succesfull/failed");
 
     userData = {
-      "settings": {"carsVisible": "true", "documentsVisible": "false", "receiptVisible": "false", "otherProductsVisible": "false"},
+      "settings": {
+        "carsVisible": "true",
+        "documentsVisible": "false",
+        "receiptVisible": "false",
+        "otherProductsVisible": "false"
+      },
       "name": "Andrzej",
       "surname": "Wąsacz",
       "cars": {
@@ -65,10 +96,10 @@ class _UserAuthState extends State<UserAuth> {
     return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
-            reverse: true,
-            child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        reverse: true,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
             const Center(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(94, 10, 94, 44),
@@ -101,8 +132,8 @@ class _UserAuthState extends State<UserAuth> {
                     TextFormField(
                       decoration: InputDecoration(
                         hintText: 'Login',
-                        hintStyle:
-                            const TextStyle(fontSize: 20, color: Color(0xff7D7D7D)),
+                        hintStyle: const TextStyle(
+                            fontSize: 20, color: Color(0xff7D7D7D)),
                         fillColor: const Color(0xffF5F5F5),
                         filled: true,
                         border: OutlineInputBorder(
@@ -118,8 +149,8 @@ class _UserAuthState extends State<UserAuth> {
                     TextFormField(
                       decoration: InputDecoration(
                         hintText: 'Hasło',
-                        hintStyle:
-                            const TextStyle(fontSize: 20, color: Color(0xff7D7D7D)),
+                        hintStyle: const TextStyle(
+                            fontSize: 20, color: Color(0xff7D7D7D)),
                         fillColor: const Color(0xffF5F5F5),
                         filled: true,
                         border: OutlineInputBorder(
@@ -139,39 +170,49 @@ class _UserAuthState extends State<UserAuth> {
                           style: style,
                           onPressed: () {
                             readJson();
+                            // createAlbum();
                           },
                           child: const Text(
                             "Zaloguj się",
                             style: TextStyle(fontWeight: FontWeight.w800),
                           )),
                     ),
-                     Padding(
-                      padding: EdgeInsets.fromLTRB(15,37,15,22),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(15, 37, 15, 22),
                       child: TextButton(
                         onPressed: () {
-                          authorizeUser();
-                          },
+                          // authorizeUser();
+                        },
                         child: Text.rich(
                           TextSpan(
                             style: TextStyle(color: const Color(0xff272727)),
                             children: <TextSpan>[
-                              TextSpan(text: 'Nie masz konta?', style: TextStyle(fontSize: 20)),
-                              TextSpan(text: ' Zarejestruj się', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800), ),
+                              TextSpan(
+                                  text: 'Nie masz konta?',
+                                  style: TextStyle(fontSize: 20)),
+                              TextSpan(
+                                text: ' Zarejestruj się',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w800),
+                              ),
                             ],
                           ),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(50,0,50,30),
+                      padding: const EdgeInsets.fromLTRB(50, 0, 50, 30),
                       child: const Text("Odzyskaj hasło",
-                      style: TextStyle(fontSize: 20, color: Color(0xff8B8B8B), fontWeight: FontWeight.w600)),
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0xff8B8B8B),
+                              fontWeight: FontWeight.w600)),
                     )
                   ],
                 )))
-        ],
-      ),
-          )),
+          ],
+        ),
+      )),
     );
   }
 }

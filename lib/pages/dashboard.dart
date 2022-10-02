@@ -66,7 +66,7 @@ class _DashboardState extends State<Dashboard> {
         ? data
         : ModalRoute.of(context)?.settings.arguments as Map;
 
-    print(data["token"]);
+    print("token: ${data["token"]}");
     return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
       body: SafeArea(
@@ -194,6 +194,7 @@ class _DashboardState extends State<Dashboard> {
                                   "${modulesTexts["module"]![index]['dataName']}"],
                               'route_name': modulesTexts["module"]![index]
                                   ["dataName"],
+                              'user_auth': data["token"]
                             });
                       },
                       child: Container(

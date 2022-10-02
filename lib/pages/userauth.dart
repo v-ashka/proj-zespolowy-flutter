@@ -169,8 +169,8 @@ class _UserAuthState extends State<UserAuth> {
                       child: ElevatedButton(
                           style: style,
                           onPressed: () {
-                            readJson();
-                            // createAlbum();
+                            // readJson();
+                            createAlbum();
                           },
                           child: const Text(
                             "Zaloguj się",

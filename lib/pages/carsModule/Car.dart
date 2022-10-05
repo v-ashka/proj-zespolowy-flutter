@@ -78,6 +78,9 @@ class CarModel {
 }
 
 class Insurance {
+  List<Insurance> insuranceModelFromJson(String str) =>
+      List<Insurance>.from(json.decode(str).map((x) => Insurance.fromJson(x)));
+
   bool dataLoaded = false;
   Insurance(
       {required this.id,
@@ -96,8 +99,19 @@ class Insurance {
   double policyPrice;
   int insuranceType;
 
-  Future<void> fetchData(id, token) async {
-    try {} catch (e) {
+  Future fetchData(id, token) async {
+    try {
+      var url = Uri.parse("http://${SERVER_IP}/api/car/GetList");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer ${token}",
+      });
+
+      if (response.statusCode == 200) {
+        List<Insurance> _model = insuranceModelFromJson(response.body);
+        return _model;
+      }
+    } catch (e) {
       print("error $e");
     }
   }

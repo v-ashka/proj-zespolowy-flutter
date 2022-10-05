@@ -67,6 +67,8 @@ class _DashboardState extends State<Dashboard> {
         : ModalRoute.of(context)?.settings.arguments as Map;
 
     print("token: ${data["token"]}");
+    print("other data");
+    print(data);
     return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
       body: SafeArea(

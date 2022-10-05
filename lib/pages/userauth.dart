@@ -39,8 +39,8 @@ class _UserAuthState extends State<UserAuth> {
         'Content-Type': 'application/json',
       },
       body: jsonEncode(<String, String>{
-        'email': 'adam@o2.pl',
-        'haslo': 'adam',
+        'email': 'admin@admin.pl',
+        'haslo': 'admin',
       }),
     );
     print(response.statusCode);

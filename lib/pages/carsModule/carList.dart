@@ -44,6 +44,8 @@ class _CarListState extends State<CarList> {
     final size = MediaQuery.of(context).size;
     // print(carData["data"][0]["pojemnoscSilnika"]);
     // print("len: ${carData["data"] == null}");
+    print("data test:");
+    print(data["user_auth"]);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(

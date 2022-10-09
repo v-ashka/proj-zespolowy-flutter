@@ -13,6 +13,12 @@ List<CarModel> carModelFromJson(String str) =>
 String carModelToJson(List<CarModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+List<CarModel2> carModel2FromJson(String str) =>
+    List<CarModel2>.from(json.decode(str).map((x) => CarModel2.fromJson(x)));
+
+String carModel2ToJson(List<CarModel2> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
 void getToken(String token) {
   userToken = token;
 }
@@ -185,5 +191,80 @@ class Service {
         "serviceDate": serviceDate,
         "nextServiceDate": nextServiceDate,
         "regNr": regNr
+      };
+}
+
+class CarModel2 {
+  Future<void> getInsurance(token, id) async {
+    id = this.id;
+    try {
+      var url = Uri.parse("${SERVER_IP}//api/insurance/GetInsurance/${id}");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer ${token}",
+      });
+      data = jsonDecode(response.body);
+    } catch (e) {
+      print("error $e");
+    }
+  }
+
+  List data = [];
+  CarModel2({
+    required this.id,
+    required this.engineCapacity,
+    required this.prodDate,
+    required this.vin,
+    required this.purchaseDate,
+    required this.regNr,
+    required this.imgId,
+    required this.model,
+    required this.brand,
+    required this.insurance,
+    // required this.service
+  });
+
+  String id;
+  String engineCapacity;
+  String prodDate;
+  String vin;
+  String purchaseDate;
+  String regNr;
+  String imgId;
+  String model;
+  String brand;
+  // List test;
+  Insurance insurance;
+  // Service service;
+  factory CarModel2.fromJson(Map<String, dynamic> json) => CarModel2(
+        id: json["idPubliczne"],
+        engineCapacity: json["pojemnoscSilnika"],
+        prodDate: json["rokProdukcji"],
+        vin: json["numerVin"],
+        purchaseDate: json["dataZakupu"],
+        regNr: json["numerRejestracyjny"],
+        imgId: json["idZdjecia"],
+        model: json["model"],
+        brand: json["marka"],
+        insurance: Insurance.fromJson(json["insurance"]),
+        // insurance: Insurance.fetchData(id, userToken),
+
+        // insurance: insurance.dataLoaded,
+        // service: Service.fromJson(json["service"])
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "engineCapacity": engineCapacity,
+        "prodDate": prodDate,
+        "vin": vin,
+        "purchaseDate": purchaseDate,
+        "regNr": regNr,
+        "imgId": imgId,
+        "model": model,
+        "brand": brand,
+        // "test": [],
+        "insurance": insurance.toJson(),
+        // "service": service.toJson(),
       };
 }

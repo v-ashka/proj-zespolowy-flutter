@@ -3,6 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 
 class CarInsuranceView extends StatefulWidget {
   const CarInsuranceView({Key? key}) : super(key: key);
@@ -22,56 +23,57 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
 
-    print("test: ${item}");
+    print("test");
+    print(item["data"]);
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          leading: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.transparent,
-              onPrimary: Colors.transparent,
-              shadowColor: Colors.transparent,
-              onSurface: Colors.red,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
+      appBar: AppBar(
+        elevation: 0.0,
+        leading: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.transparent,
+            onPrimary: Colors.transparent,
+            shadowColor: Colors.transparent,
+            onSurface: Colors.red,
           ),
-          foregroundColor: Colors.transparent,
-          backgroundColor: secondaryColor,
-          shadowColor: Colors.transparent,
-          titleTextStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Lato',
-              fontSize: MediaQuery.of(context).textScaleFactor * 20,
-              color: Colors.black),
-          title: Text("Ubezpieczenie - ${item["data"]["name"]}"),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
         ),
-        body: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/background.png'),
-                  fit: BoxFit.fill)),
-          child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-              child: ListView(children: [
-                CarImageContainer(
-                    image: item["data"]["car_info"]["image"],
-                    brand: "Opel",
-                    model: "Astra J",
-                    prodDate:
-                        item["data"]["car_info"]["production_date"].toString(),
-                    engine: item["data"]["car_info"]["engine"],
-                    vinNr: item["data"]["insurance"][0]["oc_insurance_info"][0]
-                        ["vin_nr"],
-                    carRegNumber: "LO ASTRA"),
-                SizedBox(
-                  height: 15,
-                ),
+        foregroundColor: Colors.transparent,
+        backgroundColor: secondaryColor,
+        shadowColor: Colors.transparent,
+        titleTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Lato',
+            fontSize: MediaQuery.of(context).textScaleFactor * 20,
+            color: Colors.black),
+        title: Text("Ubezpieczenie - ${item["car"]["modelId"]}"),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/background.png'), fit: BoxFit.fill)),
+        child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+            child: ListView(children: [
+              CarImageContainer(
+                  image: item["car"]["idZdjecia"],
+                  brand: "Opel",
+                  model: "Astra J",
+                  prodDate: item["car"]["rokProdukcji"],
+                  engine: item["car"]["pojemnoscSilnika"],
+                  vinNr: item["car"]["numerVin"],
+                  carRegNumber: item["car"]["numerRejestracyjny"]),
+              SizedBox(
+                height: 15,
+              ),
+              if (item["data"].length < 1) ...[
+                Center(child: Text("Trochę tu pusto..."))
+              ] else ...[
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
@@ -158,7 +160,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                              "RW-XX-123-665-222-123",
+                                              "${item["data"].first["nrPolisy"]}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontSize: 14,
@@ -196,7 +198,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                 borderRadius:
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
-                                            child: Text("PZU",
+                                            child: Text(
+                                                "${item["data"].first["ubezpieczyciel"]}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontSize: 14,
@@ -234,7 +237,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                                "20-07-2022 / 19-07-2023",
+                                                "${item["data"].first["dataZakupu"].toString().substring(0, 10)} / ${item["data"].first["dataKonca"].toString().substring(0, 10)}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -271,7 +274,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                 borderRadius:
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
-                                            child: Text("420,25 zł",
+                                            child: Text(
+                                                "${item["data"].first["kosztPolisy"]} zł",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -308,7 +312,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                 borderRadius:
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
-                                            child: Text("VF3WE9HZC34637643",
+                                            child: Text(
+                                                "${item["car"]["numerVin"]}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -348,7 +353,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
                                     color: secondaryColor),
-                                child: Text("320 dni",
+                                child: Text(
+                                    "${CarApiService().daysBetween(CarApiService().today, DateTime.parse(item["data"].first["dataKonca"]))} dni",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 14,
@@ -455,6 +461,11 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                   )),
                               onPressed: () {
                                 print("edit object");
+                                Navigator.pushNamed(context, "/form",
+                                    arguments: {
+                                      "data": item["data"].first,
+                                      "form_type": "car_insurance"
+                                    });
                               },
                               child: Container(
                                 width: 50,
@@ -569,7 +580,18 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                 SizedBox(
                   height: 50,
                 ),
-              ])),
-        ));
+              ]
+            ])),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, "/formCarInsurance",
+              arguments: {'form_type': 'car_insurance'});
+        },
+        backgroundColor: mainColor,
+        label: Text('Dodaj nowy'),
+        icon: Icon(Icons.add),
+      ),
+    );
   }
 }

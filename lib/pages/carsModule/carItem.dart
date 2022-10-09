@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:animations/animations.dart';
 import 'package:projzespoloey/main.dart';
+import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
 import 'package:projzespoloey/pages/form.dart';
 
@@ -16,17 +20,44 @@ class CarItem extends StatefulWidget {
 }
 
 class _CarItemState extends State<CarItem> {
+  late Map<String, dynamic>? carData = {};
+  late List? insuranceData = [];
+  late List? serviceData = [];
+  final storage = new FlutterSecureStorage();
   Map item = {};
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        item = item.isNotEmpty
+            ? item
+            : ModalRoute.of(context)?.settings.arguments as Map;
+      });
+      _getData(item["data"]);
+    });
+  }
+
+  void _getData(id) async {
+    String? tokenVal = await storage.read(key: "token");
+
+    carData = (await CarApiService().getCar(tokenVal, id));
+    insuranceData = (await CarApiService().getInsurance(tokenVal, id));
+    serviceData = (await CarApiService().getService(tokenVal, id));
+    Future.delayed(Duration(seconds: 1)).then((value) => setState(() {}));
+  }
 
   @override
   Widget build(BuildContext context) {
-    item = item.isNotEmpty
-        ? item
-        : ModalRoute.of(context)?.settings.arguments as Map;
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
 
+    // print("item: ");
     // print(item);
+    // print("car data");
+    // print(carData!.length);
+    // print("test token: ${storage.read(key: "token")}");
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -53,7 +84,9 @@ class _CarItemState extends State<CarItem> {
             fontFamily: 'Lato',
             fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
-        title: Text("Pojazd - ${item["data"]["name"]}"),
+        title: Text(carData!.length == 0
+            ? ("Ładuję...")
+            : ("Pojazd - ${carData!["modelId"]}")),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -61,306 +94,330 @@ class _CarItemState extends State<CarItem> {
                 image: AssetImage('assets/background.png'), fit: BoxFit.fill)),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-          child: ListView(
-            children: [
-              CarImageContainer(
-                  image: item["data"]["car_info"]["image"],
-                  brand: "Opel",
-                  model: "Astra J",
-                  prodDate:
-                      item["data"]["car_info"]["production_date"].toString(),
-                  engine: item["data"]["car_info"]["engine"],
-                  vinNr: item["data"]["insurance"][0]["oc_insurance_info"][0]
-                      ["vin_nr"],
-                  carRegNumber: "LO ASTRA"),
-              SizedBox(
-                height: 15,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: bgSmokedWhite,
-                    onPrimary: bg35Grey,
-                    padding: EdgeInsets.all(0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    )),
-                onPressed: () {
-                  // print("ubezpieczenie");
-                  Navigator.pushNamed(context, "/carInsurance",
-                      arguments: {"data": item["data"]});
-                },
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Ubezpieczenie",
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: fontBlack,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "OKRES WAŻNOŚCI",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: fontGrey,
-                                  fontFamily: "Roboto",
-                                  fontWeight: FontWeight.w300),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 100,
-                              padding: EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                color: secondaryColor,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    "OC",
-                                    style: TextStyle(
-                                        color: fontBlack,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "320 dni",
-                                    style: TextStyle(
-                                      color: fontBlack,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 100,
-                              padding: EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                color: secondaryColor,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    "AC",
-                                    style: TextStyle(
-                                        color: fontBlack,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "brak",
-                                    style: TextStyle(
-                                      color: fontBlack,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        Icon(
-                          Icons.text_snippet_outlined,
-                          size: 82,
-                          color: bg50Grey,
-                        )
-                      ],
+          child: carData!.length == 0
+              ? ((Center(
+                  child: CircularProgressIndicator(
+                  color: mainColor,
+                ))))
+              : (ListView(
+                  children: [
+                    CarImageContainer(
+                        image: carData!["idZdjecia"],
+                        brand: "Opel",
+                        model: "Astra J",
+                        prodDate: carData!["rokProdukcji"].toString(),
+                        engine: carData!["pojemnoscSilnika"],
+                        vinNr: carData!["numerVin"],
+                        carRegNumber: carData!["numerRejestracyjny"]),
+                    SizedBox(
+                      height: 15,
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: bgSmokedWhite,
-                    onPrimary: bg35Grey,
-                    padding: EdgeInsets.all(0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    )),
-                onPressed: () {
-                  // print("przeglad");
-                  Navigator.pushNamed(context, "/carService",
-                      arguments: {"data": item["data"]});
-                },
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Przegląd",
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: fontBlack,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "OKRES WAŻNOŚCI PRZEGLĄDU",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: fontGrey,
-                                  fontFamily: "Roboto",
-                                  fontWeight: FontWeight.w300),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 100,
-                              padding: EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                color: secondaryColor,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: bgSmokedWhite,
+                          onPrimary: bg35Grey,
+                          padding: EdgeInsets.all(0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          )),
+                      onPressed: () {
+                        // print("ubezpieczenie");
+                        Navigator.pushNamed(context, "/carInsurance",
+                            arguments: {"car": carData, "data": insuranceData});
+                      },
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(
-                                    Icons.car_repair_outlined,
-                                    size: 20,
-                                    color: fontGrey,
+                                  Text(
+                                    "Ubezpieczenie",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: fontBlack,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 2,
                                   ),
                                   Text(
-                                    "320 dni",
+                                    "OKRES WAŻNOŚCI",
                                     style: TextStyle(
-                                      color: fontBlack,
+                                        fontSize: 12,
+                                        color: fontGrey,
+                                        fontFamily: "Roboto",
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    width: 100,
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      color: secondaryColor,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(
+                                          "OC",
+                                          style: TextStyle(
+                                              color: fontBlack,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          insuranceData!.length > 1
+                                              ? ("${CarApiService().daysBetween(DateTime.parse(insuranceData!.first["dataKonca"]), CarApiService().today)} dni")
+                                              : ("brak"),
+                                          style: TextStyle(
+                                            color: fontBlack,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    width: 100,
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      color: secondaryColor,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(
+                                          "AC",
+                                          style: TextStyle(
+                                              color: fontBlack,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          insuranceData!.length < 1 ||
+                                                  insuranceData!.first[
+                                                          "idRodzajUbezpieczenia"] !=
+                                                      2
+                                              ? ("brak")
+                                              : ("${CarApiService().daysBetween(DateTime.parse(insuranceData!.first["dataKonca"]), CarApiService().today)} dni"),
+                                          style: TextStyle(
+                                            color: fontBlack,
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   )
                                 ],
                               ),
-                            ),
-                          ],
+                              Icon(
+                                Icons.text_snippet_outlined,
+                                size: 82,
+                                color: bg50Grey,
+                              )
+                            ],
+                          ),
                         ),
-                        Icon(
-                          Icons.history_outlined,
-                          size: 82,
-                          color: bg50Grey,
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: bgSmokedWhite,
-                    onPrimary: bg35Grey,
-                    padding: EdgeInsets.all(0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    )),
-                onPressed: () {
-                  // print("naprawy");
-                  Navigator.pushNamed(context, "/carRepairHistory",
-                      arguments: {"data": item["data"]});
-                },
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Historia Napraw",
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: fontBlack,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "OSTATNIE NAPRAWY",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: fontGrey,
-                                  fontFamily: "Roboto",
-                                  fontWeight: FontWeight.w300),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 150,
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                color: secondaryColor,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: bgSmokedWhite,
+                          onPrimary: bg35Grey,
+                          padding: EdgeInsets.all(0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          )),
+                      onPressed: () {
+                        // print("przeglad");
+                        Navigator.pushNamed(context, "/carService",
+                            arguments: {"car": carData, "data": serviceData});
+                      },
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(
-                                    Icons.build_outlined,
-                                    size: 20,
-                                    color: fontGrey,
-                                  ),
                                   Text(
-                                    "320 dni temu",
+                                    "Przegląd",
                                     style: TextStyle(
+                                      fontSize: 20,
                                       color: fontBlack,
                                     ),
-                                  )
+                                  ),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(
+                                    "OKRES WAŻNOŚCI PRZEGLĄDU",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: fontGrey,
+                                        fontFamily: "Roboto",
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    width: 100,
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      color: secondaryColor,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Icon(
+                                          Icons.car_repair_outlined,
+                                          size: 20,
+                                          color: fontGrey,
+                                        ),
+                                        Text(
+                                          serviceData!.length > 1
+                                              ? ("${CarApiService().daysBetween(CarApiService().today, DateTime.parse(serviceData!.first["dataNastepnegoPrzegladu"]))} dni")
+                                              : ("brak"),
+                                          style: TextStyle(
+                                            color: fontBlack,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                          ],
+                              Icon(
+                                Icons.history_outlined,
+                                size: 82,
+                                color: bg50Grey,
+                              )
+                            ],
+                          ),
                         ),
-                        Icon(
-                          Icons.manage_history_outlined,
-                          size: 82,
-                          color: bg50Grey,
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              )
-            ],
-          ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: bgSmokedWhite,
+                          onPrimary: bg35Grey,
+                          padding: EdgeInsets.all(0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          )),
+                      onPressed: () {
+                        // print("naprawy");
+                        Navigator.pushNamed(context, "/carRepairHistory",
+                            arguments: {
+                              "car": "${carData}",
+                              "data": "${serviceData}"
+                            });
+                      },
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Historia Napraw",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: fontBlack,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(
+                                    "OSTATNIE NAPRAWY",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: fontGrey,
+                                        fontFamily: "Roboto",
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    width: 150,
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      color: secondaryColor,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Icon(
+                                          Icons.build_outlined,
+                                          size: 20,
+                                          color: fontGrey,
+                                        ),
+                                        Text(
+                                          "320 dni temu",
+                                          style: TextStyle(
+                                            color: fontBlack,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Icon(
+                                Icons.manage_history_outlined,
+                                size: 82,
+                                color: bg50Grey,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    )
+                  ],
+                )),
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, "/form",
+              arguments: {'form_type': 'add_car'});
+        },
+        backgroundColor: mainColor,
+        label: Text('Dodaj nowy'),
+        icon: Icon(Icons.add),
       ),
     );
   }

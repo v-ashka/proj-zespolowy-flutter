@@ -5,10 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UserAuth extends StatefulWidget {
   const UserAuth({Key? key}) : super(key: key);
-
+  AndroidOptions _getAndroidOptions() => const AndroidOptions(
+        encryptedSharedPreferences: true,
+      );
   @override
   State<UserAuth> createState() => _UserAuthState();
 }
@@ -16,6 +19,8 @@ class UserAuth extends StatefulWidget {
 class _UserAuthState extends State<UserAuth> {
   Map _userData = {};
   String userToken = "";
+  final storage = new FlutterSecureStorage();
+
   Map<String, dynamic> payload = {};
   Future<void> readJson() async {
     final String response =
@@ -45,6 +50,8 @@ class _UserAuthState extends State<UserAuth> {
     );
     print(response.statusCode);
     if (response.statusCode == 200) {
+      await storage.write(key: "token", value: response.body);
+
       userToken = response.body;
       payload = Jwt.parseJwt(userToken);
       readJson();

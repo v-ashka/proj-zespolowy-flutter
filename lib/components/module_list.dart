@@ -36,6 +36,9 @@ class _ModuleListState extends State<ModuleList> {
           print("test value");
           print(value);
         }));
+
+    // _carModel.add(await CarApiService()
+    //     .getCarInsurance(widget.data["user_auth"], _carModel["idPubliczne"]))!;
   }
 
   // dynamic data;
@@ -48,7 +51,7 @@ class _ModuleListState extends State<ModuleList> {
   Future<List> getInsurance(data, token) async {
     var carBrandListRes = await http.get(
       Uri.parse(
-          'http://${SERVER_IP}/api/insurance/GetInsuranceList/${data["idPubliczne"]}'),
+          '${SERVER_IP}/api/insurance/GetInsuranceList/${data["idPubliczne"]}'),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': "Bearer ${token}",

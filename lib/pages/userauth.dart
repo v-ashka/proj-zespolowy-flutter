@@ -34,13 +34,13 @@ class _UserAuthState extends State<UserAuth> {
   void createAlbum() async {
     print(SERVER_IP);
     var response = await http.post(
-      Uri.parse('http://${SERVER_IP}/api/account/login'),
+      Uri.parse('${SERVER_IP}/api/account/login'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
       body: jsonEncode(<String, String>{
-        'email': 'admin@admin.pl',
-        'haslo': 'admin',
+        'email': 'adi@o2.pl',
+        'haslo': 'adi',
       }),
     );
     print(response.statusCode);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/carInsuranceHistoryView.dart';
@@ -21,7 +23,18 @@ import 'package:projzespoloey/pages/form.dart';
 
 // import 'package:projzespoloey/pages/_carList.dart';
 //projzespoloey
+
+class PostHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() {
+  HttpOverrides.global = new PostHttpOverrides();
   runApp(MyApp());
 }
 

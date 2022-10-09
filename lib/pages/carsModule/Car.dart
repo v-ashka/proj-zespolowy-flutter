@@ -1,7 +1,9 @@
 import 'dart:convert';
+// import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:projzespoloey/constants.dart';
 
 String userToken = "";
 
@@ -15,7 +17,25 @@ void getToken(String token) {
   userToken = token;
 }
 
+List<Insurance> insuranceModelFromJson(String str) =>
+    List<Insurance>.from(json.decode(str).map((x) => Insurance.fromJson(x)));
+
 class CarModel {
+  Future<void> getInsurance(token, id) async {
+    id = this.id;
+    try {
+      var url = Uri.parse("${SERVER_IP}//api/insurance/GetInsurance/${id}");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer ${token}",
+      });
+      data = jsonDecode(response.body);
+    } catch (e) {
+      print("error $e");
+    }
+  }
+
+  List data = [];
   CarModel({
     required this.id,
     required this.engineCapacity,
@@ -27,7 +47,6 @@ class CarModel {
     required this.model,
     required this.brand,
     required this.test,
-    // required this.insurance,
     // required this.service
   });
 
@@ -40,10 +59,9 @@ class CarModel {
   String imgId;
   String model;
   String brand;
-  String test;
+  List test;
   // Insurance insurance;
   // Service service;
-
   factory CarModel.fromJson(Map<String, dynamic> json) => CarModel(
         id: json["idPubliczne"],
         engineCapacity: json["pojemnoscSilnika"],
@@ -54,7 +72,8 @@ class CarModel {
         imgId: json["idZdjecia"],
         model: json["model"],
         brand: json["marka"],
-        test: "test",
+        test: [],
+
         // insurance: Insurance.fetchData(id, userToken),
         // insurance: Insurance.fromJson(json["insurance"]),
         // insurance: insurance.dataLoaded,
@@ -71,16 +90,13 @@ class CarModel {
         "imgId": imgId,
         "model": model,
         "brand": brand,
-        "test": "duppa",
-        // "insurance": Insurance.fetchData(id, userToken),
+        "test": [],
+        // "insurance": insurance.toJson(),
         // "service": service.toJson(),
       };
 }
 
 class Insurance {
-  List<Insurance> insuranceModelFromJson(String str) =>
-      List<Insurance>.from(json.decode(str).map((x) => Insurance.fromJson(x)));
-
   bool dataLoaded = false;
   Insurance(
       {required this.id,
@@ -99,22 +115,23 @@ class Insurance {
   double policyPrice;
   int insuranceType;
 
-  Future fetchData(id, token) async {
-    try {
-      var url = Uri.parse("http://${SERVER_IP}/api/car/GetList");
-      var response = await http.get(url, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': "Bearer ${token}",
-      });
+  // factory Insurance.fetchData(id, token) async {
+  //   try {
+  //     var url = Uri.parse("https://${SERVER_IP}/api/car/GetList");
+  //     var response = await http.get(url, headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': "Bearer ${token}",
+  //     });
 
-      if (response.statusCode == 200) {
-        List<Insurance> _model = insuranceModelFromJson(response.body);
-        return _model;
-      }
-    } catch (e) {
-      print("error $e");
-    }
-  }
+  //     if (response.statusCode == 200) {
+  //       List<Insurance> _model = insuranceModelFromJson(response.body);
+  //       print(_model);
+  //       return _model;
+  //     }
+  //   } catch (e) {
+  //     print("error $e");
+  //   }
+  // }
 
   factory Insurance.fromJson(Map<String, dynamic> json) => Insurance(
         id: json["id"],

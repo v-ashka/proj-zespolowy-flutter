@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // server ip addr
 // const SERVER_IP = "10.0.2.2:5151";
 const SERVER_IP =
-    "https://fe18-2a02-a315-4137-c700-297d-8877-deb8-e7a1.eu.ngrok.io";
+    "https://a9e4-2a02-a315-4137-c700-a16d-ec1-e3d-ebc6.eu.ngrok.io";
 // const SERVER_IP = "192.168.0.10:5151";
 
 // basic color app

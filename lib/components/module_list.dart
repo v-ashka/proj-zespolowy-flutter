@@ -378,7 +378,7 @@ class _ModuleListState extends State<ModuleList> {
                                                             .text_snippet_outlined,
                                                         color: icon70Black),
                                                     Text(
-                                                      "${_carModel![index].purchaseDate} dni",
+                                                      "${_carModel![index].regNr} dni",
                                                       style: TextStyle(
                                                           fontFamily: "Lato",
                                                           fontWeight:

@@ -52,7 +52,7 @@ class CarModel {
     required this.imgId,
     required this.model,
     required this.brand,
-    required this.test,
+
     // required this.service
   });
 
@@ -65,7 +65,7 @@ class CarModel {
   String imgId;
   String model;
   String brand;
-  List test;
+
   // Insurance insurance;
   // Service service;
   factory CarModel.fromJson(Map<String, dynamic> json) => CarModel(
@@ -78,7 +78,6 @@ class CarModel {
         imgId: json["idZdjecia"],
         model: json["model"],
         brand: json["marka"],
-        test: [],
 
         // insurance: Insurance.fetchData(id, userToken),
         // insurance: Insurance.fromJson(json["insurance"]),
@@ -91,12 +90,11 @@ class CarModel {
         "engineCapacity": engineCapacity,
         "prodDate": prodDate,
         "vin": vin,
-        "purchaseDate": purchaseDate,
+        "purchaseDate": DateTime.parse(purchaseDate),
         "regNr": regNr,
         "imgId": imgId,
         "model": model,
         "brand": brand,
-        "test": [],
         // "insurance": insurance.toJson(),
         // "service": service.toJson(),
       };

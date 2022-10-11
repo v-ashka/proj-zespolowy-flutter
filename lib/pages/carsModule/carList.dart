@@ -85,7 +85,7 @@ class _CarListState extends State<CarList> {
           child: ModuleList(data: data, size: size)),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, "/form",
+          Navigator.pushNamed(context, "/carForm",
               arguments: {'form_type': 'add_car'});
         },
         backgroundColor: mainColor,

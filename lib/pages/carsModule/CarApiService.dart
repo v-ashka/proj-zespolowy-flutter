@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'Car.dart';
 import 'package:projzespoloey/constants.dart';
@@ -27,8 +28,7 @@ class CarApiService {
 
         // var id = 2;
         List<CarModel> _model = carModelFromJson(response.body);
-        _model.map((e) => e.test = ["12"]);
-        return await _model;
+        return _model;
       }
 
       print(response.statusCode);
@@ -95,6 +95,45 @@ class CarApiService {
       if (response.statusCode == 200) {
         print(response.body);
         return jsonDecode(response.body);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<DropdownMenuItem<dynamic>?> getModeleMarki(token) async {
+    try {
+      var url = Uri.parse("${SERVER_IP}/api/car/api/Markimodele");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer ${token}",
+      });
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<CarModel?> addCar(token, data) async {
+    try {
+      var url = Uri.parse("${SERVER_IP}/api/car/AddCar");
+      var response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer ${token}",
+        },
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        print("test obj");
+        print(data);
+        return CarModel.fromJson(json.decode(response.body));
       }
     } catch (e) {
       log(e.toString());

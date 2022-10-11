@@ -9,6 +9,7 @@ import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/pages/carsModule/carRepairHistory.dart';
 import 'package:projzespoloey/pages/carsModule/carServiceHistory.dart';
 import 'package:projzespoloey/pages/carsModule/carServiceView.dart';
+import 'package:projzespoloey/pages/carsModule/form/carForm.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
 import 'package:projzespoloey/pages/documentsModule/documentItem.dart';
 import 'package:projzespoloey/pages/documentsModule/documentsList.dart';
@@ -58,6 +59,8 @@ class MyApp extends StatelessWidget {
         '/carService': (context) => CarServiceView(),
         '/carServiceHistory': (context) => CarServiceHistory(),
         '/carRepairHistory': (context) => CarRepairHistoryView(),
+        // Car form Route
+        '/carForm': (context) => CarForm(),
         // Documents Routes
         '/documentList': (context) => DocumentsList(),
         '/documentItem': (context) => DocumentItem(),

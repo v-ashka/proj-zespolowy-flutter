@@ -52,6 +52,7 @@ class CarModel {
     required this.imgId,
     required this.model,
     required this.brand,
+    required this.koniecOC
 
     // required this.service
   });
@@ -65,6 +66,7 @@ class CarModel {
   String imgId;
   String model;
   String brand;
+  int koniecOC;
 
   // Insurance insurance;
   // Service service;
@@ -78,6 +80,7 @@ class CarModel {
         imgId: json["idZdjecia"],
         model: json["model"],
         brand: json["marka"],
+        koniecOC: json["koniecOC"]
 
         // insurance: Insurance.fetchData(id, userToken),
         // insurance: Insurance.fromJson(json["insurance"]),

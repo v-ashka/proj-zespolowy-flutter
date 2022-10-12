@@ -62,6 +62,12 @@ class _ModuleListState extends State<ModuleList> {
     return [];
   }
 
+  Future<String> getPhoto(data, token) async {
+    var CarPhoto = '${SERVER_IP}/api/fileUpload/GetFile/${data["idPubliczne"]}&naglowkowy=true';
+    
+    return CarPhoto;
+  }
+
   // getCars(String token) async {
 
   //   var getCarListResponse = await http.get(
@@ -551,7 +557,8 @@ class _ModuleListState extends State<ModuleList> {
                                               borderRadius:
                                                   BorderRadius.circular(25),
                                               child: Image.network(
-                                                "/test/",
+                                                "https://www.google.com/url?sa=i&url=https%3A%2F%2Ftime.com%2F5660278%2Fsmartphone-camera-picture-tips%2F&psig=AOvVaw2_ecA-GlSg4HvhqtZe_AXu&ust=1665691380536000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJDos6G-2_oCFQAAAAAdAAAAABAJ",
+                                                //'${SERVER_IP}/api/fileUpload/GetFile/${_carModel![index].id}&naglowkowy=true',
                                                 width: 170,
                                                 height: 150,
                                                 fit: BoxFit.cover,
@@ -590,7 +597,7 @@ class _ModuleListState extends State<ModuleList> {
                                               borderRadius:
                                                   BorderRadius.circular(25),
                                               child: Image.network(
-                                                "${_carModel![index].imgId}",
+                                                '${SERVER_IP}/api/fileUpload/GetFile/${_carModel![index].id}?naglowkowy=true',
                                                 width: 170,
                                                 height: 150,
                                                 fit: BoxFit.cover,

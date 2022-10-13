@@ -36,9 +36,13 @@ class CarForm extends StatefulWidget {
 
 class _CarFormState extends State<CarForm> {
   final storage = new FlutterSecureStorage();
-
+  List brandList = [];
+  List modelList = [];
   String? _selectedValue;
+  String? brandItem;
+  int? modelItem;
   String? _selectedValue2;
+  int? _selectedValue3;
   List<String> selectType = [
     "Audi",
     "BMW",
@@ -59,20 +63,74 @@ class _CarFormState extends State<CarForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // _getModeleMarki();
-    //
+    _getModeleMarki();
   }
 
-  // void _getModeleMarki() async {
-  //   String? tokenVal = await storage.read(key: "token");
+  void _getModeleMarki() async {
+    String? tokenVal = await storage.read(key: "token");
+    brandList = (await CarApiService().getModeleMarki(tokenVal));
+    Future.delayed(Duration(seconds: 0)).then((value) => setState(() {}));
+  }
 
-  //   selectType = (await CarApiService().getModeleMarki(tokenVal));
-  //   Future.delayed(Duration(seconds: 1)).then((value) => setState(() {}));
+
+  void handleReadOnlyInputClick(context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Theme(data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: mainColor, // header background color
+              onPrimary: bgSmokedWhite, // header text color
+              onSurface: Colors.black, // body text color
+            )),
+            child: AlertDialog(
+          title: Text("Wybierz rok produkcji"),
+          content: Container(
+            // Need to use container to add size constraint.
+            width: 100,
+            height: 300,
+            child: YearPicker(
+              firstDate: DateTime(1960),
+              lastDate: DateTime(DateTime.now().year),
+              // save the selected date to _selectedDate DateTime variable.
+              // It's used to set the previous selected date when
+              // re-showing the dialog.
+              selectedDate: DateTime(prodDate),
+              onChanged: (DateTime dateTime) {
+                // close the dialog when year is selected.
+                Navigator.pop(context);
+                setState(() {
+                  prodDate = dateTime.year;
+                  print("${prodDate}");
+                });
+
+                // Do something with the dateTime selected.
+                // Remember that you need to use dateTime.year to get the year
+              },
+            ),
+          ),
+        ));
+      },
+    );
+  }
+
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //       context: context,
+  //       initialDatePickerMode: DatePickerMode.year,
+  //       initialDate: selectedDate,
+  //       firstDate: DateTime(2015, 8),
+  //       lastDate: DateTime(2101));
+  //   if (picked != null && picked != selectedDate) {
+  //     setState(() {
+  //       selectedDate = picked;
+  //     });
+  //   }
   // }
 
   final _formKey = GlobalKey<FormState>();
   String? engineCapacity = '';
-  String? prodDate = "";
+  int prodDate = DateTime.now().year;
   String? vin = "";
   String? purchaseDate = "";
   String? regNr = "";
@@ -104,14 +162,24 @@ class _CarFormState extends State<CarForm> {
   @override
   Widget build(BuildContext context) {
     Map formData = {
-      "idPubliczne": "2",
+      "pojemnoscSilnika": engineCapacity,
+      "rokProdukcji": prodDate,
+      "numerVin": vin,
+      "dataZakupu": DateTime.now().toString(),
+      "numerRejestracyjny": regNr,
+      "modelId": modelItem,
+      "idZdjecia": "string"
+    };
+    Map formData1 = {
       "pojemnoscSilnika": "string",
       "rokProdukcji": "string",
       "numerVin": "string",
       "dataZakupu": DateTime.now().toString(),
       "numerRejestracyjny": "string",
-      "modelId": 0,
+      "modelId": 10,
+      "idZdjecia": "string"
     };
+    print(brandList);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -190,21 +258,24 @@ class _CarFormState extends State<CarForm> {
                               ),
                             ),
                             DropdownButtonFormField(
-                                value: _selectedValue,
+                                value: brandItem,
                                 isExpanded: true,
                                 onChanged: (value) {
                                   setState(() {
-                                    _selectedValue = value.toString();
+                                    modelList = [];
+                                    brandItem = value.toString();
+                                    for (int i = 0; i < brandList.length; i++) {
+                                      if (brandList[i]["name"] == value) {
+                                        modelList = brandList[i]["modeleMarki"];
+                                      }
+                                    }
+                                    modelItem = null;
                                   });
                                 },
-                                onSaved: (value) {
-                                  setState(() {
-                                    _selectedValue = value.toString();
-                                  });
-                                },
-                                items: selectType.map((String val) {
+                                items: brandList.map((brand) {
                                   return DropdownMenuItem(
-                                      value: val, child: Text(val));
+                                      value: brand['name'],
+                                      child: Text(brand['name']));
                                 }).toList(),
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(15),
@@ -237,22 +308,52 @@ class _CarFormState extends State<CarForm> {
                                 ),
                               ),
                             ),
+                            /*DropdownButtonFormField(
+                                          value: _selectedValue2,
+                                          isExpanded: true,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _selectedValue2 = value.toString();
+                                            });
+                                          },
+                                          onSaved: (value) {
+                                            setState(() {
+                                              _selectedValue2 = value.toString();
+                                            });
+                                          },
+                                          items: selectType2.map((String val) {
+                                            return DropdownMenuItem(
+                                                value: val, child: Text(val));
+                                          }).toList(),
+                                          decoration: InputDecoration(
+                                              contentPadding: EdgeInsets.all(15),
+                                              prefixIcon: Padding(
+                                                padding: EdgeInsets.only(top: 1),
+                                                child: Icon(
+                                                  Icons.car_crash_outlined,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              hintText: "Wybierz model",
+                                              fillColor: bg35Grey,
+                                              filled: true,
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(50),
+                                      borderSide: BorderSide.none,
+                                    )))*/
                             DropdownButtonFormField(
-                                value: _selectedValue2,
+                                value: modelItem,
                                 isExpanded: true,
                                 onChanged: (value) {
                                   setState(() {
-                                    _selectedValue2 = value.toString();
+                                    modelItem = value as int?;
+                                    print(modelItem);
                                   });
                                 },
-                                onSaved: (value) {
-                                  setState(() {
-                                    _selectedValue2 = value.toString();
-                                  });
-                                },
-                                items: selectType2.map((String val) {
+                                items: modelList.map((model) {
                                   return DropdownMenuItem(
-                                      value: val, child: Text(val));
+                                      value: model['id'],
+                                      child: Text(model['nazwa']));
                                 }).toList(),
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(15),
@@ -285,7 +386,7 @@ class _CarFormState extends State<CarForm> {
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                     child: Text(
-                                      "Data produkcji",
+                                      "Rok produkcji",
                                       style: TextStyle(
                                         fontFamily: "Roboto",
                                         letterSpacing: 1,
@@ -295,14 +396,14 @@ class _CarFormState extends State<CarForm> {
                                   SizedBox(
                                     width: 150,
                                     child: TextFormField(
-                                        onSaved: (String? value) {
-                                          prodDate = value;
-                                        },
+                                        readOnly: true,
+                                        onTap: () =>
+                                            handleReadOnlyInputClick(context),
                                         cursorColor: Colors.black,
                                         style: TextStyle(color: Colors.black),
                                         decoration: InputDecoration(
                                             contentPadding: EdgeInsets.all(15),
-                                            hintText: "0000-00-00",
+                                            hintText: "${prodDate.toString()}",
                                             fillColor: bg35Grey,
                                             filled: true,
                                             border: OutlineInputBorder(
@@ -579,9 +680,12 @@ class _CarFormState extends State<CarForm> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           print(formData);
-          String? tokenVal = await storage.read(key: "token");
-          await CarApiService().addCar(tokenVal, formData);
-          Navigator.pop(context);
+          if (_formKey.currentState!.validate()) {
+            _formKey.currentState!.save();
+            String? tokenVal = await storage.read(key: "token");
+            await CarApiService().addCar(tokenVal, formData);
+            Navigator.pop(context);
+          }
         },
         backgroundColor: mainColor,
         label: Text("Zapisz pojazd"),

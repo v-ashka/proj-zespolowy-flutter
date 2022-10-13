@@ -101,7 +101,7 @@ class CarApiService {
     }
   }
 
-  Future<DropdownMenuItem<dynamic>?> getModeleMarki(token) async {
+  Future getModeleMarki(token) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/car/api/Markimodele");
       var response = await http.get(url, headers: <String, String>{

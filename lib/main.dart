@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/_userAuth.dart';
 import 'package:projzespoloey/pages/carsModule/carInsuranceHistoryView.dart';
 import 'package:projzespoloey/pages/carsModule/carInsuranceView.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => Loading(),
-        '/user_auth': (context) => UserAuth(),
+        '/user_auth': (context) => UserAuthentication(),
         '/dashboard': (context) => Dashboard(),
         '/form': (context) => DataForm(),
         // Car Routes

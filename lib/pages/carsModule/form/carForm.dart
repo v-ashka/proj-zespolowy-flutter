@@ -43,21 +43,6 @@ class _CarFormState extends State<CarForm> {
   int? modelItem;
   String? _selectedValue2;
   int? _selectedValue3;
-  List<String> selectType = [
-    "Audi",
-    "BMW",
-    "Peugeot",
-    "Skoda",
-    "Renault",
-  ];
-
-  List<String> selectType2 = [
-    "A4",
-    "E36",
-    "106",
-    "Fabia",
-    "Megane",
-  ];
 
   @override
   void initState() {
@@ -72,44 +57,36 @@ class _CarFormState extends State<CarForm> {
     Future.delayed(Duration(seconds: 0)).then((value) => setState(() {}));
   }
 
-
   void handleReadOnlyInputClick(context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Theme(data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+        return Theme(
+            data: Theme.of(context).copyWith(
+                colorScheme: ColorScheme.light(
               primary: mainColor, // header background color
               onPrimary: bgSmokedWhite, // header text color
               onSurface: Colors.black, // body text color
             )),
             child: AlertDialog(
-          title: Text("Wybierz rok produkcji"),
-          content: Container(
-            // Need to use container to add size constraint.
-            width: 100,
-            height: 300,
-            child: YearPicker(
-              firstDate: DateTime(1960),
-              lastDate: DateTime(DateTime.now().year),
-              // save the selected date to _selectedDate DateTime variable.
-              // It's used to set the previous selected date when
-              // re-showing the dialog.
-              selectedDate: DateTime(prodDate),
-              onChanged: (DateTime dateTime) {
-                // close the dialog when year is selected.
-                Navigator.pop(context);
-                setState(() {
-                  prodDate = dateTime.year;
-                  print("${prodDate}");
-                });
-
-                // Do something with the dateTime selected.
-                // Remember that you need to use dateTime.year to get the year
-              },
-            ),
-          ),
-        ));
+              title: Text("Wybierz rok produkcji"),
+              content: Container(
+                width: 100,
+                height: 300,
+                child: YearPicker(
+                  firstDate: DateTime(1960),
+                  lastDate: DateTime(DateTime.now().year),
+                  selectedDate: DateTime(prodDate),
+                  onChanged: (DateTime dateTime) {
+                    Navigator.pop(context);
+                    setState(() {
+                      prodDate = dateTime.year;
+                      print("${prodDate}");
+                    });
+                  },
+                ),
+              ),
+            ));
       },
     );
   }

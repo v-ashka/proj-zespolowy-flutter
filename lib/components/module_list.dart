@@ -63,128 +63,14 @@ class _ModuleListState extends State<ModuleList> {
   }
 
   Future<String> getPhoto(data, token) async {
-    var CarPhoto = '${SERVER_IP}/api/fileUpload/GetFile/${data["idPubliczne"]}&naglowkowy=true';
-    
+    var CarPhoto =
+        '${SERVER_IP}/api/fileUpload/GetFile/${data["idPubliczne"]}&naglowkowy=true';
+
     return CarPhoto;
   }
 
-  // getCars(String token) async {
-
-  //   var getCarListResponse = await http.get(
-  //     Uri.parse('http://${SERVER_IP}/api/car/GetList'),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json',
-  //       'Authorization': "Bearer ${token}",
-  //     },
-  //   );
-
-  //   var carBrandListRes = await http.get(
-  //     Uri.parse('http://${SERVER_IP}/api/car/api/MarkiModele'),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json',
-  //       'Authorization': "Bearer ${token}",
-  //     },
-  //   );
-
-  //   // print(jsonDecode(carBrandListRes.body).runtimeType);
-  //   // print("test: ");
-  //   // print(carBrandList[0]);
-
-  //   // print(getCarListResponse.body);
-
-  //   if (getCarListResponse.statusCode == 200 &&
-  //       carBrandListRes.statusCode == 200) {
-  //     final tempCarListData = jsonDecode(getCarListResponse.body);
-  //     final carBrandList = jsonDecode(carBrandListRes.body);
-  //     data = tempCarListData;
-  //     // data.forEach((car) async {
-  //     //   car["car_list"] = await http.get(
-  //     //     Uri.parse(
-  //     //         'http://${SERVER_IP}/api/insurance/GetInsuranceList/${car["idPubliczne"]}'),
-  //     //     headers: <String, String>{
-  //     //       'Content-Type': 'application/json',
-  //     //       'Authorization': "Bearer ${token}",
-  //     //     },
-  //     //   );
-  //     //   car["pojemnoscSilnika"] = "abcd";
-  //     //   // print(car["idPubliczne"]);
-  //     //   // final tempCarInsurance = jsonDecode(carInsuranceListRes.body);
-  //     //   // tempCarInsurance.length > 0
-  //     //   //     ? (data[car]["car_insurance"] = "test")
-  //     //   //     : (data[car]["car_insurance"] = "brak");
-  //     //   data[car]["car_listview_oc_time"] = "test";
-
-  //     //   // print(car);
-  //     // });
-
-  //     // data = jsonDecode(getCarListResponse.body);
-
-  //     // data.forEach((item) async {
-  //     //   // print(item["modelId"]);
-
-  //     //   item["modelName"] = await carBrandList
-  //     //       .firstWhere((expresion) => (expresion["id"] == item["modelId"]));
-  //     //   // print(item["modelId"]["modeleMarki"][item]["id"]);
-  //     //   // print(item["modelName"]["modeleMarki"][2]);
-  //     //   item["modelName"]["modeleMarki"].forEach((modelItem) async {
-  //     //     // print(modelItem);
-  //     //     // print(item["modelId"]);
-  //     //     if (modelItem['id'] == item["modelId"]) {
-  //     //       item["modelName"]["modeleMarki"] = modelItem["nazwa"];
-  //     //     } else {
-  //     //       item["modelName"]["modeleMarki"] = modelItem["nazwa"];
-  //     //     }
-  //     //   });
-
-  //     //   // item["modelTEST"] = await getInsurance(item, token);
-
-  //     //   // itemTest.then((value) {
-  //     //   //   print("start");
-  //     //   //   print("test___: ${value}");
-  //     //   //   item["testItem"] = value;
-  //     //   //   print("end");
-  //     //   // });
-  //     // });
-
-  //     // print("data testr: ${data[1]["idPubliczne"]}");
-  //     // final tempModelId = data[0]["modelId"];
-  //     // data[0]["modelId"] = carBrandList.firstWhere((item) {
-  //     //   item["id"] == data[0]["modelId"];
-  //     // });
-  //     // print(data[0]["modelId"]["name"]);
-  //     // print(data[0]["modelId"]["modeleMarki"][tempModelId]["nazwa"]);
-  //     // return jsonDecode(getCarListResponse.body);
-  //     print("car data: ");
-  //     return data;
-  //   } else {
-  //     print("Can't fetch car list!");
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // print(widget.data);
-    // DateTime date1 = DateTime.parse(widget.data["data"][1]['end_time']);
-    // print(date1);
-    // // print("${widget.data["data"][0]["name"]}");
-    //     return FutureBuilder(
-    //     future: getCars(widget.data["user_auth"]),
-    //     builder: (BuildContext context, AsyncSnapshot snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.waiting) {
-    //         return Center(
-    //           child: SpinKitThreeBounce(
-    //             color: secondColor,
-    //             size: 40,
-    //           ),
-    //         );
-    //       } else {
-    //         if (snapshot.hasError) {
-    //           return Center(child: Text("Error ${snapshot.error}"));
-    //         } else {
-    //           return Center(child: Text("${snapshot.data}"));
-    print(" ");
-    print("module_list: ");
-    // print(widget.data["user_auth"]);
     final today = DateTime.now();
 
     return Center(

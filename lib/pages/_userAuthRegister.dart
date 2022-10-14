@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -13,46 +12,54 @@ import 'package:http/http.dart' as http;
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 import 'package:projzespoloey/services/UserModel/UserModel.dart';
 
-class UserAuthentication extends StatefulWidget {
-  const UserAuthentication({Key? key}) : super(key: key);
+class UserAuthenticationRegister extends StatefulWidget {
+  const UserAuthenticationRegister({Key? key}) : super(key: key);
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
         encryptedSharedPreferences: true,
       );
   @override
-  State<UserAuthentication> createState() => _UserAuthenticationState();
+  State<UserAuthenticationRegister> createState() =>
+      _UserAuthenticationRegisterState();
 }
 
-class _UserAuthenticationState extends State<UserAuthentication> {
+class _UserAuthenticationRegisterState
+    extends State<UserAuthenticationRegister> {
   // Local flutter storage token
   final storage = new FlutterSecureStorage();
+
   // Form variables
   final formKey = GlobalKey<FormState>();
   bool isValid = false;
   bool isLoading = false;
+  bool _passValid = false;
+
+  String? loginInput = "";
+  String? nameInput = "";
   String? emailInput = "";
   String? passInput = "";
+  String? secondPassInput = "";
+  var testPass1 = TextEditingController();
+  var testPass2 = TextEditingController();
 
   // Error feedback
   String errorFeedback = "";
+  String passFeedback = "";
 
-  void saveData() async {
+  void registerUser() async {
     setState(() => isLoading = true);
     Map<String, dynamic> payload = {};
-    UserLogin data = UserLogin(email: emailInput, pass: passInput);
-    var token = await UserApiService().login(data);
+    UserRegister data = UserRegister(
+        login: loginInput,
+        name: nameInput,
+        email: emailInput,
+        pass: passInput,
+        secondPass: secondPassInput);
+    var registerProcess = await UserApiService().register(data);
     Future.delayed(const Duration(seconds: 0)).then((value) => setState(() {
-          print("token is:");
-          print(token);
           isLoading = false;
-
-          if (token != null) {
-            readJson();
-            payload = Jwt.parseJwt(token);
-            Navigator.pushNamed(context, '/dashboard', arguments: {
-              "userData": _userData,
-              "token": token,
-              "tokenData": payload
-            });
+          if (registerProcess != null) {
+            Navigator.pushNamed(context, '/user_auth',
+                arguments: {"successRegister": true});
           } else {
             errorFeedback = "Podano nieprawidłowe dane!";
           }
@@ -106,7 +113,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
                       child: Text(
-                        "Logowanie",
+                        "Zarejestruj się",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: fontBlack,
@@ -124,11 +131,82 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                               isValid = formValidation;
                             });
                           }
+                          setState(() {
+                            if (testPass1.text != testPass2.text) {
+                              passFeedback = "Hasła się nie zgadzają";
+                            } else {
+                              passFeedback = "";
+                            }
+                          });
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Proszę podać nazwę użytkownika";
+                                }
+                                return null;
+                              },
+                              onSaved: (String? value) {
+                                loginInput = value;
+                              },
+                              cursorColor: Colors.black,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(20),
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.only(top: 1),
+                                    child: Icon(
+                                      Icons.supervised_user_circle_outlined,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  hintText: "Podaj nazwę użytkownika...",
+                                  fillColor: bgSmokedWhite,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    borderSide: BorderSide.none,
+                                  )),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Proszę podać imię";
+                                }
+                                return null;
+                              },
+                              onSaved: (String? value) {
+                                nameInput = value;
+                              },
+                              cursorColor: Colors.black,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(20),
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.only(top: 1),
+                                    child: Icon(
+                                      Icons.account_circle_outlined,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  hintText: "Podaj swoje imię...",
+                                  fillColor: bgSmokedWhite,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    borderSide: BorderSide.none,
+                                  )),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -150,7 +228,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  hintText: "Wprowadź email...",
+                                  hintText: "Podaj adres email...",
                                   fillColor: bgSmokedWhite,
                                   filled: true,
                                   border: OutlineInputBorder(
@@ -162,11 +240,15 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                               height: 10,
                             ),
                             TextFormField(
+                              controller: testPass1,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return "Proszę podać hasło";
                                 }
                                 return null;
+                              },
+                              onChanged: (String? value) {
+                                passInput = value;
                               },
                               onSaved: (String? value) {
                                 passInput = value;
@@ -191,7 +273,56 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                   )),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: testPass2,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Proszę podać ponownie hasło";
+                                }
+                                return null;
+                              },
+                              onChanged: (String? value) {
+                                secondPassInput = value;
+                              },
+                              onSaved: (String? value) {
+                                secondPassInput = value;
+                              },
+                              cursorColor: Colors.black,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(20),
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.only(top: 1),
+                                    child: Icon(
+                                      Icons.fingerprint_outlined,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  hintText: "Wprowadź ponownie hasło...",
+                                  fillColor: bgSmokedWhite,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    borderSide: BorderSide.none,
+                                  )),
+                            ),
+                            if (!passFeedback.isEmpty) ...[
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "${passFeedback}",
+                                style: TextStyle(
+                                    color: errorColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: 1.2),
+                              ),
+                            ],
+                            SizedBox(
+                              height: 10,
                             ),
                             if (!errorFeedback.isEmpty) ...[
                               Text(
@@ -202,13 +333,10 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                     fontWeight: FontWeight.w400,
                                     letterSpacing: 1.2),
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
                             ],
                             SizedBox(
                               width: 200,
-                              height: 50,
+                              height: 60,
                               child: ElevatedButton.icon(
                                   style: ElevatedButton.styleFrom(
                                       onPrimary: mainColor,
@@ -222,7 +350,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                       formKey.currentState!.save();
                                       // user model
                                       errorFeedback = "";
-                                      saveData();
+                                      registerUser();
                                       print(
                                           "email: ${emailInput} pass: ${passInput}");
                                     }
@@ -242,7 +370,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                           color: bgSmokedWhite,
                                         ),
                                   label: Text(
-                                    "Zaloguj się",
+                                    "Zarejestruj się",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 18,
@@ -258,7 +386,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Nie masz konta?",
+                          "Masz już konto?",
                           style: TextStyle(
                             fontSize: 16,
                           ),
@@ -274,10 +402,10 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                             onPressed: () {
                               Navigator.pushReplacementNamed(
                                 context,
-                                '/registerUser',
+                                '/user_auth',
                               );
                             },
-                            child: Text("Zarejestruj się"))
+                            child: Text("Zaloguj się"))
                       ],
                     )
                   ],

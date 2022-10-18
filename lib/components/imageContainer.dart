@@ -16,8 +16,8 @@ class CarImageContainer extends StatelessWidget {
   final String image;
   final String brand;
   final String model;
-  final String prodDate;
-  final String engine;
+  final int prodDate;
+  final int engine;
   final String vinNr;
   final String carRegNumber;
   @override

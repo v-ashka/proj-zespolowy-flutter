@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/services/UserModel/UserModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+final storage = new FlutterSecureStorage();
 
 class UserApiService {
   Future register(data) async {
@@ -43,6 +46,7 @@ class UserApiService {
       print(response.statusCode);
       if (response.statusCode == 200) {
         // print(response.body);
+        storage.write(key: "token", value: response.body);
         return response.body;
       } else {
         return null;

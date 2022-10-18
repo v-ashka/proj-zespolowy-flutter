@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 
 class CustomTrackShape extends RoundedRectSliderTrackShape {
@@ -43,6 +45,7 @@ class _CarFormState extends State<CarForm> {
   int? modelItem;
   String? _selectedValue2;
   int? _selectedValue3;
+  CarModelForm carItem = new CarModelForm();
 
   @override
   void initState() {
@@ -81,6 +84,7 @@ class _CarFormState extends State<CarForm> {
                     Navigator.pop(context);
                     setState(() {
                       prodDate = dateTime.year;
+                      carItem!.RokProdukcji = prodDate;
                       print("${prodDate}");
                     });
                   },
@@ -138,7 +142,7 @@ class _CarFormState extends State<CarForm> {
 
   @override
   Widget build(BuildContext context) {
-    Map formData = {
+    /*Map formData = {
       "pojemnoscSilnika": engineCapacity,
       "rokProdukcji": prodDate,
       "numerVin": vin,
@@ -155,7 +159,7 @@ class _CarFormState extends State<CarForm> {
       "numerRejestracyjny": "string",
       "modelId": 10,
       "idZdjecia": "string"
-    };
+    };*/
     print(brandList);
 
     return Scaffold(
@@ -242,7 +246,7 @@ class _CarFormState extends State<CarForm> {
                                     modelList = [];
                                     brandItem = value.toString();
                                     for (int i = 0; i < brandList.length; i++) {
-                                      if (brandList[i]["name"] == value) {
+                                      if (brandList[i]["nazwa"] == value) {
                                         modelList = brandList[i]["modeleMarki"];
                                       }
                                     }
@@ -251,8 +255,8 @@ class _CarFormState extends State<CarForm> {
                                 },
                                 items: brandList.map((brand) {
                                   return DropdownMenuItem(
-                                      value: brand['name'],
-                                      child: Text(brand['name']));
+                                      value: brand['nazwa'],
+                                      child: Text(brand['nazwa']));
                                 }).toList(),
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(15),
@@ -285,45 +289,13 @@ class _CarFormState extends State<CarForm> {
                                 ),
                               ),
                             ),
-                            /*DropdownButtonFormField(
-                                          value: _selectedValue2,
-                                          isExpanded: true,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _selectedValue2 = value.toString();
-                                            });
-                                          },
-                                          onSaved: (value) {
-                                            setState(() {
-                                              _selectedValue2 = value.toString();
-                                            });
-                                          },
-                                          items: selectType2.map((String val) {
-                                            return DropdownMenuItem(
-                                                value: val, child: Text(val));
-                                          }).toList(),
-                                          decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.all(15),
-                                              prefixIcon: Padding(
-                                                padding: EdgeInsets.only(top: 1),
-                                                child: Icon(
-                                                  Icons.car_crash_outlined,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              hintText: "Wybierz model",
-                                              fillColor: bg35Grey,
-                                              filled: true,
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(50),
-                                      borderSide: BorderSide.none,
-                                    )))*/
                             DropdownButtonFormField(
                                 value: modelItem,
                                 isExpanded: true,
                                 onChanged: (value) {
                                   setState(() {
                                     modelItem = value as int?;
+                                    carItem!.IdModelu = modelItem!;
                                     print(modelItem);
                                   });
                                 },
@@ -388,12 +360,13 @@ class _CarFormState extends State<CarForm> {
                                                   BorderRadius.circular(50),
                                               borderSide: BorderSide.none,
                                             )),
-                                        validator: (value) {
+                                        /*validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'To pole nie może być puste';
                                           }
                                           return null;
-                                        }),
+                                        }*/
+                                        ),
                                   ),
                                 ],
                               ),
@@ -416,7 +389,7 @@ class _CarFormState extends State<CarForm> {
                                   width: 150,
                                   child: TextFormField(
                                       onSaved: (String? value) {
-                                        purchaseDate = value;
+                                        carItem?.DataZakupu = value!;
                                       },
                                       cursorColor: Colors.black,
                                       style: TextStyle(color: Colors.black),
@@ -456,7 +429,7 @@ class _CarFormState extends State<CarForm> {
                             ),
                             TextFormField(
                                 onSaved: (String? value) {
-                                  vin = value;
+                                  carItem?.NumerVin = value;
                                 },
                                 cursorColor: Colors.black,
                                 style: TextStyle(color: Colors.black),
@@ -476,12 +449,7 @@ class _CarFormState extends State<CarForm> {
                                       borderRadius: BorderRadius.circular(50),
                                       borderSide: BorderSide.none,
                                     )),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'To pole nie może być puste';
-                                  }
-                                  return null;
-                                }),
+                                ),
                           ],
                         ),
                         Row(
@@ -510,7 +478,7 @@ class _CarFormState extends State<CarForm> {
                                 children: [
                                   TextFormField(
                                       onSaved: (String? value) {
-                                        engineCapacity = value;
+                                        carItem?.PojemnoscSilnika = int.parse(value!);
                                       },
                                       cursorColor: Colors.black,
                                       style: TextStyle(color: Colors.black),
@@ -550,7 +518,7 @@ class _CarFormState extends State<CarForm> {
                                   children: [
                                     TextFormField(
                                         onSaved: (String? value) {
-                                          regNr = value;
+                                          carItem?.NumerRejestracyjny = value;
                                         },
                                         cursorColor: Colors.black,
                                         style: TextStyle(color: Colors.black),
@@ -611,7 +579,8 @@ class _CarFormState extends State<CarForm> {
                                     onPressed: () {
                                       print("test: $image");
                                       pickImage();
-                                      imgId = image.toString();
+                                      imgId = image!.path.toString();
+                                      print(imgId);
                                     },
                                     child: Icon(
                                       Icons.add,
@@ -642,6 +611,18 @@ class _CarFormState extends State<CarForm> {
                             ]
                           ],
                         ),
+                        ElevatedButton(onPressed: () async {
+                          //print(formData);
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            String? tokenVal = await storage.read(key: "token");
+                            var response = await CarApiService().addCar(tokenVal, carItem);
+
+                            print(carItem);
+                            Navigator.pop(context);
+                          }
+                        },
+                            child: Text("dupa"))
                       ],
                     ),
                   ),
@@ -656,11 +637,14 @@ class _CarFormState extends State<CarForm> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          print(formData);
+          //print(formData);
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
-            await CarApiService().addCar(tokenVal, formData);
+            var id = await CarApiService().addCar(tokenVal, carItem);
+            print(id);
+            await CarApiService().uploadFile(tokenVal, imgId, id.body);
+            print(carItem);
             Navigator.pop(context);
           }
         },

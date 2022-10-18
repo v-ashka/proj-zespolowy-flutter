@@ -64,7 +64,7 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                   brand: "Opel",
                   model: "Astra J",
                   prodDate:
-                      item["data"]["car_info"]["production_date"].toString(),
+                      item["data"]["car_info"]["production_date"],
                   engine: item["data"]["car_info"]["engine"],
                   vinNr: item["data"]["insurance"][0]["oc_insurance_info"][0]
                       ["vin_nr"],

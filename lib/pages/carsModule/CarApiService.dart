@@ -70,6 +70,22 @@ class CarApiService {
     }
   }
 
+  Future<Map<String, dynamic>?> getValidInsurance(token, id) async {
+    try {
+      var url = Uri.parse("${SERVER_IP}/api/insurance/GetValidInsurance/${id}");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer ${token}",
+      });
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   Future<void> deleteInsurance(token, id) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/insurance/GetInsuranceList/${id}");
@@ -118,7 +134,7 @@ class CarApiService {
     }
   }
 
-  Future<CarModel?> addCar(token, data) async {
+  Future addCar(token, data) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/car/AddCar");
       var response = await http.post(
@@ -129,13 +145,43 @@ class CarApiService {
         },
         body: jsonEncode(data),
       );
+      return response;
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 
+  Future<List<FileList>?> GetFileList(token, id) async {
+    try {
+      var url = Uri.parse("$SERVER_IP/api/fileUpload/GetFileList/$id");
+      var response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer ${token}",
+        },
+      );
       if (response.statusCode == 200) {
-        print("test obj");
-        print(data);
-        return CarModel.fromJson(json.decode(response.body));
+        List<FileList> _model = fileListFromJson(response.body);
+        return _model;
       }
     } catch (e) {
+      log(e.toString());
+    }
+  }
+  Future uploadFile(token, path, id) async {
+    try {
+      var url = Uri.parse("${SERVER_IP}/api/fileUpload/UploadFile?rootFolder=samochod&nazwaFolderu=$id&czyNaglowkowy=true");
+      var request = http.MultipartRequest('POST', url);
+      request.files.add(await http.MultipartFile.fromPath('file', path));
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        print('File uploaded!');
+      } else {
+        print(response.statusCode);
+      }
+    }
+       catch (e) {
       log(e.toString());
     }
   }

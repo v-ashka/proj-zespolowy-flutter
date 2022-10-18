@@ -1,5 +1,4 @@
 import 'dart:convert';
-// import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +16,12 @@ List<CarModel2> carModel2FromJson(String str) =>
     List<CarModel2>.from(json.decode(str).map((x) => CarModel2.fromJson(x)));
 
 String carModel2ToJson(List<CarModel2> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+List<FileList> fileListFromJson(String str) =>
+    List<FileList>.from(json.decode(str).map((x) => FileList.fromJson(x)));
+
+String fileListToJson(List<FileList> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 void getToken(String token) {
@@ -42,28 +47,26 @@ class CarModel {
   }
 
   List data = [];
-  CarModel({
-    required this.id,
-    required this.engineCapacity,
-    required this.prodDate,
-    required this.vin,
-    required this.purchaseDate,
-    required this.regNr,
-    required this.imgId,
-    required this.model,
-    required this.brand,
-    required this.koniecOC
+  CarModel(
+      {required this.id,
+      required this.engineCapacity,
+      required this.prodDate,
+      required this.vin,
+      required this.purchaseDate,
+      required this.regNr,
+      required this.model,
+      required this.brand,
+      required this.koniecOC
 
-    // required this.service
-  });
+      // required this.service
+      });
 
   String id;
-  String engineCapacity;
-  String prodDate;
+  int engineCapacity;
+  int prodDate;
   String vin;
   String purchaseDate;
   String regNr;
-  String imgId;
   String model;
   String brand;
   int koniecOC;
@@ -71,21 +74,20 @@ class CarModel {
   // Insurance insurance;
   // Service service;
   factory CarModel.fromJson(Map<String, dynamic> json) => CarModel(
-        id: json["idPubliczne"],
-        engineCapacity: json["pojemnoscSilnika"],
-        prodDate: json["rokProdukcji"],
-        vin: json["numerVin"],
-        purchaseDate: json["dataZakupu"],
-        regNr: json["numerRejestracyjny"],
-        imgId: json["idZdjecia"],
-        model: json["model"],
-        brand: json["marka"],
-        koniecOC: json["koniecOC"]
+      id: json["idSamochodu"],
+      engineCapacity: json["pojemnoscSilnika"],
+      prodDate: json["rokProdukcji"],
+      vin: json["numerVin"],
+      purchaseDate: json["dataZakupu"],
+      regNr: json["numerRejestracyjny"],
+      model: json["model"],
+      brand: json["marka"],
+      koniecOC: json["koniecOC"]
 
-        // insurance: Insurance.fetchData(id, userToken),
-        // insurance: Insurance.fromJson(json["insurance"]),
-        // insurance: insurance.dataLoaded,
-        // service: Service.fromJson(json["service"])
+      // insurance: Insurance.fetchData(id, userToken),
+      // insurance: Insurance.fromJson(json["insurance"]),
+      // insurance: insurance.dataLoaded,
+      // service: Service.fromJson(json["service"])
       );
 
   Map<String, dynamic> toJson() => {
@@ -95,7 +97,6 @@ class CarModel {
         "vin": vin,
         "purchaseDate": DateTime.parse(purchaseDate),
         "regNr": regNr,
-        "imgId": imgId,
         "model": model,
         "brand": brand,
         // "insurance": insurance.toJson(),
@@ -268,4 +269,59 @@ class CarModel2 {
         "insurance": insurance.toJson(),
         // "service": service.toJson(),
       };
+}
+
+class FileList {
+  FileList({
+    required this.idPliku,
+    required this.nazwaPlikuUzytkownika,
+    required this.rozszerzenie,
+    required this.wielkosc
+  });
+
+  String idPliku;
+  String nazwaPlikuUzytkownika;
+  String rozszerzenie;
+  int wielkosc;
+
+  factory FileList.fromJson(Map<String, dynamic> json) => FileList(
+        idPliku: json["idPliku"],
+        nazwaPlikuUzytkownika: json["nazwaPlikuUzytkownika"],
+        rozszerzenie: json["rozszerzenie"],
+        wielkosc: json["wielkosc"]
+  );
+
+  Map<String, dynamic> toJson() => {
+        "idPliku": idPliku,
+        "nazwaPlikuUzytkownika": nazwaPlikuUzytkownika,
+        "rozszerzenie": rozszerzenie,
+        "wielkosc": wielkosc
+      };
+}
+
+class CarModelForm {
+  CarModelForm(
+      {
+         this.PojemnoscSilnika,
+         this.RokProdukcji,
+         this.NumerVin,
+         this.DataZakupu,
+         this.NumerRejestracyjny,
+         this.IdModelu,
+      });
+  int? PojemnoscSilnika;
+  int? RokProdukcji;
+  String? NumerVin;
+  String? DataZakupu;
+  String? NumerRejestracyjny;
+  int? IdModelu;
+
+  Map<String, dynamic> toJson() => {
+    "pojemnoscSilnika": PojemnoscSilnika,
+    "rokProdukcji": RokProdukcji,
+    "numerVin": NumerVin,
+    "dataZakupu": DataZakupu,
+    "numerRejestracyjny": NumerRejestracyjny,
+    "idModelu": IdModelu,
+  };
 }

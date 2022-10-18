@@ -39,7 +39,7 @@ class _LoadingState extends State<Loading> {
       backgroundColor: primaryColor,
       body: Center(
         child: SpinKitDancingSquare(
-          color: secondaryColor,
+          color: mainColor,
           size: 150,
         ),
       ),

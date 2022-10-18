@@ -86,7 +86,10 @@ class _CarListState extends State<CarList> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pushNamed(context, "/carForm",
-              arguments: {'form_type': 'add_car'});
+              arguments: {'form_type': 'add_car'})
+          .then((value){
+
+          });
         },
         backgroundColor: mainColor,
         label: Text('Dodaj nowy'),

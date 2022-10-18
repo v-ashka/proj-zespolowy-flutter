@@ -7,9 +7,9 @@ if (localPropertiesFile.exists()) {
 }
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-}
+//if (flutterRoot == null) {
+//    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+//}
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
@@ -27,6 +27,8 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
+    //minSdkVersion 16
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -36,10 +38,11 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.projzespoloey"
-        minSdkVersion localProperties.getProperty("flutter.minSdkVersion").toInteger()
-        targetSdkVersion localProperties.getProperty("flutter.targetSdkVersion").toInteger()
+        //minSdkVersion localProperties.getProperty("flutter.minSdkVersion").toInteger()
+        //targetSdkVersion localProperties.getProperty("flutter.targetSdkVersion").toInteger()
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        minSdkVersion 19
     }
 
     buildTypes {

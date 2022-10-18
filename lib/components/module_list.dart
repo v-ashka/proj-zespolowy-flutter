@@ -64,7 +64,7 @@ class _ModuleListState extends State<ModuleList> {
 
   Future<String> getPhoto(data, token) async {
     var CarPhoto =
-        '${SERVER_IP}/api/fileUpload/GetFile/${data["idPubliczne"]}&naglowkowy=true';
+        '${SERVER_IP}/api/fileUpload/GetFile/${data["idSamochodu"]}&naglowkowy=true';
 
     return CarPhoto;
   }
@@ -270,7 +270,7 @@ class _ModuleListState extends State<ModuleList> {
                                                             .text_snippet_outlined,
                                                         color: icon70Black),
                                                     Text(
-                                                      "${_carModel![index].regNr} dni",
+                                                      "${_carModel![index].koniecOC} dni",
                                                       style: TextStyle(
                                                           fontFamily: "Lato",
                                                           fontWeight:

@@ -160,7 +160,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                              "${item["data"].first["nrPolisy"]}",
+                                              "${item["data"]["nrPolisy"]}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontSize: 14,
@@ -199,7 +199,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                                "${item["data"].first["ubezpieczyciel"]}",
+                                                "${item["data"]["ubezpieczyciel"]}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontSize: 14,
@@ -237,7 +237,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                                "${item["data"].first["dataZakupu"].toString().substring(0, 10)} / ${item["data"].first["dataKonca"].toString().substring(0, 10)}",
+                                                "${item["data"]["dataZakupu"].toString().substring(0, 10)} / ${item["data"]["dataKonca"].toString().substring(0, 10)}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -275,7 +275,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                                "${item["data"].first["kosztPolisy"]} zł",
+                                                "${item["data"]["kosztPolisy"]} zł",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -354,7 +354,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                     borderRadius: BorderRadius.circular(25),
                                     color: secondaryColor),
                                 child: Text(
-                                    "${CarApiService().daysBetween(CarApiService().today, DateTime.parse(item["data"].first["dataKonca"]))} dni",
+                                    "${CarApiService().daysBetween(CarApiService().today, DateTime.parse(item["data"]["dataKonca"]))} dni",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 14,
@@ -363,7 +363,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                               ),
                             ),
                             SizedBox(
-                              width: 100,
+                              width: 70,
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -463,7 +463,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                 print("edit object");
                                 Navigator.pushNamed(context, "/form",
                                     arguments: {
-                                      "data": item["data"].first,
+                                      "data": item["data"],
                                       "form_type": "car_insurance"
                                     });
                               },
@@ -476,6 +476,37 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                 ),
                                 child: Icon(
                                   Icons.edit_outlined,
+                                  size: 30,
+                                  color: bgSmokedWhite,
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.all(5),
+                                  primary: Colors.transparent,
+                                  shadowColor: Colors.transparent,
+                                  onPrimary: mainColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  )),
+                              onPressed: () {
+                                print("file list");
+                                Navigator.pushNamed(context, "/fileList",
+                                    arguments: {
+                                      "data": item["data"],
+                                      "form_type": "car_insurance"
+                                    });
+                              },
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: secondColor,
+                                ),
+                                child: Icon(
+                                  Icons.file_open_outlined,
                                   size: 30,
                                   color: bgSmokedWhite,
                                 ),

@@ -21,7 +21,8 @@ class CarItem extends StatefulWidget {
 
 class _CarItemState extends State<CarItem> {
   late Map<String, dynamic>? carData = {};
-  late List? insuranceData = [];
+  //late List? insuranceData = [];
+  late Map<String, dynamic>? insuranceData = {};
   late List? serviceData = [];
   final storage = new FlutterSecureStorage();
   Map item = {};
@@ -36,6 +37,9 @@ class _CarItemState extends State<CarItem> {
             : ModalRoute.of(context)?.settings.arguments as Map;
       });
       _getData(item["data"]);
+      //print(item);
+      print("CAR DATA PRINT TEST");
+      print(carData);
     });
   }
 
@@ -43,9 +47,11 @@ class _CarItemState extends State<CarItem> {
     String? tokenVal = await storage.read(key: "token");
 
     carData = (await CarApiService().getCar(tokenVal, id));
-    insuranceData = (await CarApiService().getInsurance(tokenVal, id));
+    insuranceData = (await CarApiService().getValidInsurance(tokenVal, id));
     serviceData = (await CarApiService().getService(tokenVal, id));
-    Future.delayed(Duration(seconds: 1)).then((value) => setState(() {}));
+    Future.delayed(Duration(seconds: 1)).then((value) => setState(() {
+          print(carData);
+        }));
   }
 
   @override
@@ -63,9 +69,9 @@ class _CarItemState extends State<CarItem> {
         elevation: 0.0,
         leading: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onPrimary: Colors.transparent,
-            shadowColor: Colors.transparent,
+            primary: secondaryColor,
+            //onPrimary: Colors.transparent,
+            //shadowColor: Colors.red,
             onSurface: Colors.red,
           ),
           onPressed: () {
@@ -86,7 +92,7 @@ class _CarItemState extends State<CarItem> {
             color: Colors.black),
         title: Text(carData!.length == 0
             ? ("Ładuję...")
-            : ("Pojazd - ${carData!["modelId"]}")),
+            : ("Pojazd - ${carData!["model"]}")),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -102,10 +108,11 @@ class _CarItemState extends State<CarItem> {
               : (ListView(
                   children: [
                     CarImageContainer(
-                        image: carData!["idZdjecia"],
+                        image:
+                            '${SERVER_IP}/api/fileUpload/GetFile/${item["data"]}?naglowkowy=true',
                         brand: "Opel",
                         model: "Astra J",
-                        prodDate: carData!["rokProdukcji"].toString(),
+                        prodDate: carData!["rokProdukcji"],
                         engine: carData!["pojemnoscSilnika"],
                         vinNr: carData!["numerVin"],
                         carRegNumber: carData!["numerRejestracyjny"]),
@@ -175,7 +182,7 @@ class _CarItemState extends State<CarItem> {
                                         ),
                                         Text(
                                           insuranceData!.length > 1
-                                              ? ("${CarApiService().daysBetween(DateTime.parse(insuranceData!.first["dataKonca"]), CarApiService().today)} dni")
+                                              ? ("${CarApiService().daysBetween(DateTime.parse(insuranceData!["dataKonca"]), CarApiService().today)} dni")
                                               : ("brak"),
                                           style: TextStyle(
                                             color: fontBlack,
@@ -206,11 +213,11 @@ class _CarItemState extends State<CarItem> {
                                         ),
                                         Text(
                                           insuranceData!.length < 1 ||
-                                                  insuranceData!.first[
-                                                          "idRodzajUbezpieczenia"] !=
+                                                  insuranceData![
+                                                          "idRodzajuUbezpieczenia"] !=
                                                       2
                                               ? ("brak")
-                                              : ("${CarApiService().daysBetween(DateTime.parse(insuranceData!.first["dataKonca"]), CarApiService().today)} dni"),
+                                              : ("${CarApiService().daysBetween(DateTime.parse(insuranceData!["dataKonca"]), CarApiService().today)} dni"),
                                           style: TextStyle(
                                             color: fontBlack,
                                           ),
@@ -295,7 +302,8 @@ class _CarItemState extends State<CarItem> {
                                         ),
                                         Text(
                                           serviceData!.length > 1
-                                              ? ("${CarApiService().daysBetween(CarApiService().today, DateTime.parse(serviceData!.first["dataNastepnegoPrzegladu"]))} dni")
+                                              ? ("ERROR")
+                                          //("${CarApiService().daysBetween(CarApiService().today, DateTime.parse(serviceData!["dataNastepnegoPrzegladu"]))} dni")
                                               : ("brak"),
                                           style: TextStyle(
                                             color: fontBlack,

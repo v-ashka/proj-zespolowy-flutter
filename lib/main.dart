@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/_userAuth.dart';
 import 'package:projzespoloey/pages/_userAuthRegister.dart';
@@ -24,6 +25,8 @@ import 'package:projzespoloey/pages/userauth.dart';
 import 'package:projzespoloey/pages/loading.dart';
 import 'package:projzespoloey/pages/form.dart';
 
+import 'pages/carsModule/filesView.dart';
+
 // import 'package:projzespoloey/pages/_carList.dart';
 //projzespoloey
 
@@ -37,6 +40,11 @@ class PostHttpOverrides extends HttpOverrides {
 }
 
 void main() {
+   WidgetsFlutterBinding.ensureInitialized();
+      FlutterDownloader.initialize(
+          debug: true, // optional: set to false to disable printing logs to console (default: true)
+          ignoreSsl: true // option: set to false to disable working with http links (default: false)
+      );
   HttpOverrides.global = new PostHttpOverrides();
   runApp(MyApp());
 }
@@ -56,6 +64,8 @@ class MyApp extends StatelessWidget {
         '/registerUser': (context) => UserAuthenticationRegister(),
         '/dashboard': (context) => Dashboard(),
         '/form': (context) => DataForm(),
+        //File list
+        '/fileList': (context) => FilesView(),
         // Car Routes
         '/carList': (context) => CarList(),
         '/carItem': (context) => CarItem(),

@@ -33,7 +33,6 @@ class _UserAuthenticationRegisterState
   bool isLoading = false;
   bool _passValid = false;
 
-  String? loginInput = "";
   String? nameInput = "";
   String? emailInput = "";
   String? passInput = "";
@@ -49,7 +48,6 @@ class _UserAuthenticationRegisterState
     setState(() => isLoading = true);
     Map<String, dynamic> payload = {};
     UserRegister data = UserRegister(
-        login: loginInput,
         name: nameInput,
         email: emailInput,
         pass: passInput,
@@ -143,38 +141,6 @@ class _UserAuthenticationRegisterState
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            TextFormField(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Proszę podać nazwę użytkownika";
-                                }
-                                return null;
-                              },
-                              onSaved: (String? value) {
-                                loginInput = value;
-                              },
-                              cursorColor: Colors.black,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.only(top: 1),
-                                    child: Icon(
-                                      Icons.supervised_user_circle_outlined,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  hintText: "Podaj nazwę użytkownika...",
-                                  fillColor: bgSmokedWhite,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide.none,
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
                             TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {

@@ -63,8 +63,7 @@ class _CarServiceHistoryState extends State<CarServiceHistory> {
                       image: item["data"]["car_info"]["image"],
                       brand: "Opel",
                       model: "Astra J",
-                      prodDate: item["data"]["car_info"]["production_date"]
-                          .toString(),
+                      prodDate: item["data"]["car_info"]["production_date"],
                       engine: item["data"]["car_info"]["engine"],
                       vinNr: item["data"]["insurance"][0]["oc_insurance_info"]
                           [0]["vin_nr"],

@@ -181,7 +181,7 @@ class _CarItemState extends State<CarItem> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          insuranceData!.length > 1
+                                          insuranceData != null && insuranceData!.length > 1
                                               ? ("${CarApiService().daysBetween(DateTime.parse(insuranceData!["dataKonca"]), CarApiService().today)} dni")
                                               : ("brak"),
                                           style: TextStyle(
@@ -212,7 +212,7 @@ class _CarItemState extends State<CarItem> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          insuranceData!.length < 1 ||
+                                          insuranceData == null ||
                                                   insuranceData![
                                                           "idRodzajuUbezpieczenia"] !=
                                                       2

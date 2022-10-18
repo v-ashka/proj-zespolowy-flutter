@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
+import 'package:file_picker/file_picker.dart';
 
 class CustomTrackShape extends RoundedRectSliderTrackShape {
   Rect getPreferredRect({
@@ -43,9 +42,9 @@ class _CarFormState extends State<CarForm> {
   String? _selectedValue;
   String? brandItem;
   int? modelItem;
-  String? _selectedValue2;
-  int? _selectedValue3;
-  CarModelForm carItem = new CarModelForm();
+  int prodDate = DateTime.now().year;
+  String? imgId = "";
+  CarModelForm carItem = new CarModelForm(RokProdukcji: DateTime.now().year);
 
   @override
   void initState() {
@@ -81,12 +80,12 @@ class _CarFormState extends State<CarForm> {
                   lastDate: DateTime(DateTime.now().year),
                   selectedDate: DateTime(prodDate),
                   onChanged: (DateTime dateTime) {
-                    Navigator.pop(context);
                     setState(() {
                       prodDate = dateTime.year;
                       carItem!.RokProdukcji = prodDate;
                       print("${prodDate}");
                     });
+                    Navigator.pop(context);
                   },
                 ),
               ),
@@ -110,14 +109,7 @@ class _CarFormState extends State<CarForm> {
   // }
 
   final _formKey = GlobalKey<FormState>();
-  String? engineCapacity = '';
-  int prodDate = DateTime.now().year;
-  String? vin = "";
-  String? purchaseDate = "";
-  String? regNr = "";
-  String? imgId = "";
-  String? model = "";
-  String? brand = "";
+
 
   // Slider values
   double _currentGuaranteeSliderVal = 0;
@@ -125,7 +117,7 @@ class _CarFormState extends State<CarForm> {
 
   // Pick image
   File? image;
-  Future pickImage() async {
+  /*Future pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
@@ -137,6 +129,20 @@ class _CarFormState extends State<CarForm> {
       print(imageTemp);
     } on PlatformException catch (e) {
       print("Failed to pick image $e");
+    }
+  }*/
+
+  Future pickImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+    if (result != null) {
+      var imageTemp = File(result.files.single.path!);
+      image = imageTemp;
+      setState(() {
+        image = imageTemp;
+        imgId = image!.path.toString();
+      });
+    } else {
+      // User canceled the picker
     }
   }
 
@@ -579,9 +585,11 @@ class _CarFormState extends State<CarForm> {
                                     onPressed: () {
                                       print("test: $image");
                                       pickImage();
-                                      imgId = image!.path.toString();
+                                      //imgId = image!.path.toString();
+                                      print("sciezka fotki");
                                       print(imgId);
                                     },
+
                                     child: Icon(
                                       Icons.add,
                                       size: 28,
@@ -611,18 +619,6 @@ class _CarFormState extends State<CarForm> {
                             ]
                           ],
                         ),
-                        ElevatedButton(onPressed: () async {
-                          //print(formData);
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            String? tokenVal = await storage.read(key: "token");
-                            var response = await CarApiService().addCar(tokenVal, carItem);
-
-                            print(carItem);
-                            Navigator.pop(context);
-                          }
-                        },
-                            child: Text("dupa"))
                       ],
                     ),
                   ),
@@ -642,7 +638,6 @@ class _CarFormState extends State<CarForm> {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
             var id = await CarApiService().addCar(tokenVal, carItem);
-            print(id);
             await CarApiService().uploadFile(tokenVal, imgId, id.body);
             print(carItem);
             Navigator.pop(context);

@@ -28,7 +28,6 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     compileSdkVersion flutter.compileSdkVersion
     compileSdkVersion 33
-    //minSdkVersion 16
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -42,7 +41,7 @@ android {
         //targetSdkVersion localProperties.getProperty("flutter.targetSdkVersion").toInteger()
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        minSdkVersion 19
+        minSdkVersion 21
     }
 
     buildTypes {

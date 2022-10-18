@@ -172,6 +172,7 @@ class CarApiService {
   Future uploadFile(token, path, id) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/fileUpload/UploadFile?rootFolder=samochod&nazwaFolderu=$id&czyNaglowkowy=true");
+      print(url);
       var request = http.MultipartRequest('POST', url);
       request.files.add(await http.MultipartFile.fromPath('file', path));
       var response = await request.send();

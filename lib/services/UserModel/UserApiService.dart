@@ -23,13 +23,19 @@ class UserApiService {
       print(response.statusCode);
       print(jsonEncode(data));
       if (response.statusCode == 200) {
-        // print(response.body);
-        return response.body;
+        return {"data": response.body, "message": "Pomyślnie zarejestrowano!"};
       } else {
-        return null;
+        return {
+          "data": null,
+          "message": "Wystapił błąd połączenia z bazą danych!"
+        };
       }
     } catch (e) {
       log(e.toString());
+      return {
+        "data": null,
+        "message": "Nie można zapisać danych, sprawdź połączenie internetowe!"
+      };
     }
   }
 
@@ -47,12 +53,13 @@ class UserApiService {
       if (response.statusCode == 200) {
         // print(response.body);
         storage.write(key: "token", value: response.body);
-        return response.body;
+        return {"data": response.body};
       } else {
-        return null;
+        return {"data": null, "message": "Podano nie prawidłowe dane!"};
       }
     } catch (e) {
       log(e.toString());
+      return {"data": null, "message": "Wystapił błąd połączenia!"};
     }
   }
 }

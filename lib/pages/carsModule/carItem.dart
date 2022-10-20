@@ -93,7 +93,7 @@ class _CarItemState extends State<CarItem> {
             color: Colors.black),
         title: Text(carData!.length == 0
             ? ("Ładuję...")
-            : ("Pojazd - ${carData!["model"]}")),
+            : ("Pojazd - ${carData!["marka"]} ${carData!["model"]}  ")),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -251,8 +251,11 @@ class _CarItemState extends State<CarItem> {
                           )),
                       onPressed: () {
                         // print("przeglad");
-                        Navigator.pushNamed(context, "/carService",
-                            arguments: {"car": carData, "data": serviceData});
+                        Navigator.pushNamed(context, "/carService", arguments: {
+                          "car": carData,
+                          "data": serviceData,
+                          "id": item["data"],
+                        });
                       },
                       child: Container(
                         child: Padding(
@@ -304,7 +307,7 @@ class _CarItemState extends State<CarItem> {
                                         Text(
                                           serviceData!.length > 1
                                               ? ("ERROR")
-                                          //("${CarApiService().daysBetween(CarApiService().today, DateTime.parse(serviceData!["dataNastepnegoPrzegladu"]))} dni")
+                                              //("${CarApiService().daysBetween(CarApiService().today, DateTime.parse(serviceData!["dataNastepnegoPrzegladu"]))} dni")
                                               : ("brak"),
                                           style: TextStyle(
                                             color: fontBlack,
@@ -340,8 +343,9 @@ class _CarItemState extends State<CarItem> {
                         // print("naprawy");
                         Navigator.pushNamed(context, "/carRepairHistory",
                             arguments: {
-                              "car": "${carData}",
-                              "data": "${serviceData}"
+                              "id": item["data"],
+                              "car": carData,
+                              "data": serviceData
                             });
                       },
                       child: Container(

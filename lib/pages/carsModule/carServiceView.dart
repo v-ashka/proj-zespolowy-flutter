@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:projzespoloey/components/emptyBox.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
@@ -50,7 +51,8 @@ class _CarServiceViewState extends State<CarServiceView> {
               fontFamily: 'Lato',
               fontSize: MediaQuery.of(context).textScaleFactor * 18,
               color: Colors.black),
-          title: Text("Przegląd - ${item["car"]["modelId"]}"),
+          title: Text(
+              "Przegląd - ${item["car"]["marka"]} ${item["car"]["model"]}"),
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -61,9 +63,10 @@ class _CarServiceViewState extends State<CarServiceView> {
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
               child: ListView(children: [
                 CarImageContainer(
-                    image: item["car"]["idZdjecia"],
-                    brand: "Opel",
-                    model: "Astra J",
+                    image:
+                        "${SERVER_IP}/api/fileUpload/GetFile/${item["id"]}?naglowkowy=true",
+                    brand: item["car"]["marka"],
+                    model: item["car"]["model"],
                     prodDate: item["car"]["rokProdukcji"],
                     engine: item["car"]["pojemnoscSilnika"],
                     vinNr: item["car"]["numerVin"],
@@ -72,7 +75,14 @@ class _CarServiceViewState extends State<CarServiceView> {
                   height: 15,
                 ),
                 if (item["data"].length < 1) ...[
-                  Center(child: Text("Trochę tu pusto..."))
+                  EmptyBoxInfo(
+                      title: "Dodaj przegląd w kilku krokach",
+                      description:
+                          "Aktualnie nie dodałeś jeszcze żadnego przeglądu zrób to już teraz klikając w to powiadomienie!",
+                      addRouteLink: {
+                        "routeName": "/carForm",
+                        "arguments": {"form_type": "add_car"}
+                      })
                 ] else ...[
                   Container(
                     decoration: BoxDecoration(

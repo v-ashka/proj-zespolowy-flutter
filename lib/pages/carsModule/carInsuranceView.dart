@@ -61,7 +61,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
             child: ListView(children: [
               CarImageContainer(
-                  image: item["car"]["idZdjecia"],
+                  image: item["car"]["idSamochodu"],
                   brand: "Opel",
                   model: "Astra J",
                   prodDate: item["car"]["rokProdukcji"],
@@ -286,7 +286,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                       ],
                                     ),
                                   ),
-                                  Padding(
+                                  /*Padding(
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 2),
                                     child: Row(
@@ -323,7 +323,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                         ),
                                       ],
                                     ),
-                                  ),
+                                  ),*/
                                 ],
                               ),
                             ),
@@ -617,7 +617,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.pushNamed(context, "/formCarInsurance",
-              arguments: {'form_type': 'car_insurance'});
+              arguments: {'form_type': 'car_insurance',
+              'idSamochodu': item["car"]["idSamochodu"]});
         },
         backgroundColor: mainColor,
         label: Text('Dodaj nowy'),

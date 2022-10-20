@@ -325,3 +325,31 @@ class CarModelForm {
     "idModelu": IdModelu,
   };
 }
+
+class InsuranceFormModel {
+  InsuranceFormModel(
+      {
+        this.Ubezpieczyciel,
+        this.NrPolisy,
+        this.DataZakupu,
+        this.DataKonca,
+        this.KosztPolisy,
+        this.IdRodzajuUbezpieczenia
+      });
+
+  String? Ubezpieczyciel;
+  String? NrPolisy;
+  String? DataZakupu;
+  String? DataKonca;
+  int? IdRodzajuUbezpieczenia;
+  int? KosztPolisy;
+
+  Map<String, dynamic> toJson() => {
+    "ubezpieczyciel": Ubezpieczyciel,
+    "nrPolisy": NrPolisy,
+    "dataZakupu": DataZakupu,
+    "dataKonca": DataKonca,
+    "kosztPolisy": KosztPolisy,
+    "idRodzajuUbezpieczenia": IdRodzajuUbezpieczenia,
+  };
+}

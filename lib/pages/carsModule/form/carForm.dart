@@ -82,7 +82,7 @@ class _CarFormState extends State<CarForm> {
                   onChanged: (DateTime dateTime) {
                     setState(() {
                       prodDate = dateTime.year;
-                      carItem!.RokProdukcji = prodDate;
+                      carItem.RokProdukcji = prodDate;
                       print("${prodDate}");
                     });
                     Navigator.pop(context);
@@ -301,7 +301,7 @@ class _CarFormState extends State<CarForm> {
                                 onChanged: (value) {
                                   setState(() {
                                     modelItem = value as int?;
-                                    carItem!.IdModelu = modelItem!;
+                                    carItem.IdModelu = modelItem!;
                                     print(modelItem);
                                   });
                                 },

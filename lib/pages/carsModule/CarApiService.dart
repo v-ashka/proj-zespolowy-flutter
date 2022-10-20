@@ -77,7 +77,7 @@ class CarApiService {
         'Content-Type': 'application/json',
         'Authorization': "Bearer ${token}",
       });
-
+      var lol = jsonDecode(response.body);
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       }
@@ -120,6 +120,23 @@ class CarApiService {
   Future getModeleMarki(token) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/car/api/Markimodele");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer ${token}",
+      });
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future getInsuranceTypes(token) async {
+    try {
+      var url = Uri.parse("${SERVER_IP}/api/insurance/api/GetInsuranceTypes");
       var response = await http.get(url, headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': "Bearer ${token}",
@@ -183,6 +200,23 @@ class CarApiService {
       }
     }
        catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future addInsurance(token, data, carId) async {
+    try {
+      var url = Uri.parse("${SERVER_IP}/api/insurance/AddInsurance/$carId");
+      var response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer ${token}",
+        },
+        body: jsonEncode(data),
+      );
+      return response;
+    } catch (e) {
       log(e.toString());
     }
   }

@@ -25,7 +25,7 @@ class CarImageContainer extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(image),
+            image: NetworkImage("${SERVER_IP}/api/fileUpload/GetFile/$image?naglowkowy=true"),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(25),

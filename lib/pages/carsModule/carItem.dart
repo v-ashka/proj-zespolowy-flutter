@@ -51,6 +51,7 @@ class _CarItemState extends State<CarItem> {
     serviceData = (await CarApiService().getService(tokenVal, id));
     Future.delayed(Duration(seconds: 1)).then((value) => setState(() {
           print(carData);
+          print(insuranceData!["dataZakupu"].runtimeType);
         }));
   }
 
@@ -109,9 +110,9 @@ class _CarItemState extends State<CarItem> {
                   children: [
                     CarImageContainer(
                         image:
-                            '${SERVER_IP}/api/fileUpload/GetFile/${item["data"]}?naglowkowy=true',
-                        brand: "Opel",
-                        model: "Astra J",
+                            carData!["idSamochodu"],
+                        brand: carData!["marka"],
+                        model: carData!["model"],
                         prodDate: carData!["rokProdukcji"],
                         engine: carData!["pojemnoscSilnika"],
                         vinNr: carData!["numerVin"],
@@ -182,7 +183,7 @@ class _CarItemState extends State<CarItem> {
                                         ),
                                         Text(
                                           insuranceData != null && insuranceData!.length > 1
-                                              ? ("${CarApiService().daysBetween(DateTime.parse(insuranceData!["dataKonca"]), CarApiService().today)} dni")
+                                              ? ("WPISAC DNI")
                                               : ("brak"),
                                           style: TextStyle(
                                             color: fontBlack,
@@ -217,7 +218,7 @@ class _CarItemState extends State<CarItem> {
                                                           "idRodzajuUbezpieczenia"] !=
                                                       2
                                               ? ("brak")
-                                              : ("${CarApiService().daysBetween(DateTime.parse(insuranceData!["dataKonca"]), CarApiService().today)} dni"),
+                                              : ("WPISAC DNI"),
                                           style: TextStyle(
                                             color: fontBlack,
                                           ),

@@ -45,16 +45,16 @@ class _UserAuthenticationState extends State<UserAuthentication> {
           print(token);
           isLoading = false;
 
-          if (token != null) {
+          if (token["data"] != null) {
             readJson();
-            payload = Jwt.parseJwt(token);
+            payload = Jwt.parseJwt(token["data"]);
             Navigator.pushNamed(context, '/dashboard', arguments: {
               "userData": _userData,
-              "token": token,
+              "token": token["data"],
               "tokenData": payload
             });
           } else {
-            errorFeedback = "Podano nieprawidłowe dane!";
+            errorFeedback = token["message"];
           }
         }));
   }

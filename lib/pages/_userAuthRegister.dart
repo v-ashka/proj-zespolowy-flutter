@@ -55,11 +55,11 @@ class _UserAuthenticationRegisterState
     var registerProcess = await UserApiService().register(data);
     Future.delayed(const Duration(seconds: 0)).then((value) => setState(() {
           isLoading = false;
-          if (registerProcess != null) {
+          if (registerProcess["data"] != null) {
             Navigator.pushNamed(context, '/user_auth',
                 arguments: {"successRegister": true});
           } else {
-            errorFeedback = "Podano nieprawidłowe dane!";
+            errorFeedback = registerProcess["message"];
           }
         }));
   }

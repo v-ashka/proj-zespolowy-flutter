@@ -32,7 +32,7 @@ class _ModuleListState extends State<ModuleList> {
 
   void _getData() async {
     _carModel = (await CarApiService().getCars(widget.data["user_auth"]))!;
-    Future.delayed(const Duration(seconds: 0)).then((value) => setState(() {
+    Future.delayed(const Duration(milliseconds: 200)).then((value) => setState(() {
           print("test value");
           print(value);
         }));

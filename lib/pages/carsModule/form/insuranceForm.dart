@@ -28,6 +28,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
   String? dateTo;
   InsuranceFormModel insurance = InsuranceFormModel();
   Map item = {};
+  List<PlatformFile> files = [];
 
   void _getInsuranceTypes() async {
     String? tokenVal = await storage.read(key: "token");
@@ -54,6 +55,21 @@ class _InsuranceFormState extends State<InsuranceForm> {
       },
     );
     return date;
+  }
+
+  Future pickFiles() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+    if (result != null) {
+      setState(() {
+        if (files.isNotEmpty) {
+          files.clear();
+        }
+        //files = result.paths.map((path) => File(path!)).toList();
+        files = result!.files;
+      });
+    } else {
+      // User canceled the picker
+    }
   }
 
   @override
@@ -426,13 +442,10 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                           BorderRadius.circular(25)),
                                     ),
                                     onPressed: () {
-                                      /*print("test: $image");
-                                      pickImage();
-                                      //imgId = image!.path.toString();
-                                      print("sciezka fotki");
-                                      print(imgId);*/
+                                      pickFiles();
+                                      print("TEST LISTY PLIKOW");
+                                      print(files);
                                     },
-
                                     child: Icon(
                                       Icons.add,
                                       size: 28,
@@ -442,24 +455,46 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                 ],
                               ),
                             ),
-                            /*if (image != null) ...[
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: secondaryColor,
-                                      image: DecorationImage(
-                                        image: FileImage(),
-                                        fit: BoxFit.scaleDown,
-                                      ),
-                                      border: Border.all(
-                                          color: secondaryColor, width: 5)),
-                                  width: 90,
-                                  height: 90,
-                                ),
+                            if (files.isNotEmpty) ...[
+                              Container(
+                                height: 150,
+                                width: 230,
+                                child: ListView.separated(
+                                    separatorBuilder: (BuildContext context, int index) =>
+                                    const Divider(
+                                      color: Colors.transparent,
+                                    ),
+                                    itemCount: files!.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      final file = files[index];
+                                      return GestureDetector(
+                                        onTap: (){
+                                          //_download("$SERVER_IP/api/fileUpload/GetFile/${_files![index].idPliku}?naglowkowy=false");
+                                        },
+                                          child: Card(
+                                          margin: const EdgeInsets.all(5),
+                                          elevation: 2,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          shadowColor: Colors.white,
+                                          child: ListTile(
+                                            leading: Icon(Icons.abc),
+                                            title: Text(
+                                              file.name,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            tileColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
                               )
-                            ]*/
+                            ]
                           ],
                         ),
                       ],
@@ -480,9 +515,8 @@ class _InsuranceFormState extends State<InsuranceForm> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
-            print(insurance);
-            await CarApiService().addInsurance(tokenVal, insurance, idSamochodu);
-            //await CarApiService().uploadFile(tokenVal, imgId, id.body);
+            var insuranceId = await CarApiService().addInsurance(tokenVal, insurance, idSamochodu);
+            await CarApiService().uploadFiles(tokenVal, files, insuranceId);
             Navigator.pop(context);
           }
         },

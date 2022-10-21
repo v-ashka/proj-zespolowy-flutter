@@ -11,6 +11,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:isolate';
 import 'dart:ui';
+import 'dart:io';
+import 'package:open_file/open_file.dart';
 
 class FilesView extends StatefulWidget {
   const FilesView({Key? key}) : super(key: key);
@@ -24,6 +26,7 @@ class FilesViewState extends State<FilesView> {
   late List<FileList>? _files = [];
   Map item = {};
   ReceivePort _port = ReceivePort();
+
 
   @override
   void initState() {
@@ -69,17 +72,18 @@ static void downloadCallback(String id, DownloadTaskStatus status, int progress)
   send.send([id, status, progress]);
 }
 
+Future<String> getStorageDir() async {
+    final storageDir = await getExternalStorageDirectory();
+    return storageDir!.path;
+}
 
-void _download(String url) async {
+void download(String fileId) async {
     final status = await Permission.storage.request();
-
     if(status.isGranted) {
-      final externalDir = await getExternalStorageDirectory();
-      print(externalDir);
-
-      final id = await FlutterDownloader.enqueue(
-          url: url,
-          savedDir: externalDir!.path,
+      var storageDir = await getStorageDir();
+      final id = FlutterDownloader.enqueue(
+          url: "$SERVER_IP/api/fileUpload/GetFile/$fileId?naglowkowy=false",
+          savedDir: storageDir,
         showNotification: true,
         openFileFromNotification: true,
         saveInPublicStorage: true
@@ -134,8 +138,19 @@ void _download(String url) async {
                   itemCount: _files!.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
-                      onTap: (){
-                        _download("$SERVER_IP/api/fileUpload/GetFile/${_files![index].idPliku}?naglowkowy=false");
+                      onTap: () async {
+                        //var storageDirectory = await getStorageDir();
+                        var path = "/storage/emulated/0/Download/${_files![index].nazwaPlikuUzytkownika}";
+                        print(path);
+                        String? filePath;
+                        if(!File(path).existsSync())
+                          {
+                            download(_files![index].idPliku);
+                          }
+                        else
+                        {
+                          OpenFile.open(path);
+                        }
                     },
                       child: Card(
                         margin: const EdgeInsets.all(5),

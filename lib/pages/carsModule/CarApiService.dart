@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'Car.dart';
@@ -204,6 +206,28 @@ class CarApiService {
     }
   }
 
+  Future uploadFiles(token, List<PlatformFile>files, id) async {
+    for (var item in files) {
+      var file = File(item.path!);
+      try {
+        var url = Uri.parse(
+            "${SERVER_IP}/api/fileUpload/UploadFile?rootFolder=pliki&nazwaFolderu=$id&czyNaglowkowy=false");
+        print(url);
+        var request = http.MultipartRequest('POST', url);
+        request.files.add(await http.MultipartFile.fromPath('file', file.path));
+        var response = await request.send();
+        if (response.statusCode == 200) {
+          print('File uploaded!');
+        } else {
+          print(response.statusCode);
+        }
+      }
+      catch (e) {
+        log(e.toString());
+      }
+    }
+  }
+
   Future addInsurance(token, data, carId) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/insurance/AddInsurance/$carId");
@@ -215,7 +239,7 @@ class CarApiService {
         },
         body: jsonEncode(data),
       );
-      return response;
+      return response.body;
     } catch (e) {
       log(e.toString());
     }

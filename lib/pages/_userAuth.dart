@@ -78,7 +78,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
         child: Container(
           height: double.infinity,
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/background.png"),
                   fit: BoxFit.fill)),

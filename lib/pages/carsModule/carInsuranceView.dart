@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
+import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
 
 class CarInsuranceView extends StatefulWidget {
   const CarInsuranceView({Key? key}) : super(key: key);
@@ -13,18 +16,39 @@ class CarInsuranceView extends StatefulWidget {
 }
 
 class _CarInsuranceViewState extends State<CarInsuranceView> {
+  final storage = const FlutterSecureStorage();
   Map item = {};
+  String? tokenVal;
+  late InsuranceFormModel insuranceData = InsuranceFormModel();
+  var idSamochodu;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 0), () {
+      setState(() {
+        item = item.isNotEmpty
+            ? item
+            : ModalRoute.of(context)?.settings.arguments as Map;
+        idSamochodu = item["car"]["idSamochodu"];
+        _getData(idSamochodu);
+      });
+
+    });
+  }
+
+  void _getData(id) async {
+    tokenVal = await storage.read(key: "token");
+    insuranceData = (await CarApiService().getValidInsurance(tokenVal, id));
+    Future.delayed(const Duration(milliseconds: 200)).then((value) => setState(() {}));
+  }
 
   @override
   Widget build(BuildContext context) {
-    item = item.isNotEmpty
-        ? item
-        : ModalRoute.of(context)?.settings.arguments as Map;
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
-
-    print("test");
-    print(item["data"]);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -51,7 +75,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
             fontFamily: 'Lato',
             fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
-        title: Text("Ubezpieczenie - ${item["car"]["modelId"]}"),
+        title: Text("Ubezpieczenie - ${item["car"]["model"]}"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -62,8 +86,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
             child: ListView(children: [
               CarImageContainer(
                   image: item["car"]["idSamochodu"],
-                  brand: "Opel",
-                  model: "Astra J",
+                  brand: item["car"]["marka"],
+                  model: item["car"]["model"],
                   prodDate: item["car"]["rokProdukcji"],
                   engine: item["car"]["pojemnoscSilnika"],
                   vinNr: item["car"]["numerVin"],
@@ -71,7 +95,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
               SizedBox(
                 height: 15,
               ),
-              if (item["data"].length < 1) ...[
+              if (item["data"] == null) ...[
                 Center(child: Text("Trochę tu pusto..."))
               ] else ...[
                 Container(
@@ -160,7 +184,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                              "${item["data"]["nrPolisy"]}",
+                                              "${insuranceData.NrPolisy}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontSize: 14,
@@ -199,7 +223,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                                "${item["data"]["ubezpieczyciel"]}",
+                                                "${insuranceData.Ubezpieczyciel}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontSize: 14,
@@ -237,7 +261,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                                "${item["data"]["dataZakupu"].toString().substring(0, 10)} / ${item["data"]["dataKonca"].toString().substring(0, 10)}",
+                                                "${insuranceData.DataZakupu}  /  ${insuranceData.DataKonca}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -275,7 +299,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                                "${item["data"]["kosztPolisy"]} zł",
+                                                "${insuranceData.KosztPolisy} zł",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -354,7 +378,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                     borderRadius: BorderRadius.circular(25),
                                     color: secondaryColor),
                                 child: Text(
-                                    "${CarApiService().daysBetween(CarApiService().today, DateTime.parse(item["data"]["dataKonca"]))} dni",
+                                    "${item["car"]["koniecOC"]} dni",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 14,
@@ -461,11 +485,11 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                   )),
                               onPressed: () {
                                 print("edit object");
-                                Navigator.pushNamed(context, "/form",
-                                    arguments: {
-                                      "data": item["data"],
-                                      "form_type": "car_insurance"
-                                    });
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => InsuranceEditForm(data: insuranceData),
+                                    ));
                               },
                               child: Container(
                                 width: 50,

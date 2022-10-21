@@ -29,6 +29,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
   InsuranceFormModel insurance = InsuranceFormModel();
   Map item = {};
   List<PlatformFile> files = [];
+  String? idSamochodu;
 
   void _getInsuranceTypes() async {
     String? tokenVal = await storage.read(key: "token");
@@ -75,17 +76,21 @@ class _InsuranceFormState extends State<InsuranceForm> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        item = item.isNotEmpty
+            ? item
+            : ModalRoute.of(context)?.settings.arguments as Map;
+        idSamochodu = item["idSamochodu"];
+      });
+    });
+
     _getInsuranceTypes();
 
   }
 
   @override
   Widget build(BuildContext context) {
-    item = item.isNotEmpty
-        ? item
-        : ModalRoute.of(context)?.settings.arguments as Map;
-    print(item);
-    String idSamochodu = item["idSamochodu"];
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -394,7 +399,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: TextFormField(
                                  onSaved: (String? value) {
-                                  insurance.KosztPolisy = int.parse(value!);
+                                  insurance.KosztPolisy = double.parse(value!);
                                 },
                                 cursorColor: Colors.black,
                                 style: TextStyle(color: Colors.black),
@@ -511,7 +516,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          print(insurance);
+          print(insurance.toJson());
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
@@ -521,7 +526,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
           }
         },
         backgroundColor: mainColor,
-        label: Text("Zapisz pojazd"),
+        label: Text("Dodaj ubezpieczenie"),
         icon: Icon(Icons.check),
       ),
     );

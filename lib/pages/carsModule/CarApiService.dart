@@ -64,7 +64,6 @@ class CarApiService {
       });
 
       if (response.statusCode == 200) {
-        print(response.body);
         return jsonDecode(response.body);
       }
     } catch (e) {
@@ -72,20 +71,22 @@ class CarApiService {
     }
   }
 
-  Future<Map<String, dynamic>?> getValidInsurance(token, id) async {
+  Future<InsuranceFormModel> getValidInsurance(token, id) async {
     try {
-      var url = Uri.parse("${SERVER_IP}/api/insurance/GetValidInsurance/${id}");
+      var url = Uri.parse("$SERVER_IP/api/insurance/GetValidInsurance/$id");
       var response = await http.get(url, headers: <String, String>{
         'Content-Type': 'application/json',
-        'Authorization': "Bearer ${token}",
+        'Authorization': "Bearer $token",
       });
-      var lol = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      }
-    } catch (e) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        InsuranceFormModel model = InsuranceFormModel.fromJson(data);
+        return model;
+    }  }
+  catch (e) {
       log(e.toString());
     }
+    throw Exception('Błąd pobierania danych');
   }
 
   Future<void> deleteInsurance(token, id) async {

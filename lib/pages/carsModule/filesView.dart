@@ -100,10 +100,10 @@ void download(String fileId) async {
           elevation: 0.0,
           leading: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: secondaryColor,
+              backgroundColor: secondaryColor,
               //onPrimary: Colors.transparent,
               //shadowColor: Colors.red,
-              onSurface: Colors.red,
+              disabledBackgroundColor: Colors.red,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -137,15 +137,13 @@ void download(String fileId) async {
                       ),
                   itemCount: _files!.length,
                   itemBuilder: (BuildContext context, int index) {
+                    final file = _files![index];
                     return GestureDetector(
                       onTap: () async {
-                        //var storageDirectory = await getStorageDir();
-                        var path = "/storage/emulated/0/Download/${_files![index].nazwaPlikuUzytkownika}";
-                        print(path);
-                        String? filePath;
+                        var path = "/storage/emulated/0/Download/${file.nazwaPlikuUzytkownika}";
                         if(!File(path).existsSync())
                           {
-                            download(_files![index].idPliku);
+                            download(file.idPliku);
                           }
                         else
                         {
@@ -160,16 +158,29 @@ void download(String fileId) async {
                         ),
                         shadowColor: Colors.white,
                         child: ListTile(
-                          leading: Icon(Icons.abc),
+                          leading: Image.asset(file.rozszerzenie == ".pdf"
+                              ? "assets/pdf_icon.png"
+                              : file.rozszerzenie == ".txt"
+                              ? "assets/txt_icon.png"
+                              : file.rozszerzenie == ".png"
+                              ? "assets/png_icon.png"
+                              : file.rozszerzenie == ".jpg" || file.rozszerzenie == ".jpeg"
+                              ? "assets/jpg_icon.png"
+                              : file.rozszerzenie == ".zip" || file.rozszerzenie == ".7z"
+                              ? "assets/zip_icon.png"
+                              : "assets/default_icon.png",
+                            width: 50,
+                            height: 50,
+                          ),
                           title: Text(
-                            _files![index].nazwaPlikuUzytkownika,
+                            file.nazwaPlikuUzytkownika,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           subtitle: Text(
-                              _files![index].wielkosc.toDouble() < 1
-                              ? "${ByteConverter(_files![index].wielkosc.roundToDouble()).megaBytes} MB"
-                              : "${ByteConverter(_files![index].wielkosc.toDouble()).kiloBytes} kB",
+                              file.wielkosc.toDouble() > 1000000
+                              ? "${ByteConverter(file.wielkosc.roundToDouble()).megaBytes.toStringAsFixed(2)} MB"
+                              : "${ByteConverter(file.wielkosc.roundToDouble()).kiloBytes.toStringAsFixed(2)} KB",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -180,7 +191,7 @@ void download(String fileId) async {
                           trailing: IconButton(
                             onPressed: () {},
                             icon: Icon(Icons.more_vert_outlined),
-                            tooltip: "more",
+                            tooltip: "Opcje",
                           ),
                         ),
                       ),

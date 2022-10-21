@@ -8,6 +8,7 @@ import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:animations/animations.dart';
 import 'package:projzespoloey/main.dart';
+import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
 import 'package:projzespoloey/pages/form.dart';
@@ -22,7 +23,7 @@ class CarItem extends StatefulWidget {
 class _CarItemState extends State<CarItem> {
   late Map<String, dynamic>? carData = {};
   //late List? insuranceData = [];
-  late Map<String, dynamic>? insuranceData = {};
+  late InsuranceFormModel insuranceData = InsuranceFormModel();
   late List? serviceData = [];
   final storage = new FlutterSecureStorage();
   Map item = {};
@@ -51,7 +52,6 @@ class _CarItemState extends State<CarItem> {
     serviceData = (await CarApiService().getService(tokenVal, id));
     Future.delayed(Duration(seconds: 1)).then((value) => setState(() {
           print(carData);
-          print(insuranceData!["dataZakupu"].runtimeType);
         }));
   }
 
@@ -182,7 +182,7 @@ class _CarItemState extends State<CarItem> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          insuranceData != null && insuranceData!.length > 1
+                                          insuranceData != null
                                               ? ("WPISAC DNI")
                                               : ("brak"),
                                           style: TextStyle(
@@ -214,8 +214,7 @@ class _CarItemState extends State<CarItem> {
                                         ),
                                         Text(
                                           insuranceData == null ||
-                                                  insuranceData![
-                                                          "idRodzajuUbezpieczenia"] !=
+                                                  insuranceData.IdRodzajuUbezpieczenia !=
                                                       2
                                               ? ("brak")
                                               : ("WPISAC DNI"),

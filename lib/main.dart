@@ -5,6 +5,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/_userAuth.dart';
 import 'package:projzespoloey/pages/_userAuthRegister.dart';
+import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/carInsuranceHistoryView.dart';
 import 'package:projzespoloey/pages/carsModule/carInsuranceView.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
@@ -13,6 +14,7 @@ import 'package:projzespoloey/pages/carsModule/carRepairHistory.dart';
 import 'package:projzespoloey/pages/carsModule/carServiceHistory.dart';
 import 'package:projzespoloey/pages/carsModule/carServiceView.dart';
 import 'package:projzespoloey/pages/carsModule/form/carForm.dart';
+import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceForm.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
 import 'package:projzespoloey/pages/documentsModule/documentItem.dart';
@@ -51,7 +53,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  InsuranceFormModel? model;
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +74,7 @@ class MyApp extends StatelessWidget {
         '/carList': (context) => CarList(),
         '/carItem': (context) => CarItem(),
         '/carInsurance': (context) => CarInsuranceView(),
+        '/carInsuranceEditForm': (context) =>InsuranceEditForm(data: model!),
         '/carInsuranceHistory': (context) => CarInsuranceHistoryView(),
         '/carService': (context) => CarServiceView(),
         '/carServiceHistory': (context) => CarServiceHistory(),

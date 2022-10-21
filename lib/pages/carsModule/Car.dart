@@ -24,6 +24,9 @@ List<FileList> fileListFromJson(String str) =>
 String fileListToJson(List<FileList> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+List<InsuranceFormModel> InsuranceFormModelFromJson(String str) =>
+    List<InsuranceFormModel>.from(json.decode(str).map((x) => InsuranceFormModel.fromJson(x)));
+
 void getToken(String token) {
   userToken = token;
 }
@@ -342,7 +345,7 @@ class InsuranceFormModel {
   String? DataZakupu;
   String? DataKonca;
   int? IdRodzajuUbezpieczenia;
-  int? KosztPolisy;
+  double? KosztPolisy;
 
   Map<String, dynamic> toJson() => {
     "ubezpieczyciel": Ubezpieczyciel,
@@ -352,4 +355,52 @@ class InsuranceFormModel {
     "kosztPolisy": KosztPolisy,
     "idRodzajuUbezpieczenia": IdRodzajuUbezpieczenia,
   };
+
+  factory InsuranceFormModel.fromJson(Map<String, dynamic> json) => InsuranceFormModel(
+      Ubezpieczyciel: json["ubezpieczyciel"],
+      NrPolisy: json["nrPolisy"],
+      DataZakupu: json["dataZakupu"],
+      DataKonca: json["dataKonca"],
+      KosztPolisy: json["kosztPolisy"],
+      IdRodzajuUbezpieczenia: json["idRodzajuUbezpieczenia"]);
+}
+
+class InsuranceModel {
+  InsuranceModel(
+      {
+        this.IdUbezpieczenia,
+        this.Ubezpieczyciel,
+        this.NrPolisy,
+        this.DataZakupu,
+        this.DataKonca,
+        this.KosztPolisy,
+        this.IdRodzajuUbezpieczenia
+      });
+
+  String? IdUbezpieczenia;
+  String? Ubezpieczyciel;
+  String? NrPolisy;
+  String? DataZakupu;
+  String? DataKonca;
+  int? IdRodzajuUbezpieczenia;
+  double? KosztPolisy;
+
+  Map<String, dynamic> toJson() => {
+    "idUbezpieczenia": IdUbezpieczenia,
+    "ubezpieczyciel": Ubezpieczyciel,
+    "nrPolisy": NrPolisy,
+    "dataZakupu": DataZakupu,
+    "dataKonca": DataKonca,
+    "kosztPolisy": KosztPolisy,
+    "idRodzajuUbezpieczenia": IdRodzajuUbezpieczenia,
+  };
+
+  factory InsuranceModel.fromJson(Map<String, dynamic> json) => InsuranceModel(
+      IdUbezpieczenia: json["idUbezpieczenia"],
+      Ubezpieczyciel: json["ubezpieczyciel"],
+      NrPolisy: json["nrPolisy"],
+      DataZakupu: json["dataZakupu"],
+      DataKonca: json["dataKonca"],
+      KosztPolisy: json["kosztPolisy"],
+      IdRodzajuUbezpieczenia: json["idRodzajuUbezpieczenia"]);
 }

@@ -332,6 +332,7 @@ class CarModelForm {
 class InsuranceFormModel {
   InsuranceFormModel(
       {
+        this.IdUbezpieczenia,
         this.Ubezpieczyciel,
         this.NrPolisy,
         this.DataZakupu,
@@ -339,7 +340,7 @@ class InsuranceFormModel {
         this.KosztPolisy,
         this.IdRodzajuUbezpieczenia
       });
-
+  String? IdUbezpieczenia;
   String? Ubezpieczyciel;
   String? NrPolisy;
   String? DataZakupu;
@@ -357,6 +358,7 @@ class InsuranceFormModel {
   };
 
   factory InsuranceFormModel.fromJson(Map<String, dynamic> json) => InsuranceFormModel(
+      IdUbezpieczenia: json["idUbezpieczenia"],
       Ubezpieczyciel: json["ubezpieczyciel"],
       NrPolisy: json["nrPolisy"],
       DataZakupu: json["dataZakupu"],

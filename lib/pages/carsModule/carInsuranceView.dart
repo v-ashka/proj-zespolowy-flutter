@@ -518,7 +518,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                 print("file list");
                                 Navigator.pushNamed(context, "/fileList",
                                     arguments: {
-                                      "data": item["data"],
+                                      "data": insuranceData,
                                       "form_type": "car_insurance"
                                     });
                               },

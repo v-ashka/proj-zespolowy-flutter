@@ -32,10 +32,13 @@ class _ModuleListState extends State<ModuleList> {
 
   void _getData() async {
     _carModel = (await CarApiService().getCars(widget.data["user_auth"]))!;
-    Future.delayed(const Duration(milliseconds: 200)).then((value) => setState(() {
-          print("test value");
-          print(value);
-        }));
+    setState(() {
+      print(_carModel?.isEmpty);
+    });
+    // Future.delayed(const Duration(milliseconds: 200)).then((value) => setState(() {
+    //       print("test value");
+    //       print(value);
+    //     }));
 
     // _carModel.add(await CarApiService()
     //     .getCarInsurance(widget.data["user_auth"], _carModel["idPubliczne"]))!;
@@ -74,7 +77,7 @@ class _ModuleListState extends State<ModuleList> {
     final today = DateTime.now();
 
     return Center(
-        child: _carModel == null
+        child: _carModel!.isEmpty
             ? Center(
                 child: CircularProgressIndicator(
                 color: mainColor,

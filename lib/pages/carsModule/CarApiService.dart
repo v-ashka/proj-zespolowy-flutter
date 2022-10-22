@@ -26,8 +26,6 @@ class CarApiService {
       });
 
       if (response.statusCode == 200) {
-        getToken(token);
-
         // var id = 2;
         List<CarModel> _model = carModelFromJson(response.body);
         return _model;
@@ -79,14 +77,17 @@ class CarApiService {
         'Authorization': "Bearer $token",
       });
       if (response.statusCode == 200) {
+        log(response.body.toString());
         Map<String, dynamic> data = jsonDecode(response.body);
         InsuranceFormModel model = InsuranceFormModel.fromJson(data);
         return model;
-    }  }
-  catch (e) {
+      } else {
+        return InsuranceFormModel();
+      }
+    } catch (e) {
       log(e.toString());
+      throw Exception('Błąd pobierania danych');
     }
-    throw Exception('Błąd pobierania danych');
   }
 
   Future<void> deleteInsurance(token, id) async {
@@ -189,9 +190,11 @@ class CarApiService {
       log(e.toString());
     }
   }
+
   Future uploadFile(token, path, id) async {
     try {
-      var url = Uri.parse("${SERVER_IP}/api/fileUpload/UploadFile?rootFolder=samochod&nazwaFolderu=$id&czyNaglowkowy=true");
+      var url = Uri.parse(
+          "${SERVER_IP}/api/fileUpload/UploadFile?rootFolder=samochod&nazwaFolderu=$id&czyNaglowkowy=true");
       print(url);
       var request = http.MultipartRequest('POST', url);
       request.files.add(await http.MultipartFile.fromPath('file', path));
@@ -201,13 +204,12 @@ class CarApiService {
       } else {
         print(response.statusCode);
       }
-    }
-       catch (e) {
+    } catch (e) {
       log(e.toString());
     }
   }
 
-  Future uploadFiles(token, List<PlatformFile>files, id) async {
+  Future uploadFiles(token, List<PlatformFile> files, id) async {
     for (var item in files) {
       var file = File(item.path!);
       try {
@@ -219,11 +221,12 @@ class CarApiService {
         var response = await request.send();
         if (response.statusCode == 200) {
           print('File uploaded!');
+          return true;
         } else {
           print(response.statusCode);
+          return false;
         }
-      }
-      catch (e) {
+      } catch (e) {
         log(e.toString());
       }
     }
@@ -232,6 +235,23 @@ class CarApiService {
   Future addInsurance(token, data, carId) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/insurance/AddInsurance/$carId");
+      var response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer ${token}",
+        },
+        body: jsonEncode(data),
+      );
+      return response.body;
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future addService(token, data, carId) async {
+    try {
+      var url = Uri.parse("${SERVER_IP}/api/inspection/$carId/AddInspection");
       var response = await http.post(
         url,
         headers: <String, String>{

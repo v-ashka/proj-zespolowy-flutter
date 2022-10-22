@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:projzespoloey/components/emptyBox.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
@@ -22,7 +23,6 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
   late InsuranceFormModel insuranceData = InsuranceFormModel();
   var idSamochodu;
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -32,17 +32,18 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
         item = item.isNotEmpty
             ? item
             : ModalRoute.of(context)?.settings.arguments as Map;
+        print(item.toString());
         idSamochodu = item["car"]["idSamochodu"];
         _getData(idSamochodu);
       });
-
     });
   }
 
   void _getData(id) async {
     tokenVal = await storage.read(key: "token");
     insuranceData = (await CarApiService().getValidInsurance(tokenVal, id));
-    Future.delayed(const Duration(milliseconds: 200)).then((value) => setState(() {}));
+    Future.delayed(const Duration(milliseconds: 200))
+        .then((value) => setState(() {}));
   }
 
   @override
@@ -96,7 +97,17 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                 height: 15,
               ),
               if (item["data"] == null) ...[
-                Center(child: Text("Trochę tu pusto..."))
+                EmptyBoxInfo(
+                    title: "Dodaj ubezpieczenie w kilku krokach",
+                    description:
+                        "Aktualnie nie dodałeś jeszcze żadnego ubezpieczenia, zrób to już teraz",
+                    addRouteLink: {
+                      "routeName": "/formCarInsurance",
+                      "arguments": {
+                        "form_type": "car_insurance",
+                        'idSamochodu': item["car"]["idSamochodu"],
+                      }
+                    })
               ] else ...[
                 Container(
                   decoration: BoxDecoration(
@@ -377,8 +388,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
                                     color: secondaryColor),
-                                child: Text(
-                                    "${item["car"]["koniecOC"]} dni",
+                                child: Text("${item["car"]["koniecOC"]} dni",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 14,
@@ -387,154 +397,172 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                               ),
                             ),
                             SizedBox(
-                              width: 70,
+                              width: 20,
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(5),
-                                  primary: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  onPrimary: deleteBtn,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100),
-                                  )),
-                              onPressed: () {
-                                print("delete object");
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Container(
-                                        padding: EdgeInsets.all(5),
-                                        child: AlertDialog(
-                                          actionsPadding: EdgeInsets.all(0),
-                                          actionsAlignment:
-                                              MainAxisAlignment.center,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                          ),
-                                          title: Text(
-                                              "Czy na pewno chcesz usunąć ten element?"),
-                                          content: Text(
-                                              "Po usunięciu nie możesz cofnąć tej akcji."),
-                                          actions: [
-                                            ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: mainColor,
-                                                    onPrimary: mainColor,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      primary: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                      onPrimary: deleteBtn,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      )),
+                                  onPressed: () {
+                                    print("delete object");
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            padding: EdgeInsets.all(5),
+                                            child: AlertDialog(
+                                              actionsPadding: EdgeInsets.all(0),
+                                              actionsAlignment:
+                                                  MainAxisAlignment.center,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                              ),
+                                              title: Text(
+                                                  "Czy na pewno chcesz usunąć ten element?"),
+                                              content: Text(
+                                                  "Po usunięciu nie możesz cofnąć tej akcji."),
+                                              actions: [
+                                                ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            primary: mainColor,
+                                                            onPrimary:
+                                                                mainColor,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          25),
+                                                            )),
+                                                    onPressed: () {
+                                                      print("no");
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text(
+                                                      "Anuluj",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
                                                     )),
-                                                onPressed: () {
-                                                  print("no");
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text(
-                                                  "Anuluj",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                )),
-                                            ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: deleteBtn,
-                                                    onPrimary: deleteBtn,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
+                                                ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            primary: deleteBtn,
+                                                            onPrimary:
+                                                                deleteBtn,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          25),
+                                                            )),
+                                                    onPressed: () {
+                                                      print("yes");
+                                                    },
+                                                    child: Text(
+                                                      "Usuń",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
                                                     )),
-                                                onPressed: () {
-                                                  print("yes");
-                                                },
-                                                child: Text(
-                                                  "Usuń",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                )),
-                                          ],
-                                        ),
-                                      );
-                                    });
-                              },
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: deleteBtn,
+                                              ],
+                                            ),
+                                          );
+                                        });
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25),
+                                      color: deleteBtn,
+                                    ),
+                                    child: Icon(
+                                      Icons.delete_outline_rounded,
+                                      size: 30,
+                                      color: bgSmokedWhite,
+                                    ),
+                                  ),
                                 ),
-                                child: Icon(
-                                  Icons.delete_outline_rounded,
-                                  size: 30,
-                                  color: bgSmokedWhite,
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      primary: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                      onPrimary: mainColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      )),
+                                  onPressed: () {
+                                    print("edit object");
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              InsuranceEditForm(
+                                                  data: insuranceData),
+                                        ));
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: mainColor,
+                                    ),
+                                    child: Icon(
+                                      Icons.edit_outlined,
+                                      size: 30,
+                                      color: bgSmokedWhite,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(5),
-                                  primary: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  onPrimary: mainColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100),
-                                  )),
-                              onPressed: () {
-                                print("edit object");
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => InsuranceEditForm(data: insuranceData),
-                                    ));
-                              },
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: mainColor,
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      primary: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                      onPrimary: mainColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      )),
+                                  onPressed: () {
+                                    print("file list");
+                                    Navigator.pushNamed(context, "/fileList",
+                                        arguments: {
+                                          "data": insuranceData,
+                                          "form_type": "car_insurance"
+                                        });
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: secondColor,
+                                    ),
+                                    child: Icon(
+                                      Icons.file_open_outlined,
+                                      size: 30,
+                                      color: bgSmokedWhite,
+                                    ),
+                                  ),
                                 ),
-                                child: Icon(
-                                  Icons.edit_outlined,
-                                  size: 30,
-                                  color: bgSmokedWhite,
-                                ),
-                              ),
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(5),
-                                  primary: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  onPrimary: mainColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100),
-                                  )),
-                              onPressed: () {
-                                print("file list");
-                                Navigator.pushNamed(context, "/fileList",
-                                    arguments: {
-                                      "data": insuranceData,
-                                      "form_type": "car_insurance"
-                                    });
-                              },
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: secondColor,
-                                ),
-                                child: Icon(
-                                  Icons.file_open_outlined,
-                                  size: 30,
-                                  color: bgSmokedWhite,
-                                ),
-                              ),
+                              ],
                             ),
                           ],
                         ),
@@ -640,9 +668,10 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, "/formCarInsurance",
-              arguments: {'form_type': 'car_insurance',
-              'idSamochodu': item["car"]["idSamochodu"]});
+          Navigator.pushNamed(context, "/formCarInsurance", arguments: {
+            'form_type': 'car_insurance',
+            'idSamochodu': item["car"]["idSamochodu"]
+          });
         },
         backgroundColor: mainColor,
         label: Text('Dodaj nowy'),

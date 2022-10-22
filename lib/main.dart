@@ -29,6 +29,7 @@ import 'package:projzespoloey/pages/loading.dart';
 import 'package:projzespoloey/pages/form.dart';
 
 import 'pages/carsModule/filesView.dart';
+import 'pages/carsModule/form/serviceForm.dart';
 
 // import 'package:projzespoloey/pages/_carList.dart';
 //projzespoloey
@@ -43,10 +44,12 @@ class PostHttpOverrides extends HttpOverrides {
 }
 
 void main() {
-   WidgetsFlutterBinding.ensureInitialized();
-      FlutterDownloader.initialize(
-          debug: true, // optional: set to false to disable printing logs to console (default: true)
-          ignoreSsl: true // option: set to false to disable working with http links (default: false)
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterDownloader.initialize(
+      debug:
+          true, // optional: set to false to disable printing logs to console (default: true)
+      ignoreSsl:
+          true // option: set to false to disable working with http links (default: false)
       );
   HttpOverrides.global = new PostHttpOverrides();
   runApp(MyApp());
@@ -74,7 +77,7 @@ class MyApp extends StatelessWidget {
         '/carList': (context) => CarList(),
         '/carItem': (context) => CarItem(),
         '/carInsurance': (context) => CarInsuranceView(),
-        '/carInsuranceEditForm': (context) =>InsuranceEditForm(data: model!),
+        '/carInsuranceEditForm': (context) => InsuranceEditForm(data: model!),
         '/carInsuranceHistory': (context) => CarInsuranceHistoryView(),
         '/carService': (context) => CarServiceView(),
         '/carServiceHistory': (context) => CarServiceHistory(),
@@ -82,6 +85,7 @@ class MyApp extends StatelessWidget {
         // Car form Route
         '/carForm': (context) => CarForm(),
         '/formCarInsurance': (context) => InsuranceForm(),
+        '/formCarService': (context) => ServiceForm(),
         // Documents Routes
         '/documentList': (context) => DocumentsList(),
         '/documentItem': (context) => DocumentItem(),

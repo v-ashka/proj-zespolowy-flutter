@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/main.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:file_picker/file_picker.dart';
@@ -45,21 +46,22 @@ class _InsuranceFormState extends State<InsuranceForm> {
       lastDate: DateTime(2023),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-            data: Theme.of(context).copyWith(
-                colorScheme: const ColorScheme.light(
-              primary: mainColor, // header background color
-              onPrimary: bgSmokedWhite, // header text color
-              onSurface: Colors.black, // body text color
-            )),
+          data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+            primary: mainColor, // header background color
+            onPrimary: bgSmokedWhite, // header text color
+            onSurface: Colors.black, // body text color
+          )),
           child: child!,
-            );
+        );
       },
     );
     return date;
   }
 
   Future pickFiles() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: true);
     if (result != null) {
       setState(() {
         if (files.isNotEmpty) {
@@ -86,7 +88,6 @@ class _InsuranceFormState extends State<InsuranceForm> {
     });
 
     _getInsuranceTypes();
-
   }
 
   @override
@@ -172,7 +173,8 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                 isExpanded: true,
                                 onChanged: (value) {
                                   setState(() {
-                                    insurance.IdRodzajuUbezpieczenia = value as int?;
+                                    insurance.IdRodzajuUbezpieczenia =
+                                        value as int?;
                                   });
                                 },
                                 items: insuranceTypesList.map((insurance) {
@@ -212,8 +214,8 @@ class _InsuranceFormState extends State<InsuranceForm> {
                               ),
                             ),
                             TextFormField(
-                               onSaved: (String? value) {
-                               insurance.Ubezpieczyciel = value;
+                              onSaved: (String? value) {
+                                insurance.Ubezpieczyciel = value;
                               },
                               cursorColor: Colors.black,
                               style: TextStyle(color: Colors.black),
@@ -250,7 +252,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                               ),
                             ),
                             TextFormField(
-                               onSaved: (String? value) {
+                              onSaved: (String? value) {
                                 insurance.NrPolisy = value;
                               },
                               cursorColor: Colors.black,
@@ -295,41 +297,45 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 165,
+                                    width: 145,
                                     child: TextFormField(
-                                      readOnly: true,
-                                      onTap: () async {
-                                        DateTime? date = await pickDate(context);
-                                        setState(() {
-                                          insurance.DataZakupu = DateFormat('dd-MM-yyyy').format(date!);
-                                        });
-                                      },
-                                      cursorColor: Colors.black,
-                                      style: TextStyle(color: Colors.black),
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(15),
-                                          prefixIcon: Padding(
-                                            padding: EdgeInsets.only(top: 1),
-                                            child: Icon(
-                                              Icons.calendar_today_outlined,
-                                              color: Colors.black,
+                                        readOnly: true,
+                                        onTap: () async {
+                                          DateTime? date =
+                                              await pickDate(context);
+                                          setState(() {
+                                            insurance.DataZakupu =
+                                                DateFormat('dd-MM-yyyy')
+                                                    .format(date!);
+                                          });
+                                        },
+                                        cursorColor: Colors.black,
+                                        style: TextStyle(color: Colors.black),
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(15),
+                                            prefixIcon: Padding(
+                                              padding: EdgeInsets.only(top: 1),
+                                              child: Icon(
+                                                Icons.calendar_today_outlined,
+                                                color: Colors.black,
+                                              ),
                                             ),
-                                          ),
-                                          hintText: insurance.DataZakupu ?? "Od",
-                                          fillColor: bg35Grey,
-                                          filled: true,
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            borderSide: BorderSide.none,
-                                          )),
-                                      validator: (date) {
+                                            hintText:
+                                                insurance.DataZakupu ?? "Od",
+                                            hintStyle: TextStyle(fontSize: 12),
+                                            fillColor: bg35Grey,
+                                            filled: true,
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              borderSide: BorderSide.none,
+                                            )),
+                                        validator: (date) {
                                           if (insurance.DataZakupu == null) {
                                             return 'To pole nie może być puste';
                                           }
                                           return null;
-                                        }
-                                    ),
+                                        }),
                                   ),
                                 ],
                               ),
@@ -340,32 +346,41 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                     padding:
                                         const EdgeInsets.fromLTRB(12, 26, 0, 5),
                                     child: SizedBox(
-                                      width: 165,
+                                      width: 145,
                                       child: TextFormField(
                                           readOnly: true,
                                           onTap: () async {
-                                            DateTime? date = await pickDate(context);
+                                            DateTime? date =
+                                                await pickDate(context);
                                             setState(() {
-                                              insurance.DataKonca = DateFormat('dd-MM-yyyy').format(date!);
+                                              insurance.DataKonca =
+                                                  DateFormat('dd-MM-yyyy')
+                                                      .format(date!);
                                             });
                                           },
                                           cursorColor: Colors.black,
-                                          style: const TextStyle(color: Colors.black),
+                                          style: const TextStyle(
+                                              color: Colors.black),
                                           decoration: InputDecoration(
                                               prefixIcon: const Padding(
-                                                padding: EdgeInsets.only(top: 1),
+                                                padding:
+                                                    EdgeInsets.only(top: 1),
                                                 child: Icon(
                                                   Icons.calendar_today_outlined,
                                                   color: Colors.black,
                                                 ),
                                               ),
-                                              contentPadding: const EdgeInsets.all(15),
-                                              hintText: insurance.DataKonca ?? "Do",
+                                              contentPadding:
+                                                  const EdgeInsets.all(15),
+                                              hintText:
+                                                  insurance.DataKonca ?? "Do",
+                                              hintStyle:
+                                                  TextStyle(fontSize: 12),
                                               fillColor: bg35Grey,
                                               filled: true,
                                               border: OutlineInputBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(50),
+                                                    BorderRadius.circular(50),
                                                 borderSide: BorderSide.none,
                                               )),
                                           validator: (date) {
@@ -373,8 +388,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                               return 'To pole nie może być puste';
                                             }
                                             return null;
-                                          }
-                                      ),
+                                          }),
                                     ),
                                   ),
                                 ],
@@ -398,7 +412,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: TextFormField(
-                                 onSaved: (String? value) {
+                                onSaved: (String? value) {
                                   insurance.KosztPolisy = double.parse(value!);
                                 },
                                 cursorColor: Colors.black,
@@ -434,7 +448,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                 children: [
                                   Padding(
                                     padding:
-                                    const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                        const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                     child: Text("Załączniki"),
                                   ),
                                   ElevatedButton(
@@ -444,7 +458,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                       padding: EdgeInsets.all(40),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(25)),
+                                              BorderRadius.circular(25)),
                                     ),
                                     onPressed: () {
                                       pickFiles();
@@ -461,43 +475,54 @@ class _InsuranceFormState extends State<InsuranceForm> {
                               ),
                             ),
                             if (files.isNotEmpty) ...[
-                              Container(
-                                height: 150,
-                                width: 230,
-                                child: ListView.separated(
-                                    separatorBuilder: (BuildContext context, int index) =>
-                                    const Divider(
-                                      color: Colors.transparent,
-                                    ),
-                                    itemCount: files!.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      final file = files[index];
-                                      return GestureDetector(
-                                        onTap: (){
-                                          //_download("$SERVER_IP/api/fileUpload/GetFile/${_files![index].idPliku}?naglowkowy=false");
-                                        },
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Container(
+                                  height: 150,
+                                  width: 230,
+                                  child: ListView.separated(
+                                      separatorBuilder:
+                                          (BuildContext context, int index) =>
+                                              const Divider(
+                                                height: 0,
+                                                color: Colors.transparent,
+                                              ),
+                                      itemCount: files!.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        final file = files[index];
+                                        return GestureDetector(
+                                          onTap: () {
+                                            //_download("$SERVER_IP/api/fileUpload/GetFile/${_files![index].idPliku}?naglowkowy=false");
+                                          },
                                           child: Card(
-                                          margin: const EdgeInsets.all(5),
-                                          elevation: 2,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
-                                          shadowColor: Colors.white,
-                                          child: ListTile(
-                                            leading: Icon(Icons.abc),
-                                            title: Text(
-                                              file.name,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            tileColor: Colors.white,
+                                            margin: const EdgeInsets.all(5),
+                                            elevation: 2,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            shadowColor: fontBlack,
+                                            child: ListTile(
+                                              leading: Icon(Icons.abc),
+                                              title: Text(
+                                                file.name,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                              tileColor: Colors.white,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    }),
+                                        );
+                                      }),
+                                ),
                               )
                             ]
                           ],
@@ -520,7 +545,8 @@ class _InsuranceFormState extends State<InsuranceForm> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
-            var insuranceId = await CarApiService().addInsurance(tokenVal, insurance, idSamochodu);
+            var insuranceId = await CarApiService()
+                .addInsurance(tokenVal, insurance, idSamochodu);
             await CarApiService().uploadFiles(tokenVal, files, insuranceId);
             Navigator.pop(context);
           }

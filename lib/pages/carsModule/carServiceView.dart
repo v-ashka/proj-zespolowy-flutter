@@ -80,8 +80,11 @@ class _CarServiceViewState extends State<CarServiceView> {
                       description:
                           "Aktualnie nie dodałeś jeszcze żadnego przeglądu zrób to już teraz klikając w to powiadomienie!",
                       addRouteLink: {
-                        "routeName": "/carForm",
-                        "arguments": {"form_type": "add_car"}
+                        "routeName": "/formCarService",
+                        "arguments": {
+                          "form_type": "car_insurance",
+                          'idSamochodu': item["car"]["idSamochodu"],
+                        }
                       })
                 ] else ...[
                   Container(

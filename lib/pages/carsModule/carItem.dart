@@ -50,8 +50,9 @@ class _CarItemState extends State<CarItem> {
     carData = (await CarApiService().getCar(tokenVal, id));
     insuranceData = (await CarApiService().getValidInsurance(tokenVal, id));
     serviceData = (await CarApiService().getService(tokenVal, id));
-    Future.delayed(Duration(seconds: 1)).then((value) => setState(() {
-          print(carData);
+    Future.delayed(Duration(milliseconds: 50)).then((value) => setState(() {
+          // print(carData);
+          // print(insuranceData.IdUbezpieczenia);
         }));
   }
 
@@ -109,8 +110,7 @@ class _CarItemState extends State<CarItem> {
               : (ListView(
                   children: [
                     CarImageContainer(
-                        image:
-                            carData!["idSamochodu"],
+                        image: carData!["idSamochodu"],
                         brand: carData!["marka"],
                         model: carData!["model"],
                         prodDate: carData!["rokProdukcji"],
@@ -131,7 +131,12 @@ class _CarItemState extends State<CarItem> {
                       onPressed: () {
                         // print("ubezpieczenie");
                         Navigator.pushNamed(context, "/carInsurance",
-                            arguments: {"car": carData, "data": insuranceData});
+                            arguments: {
+                              "car": carData,
+                              "data": insuranceData.IdUbezpieczenia != null
+                                  ? (insuranceData)
+                                  : (null)
+                            });
                       },
                       child: Container(
                         child: Padding(
@@ -153,78 +158,110 @@ class _CarItemState extends State<CarItem> {
                                   SizedBox(
                                     height: 2,
                                   ),
-                                  Text(
-                                    "OKRES WAŻNOŚCI",
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: fontGrey,
-                                        fontFamily: "Roboto",
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    width: 100,
-                                    padding: EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                      color: secondaryColor,
-                                      borderRadius: BorderRadius.circular(25),
+                                  if (insuranceData.IdUbezpieczenia !=
+                                      null) ...[
+                                    Text(
+                                      "OKRES WAŻNOŚCI",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: fontGrey,
+                                          fontFamily: "Roboto",
+                                          fontWeight: FontWeight.w300),
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text(
-                                          "OC",
-                                          style: TextStyle(
-                                              color: fontBlack,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          insuranceData != null
-                                              ? ("WPISAC DNI")
-                                              : ("brak"),
-                                          style: TextStyle(
-                                            color: fontBlack,
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: 100,
+                                      padding: EdgeInsets.all(3),
+                                      decoration: BoxDecoration(
+                                        color: secondaryColor,
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(
+                                            "OC",
+                                            style: TextStyle(
+                                                color: fontBlack,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    width: 100,
-                                    padding: EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                      color: secondaryColor,
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text(
-                                          "AC",
-                                          style: TextStyle(
+                                          Text(
+                                            insuranceData != null
+                                                ? ("WPISAC DNI")
+                                                : ("brak"),
+                                            style: TextStyle(
                                               color: fontBlack,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          insuranceData == null ||
-                                                  insuranceData.IdRodzajuUbezpieczenia !=
-                                                      2
-                                              ? ("brak")
-                                              : ("WPISAC DNI"),
-                                          style: TextStyle(
-                                            color: fontBlack,
-                                          ),
-                                        )
-                                      ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  )
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: 100,
+                                      padding: EdgeInsets.all(3),
+                                      decoration: BoxDecoration(
+                                        color: secondaryColor,
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(
+                                            "AC",
+                                            style: TextStyle(
+                                                color: fontBlack,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            insuranceData == null ||
+                                                    insuranceData
+                                                            .IdRodzajuUbezpieczenia !=
+                                                        2
+                                                ? ("brak")
+                                                : ("WPISAC DNI"),
+                                            style: TextStyle(
+                                              color: fontBlack,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ] else ...[
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    SizedBox(
+                                      width: 220,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Nie dodałeś jeszcze żadnego ubezpieczenia!",
+                                            style: TextStyle(
+                                                color: fontBlack,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            "W tym miejscu pojawi się okres ważności ubezpieczenia OC oraz AC",
+                                            style: TextStyle(
+                                              color: fontBlack,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ]
                                 ],
                               ),
                               Icon(

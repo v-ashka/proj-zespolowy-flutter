@@ -201,11 +201,14 @@ class CarApiService {
       var response = await request.send();
       if (response.statusCode == 200) {
         print('File uploaded!');
+        return true;
       } else {
         print(response.statusCode);
+        return false;
       }
     } catch (e) {
       log(e.toString());
+      return false;
     }
   }
 
@@ -228,6 +231,7 @@ class CarApiService {
         }
       } catch (e) {
         log(e.toString());
+        return false;
       }
     }
   }

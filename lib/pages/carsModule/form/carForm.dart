@@ -10,6 +10,8 @@ import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:projzespoloey/pages/carsModule/carList.dart';
+import 'package:projzespoloey/pages/old_/_carList.dart';
 
 class CustomTrackShape extends RoundedRectSliderTrackShape {
   Rect getPreferredRect({
@@ -110,7 +112,6 @@ class _CarFormState extends State<CarForm> {
 
   final _formKey = GlobalKey<FormState>();
 
-
   // Slider values
   double _currentGuaranteeSliderVal = 0;
   double _currentRefundSliderVal = 0;
@@ -133,7 +134,8 @@ class _CarFormState extends State<CarForm> {
   }*/
 
   Future pickImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.image);
     if (result != null) {
       var imageTemp = File(result.files.single.path!);
       image = imageTemp;
@@ -351,28 +353,28 @@ class _CarFormState extends State<CarForm> {
                                   SizedBox(
                                     width: 150,
                                     child: TextFormField(
-                                        readOnly: true,
-                                        onTap: () =>
-                                            handleReadOnlyInputClick(context),
-                                        cursorColor: Colors.black,
-                                        style: TextStyle(color: Colors.black),
-                                        decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(15),
-                                            hintText: "${prodDate.toString()}",
-                                            fillColor: bg35Grey,
-                                            filled: true,
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              borderSide: BorderSide.none,
-                                            )),
-                                        /*validator: (value) {
+                                      readOnly: true,
+                                      onTap: () =>
+                                          handleReadOnlyInputClick(context),
+                                      cursorColor: Colors.black,
+                                      style: TextStyle(color: Colors.black),
+                                      decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.all(15),
+                                          hintText: "${prodDate.toString()}",
+                                          fillColor: bg35Grey,
+                                          filled: true,
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            borderSide: BorderSide.none,
+                                          )),
+                                      /*validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'To pole nie może być puste';
                                           }
                                           return null;
                                         }*/
-                                        ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -434,28 +436,28 @@ class _CarFormState extends State<CarForm> {
                               ),
                             ),
                             TextFormField(
-                                onSaved: (String? value) {
-                                  carItem?.NumerVin = value;
-                                },
-                                cursorColor: Colors.black,
-                                style: TextStyle(color: Colors.black),
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(15),
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.only(top: 1),
-                                      child: Icon(
-                                        Icons.numbers,
-                                        color: Colors.black,
-                                      ),
+                              onSaved: (String? value) {
+                                carItem?.NumerVin = value;
+                              },
+                              cursorColor: Colors.black,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(15),
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.only(top: 1),
+                                    child: Icon(
+                                      Icons.numbers,
+                                      color: Colors.black,
                                     ),
-                                    hintText: "Podaj numer VIN",
-                                    fillColor: bg35Grey,
-                                    filled: true,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                      borderSide: BorderSide.none,
-                                    )),
-                                ),
+                                  ),
+                                  hintText: "Podaj numer VIN",
+                                  fillColor: bg35Grey,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    borderSide: BorderSide.none,
+                                  )),
+                            ),
                           ],
                         ),
                         Row(
@@ -484,7 +486,8 @@ class _CarFormState extends State<CarForm> {
                                 children: [
                                   TextFormField(
                                       onSaved: (String? value) {
-                                        carItem?.PojemnoscSilnika = int.parse(value!);
+                                        carItem?.PojemnoscSilnika =
+                                            int.parse(value!);
                                       },
                                       cursorColor: Colors.black,
                                       style: TextStyle(color: Colors.black),
@@ -589,7 +592,6 @@ class _CarFormState extends State<CarForm> {
                                       print("sciezka fotki");
                                       print(imgId);
                                     },
-
                                     child: Icon(
                                       Icons.add,
                                       size: 28,
@@ -638,9 +640,25 @@ class _CarFormState extends State<CarForm> {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
             var id = await CarApiService().addCar(tokenVal, carItem);
-            await CarApiService().uploadFile(tokenVal, imgId, id.body);
-            print(carItem);
-            Navigator.pop(context);
+            var uploadImg =
+                await CarApiService().uploadFile(tokenVal, imgId, id.body);
+            // print(carItem);
+            setState(() {
+              if (uploadImg) {
+                Navigator.popAndPushNamed(context, "/carList", arguments: {
+                  "module_data": "cars",
+                  "user_auth": tokenVal,
+                  "route_name": "cars"
+                });
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute<void>(
+                //       builder: (BuildContext context) => ,
+                //     ));
+                // Navigator.pop(context);
+              }
+            });
+            // Navigator.pop(context);
           }
         },
         backgroundColor: mainColor,

@@ -3,9 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/carsModule/Car.dart';
 
 List<CarModel> carModelFromJson(String str) =>
     List<CarModel>.from(json.decode(str).map((x) => CarModel.fromJson(x)));
+
+List<CarListView> carListViewFromJson(String str) =>
+    List<CarListView>.from(json.decode(str).map((x) => CarListView.fromJson(x)));
 
 String carModelToJson(List<CarModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -71,6 +75,27 @@ class CarModel {
         "model": model,
         "brand": brand,
       };
+}
+
+class CarListView {
+  CarListView(
+
+      { required this.idSamochodu,
+        required this.model,
+        required this.marka,
+        required this.koniecOC
+      });
+
+  String idSamochodu;
+  String model;
+  String marka;
+  int koniecOC;
+
+  factory CarListView.fromJson(Map<String, dynamic> json) => CarListView(
+      idSamochodu: json["idSamochodu"],
+      model: json["model"],
+      marka: json["marka"],
+      koniecOC: json["koniecOC"]);
 }
 
 class Insurance {

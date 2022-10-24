@@ -17,7 +17,7 @@ class CarApiService {
     return (to.difference(from).inHours / 24).round();
   }
 
-  Future<List<CarModel>?> getCars(token) async {
+  Future<List<CarListView>?> getCars(token) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/car/GetList");
       var response = await http.get(url, headers: <String, String>{
@@ -27,8 +27,8 @@ class CarApiService {
 
       if (response.statusCode == 200) {
         // var id = 2;
-        List<CarModel> _model = carModelFromJson(response.body);
-        return _model;
+        List<CarListView> list = carListViewFromJson(response.body);
+        return list;
       }
 
       print(response.statusCode);
@@ -71,7 +71,7 @@ class CarApiService {
 
   Future<InsuranceFormModel> getValidInsurance(token, id) async {
     try {
-      var url = Uri.parse("$SERVER_IP/api/insurance/GetValidInsurance/$id");
+      var url = Uri.parse("$SERVER_IP/api/insurance/GetValidOC/$id");
       var response = await http.get(url, headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': "Bearer $token",
@@ -224,7 +224,6 @@ class CarApiService {
         var response = await request.send();
         if (response.statusCode == 200) {
           print('File uploaded!');
-          return true;
         } else {
           print(response.statusCode);
           return false;

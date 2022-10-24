@@ -22,7 +22,7 @@ class ModuleList extends StatefulWidget {
 }
 
 class _ModuleListState extends State<ModuleList> {
-  late List<CarModel>? _carModel = [];
+  late List<CarListView>? _carList = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -31,9 +31,9 @@ class _ModuleListState extends State<ModuleList> {
   }
 
   void _getData() async {
-    _carModel = (await CarApiService().getCars(widget.data["user_auth"]))!;
+    _carList = (await CarApiService().getCars(widget.data["user_auth"]))!;
     setState(() {
-      print(_carModel?.isEmpty);
+      print(_carList?.isEmpty);
     });
     // Future.delayed(const Duration(milliseconds: 200)).then((value) => setState(() {
     //       print("test value");
@@ -77,7 +77,7 @@ class _ModuleListState extends State<ModuleList> {
     final today = DateTime.now();
 
     return Center(
-        child: _carModel!.isEmpty
+        child: _carList!.isEmpty
             ? Center(
                 child: CircularProgressIndicator(
                 color: mainColor,
@@ -86,9 +86,9 @@ class _ModuleListState extends State<ModuleList> {
                 padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                 child: ListView.separated(
                   padding: const EdgeInsets.all(20),
-                  itemCount: _carModel!.length,
+                  itemCount: _carList!.length,
                   itemBuilder: (BuildContext context, int index) {
-                    if (_carModel!.isEmpty) {
+                    if (_carList!.isEmpty) {
                       return Center(
                         child: Text("Trochę tu pusto..."),
                       );
@@ -98,7 +98,7 @@ class _ModuleListState extends State<ModuleList> {
                           Navigator.pushNamed(context,
                               "/${widget.data['route_name'].toString().substring(0, widget.data['route_name'].toString().length - 1)}Item",
                               arguments: {
-                                "data": _carModel![index].id,
+                                "data": _carList![index].idSamochodu,
                                 "token": widget.data["user_auth"]
                               });
                         },
@@ -126,7 +126,7 @@ class _ModuleListState extends State<ModuleList> {
                                           10, 10, 0, 0),
                                       child: Text(
                                           widget.data["route_name"] == "cars"
-                                              ? ("${_carModel![index].brand} ${_carModel![index].model}")
+                                              ? ("${_carList![index].marka} ${_carList![index].model}")
                                               : ("test"),
                                           style: TextStyle(
                                             fontSize: 15,
@@ -273,7 +273,7 @@ class _ModuleListState extends State<ModuleList> {
                                                             .text_snippet_outlined,
                                                         color: icon70Black),
                                                     Text(
-                                                      "${_carModel![index].koniecOC} dni",
+                                                      "${_carList![index].koniecOC} dni",
                                                       style: TextStyle(
                                                           fontFamily: "Lato",
                                                           fontWeight:
@@ -306,7 +306,7 @@ class _ModuleListState extends State<ModuleList> {
                                                             .car_repair_outlined,
                                                         color: icon70Black),
                                                     Text(
-                                                      "${_carModel![index].prodDate} dni",
+                                                      "${_carList![index].koniecOC} dni",
                                                       style: TextStyle(
                                                           fontFamily: "Lato",
                                                           fontWeight:
@@ -486,7 +486,7 @@ class _ModuleListState extends State<ModuleList> {
                                               borderRadius:
                                                   BorderRadius.circular(25),
                                               child: Image.network(
-                                                '${SERVER_IP}/api/fileUpload/GetFile/${_carModel![index].id}?naglowkowy=true',
+                                                '${SERVER_IP}/api/fileUpload/GetFile/${_carList![index].idSamochodu}?naglowkowy=true',
                                                 width: 170,
                                                 height: 150,
                                                 fit: BoxFit.cover,

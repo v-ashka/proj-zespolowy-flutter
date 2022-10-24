@@ -36,7 +36,7 @@ class FilesViewState extends State<FilesView> {
             ? item
             : ModalRoute.of(context)?.settings.arguments as Map;
       });
-      _getData(item["data"]);
+      _getData(item["data"].IdUbezpieczenia);
     });
      IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
@@ -50,8 +50,6 @@ class FilesViewState extends State<FilesView> {
 
   void _getData(id) async {
     String? tokenVal = await storage.read(key: "token");
-    print("item test");
-    print(item["data"]["IdUbezpieczenia"]);
     _files = (await CarApiService().GetFileList(tokenVal, id));
     Future.delayed(Duration(seconds: 0)).then((value) => setState(() {
           print("files view");

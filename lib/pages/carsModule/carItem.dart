@@ -188,10 +188,9 @@ class _CarItemState extends State<CarItem> {
                                                 color: fontBlack,
                                                 fontWeight: FontWeight.bold),
                                           ),
-                                          Text(
-                                            insuranceData != null
-                                                ? ("WPISAC DNI")
-                                                : ("brak"),
+                                          Text(carData?["koniecOC"] != null
+                                                ? "${carData!["koniecOC"].toString()} dni"
+                                                : "brak",
                                             style: TextStyle(
                                               color: fontBlack,
                                             ),

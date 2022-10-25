@@ -63,8 +63,7 @@ class _CarServiceViewState extends State<CarServiceView> {
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
               child: ListView(children: [
                 CarImageContainer(
-                    image:
-                        "${SERVER_IP}/api/fileUpload/GetFile/${item["id"]}?naglowkowy=true",
+                    image: item["car"]["idSamochodu"],
                     brand: item["car"]["marka"],
                     model: item["car"]["model"],
                     prodDate: item["car"]["rokProdukcji"],
@@ -222,7 +221,8 @@ class _CarServiceViewState extends State<CarServiceView> {
                                                       BorderRadius.circular(25),
                                                   color: secondaryColor),
                                               child: Text(
-                                                  "${item["data"].first["dataPrzegladu"].toString().substring(0, 10)} / ${item["data"].first["dataNastepnegoPrzegladu"].toString().substring(0, 10)}",
+                                                  //".first["dataPrzegladu"].toString().substring(0, 10)} / ${item["data"].first["dataNastepnegoPrzegladu"].toString().substring(0, 10)}",
+                                                  "ELO",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontSize: 14,
@@ -304,7 +304,8 @@ class _CarServiceViewState extends State<CarServiceView> {
                                       borderRadius: BorderRadius.circular(25),
                                       color: secondaryColor),
                                   child: Text(
-                                      "${CarApiService().daysBetween(CarApiService().today, DateTime.parse(item["data"].first["dataNastepnegoPrzegladu"]))} dni",
+                                      //"${CarApiService().daysBetween(CarApiService().today, DateTime.parse(item["data"].first["dataNastepnegoPrzegladu"]))} dni",
+                                      "ELO",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 14,

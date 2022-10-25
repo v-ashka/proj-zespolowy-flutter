@@ -89,7 +89,7 @@ class CarListView {
   String idSamochodu;
   String model;
   String marka;
-  int koniecOC;
+  int? koniecOC;
 
   factory CarListView.fromJson(Map<String, dynamic> json) => CarListView(
       idSamochodu: json["idSamochodu"],
@@ -318,7 +318,7 @@ class ServiceFormModel {
         "czyPozytywny": CzyPozytywny,
         "uwagi": Uwagi,
         "dataPrzegladu": DataPrzegladu,
-        "dataNastepnegoPrzegladu": DateTime(2022 + 1, 1, 1, 1).toString(),
+        "dataNastepnegoPrzegladu": "2024-01-01",
       };
 
   factory ServiceFormModel.fromJson(Map<String, dynamic> json) =>

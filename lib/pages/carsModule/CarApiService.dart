@@ -123,7 +123,7 @@ class CarApiService {
 
   Future getModeleMarki(token) async {
     try {
-      var url = Uri.parse("${SERVER_IP}/api/car/api/Markimodele");
+      var url = Uri.parse("${SERVER_IP}/api/car/MarkiModele");
       var response = await http.get(url, headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': "Bearer ${token}",
@@ -254,7 +254,7 @@ class CarApiService {
 
   Future addService(token, data, carId) async {
     try {
-      var url = Uri.parse("${SERVER_IP}/api/inspection/$carId/AddInspection");
+      var url = Uri.parse("${SERVER_IP}/api/inspection/AddInspection/$carId");
       var response = await http.post(
         url,
         headers: <String, String>{

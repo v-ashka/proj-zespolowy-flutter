@@ -393,14 +393,12 @@ class _ServiceFormState extends State<ServiceForm> {
             var uploadImg =
                 await CarApiService().uploadFiles(tokenVal, files, insuranceId);
             setState(() {
-              if (uploadImg) {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute<void>(
                       builder: (BuildContext context) => CarItem(),
                     ));
                 // Navigator.pop(context);
-              }
             });
           }
         },

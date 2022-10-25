@@ -306,7 +306,10 @@ class _ModuleListState extends State<ModuleList> {
                                                             .car_repair_outlined,
                                                         color: icon70Black),
                                                     Text(
-                                                      "${_carList![index].koniecOC} dni",
+                                                      _carList?[index].koniecOC == null ?
+                                                          "Brak":
+                                                      "${_carList![index].koniecOC} dni"
+                                                      /*"${_carList![index].koniecOC} dni"*/,
                                                       style: TextStyle(
                                                           fontFamily: "Lato",
                                                           fontWeight:

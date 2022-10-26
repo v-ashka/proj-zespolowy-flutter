@@ -31,7 +31,7 @@ class _CarItemState extends State<CarItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration(milliseconds: 100), () {
       setState(() {
         item = item.isNotEmpty
             ? item
@@ -188,7 +188,8 @@ class _CarItemState extends State<CarItem> {
                                                 color: fontBlack,
                                                 fontWeight: FontWeight.bold),
                                           ),
-                                          Text(carData?["koniecOC"] != null
+                                          Text(
+                                            carData?["koniecOC"] != null
                                                 ? "${carData!["koniecOC"].toString()} dni"
                                                 : "brak",
                                             style: TextStyle(

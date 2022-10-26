@@ -24,7 +24,7 @@ class UserAuthentication extends StatefulWidget {
 
 class _UserAuthenticationState extends State<UserAuthentication> {
   // Local flutter storage token
-  final storage = new FlutterSecureStorage();
+  // final storage = new FlutterSecureStorage();
   // Form variables
   final formKey = GlobalKey<FormState>();
   bool isValid = false;
@@ -47,11 +47,16 @@ class _UserAuthenticationState extends State<UserAuthentication> {
 
           if (token["data"] != null) {
             readJson();
-            payload = Jwt.parseJwt(token["data"]);
+            var payload = Jwt.parseJwt(token["data"]);
+            storage.write(
+                key: "userName",
+                value: payload[
+                    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]);
+            // payload = Jwt.parseJwt(token["data"]);
             Navigator.pushNamed(context, '/dashboard', arguments: {
               "userData": _userData,
-              "token": token["data"],
-              "tokenData": payload
+              // "token": token["data"],
+              // "tokenData": payload
             });
           } else {
             errorFeedback = token["message"];

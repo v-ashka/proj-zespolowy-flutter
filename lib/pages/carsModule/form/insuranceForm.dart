@@ -13,6 +13,7 @@ import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/carsModule/carItem.dart';
 
 class InsuranceForm extends StatefulWidget {
   const InsuranceForm({Key? key}) : super(key: key);
@@ -548,7 +549,13 @@ class _InsuranceFormState extends State<InsuranceForm> {
             var insuranceId = await CarApiService()
                 .addInsurance(tokenVal, insurance, idSamochodu);
             await CarApiService().uploadFiles(tokenVal, files, insuranceId);
-            Navigator.pop(context);
+            setState(() {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) => CarItem(),
+                  ));
+            });
           }
         },
         backgroundColor: mainColor,

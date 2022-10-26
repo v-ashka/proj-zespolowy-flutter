@@ -90,16 +90,19 @@ class CarApiService {
     }
   }
 
-  Future<void> deleteInsurance(token, id) async {
+  Future deleteInsurance(token, id) async {
     try {
-      var url = Uri.parse("${SERVER_IP}/api/insurance/GetInsuranceList/${id}");
+      var url = Uri.parse("$SERVER_IP/api/insurance/DeleteInsurance/$id");
       var response = await http.delete(url, headers: <String, String>{
         'Content-Type': 'application/json',
-        'Authorization': "Bearer ${token}",
+        'Authorization': "Bearer $token",
       });
-      print(response);
+      if (response.statusCode == 200) {
+        return true;
+      }
     } catch (e) {
       log(e.toString());
+      return false;
     }
   }
 

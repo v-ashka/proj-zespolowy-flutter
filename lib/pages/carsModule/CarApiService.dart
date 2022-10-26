@@ -213,6 +213,7 @@ class CarApiService {
   }
 
   Future uploadFiles(token, List<PlatformFile> files, id) async {
+    var response;
     for (var item in files) {
       var file = File(item.path!);
       try {
@@ -221,18 +222,13 @@ class CarApiService {
         print(url);
         var request = http.MultipartRequest('POST', url);
         request.files.add(await http.MultipartFile.fromPath('file', file.path));
-        var response = await request.send();
-        if (response.statusCode == 200) {
-          print('File uploaded!');
-        } else {
-          print(response.statusCode);
-          return false;
-        }
+        response = await request.send();
       } catch (e) {
         log(e.toString());
         return false;
       }
     }
+    return response;
   }
 
   Future addInsurance(token, data, carId) async {
@@ -247,6 +243,23 @@ class CarApiService {
         body: jsonEncode(data),
       );
       return response.body;
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future updateInsurance(token, data, carId) async {
+    try {
+      var url = Uri.parse("${SERVER_IP}/api/insurance/UpdateInsurance/$carId");
+      var response = await http.put(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer ${token}",
+        },
+        body: jsonEncode(data),
+      );
+      return response.statusCode;
     } catch (e) {
       log(e.toString());
     }

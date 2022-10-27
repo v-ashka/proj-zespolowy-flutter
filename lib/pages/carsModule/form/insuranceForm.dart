@@ -553,7 +553,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (BuildContext context) => CarItem(),
+                    builder: (BuildContext context) => CarItem(carId: idSamochodu!),
                   ));
             });
           }

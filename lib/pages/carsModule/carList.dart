@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:projzespoloey/pages/_Dashboard.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
+import 'package:projzespoloey/pages/carsModule/carItem.dart';
 
 import '../../constants.dart';
 
@@ -19,47 +20,50 @@ class CarList extends StatefulWidget {
 }
 
 class _CarListState extends State<CarList> {
-  // late UserDataArguments data;
+  List<CarListView>? carList;
+  String? token;
 
-  // late List<CarListView>? _carList = [];
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _getData();
-  // }
-
-  // void _getData() async {
-  //   _carList = (await CarApiService().getCars(data.token))!;
-  //   setState(() {
-  //   });
-  // }
-
-  var _carList = [];
   @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  void getData() async {
+    token = await storage.read(key: "token");
+    carList = (await CarApiService().getCars(token)!);
+    setState(() {});
+  }
+
+  String getPhoto(carId) {
+    var url = '$SERVER_IP/api/fileUpload/GetFile/$carId?naglowkowy=true';
+    return url;
+  }
+
   Widget build(BuildContext context) {
     // data = ModalRoute.of(context)?.settings.arguments as UserDataArguments;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         elevation: 0,
-        title: Text('Pojazdy'),
+        title: const Text('Pojazdy'),
         leading: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onPrimary: Colors.transparent,
+            foregroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
-            onSurface: Colors.red,
+            disabledForegroundColor: Colors.red.withOpacity(0.38),
+            disabledBackgroundColor: Colors.red.withOpacity(0.12),
           ),
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
         ),
-        foregroundColor:
-            Colors.black, //Theme.of(context).colorScheme.secondary,
+        foregroundColor: Colors.black,
+        //Theme.of(context).colorScheme.secondary,
         backgroundColor: Colors.transparent,
         titleTextStyle: TextStyle(
             fontWeight: FontWeight.bold,
@@ -70,13 +74,13 @@ class _CarListState extends State<CarList> {
       body: Container(
           height: double.infinity,
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('assets/background.png'),
                   fit: BoxFit.fill)),
           child: Center(
-              child: _carList!.isEmpty
-                  ? Center(
+              child: carList?.length == null
+                  ? const Center(
                       child: CircularProgressIndicator(
                       color: mainColor,
                     ))
@@ -84,23 +88,23 @@ class _CarListState extends State<CarList> {
                       padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                       child: ListView.separated(
                         padding: const EdgeInsets.all(20),
-                        // item count carList
-                        // itemCount: _carList!.length,
-                        itemCount: 10,
+                        itemCount: carList!.length,
                         itemBuilder: (BuildContext context, int index) {
-                          if (_carList.length == 10) {
-                            return Center(
+                          final carItem = carList![index];
+                          if (carList!.isEmpty) {
+                            return const Center(
                               child: Text("Trochę tu pusto..."),
                             );
                           } else {
                             return GestureDetector(
                               onTap: () {
-                                // Navigator.pushNamed(context,
-                                //     "/${widget.data['route_name'].toString().substring(0, widget.data['route_name'].toString().length - 1)}Item",
-                                //     arguments: {
-                                //       "data": _carList![index].idSamochodu,
-                                //       "token": widget.data["user_auth"]
-                                //     });
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CarItem(
+                                                carId: carItem.idSamochodu),
+                                      ));
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -125,16 +129,16 @@ class _CarListState extends State<CarList> {
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 10, 10, 0, 0),
-                                            child: Text("marka model",
-                                                // "${_carList![index].marka} ${_carList![index].model}",
-                                                style: TextStyle(
+                                            child: Text(
+                                                "${carItem!.marka} ${carItem!.model}",
+                                                style: const TextStyle(
                                                   fontSize: 15,
                                                 ),
                                                 overflow:
                                                     TextOverflow.ellipsis),
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.fromLTRB(
+                                            padding: const EdgeInsets.fromLTRB(
                                                 10, 5, 0, 0),
                                             child: Column(
                                               crossAxisAlignment:
@@ -142,7 +146,7 @@ class _CarListState extends State<CarList> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Text("OKRES WAŻNOŚCI",
+                                                const Text("OKRES WAŻNOŚCI",
                                                     style: TextStyle(
                                                         color: fontGrey,
                                                         fontFamily: "Roboto",
@@ -150,7 +154,7 @@ class _CarListState extends State<CarList> {
                                                         fontWeight:
                                                             FontWeight.w300,
                                                         letterSpacing: 1.2)),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 10,
                                                 ),
                                                 Container(
@@ -170,14 +174,16 @@ class _CarListState extends State<CarList> {
                                                           MainAxisAlignment
                                                               .spaceAround,
                                                       children: [
-                                                        Icon(
+                                                        const Icon(
                                                             Icons
                                                                 .text_snippet_outlined,
                                                             color: icon70Black),
                                                         Text(
-                                                          "Koniec OC dni",
-                                                          // "${_carList![index].koniecOC} dni",
-                                                          style: TextStyle(
+                                                          carItem!.koniecOC !=
+                                                                  null
+                                                              ? "${carItem!.koniecOC} dni"
+                                                              : "Brak",
+                                                          style: const TextStyle(
                                                               fontFamily:
                                                                   "Lato",
                                                               fontWeight:
@@ -188,7 +194,7 @@ class _CarListState extends State<CarList> {
                                                     ),
                                                   ),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 10,
                                                 ),
                                                 Container(
@@ -198,9 +204,8 @@ class _CarListState extends State<CarList> {
                                                               25),
                                                       color: bg35Grey),
                                                   child: Padding(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 0, 20, 0),
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(10, 0, 20, 0),
                                                     child: Row(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
@@ -209,17 +214,16 @@ class _CarListState extends State<CarList> {
                                                           MainAxisAlignment
                                                               .spaceAround,
                                                       children: [
-                                                        Icon(
+                                                        const Icon(
                                                             Icons
                                                                 .car_repair_outlined,
                                                             color: icon70Black),
                                                         Text(
-                                                          "Koniec oc dni",
-                                                          // _carList?[index].koniecOC == null ?
-                                                          //     "Brak":
-                                                          // "${_carList![index].koniecOC} dni"
-                                                          /*"${_carList![index].koniecOC} dni"*/
-                                                          style: TextStyle(
+                                                          carItem!.koniecOC !=
+                                                                  null
+                                                              ? "${carItem!.koniecOC} dni"
+                                                              : "Brak",
+                                                          style: const TextStyle(
                                                               fontFamily:
                                                                   "Lato",
                                                               fontWeight:
@@ -236,7 +240,6 @@ class _CarListState extends State<CarList> {
                                         ],
                                       ),
                                     ),
-                                    // FittedBox(child: Image.asset("assets/asterka.jpg"), fit: BoxFit.fill)
                                     Expanded(
                                       flex: 10,
                                       child: SizedBox(
@@ -280,13 +283,13 @@ class _CarListState extends State<CarList> {
                                                   borderRadius:
                                                       BorderRadius.circular(25),
                                                   child: Image.network(
-                                                    "zdjecie ",
-                                                    // '${SERVER_IP}/api/fileUpload/GetFile/${_carList![index].idSamochodu}?naglowkowy=true',
+                                                    getPhoto(
+                                                        carItem!.idSamochodu),
                                                     width: 170,
                                                     height: 150,
                                                     fit: BoxFit.cover,
-                                                    alignment:
-                                                        Alignment(-0.5, 0),
+                                                    alignment: const Alignment(
+                                                        -0.3, 0),
                                                     errorBuilder:
                                                         (BuildContext context,
                                                             Object exception,
@@ -299,7 +302,7 @@ class _CarListState extends State<CarList> {
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(25),
-                                                          child: Icon(
+                                                          child: const Icon(
                                                             Icons
                                                                 .not_interested_rounded,
                                                             size: 88,
@@ -336,8 +339,8 @@ class _CarListState extends State<CarList> {
           ).then((value) {});
         },
         backgroundColor: mainColor,
-        label: Text('Dodaj nowy'),
-        icon: Icon(Icons.add),
+        label: const Text('Dodaj nowy'),
+        icon: const Icon(Icons.add),
       ),
     );
   }

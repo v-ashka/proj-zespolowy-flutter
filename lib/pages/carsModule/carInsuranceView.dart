@@ -490,7 +490,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                                       void>(
                                                                     builder: (BuildContext
                                                                             context) =>
-                                                                        CarItem(),
+                                                                        CarItem(carId: idSamochodu),
                                                                   ));
                                                       });
                                                     },

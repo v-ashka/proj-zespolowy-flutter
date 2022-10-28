@@ -21,7 +21,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
   final storage = const FlutterSecureStorage();
   Map item = {};
   String? tokenVal;
-  late InsuranceFormModel insuranceData = InsuranceFormModel();
+  InsuranceFormModel insuranceData = InsuranceFormModel();
   var idSamochodu;
 
   @override
@@ -535,7 +535,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               InsuranceEditForm(
-                                                  data: insuranceData),
+                                                  insurance: insuranceData,
+                                                  carId: idSamochodu),
                                         ));
                                   },
                                   child: Container(
@@ -555,9 +556,9 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       padding: EdgeInsets.all(5),
-                                      primary: Colors.transparent,
+                                      backgroundColor: Colors.transparent,
                                       shadowColor: Colors.transparent,
-                                      onPrimary: mainColor,
+                                      foregroundColor: mainColor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(100),

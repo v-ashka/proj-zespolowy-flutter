@@ -396,7 +396,7 @@ class _ServiceFormState extends State<ServiceForm> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute<void>(
-                      builder: (BuildContext context) => CarItem(),
+                      builder: (BuildContext context) => CarItem(carId: item["idSamochodu"]!),
                     ));
                 // Navigator.pop(context);
             });

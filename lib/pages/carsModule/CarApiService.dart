@@ -17,24 +17,25 @@ class CarApiService {
     return (to.difference(from).inHours / 24).round();
   }
 
-  Future<List<CarListView>?> getCars(token) async {
+  Future<List<CarListView>> getCars(token) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/car/GetList");
       var response = await http.get(url, headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': "Bearer ${token}",
       });
-
       if (response.statusCode == 200) {
-        // var id = 2;
         List<CarListView> list = carListViewFromJson(response.body);
         return list;
       }
-
+      else {
+        return [];
+      }
       print(response.statusCode);
     } catch (e) {
       log(e.toString());
     }
+    return [];
   }
 
   Future<Map<String, dynamic>?> getCar(token, id) async {
@@ -90,16 +91,19 @@ class CarApiService {
     }
   }
 
-  Future<void> deleteInsurance(token, id) async {
+  Future deleteInsurance(token, id) async {
     try {
-      var url = Uri.parse("${SERVER_IP}/api/insurance/GetInsuranceList/${id}");
+      var url = Uri.parse("$SERVER_IP/api/insurance/DeleteInsurance/$id");
       var response = await http.delete(url, headers: <String, String>{
         'Content-Type': 'application/json',
-        'Authorization': "Bearer ${token}",
+        'Authorization': "Bearer $token",
       });
-      print(response);
+      if (response.statusCode == 200) {
+        return true;
+      }
     } catch (e) {
       log(e.toString());
+      return false;
     }
   }
 

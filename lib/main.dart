@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/_Dashboard.dart';
 import 'package:projzespoloey/pages/_userAuth.dart';
 import 'package:projzespoloey/pages/_userAuthRegister.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
@@ -30,6 +31,7 @@ import 'package:projzespoloey/pages/form.dart';
 
 import 'pages/carsModule/filesView.dart';
 import 'pages/carsModule/form/serviceForm.dart';
+import 'services/UserModel/UserApiService.dart';
 
 // import 'package:projzespoloey/pages/_carList.dart';
 //projzespoloey
@@ -57,7 +59,8 @@ void main() {
 
 class MyApp extends StatelessWidget {
   InsuranceFormModel? model;
-  String? carId;
+
+  String carId = "";
   MyApp({Key? key}) : super(key: key);
 
   @override
@@ -70,13 +73,13 @@ class MyApp extends StatelessWidget {
         '/user_auth': (context) => UserAuthentication(),
         // User register page
         '/registerUser': (context) => UserAuthenticationRegister(),
-        '/dashboard': (context) => Dashboard(),
+        '/dashboard': (context) => DashboardPanel(),
         '/form': (context) => DataForm(),
         //File list
         '/fileList': (context) => FilesView(),
         // Car Routes
         '/carList': (context) => CarList(),
-        '/carItem': (context) => CarItem(),
+        '/carItem': (context) => CarItem(carId: carId),
         '/carInsurance': (context) => CarInsuranceView(),
         '/carInsuranceEditForm': (context) => InsuranceEditForm(insurance: model!, carId: carId!),
         '/carInsuranceHistory': (context) => CarInsuranceHistoryView(),

@@ -14,7 +14,8 @@ import 'package:projzespoloey/pages/dashboard.dart';
 import 'package:projzespoloey/pages/form.dart';
 
 class CarItem extends StatefulWidget {
-  const CarItem({Key? key}) : super(key: key);
+  String carId;
+  CarItem({Key? key, required this.carId}) : super(key: key);
 
   @override
   State<CarItem> createState() => _CarItemState();
@@ -22,26 +23,16 @@ class CarItem extends StatefulWidget {
 
 class _CarItemState extends State<CarItem> {
   late Map<String, dynamic>? carData = {};
-  //late List? insuranceData = [];
+
   late InsuranceFormModel insuranceData = InsuranceFormModel();
   late List? serviceData = [];
   final storage = new FlutterSecureStorage();
-  Map item = {};
+  String carId = "";
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        item = item.isNotEmpty
-            ? item
-            : ModalRoute.of(context)?.settings.arguments as Map;
-      });
-      _getData(item["data"]);
-      //print(item);
-      print("CAR DATA PRINT TEST");
-      print(carData);
-    });
+    _getData(widget.carId);
   }
 
   void _getData(id) async {
@@ -50,10 +41,7 @@ class _CarItemState extends State<CarItem> {
     carData = (await CarApiService().getCar(tokenVal, id));
     insuranceData = (await CarApiService().getValidInsurance(tokenVal, id));
     serviceData = (await CarApiService().getService(tokenVal, id));
-    Future.delayed(Duration(milliseconds: 50)).then((value) => setState(() {
-          // print(carData);
-          // print(insuranceData.IdUbezpieczenia);
-        }));
+    setState(() {});
   }
 
   @override
@@ -188,7 +176,8 @@ class _CarItemState extends State<CarItem> {
                                                 color: fontBlack,
                                                 fontWeight: FontWeight.bold),
                                           ),
-                                          Text(carData?["koniecOC"] != null
+                                          Text(
+                                            carData?["koniecOC"] != null
                                                 ? "${carData!["koniecOC"].toString()} dni"
                                                 : "brak",
                                             style: TextStyle(
@@ -289,7 +278,7 @@ class _CarItemState extends State<CarItem> {
                         Navigator.pushNamed(context, "/carService", arguments: {
                           "car": carData,
                           "data": serviceData,
-                          "id": item["data"],
+                          "id": widget.carId,
                         });
                       },
                       child: Container(
@@ -378,7 +367,7 @@ class _CarItemState extends State<CarItem> {
                         // print("naprawy");
                         Navigator.pushNamed(context, "/carRepairHistory",
                             arguments: {
-                              "id": item["data"],
+                              "id": widget.carId,
                               "car": carData,
                               "data": serviceData
                             });

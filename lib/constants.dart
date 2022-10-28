@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // server ip addr
 const SERVER_IP = "http://10.0.2.2:5151";
-//const SERVER_IP =
-    //"https://c89e-87-246-223-87.eu.ngrok.io";
-// const SERVER_IP = "192.168.0.10:5151";
+
+// const SERVER_IP =
+// "https://6b4c-2a02-a315-4137-c700-4543-3dd2-d609-4139.eu.ngrok.io";
 
 // basic color app
 
@@ -42,3 +43,7 @@ const secondColor = Color.fromARGB(255, 194, 83, 184);
 const secondColorX = Color.fromARGB(89, 255, 0, 229);
 const secondColor100 = Color.fromARGB(255, 154, 57, 143);
 const second50Color = Color.fromARGB(25, 255, 0, 230);
+
+final storage = new FlutterSecureStorage();
+const token = "";
+const payload = "";

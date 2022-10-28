@@ -58,7 +58,7 @@ class _CarFormState extends State<CarForm> {
   void _getModeleMarki() async {
     String? tokenVal = await storage.read(key: "token");
     brandList = (await CarApiService().getModeleMarki(tokenVal));
-    Future.delayed(Duration(seconds: 0)).then((value) => setState(() {}));
+    setState(() {});
   }
 
   void handleReadOnlyInputClick(context) {

@@ -7,6 +7,7 @@ import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
+import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
 
 class CarInsuranceView extends StatefulWidget {
@@ -469,8 +470,29 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                                       .circular(
                                                                           25),
                                                             )),
-                                                    onPressed: () {
+                                                    onPressed: () async {
                                                       print("yes");
+                                                      // insuranceData.IdUbezpieczenia
+                                                      tokenVal = await storage
+                                                          .read(key: "token");
+                                                      var deleteRes =
+                                                          await CarApiService()
+                                                              .deleteInsurance(
+                                                                  tokenVal,
+                                                                  insuranceData
+                                                                      .IdUbezpieczenia);
+                                                      setState(() {
+                                                        if (deleteRes)
+                                                          Navigator
+                                                              .pushReplacement(
+                                                                  context,
+                                                                  MaterialPageRoute<
+                                                                      void>(
+                                                                    builder: (BuildContext
+                                                                            context) =>
+                                                                        CarItem(carId: idSamochodu),
+                                                                  ));
+                                                      });
                                                     },
                                                     child: Text(
                                                       "Usuń",

@@ -22,6 +22,7 @@ class _DashboardState extends State<Dashboard> {
     final size = MediaQuery.of(context).size;
     final width = size.width;
     final height = size.height;
+
     final moduleItems = ['Dokumenty', 'Paraogny', 'Samochody', 'Sprzęt domowy'];
     final modulesTexts = {
       "module": [
@@ -66,9 +67,6 @@ class _DashboardState extends State<Dashboard> {
         ? data
         : ModalRoute.of(context)?.settings.arguments as Map;
 
-    print("token: ${data["token"]}");
-    print("other data");
-    print(data);
     return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
       body: SafeArea(

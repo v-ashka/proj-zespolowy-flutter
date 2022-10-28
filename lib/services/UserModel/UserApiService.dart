@@ -7,8 +7,6 @@ import 'package:projzespoloey/services/UserModel/UserModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-final storage = new FlutterSecureStorage();
-
 class UserApiService {
   Future register(data) async {
     try {
@@ -61,5 +59,19 @@ class UserApiService {
       log(e.toString());
       return {"data": null, "message": "Wystapił błąd połączenia!"};
     }
+  }
+}
+
+class UserAuthenticate {
+  UserAuthenticate({required this.token, required this.payload});
+  final String? token;
+  final Map payload;
+
+  String? get getToken {
+    return token;
+  }
+
+  Map get getPayload {
+    return payload;
   }
 }

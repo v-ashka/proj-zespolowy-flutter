@@ -9,6 +9,7 @@ import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
+import 'package:projzespoloey/pages/loadingScreen.dart';
 
 class CarInsuranceView extends StatefulWidget {
   const CarInsuranceView({Key? key}) : super(key: key);
@@ -51,6 +52,9 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
+    if(item.isEmpty){
+      return const LoadingScreen();
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -97,7 +101,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
               SizedBox(
                 height: 15,
               ),
-              if (item["data"] == null) ...[
+              if (item["car"]["koniecOC"]== null) ...[
                 EmptyBoxInfo(
                     title: "Dodaj ubezpieczenie w kilku krokach",
                     description:
@@ -607,7 +611,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                   onPressed: () {
                     print("historia ubezpieczenie");
                     Navigator.pushNamed(context, "/carInsuranceHistory",
-                        arguments: {"data": item["data"]});
+                        arguments: {"car": item["car"]});
                   },
                   child: Container(
                     child: Padding(

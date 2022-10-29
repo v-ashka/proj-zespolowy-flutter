@@ -24,9 +24,8 @@ class InsuranceEditForm extends StatefulWidget {
 }
 
 class _InsuranceEditFormState extends State<InsuranceEditForm> {
-  final storage = new FlutterSecureStorage();
   Map item = {};
-  late InsuranceFormModel insurance;
+  InsuranceFormModel insurance = InsuranceFormModel();
   final _formKey = GlobalKey<FormState>();
   var insuranceTypesList = [];
   String? dateFrom;
@@ -79,15 +78,10 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    _getInsuranceTypes();
     super.initState();
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        insurance = widget.insurance;
-        carId = widget.carId;
-      });
-    });
+    insurance = widget.insurance;
+    carId = widget.carId;
+    _getInsuranceTypes();
   }
 
   @override

@@ -5,11 +5,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:projzespoloey/components/emptyBox.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/models/insurance/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
+import 'package:projzespoloey/services/insurance_service.dart';
 
 class CarInsuranceView extends StatefulWidget {
   const CarInsuranceView({Key? key}) : super(key: key);
@@ -22,7 +24,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
   final storage = const FlutterSecureStorage();
   Map item = {};
   String? tokenVal;
-  InsuranceFormModel insuranceData = InsuranceFormModel();
+  InsuranceModel insuranceOC = InsuranceModel();
+  InsuranceModel insuranceAC = InsuranceModel();
   var idSamochodu;
 
   @override
@@ -43,7 +46,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
 
   void _getData(id) async {
     tokenVal = await storage.read(key: "token");
-    insuranceData = (await CarApiService().getValidInsurance(tokenVal, id));
+    insuranceOC = (await getValidOC(tokenVal, id));
+    insuranceAC = (await getValidAC(tokenVal, id));
     Future.delayed(const Duration(milliseconds: 200))
         .then((value) => setState(() {}));
   }
@@ -52,7 +56,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
-    if(item.isEmpty){
+    if (item.isEmpty) {
       return const LoadingScreen();
     }
     return Scaffold(
@@ -90,18 +94,18 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
             child: ListView(children: [
-              CarImageContainer(
-                  image: item["car"]["idSamochodu"],
-                  brand: item["car"]["marka"],
-                  model: item["car"]["model"],
-                  prodDate: item["car"]["rokProdukcji"],
-                  engine: item["car"]["pojemnoscSilnika"],
-                  vinNr: item["car"]["numerVin"],
-                  carRegNumber: item["car"]["numerRejestracyjny"]),
-              SizedBox(
-                height: 15,
-              ),
-              if (item["car"]["koniecOC"]== null) ...[
+              // CarImageContainer(
+              //     image: item["car"]["idSamochodu"],
+              //     brand: item["car"]["marka"],
+              //     model: item["car"]["model"],
+              //     prodDate: item["car"]["rokProdukcji"],
+              //     engine: item["car"]["pojemnoscSilnika"],
+              //     vinNr: item["car"]["numerVin"],
+              //     carRegNumber: item["car"]["numerRejestracyjny"]),
+              // SizedBox(
+              //   height: 15,
+              // ),
+              if (item["car"]["koniecOC"] == null) ...[
                 EmptyBoxInfo(
                     title: "Dodaj ubezpieczenie w kilku krokach",
                     description:
@@ -200,7 +204,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                              "${insuranceData.NrPolisy}",
+                                              "${insuranceOC.nrPolisy}",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontSize: 14,
@@ -239,7 +243,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                                "${insuranceData.Ubezpieczyciel}",
+                                                "${insuranceOC.ubezpieczyciel}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontSize: 14,
@@ -277,7 +281,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                                "${insuranceData.DataZakupu}  /  ${insuranceData.DataKonca}",
+                                                "${insuranceOC.dataZakupu}  /  ${insuranceOC.dataKonca}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -315,7 +319,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                                "${insuranceData.KosztPolisy} zł",
+                                                "${insuranceOC.kosztPolisy} zł",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -326,44 +330,6 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                       ],
                                     ),
                                   ),
-                                  /*Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 2),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Numer VIN:  ",
-                                          style: TextStyle(
-                                            fontFamily: "Lato",
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                        Flexible(
-                                          fit: FlexFit.loose,
-                                          child: Container(
-                                            padding: EdgeInsets.fromLTRB(
-                                                10, 5, 10, 5),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                color: secondaryColor),
-                                            child: Text(
-                                                "${item["car"]["numerVin"]}",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: fontBlack)),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),*/
                                 ],
                               ),
                             ),
@@ -480,11 +446,10 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                       tokenVal = await storage
                                                           .read(key: "token");
                                                       var deleteRes =
-                                                          await CarApiService()
-                                                              .deleteInsurance(
-                                                                  tokenVal,
-                                                                  insuranceData
-                                                                      .IdUbezpieczenia);
+                                                          await deleteInsurance(
+                                                              tokenVal,
+                                                              insuranceOC
+                                                                  .idUbezpieczenia);
                                                       setState(() {
                                                         if (deleteRes)
                                                           Navigator
@@ -494,7 +459,9 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                                       void>(
                                                                     builder: (BuildContext
                                                                             context) =>
-                                                                        CarItem(carId: idSamochodu),
+                                                                        CarItem(
+                                                                            carId:
+                                                                                idSamochodu),
                                                                   ));
                                                       });
                                                     },
@@ -539,7 +506,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               InsuranceEditForm(
-                                                  insurance: insuranceData,
+                                                  insurance: insuranceOC,
                                                   carId: idSamochodu),
                                         ));
                                   },
@@ -571,7 +538,469 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                     print("file list");
                                     Navigator.pushNamed(context, "/fileList",
                                         arguments: {
-                                          "data": insuranceData,
+                                          "data": insuranceOC,
+                                          "form_type": "car_insurance"
+                                        });
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: secondColor,
+                                    ),
+                                    child: Icon(
+                                      Icons.file_open_outlined,
+                                      size: 30,
+                                      color: bgSmokedWhite,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                if (item["car"]["koniecAC"] == null) ...[
+                EmptyBoxInfo(
+                    title: "Dodaj ubezpieczenie w kilku krokach",
+                    description:
+                        "Aktualnie nie dodałeś jeszcze żadnego ubezpieczenia, zrób to już teraz",
+                    addRouteLink: {
+                      "routeName": "/formCarInsurance",
+                      "arguments": {
+                        "form_type": "car_insurance",
+                        'idSamochodu': item["car"]["idSamochodu"],
+                      }
+                    })
+              ] else ...[
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.white),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Polisa AC",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 20),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5),
+                                            child: Text(
+                                              "DANE DOTYCZĄCE POLISY",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: fontGrey,
+                                                  fontFamily: "Roboto",
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Icon(
+                                        Icons.text_snippet_outlined,
+                                        size: 82,
+                                        color: bg50Grey,
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 2),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Numer polisy:  ",
+                                          style: TextStyle(
+                                            fontFamily: "Lato",
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          fit: FlexFit.loose,
+                                          child: Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                10, 5, 10, 5),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                color: secondaryColor),
+                                            child: Text(
+                                              "${insuranceAC.nrPolisy}",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 2),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Nazwa firmy ubezpieczeniowej:  ",
+                                          style: TextStyle(
+                                            fontFamily: "Lato",
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          fit: FlexFit.loose,
+                                          child: Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                10, 5, 10, 5),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                color: secondaryColor),
+                                            child: Text(
+                                                "${insuranceAC.ubezpieczyciel}",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                )),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 2),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Okres ubezpieczenia:  ",
+                                          style: TextStyle(
+                                            fontFamily: "Lato",
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          fit: FlexFit.loose,
+                                          child: Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                10, 5, 10, 5),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                color: secondaryColor),
+                                            child: Text(
+                                                "${insuranceAC.dataZakupu}  /  ${insuranceAC.dataKonca}",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: fontBlack)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 2),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Składka AC:  ",
+                                          style: TextStyle(
+                                            fontFamily: "Lato",
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          fit: FlexFit.loose,
+                                          child: Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                10, 5, 10, 5),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                color: secondaryColor),
+                                            child: Text(
+                                                "${insuranceAC.kosztPolisy} zł",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: fontBlack)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: Text(
+                          "OKRES WAŻNOŚCI POLISY",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: fontGrey,
+                              fontFamily: "Roboto",
+                              fontWeight: FontWeight.w300),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 80,
+                              child: Container(
+                                padding: EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25),
+                                    color: secondaryColor),
+                                child: Text("${item["car"]["koniecAC"]} dni",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: fontBlack)),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      primary: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                      onPrimary: deleteBtn,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      )),
+                                  onPressed: () {
+                                    print("delete object");
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            padding: EdgeInsets.all(5),
+                                            child: AlertDialog(
+                                              actionsPadding: EdgeInsets.all(0),
+                                              actionsAlignment:
+                                                  MainAxisAlignment.center,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                              ),
+                                              title: Text(
+                                                  "Czy na pewno chcesz usunąć ten element?"),
+                                              content: Text(
+                                                  "Po usunięciu nie możesz cofnąć tej akcji."),
+                                              actions: [
+                                                ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            primary: mainColor,
+                                                            onPrimary:
+                                                                mainColor,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          25),
+                                                            )),
+                                                    onPressed: () {
+                                                      print("no");
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text(
+                                                      "Anuluj",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )),
+                                                ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            primary: deleteBtn,
+                                                            onPrimary:
+                                                                deleteBtn,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          25),
+                                                            )),
+                                                    onPressed: () async {
+                                                      print("yes");
+                                                      // insuranceData.IdUbezpieczenia
+                                                      tokenVal = await storage
+                                                          .read(key: "token");
+                                                      var deleteRes =
+                                                          await deleteInsurance(
+                                                              tokenVal,
+                                                              insuranceOC
+                                                                  .idUbezpieczenia);
+                                                      setState(() {
+                                                        if (deleteRes)
+                                                          Navigator
+                                                              .pushReplacement(
+                                                                  context,
+                                                                  MaterialPageRoute<
+                                                                      void>(
+                                                                    builder: (BuildContext
+                                                                            context) =>
+                                                                        CarItem(
+                                                                            carId:
+                                                                                idSamochodu),
+                                                                  ));
+                                                      });
+                                                    },
+                                                    child: Text(
+                                                      "Usuń",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )),
+                                              ],
+                                            ),
+                                          );
+                                        });
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25),
+                                      color: deleteBtn,
+                                    ),
+                                    child: Icon(
+                                      Icons.delete_outline_rounded,
+                                      size: 30,
+                                      color: bgSmokedWhite,
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      primary: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                      onPrimary: mainColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      )),
+                                  onPressed: () {
+                                    print("edit object");
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              InsuranceEditForm(
+                                                  insurance: insuranceOC,
+                                                  carId: idSamochodu),
+                                        ));
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: mainColor,
+                                    ),
+                                    child: Icon(
+                                      Icons.edit_outlined,
+                                      size: 30,
+                                      color: bgSmokedWhite,
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      backgroundColor: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                      foregroundColor: mainColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      )),
+                                  onPressed: () {
+                                    print("file list");
+                                    Navigator.pushNamed(context, "/fileList",
+                                        arguments: {
+                                          "data": insuranceOC,
                                           "form_type": "car_insurance"
                                         });
                                   },
@@ -666,7 +1095,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                         width: 10,
                                       ),
                                       Text(
-                                        "10",
+                                        "${item["car"]["zarchiwizowanePolisy"]}",
                                         style: TextStyle(
                                           color: fontBlack,
                                         ),
@@ -691,7 +1120,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                   height: 50,
                 ),
               ]
-            ])),
+            ]])),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {

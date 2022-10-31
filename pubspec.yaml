@@ -59,6 +59,8 @@ dependencies:
   permission_handler: ^10.1.0
   file_picker: 5.2.2
   expandable: ^5.0.1
+  cached_network_image: ^3.2.2
+  video_thumbnail: ^0.5.3
 dependency_overrides:
   ffi: ^1.0.0
 

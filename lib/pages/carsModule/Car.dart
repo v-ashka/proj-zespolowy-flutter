@@ -14,16 +14,6 @@ List<CarListView> carListViewFromJson(String str) =>
 String carModelToJson(List<CarModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-List<FileList> fileListFromJson(String str) =>
-    List<FileList>.from(json.decode(str).map((x) => FileList.fromJson(x)));
-
-String fileListToJson(List<FileList> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-List<InsuranceFormModel> InsuranceFormModelFromJson(String str) =>
-    List<InsuranceFormModel>.from(
-        json.decode(str).map((x) => InsuranceFormModel.fromJson(x)));
-
 List<Insurance> insuranceModelFromJson(String str) =>
     List<Insurance>.from(json.decode(str).map((x) => Insurance.fromJson(x)));
 
@@ -172,32 +162,6 @@ class Service {
       };
 }
 
-class FileList {
-  FileList(
-      {required this.idPliku,
-      required this.nazwaPlikuUzytkownika,
-      required this.rozszerzenie,
-      required this.wielkosc});
-
-  String idPliku;
-  String nazwaPlikuUzytkownika;
-  String rozszerzenie;
-  int wielkosc;
-
-  factory FileList.fromJson(Map<String, dynamic> json) => FileList(
-      idPliku: json["idPliku"],
-      nazwaPlikuUzytkownika: json["nazwaPlikuUzytkownika"],
-      rozszerzenie: json["rozszerzenie"],
-      wielkosc: json["wielkosc"]);
-
-  Map<String, dynamic> toJson() => {
-        "idPliku": idPliku,
-        "nazwaPlikuUzytkownika": nazwaPlikuUzytkownika,
-        "rozszerzenie": rozszerzenie,
-        "wielkosc": wielkosc
-      };
-}
-
 class CarModelForm {
   CarModelForm({
     this.PojemnoscSilnika,
@@ -222,81 +186,6 @@ class CarModelForm {
         "numerRejestracyjny": NumerRejestracyjny,
         "idModelu": IdModelu,
       };
-}
-
-class InsuranceFormModel {
-  InsuranceFormModel(
-      {this.IdUbezpieczenia,
-      this.Ubezpieczyciel,
-      this.NrPolisy,
-      this.DataZakupu,
-      this.DataKonca,
-      this.KosztPolisy,
-      this.IdRodzajuUbezpieczenia});
-  String? IdUbezpieczenia;
-  String? Ubezpieczyciel;
-  String? NrPolisy;
-  String? DataZakupu;
-  String? DataKonca;
-  int? IdRodzajuUbezpieczenia;
-  double? KosztPolisy;
-
-  Map<String, dynamic> toJson() => {
-        "ubezpieczyciel": Ubezpieczyciel,
-        "nrPolisy": NrPolisy,
-        "dataZakupu": DataZakupu,
-        "dataKonca": DataKonca,
-        "kosztPolisy": KosztPolisy,
-        "idRodzajuUbezpieczenia": IdRodzajuUbezpieczenia,
-      };
-
-  factory InsuranceFormModel.fromJson(Map<String, dynamic> json) =>
-      InsuranceFormModel(
-          IdUbezpieczenia: json["idUbezpieczenia"],
-          Ubezpieczyciel: json["ubezpieczyciel"],
-          NrPolisy: json["nrPolisy"],
-          DataZakupu: json["dataZakupu"],
-          DataKonca: json["dataKonca"],
-          KosztPolisy: json["kosztPolisy"],
-          IdRodzajuUbezpieczenia: json["idRodzajuUbezpieczenia"]);
-}
-
-class InsuranceModel {
-  InsuranceModel(
-      {this.IdUbezpieczenia,
-      this.Ubezpieczyciel,
-      this.NrPolisy,
-      this.DataZakupu,
-      this.DataKonca,
-      this.KosztPolisy,
-      this.IdRodzajuUbezpieczenia});
-
-  String? IdUbezpieczenia;
-  String? Ubezpieczyciel;
-  String? NrPolisy;
-  String? DataZakupu;
-  String? DataKonca;
-  int? IdRodzajuUbezpieczenia;
-  double? KosztPolisy;
-
-  Map<String, dynamic> toJson() => {
-        "idUbezpieczenia": IdUbezpieczenia,
-        "ubezpieczyciel": Ubezpieczyciel,
-        "nrPolisy": NrPolisy,
-        "dataZakupu": DataZakupu,
-        "dataKonca": DataKonca,
-        "kosztPolisy": KosztPolisy,
-        "idRodzajuUbezpieczenia": IdRodzajuUbezpieczenia,
-      };
-
-  factory InsuranceModel.fromJson(Map<String, dynamic> json) => InsuranceModel(
-      IdUbezpieczenia: json["idUbezpieczenia"],
-      Ubezpieczyciel: json["ubezpieczyciel"],
-      NrPolisy: json["nrPolisy"],
-      DataZakupu: json["dataZakupu"],
-      DataKonca: json["dataKonca"],
-      KosztPolisy: json["kosztPolisy"],
-      IdRodzajuUbezpieczenia: json["idRodzajuUbezpieczenia"]);
 }
 
 class ServiceFormModel {

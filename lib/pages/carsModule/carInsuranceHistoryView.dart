@@ -1,16 +1,9 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:projzespoloey/components/emptyBox.dart';
-import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/pages/carsModule/Car.dart';
-import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
-import 'package:projzespoloey/pages/carsModule/carItem.dart';
-import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
+import 'package:projzespoloey/models/insurance/insurace_model.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
+import 'package:projzespoloey/services/insurance_service.dart';
 
 class CarInsuranceHistoryView extends StatefulWidget {
   const CarInsuranceHistoryView({Key? key}) : super(key: key);
@@ -22,14 +15,33 @@ class CarInsuranceHistoryView extends StatefulWidget {
 
 class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
   Map item = {};
+  List<InsuranceModel> insuranceList = [];
+  String? token;
 
- Widget build(BuildContext context) {
-  item = item.isNotEmpty
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 0), () {
+      setState(() {
+        item = item.isNotEmpty
             ? item
             : ModalRoute.of(context)?.settings.arguments as Map;
+      });
+    });
+    getData();
+  }
+
+  void getData() async {
+    token = await storage.read(key: "token");
+    insuranceList = await getInsuranceList(token, item["car"]["idSamochodu"]);
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
-    if(item.isEmpty){
+    if (item.isEmpty) {
       return const LoadingScreen();
     }
     return Scaffold(
@@ -45,7 +57,7 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
@@ -58,481 +70,502 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
             fontFamily: 'Lato',
             fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
-        title: Text("Ubezpieczenie - ${item["car"]["model"]}"),
+        title: Text("Historia ubezpieczeń - ${item["car"]["model"]}"),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/background.png'), fit: BoxFit.fill)),
         child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-            child: ListView(children: [
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Colors.white),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 5,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(15, 15, 15, 15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  ExpandablePanel(
-                                  header: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+            child: ListView.separated(
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(
+                      color: Colors.transparent,
+                    ),
+                itemCount: insuranceList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final insurance = insuranceList[index];
+                  return Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.white),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 5,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ExpandablePanel(
+                                      header: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            "Polisa OC",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 20),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            child: Text(
-                                              "DANE DOTYCZĄCE POLISY",
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: fontGrey,
-                                                  fontFamily: "Roboto",
-                                                  fontWeight: FontWeight.w300),
-                                            ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                insurance.idRodzajuUbezpieczenia ==
+                                                        1
+                                                    ? "Polisa OC"
+                                                    : "Polisa AC",
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 20),
+                                              ),
+                                              const Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 5),
+                                                child: Text(
+                                                  "DANE DOTYCZĄCE POLISY",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: fontGrey,
+                                                      fontFamily: "Roboto",
+                                                      fontWeight:
+                                                          FontWeight.w300),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    
-                                    ],
-                                  ),
-                                  collapsed: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 2),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Okres ubezpieczenia:  ",
-                                          style: TextStyle(
-                                            fontFamily: "Lato",
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                        Flexible(
-                                          fit: FlexFit.loose,
-                                          child: Container(
-                                            padding: EdgeInsets.fromLTRB(
-                                                10, 5, 10, 5),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                color: secondaryColor),
-                                            child: Text(
-                                                "2022-01-01  / 2022-01-01",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: fontBlack)),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  expanded: Column(
-                                    children: [
-                                      Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 2),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Numer polisy:  ",
-                                          style: TextStyle(
-                                            fontFamily: "Lato",
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                        Flexible(
-                                          fit: FlexFit.loose,
-                                          child: Container(
-                                            padding: EdgeInsets.fromLTRB(
-                                                10, 5, 10, 5),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                color: secondaryColor),
-                                            child: Text(
-                                              "2022/01/FGHGF/212",
-                                              textAlign: TextAlign.center,
+                                      collapsed: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "Okres ubezpieczenia:  ",
                                               style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
+                                                fontFamily: "Lato",
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 12,
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 2),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Nazwa firmy ubezpieczeniowej:  ",
-                                          style: TextStyle(
-                                            fontFamily: "Lato",
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                        Flexible(
-                                          fit: FlexFit.loose,
-                                          child: Container(
-                                            padding: EdgeInsets.fromLTRB(
-                                                10, 5, 10, 5),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                color: secondaryColor),
-                                            child: Text(
-                                                "PZU",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                )),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 2),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Okres ubezpieczenia:  ",
-                                          style: TextStyle(
-                                            fontFamily: "Lato",
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                        Flexible(
-                                          fit: FlexFit.loose,
-                                          child: Container(
-                                            padding: EdgeInsets.fromLTRB(
-                                                10, 5, 10, 5),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                color: secondaryColor),
-                                            child: Text(
-                                                "2022-01-01  / 2022-01-01",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: fontBlack)),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 2),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Składka OC:  ",
-                                          style: TextStyle(
-                                            fontFamily: "Lato",
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                        Flexible(
-                                          fit: FlexFit.loose,
-                                          child: Container(
-                                            padding: EdgeInsets.fromLTRB(
-                                                10, 5, 10, 5),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                color: secondaryColor),
-                                            child: Text(
-                                                "1011 zł",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: fontBlack)),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 0, 0, 5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.all(5),
-                                      primary: Colors.transparent,
-                                      shadowColor: Colors.transparent,
-                                      onPrimary: deleteBtn,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      )),
-                                  onPressed: () {
-                                    print("delete object");
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Container(
-                                            padding: EdgeInsets.all(5),
-                                            child: AlertDialog(
-                                              actionsPadding: EdgeInsets.all(0),
-                                              actionsAlignment:
-                                                  MainAxisAlignment.center,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
+                                            Flexible(
+                                              fit: FlexFit.loose,
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 5, 10, 5),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                    color: secondaryColor),
+                                                child: Text(
+                                                    "${insurance.dataZakupu} / ${insurance.dataKonca}",
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: fontBlack)),
                                               ),
-                                              title: Text(
-                                                  "Czy na pewno chcesz usunąć ten element?"),
-                                              content: Text(
-                                                  "Po usunięciu nie możesz cofnąć tej akcji."),
-                                              actions: [
-                                                ElevatedButton(
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      expanded: Column(children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 2),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Numer polisy:  ",
+                                                style: TextStyle(
+                                                  fontFamily: "Lato",
+                                                  fontWeight: FontWeight.w900,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                              Flexible(
+                                                fit: FlexFit.loose,
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 5, 10, 5),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25),
+                                                      color: secondaryColor),
+                                                  child: Text(
+                                                    "${insurance.nrPolisy}",
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 2),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Nazwa ubezpieczyciela:  ",
+                                                style: TextStyle(
+                                                  fontFamily: "Lato",
+                                                  fontWeight: FontWeight.w900,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                              Flexible(
+                                                fit: FlexFit.loose,
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 5, 10, 5),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25),
+                                                      color: secondaryColor),
+                                                  child: Text(
+                                                      "${insurance.ubezpieczyciel}",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      )),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 2),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Okres ubezpieczenia:  ",
+                                                style: TextStyle(
+                                                  fontFamily: "Lato",
+                                                  fontWeight: FontWeight.w900,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                              Flexible(
+                                                fit: FlexFit.loose,
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 5, 10, 5),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25),
+                                                      color: secondaryColor),
+                                                  child: Text(
+                                                      "${insurance.dataZakupu} / ${insurance.dataKonca}",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: fontBlack)),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 2),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Składka OC:  ",
+                                                style: TextStyle(
+                                                  fontFamily: "Lato",
+                                                  fontWeight: FontWeight.w900,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                              Flexible(
+                                                fit: FlexFit.loose,
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 5, 10, 5),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25),
+                                                      color: secondaryColor),
+                                                  child: Text(
+                                                      "${insurance.kosztPolisy}",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: fontBlack)),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              15, 0, 0, 5),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const SizedBox(
+                                                width: 20,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  ElevatedButton(
                                                     style: ElevatedButton
                                                         .styleFrom(
-                                                            primary: mainColor,
-                                                            onPrimary:
+                                                            foregroundColor:
+                                                                deleteBtn,
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(5),
+                                                            shadowColor: Colors
+                                                                .transparent,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          100),
+                                                            )),
+                                                    onPressed: () {
+                                                      print("delete object");
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(5),
+                                                              child:
+                                                                  AlertDialog(
+                                                                actionsPadding:
+                                                                    const EdgeInsets
+                                                                        .all(0),
+                                                                actionsAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              25),
+                                                                ),
+                                                                title: const Text(
+                                                                    "Czy na pewno chcesz usunąć ten element?"),
+                                                                content: const Text(
+                                                                    "Po usunięciu nie możesz cofnąć tej akcji."),
+                                                                actions: [
+                                                                  ElevatedButton(
+                                                                      style: ElevatedButton.styleFrom(
+                                                                          primary: mainColor,
+                                                                          onPrimary: mainColor,
+                                                                          shape: RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(25),
+                                                                          )),
+                                                                      onPressed: () {
+                                                                        print(
+                                                                            "no");
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                      child: const Text(
+                                                                        "Anuluj",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.white),
+                                                                      )),
+                                                                  ElevatedButton(
+                                                                      style: ElevatedButton.styleFrom(
+                                                                          primary: deleteBtn,
+                                                                          onPrimary: deleteBtn,
+                                                                          shape: RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(25),
+                                                                          )),
+                                                                      onPressed: () async {
+                                                                        // print("yes");
+                                                                        // // insuranceData.IdUbezpieczenia
+                                                                        // tokenVal = await storage
+                                                                        //     .read(key: "token");
+                                                                        // var deleteRes =
+                                                                        //     await CarApiService()
+                                                                        //         .deleteInsurance(
+                                                                        //             tokenVal,
+                                                                        //             insuranceData
+                                                                        //                 .IdUbezpieczenia);
+                                                                        // setState(() {
+                                                                        //   if (deleteRes)
+                                                                        //     Navigator
+                                                                        //         .pushReplacement(
+                                                                        //             context,
+                                                                        //             MaterialPageRoute<
+                                                                        //                 void>(
+                                                                        //               builder: (BuildContext
+                                                                        //                       context) =>
+                                                                        //                   CarItem(carId: idSamochodu),
+                                                                        //             ));
+                                                                        // });
+                                                                      },
+                                                                      child: const Text(
+                                                                        "Usuń",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.white),
+                                                                      )),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          });
+                                                    },
+                                                    child: Container(
+                                                      width: 50,
+                                                      height: 50,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25),
+                                                        color: deleteBtn,
+                                                      ),
+                                                      child: const Icon(
+                                                        Icons
+                                                            .delete_outline_rounded,
+                                                        size: 30,
+                                                        color: bgSmokedWhite,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  
+                                                  ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(5),
+                                                            backgroundColor: Colors
+                                                                .transparent,
+                                                            shadowColor: Colors
+                                                                .transparent,
+                                                            foregroundColor:
                                                                 mainColor,
                                                             shape:
                                                                 RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          25),
+                                                                          100),
                                                             )),
                                                     onPressed: () {
-                                                      print("no");
-                                                      Navigator.of(context)
-                                                          .pop();
+                                                      Navigator.pushNamed(context, "/fileList",
+                                                          arguments: {
+                                                            "data": insurance,
+                                                            "form_type": "car_insurance"
+                                                          });
                                                     },
-                                                    child: Text(
-                                                      "Anuluj",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    )),
-                                                ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            primary: deleteBtn,
-                                                            onPrimary:
-                                                                deleteBtn,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          25),
-                                                            )),
-                                                    onPressed: () async {
-                                                      // print("yes");
-                                                      // // insuranceData.IdUbezpieczenia
-                                                      // tokenVal = await storage
-                                                      //     .read(key: "token");
-                                                      // var deleteRes =
-                                                      //     await CarApiService()
-                                                      //         .deleteInsurance(
-                                                      //             tokenVal,
-                                                      //             insuranceData
-                                                      //                 .IdUbezpieczenia);
-                                                      // setState(() {
-                                                      //   if (deleteRes)
-                                                      //     Navigator
-                                                      //         .pushReplacement(
-                                                      //             context,
-                                                      //             MaterialPageRoute<
-                                                      //                 void>(
-                                                      //               builder: (BuildContext
-                                                      //                       context) =>
-                                                      //                   CarItem(carId: idSamochodu),
-                                                      //             ));
-                                                      // });
-                                                    },
-                                                    child: Text(
-                                                      "Usuń",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    )),
-                                              ],
-                                            ),
-                                          );
-                                        });
-                                  },
-                                  child: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: deleteBtn,
+                                                    child: Container(
+                                                      width: 50,
+                                                      height: 50,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(50),
+                                                        color: secondColor,
+                                                      ),
+                                                      child: const Icon(
+                                                        Icons
+                                                            .file_open_outlined,
+                                                        size: 30,
+                                                        color: bgSmokedWhite,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ]),
                                     ),
-                                    child: Icon(
-                                      Icons.delete_outline_rounded,
-                                      size: 30,
-                                      color: bgSmokedWhite,
-                                    ),
-                                  ),
+                                  ], //TUTAJ SIE KONCZY
                                 ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.all(5),
-                                      primary: Colors.transparent,
-                                      shadowColor: Colors.transparent,
-                                      onPrimary: mainColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      )),
-                                  onPressed: () {
-                                    // print("edit object");
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //       builder: (context) =>
-                                    //           InsuranceEditForm(
-                                    //               insurance: insuranceData,
-                                    //               carId: idSamochodu),
-                                    //     ));
-                                  },
-                                  child: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: mainColor,
-                                    ),
-                                    child: Icon(
-                                      Icons.edit_outlined,
-                                      size: 30,
-                                      color: bgSmokedWhite,
-                                    ),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.all(5),
-                                      backgroundColor: Colors.transparent,
-                                      shadowColor: Colors.transparent,
-                                      foregroundColor: mainColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      )),
-                                  onPressed: () {
-                                    // print("file list");
-                                    // Navigator.pushNamed(context, "/fileList",
-                                    //     arguments: {
-                                    //       "data": insuranceData,
-                                    //       "form_type": "car_insurance"
-                                    //     });
-                                  },
-                                  child: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: secondColor,
-                                    ),
-                                    child: Icon(
-                                      Icons.file_open_outlined,
-                                      size: 30,
-                                      color: bgSmokedWhite,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ],
                         ),
-                      ), 
-                                ]),
-                                
-                              ),    
-                                ], //TUTAJ SIE KONCZY
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-              
-            ])),
+                      ],
+                    ),
+                  );
+                  const SizedBox(
+                    height: 15,
+                  );
+                })),
       ),
-
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/models/insurance/insurace_model.dart';
 import 'package:projzespoloey/pages/_Dashboard.dart';
 import 'package:projzespoloey/pages/_userAuth.dart';
 import 'package:projzespoloey/pages/_userAuthRegister.dart';
@@ -47,19 +48,13 @@ class PostHttpOverrides extends HttpOverrides {
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  FlutterDownloader.initialize(
-      debug:
-          true, // optional: set to false to disable printing logs to console (default: true)
-      ignoreSsl:
-          true // option: set to false to disable working with http links (default: false)
-      );
-  HttpOverrides.global = new PostHttpOverrides();
+  FlutterDownloader.initialize(debug: true, ignoreSsl: true);
+  HttpOverrides.global = PostHttpOverrides();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  InsuranceFormModel? model;
-
+  InsuranceModel model = InsuranceModel();
   String carId = "";
   MyApp({Key? key}) : super(key: key);
 
@@ -81,7 +76,8 @@ class MyApp extends StatelessWidget {
         '/carList': (context) => CarList(),
         '/carItem': (context) => CarItem(carId: carId),
         '/carInsurance': (context) => CarInsuranceView(),
-        '/carInsuranceEditForm': (context) => InsuranceEditForm(insurance: model!, carId: carId!),
+        '/carInsuranceEditForm': (context) =>
+            InsuranceEditForm(insurance: model, carId: carId),
         '/carInsuranceHistory': (context) => CarInsuranceHistoryView(),
         '/carService': (context) => CarServiceView(),
         '/carServiceHistory': (context) => CarServiceHistory(),

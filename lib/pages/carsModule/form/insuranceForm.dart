@@ -14,6 +14,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
+import '../../../models/insurance/insurace_model.dart';
 
 class InsuranceForm extends StatefulWidget {
   const InsuranceForm({Key? key}) : super(key: key);
@@ -28,7 +29,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
   var insuranceTypesList = [];
   String? dateFrom;
   String? dateTo;
-  InsuranceFormModel insurance = InsuranceFormModel();
+  InsuranceModel insurance = InsuranceModel();
   Map item = {};
   List<PlatformFile> files = [];
   String? idSamochodu;
@@ -170,11 +171,11 @@ class _InsuranceFormState extends State<InsuranceForm> {
                               ),
                             ),
                             DropdownButtonFormField(
-                                value: insurance.IdRodzajuUbezpieczenia,
+                                value: insurance.idRodzajuUbezpieczenia,
                                 isExpanded: true,
                                 onChanged: (value) {
                                   setState(() {
-                                    insurance.IdRodzajuUbezpieczenia =
+                                    insurance.idRodzajuUbezpieczenia =
                                         value as int?;
                                   });
                                 },
@@ -216,7 +217,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                             ),
                             TextFormField(
                               onSaved: (String? value) {
-                                insurance.Ubezpieczyciel = value;
+                                insurance.ubezpieczyciel = value;
                               },
                               cursorColor: Colors.black,
                               style: TextStyle(color: Colors.black),
@@ -254,7 +255,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                             ),
                             TextFormField(
                               onSaved: (String? value) {
-                                insurance.NrPolisy = value;
+                                insurance.nrPolisy = value;
                               },
                               cursorColor: Colors.black,
                               style: TextStyle(color: Colors.black),
@@ -305,7 +306,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                           DateTime? date =
                                               await pickDate(context);
                                           setState(() {
-                                            insurance.DataZakupu =
+                                            insurance.dataZakupu =
                                                 DateFormat('dd-MM-yyyy')
                                                     .format(date!);
                                           });
@@ -322,7 +323,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                               ),
                                             ),
                                             hintText:
-                                                insurance.DataZakupu ?? "Od",
+                                                insurance.dataZakupu ?? "Od",
                                             hintStyle: TextStyle(fontSize: 12),
                                             fillColor: bg35Grey,
                                             filled: true,
@@ -332,7 +333,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                               borderSide: BorderSide.none,
                                             )),
                                         validator: (date) {
-                                          if (insurance.DataZakupu == null) {
+                                          if (insurance.dataZakupu == null) {
                                             return 'To pole nie może być puste';
                                           }
                                           return null;
@@ -354,7 +355,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                             DateTime? date =
                                                 await pickDate(context);
                                             setState(() {
-                                              insurance.DataKonca =
+                                              insurance.dataKonca =
                                                   DateFormat('dd-MM-yyyy')
                                                       .format(date!);
                                             });
@@ -374,7 +375,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                               contentPadding:
                                                   const EdgeInsets.all(15),
                                               hintText:
-                                                  insurance.DataKonca ?? "Do",
+                                                  insurance.dataKonca ?? "Do",
                                               hintStyle:
                                                   TextStyle(fontSize: 12),
                                               fillColor: bg35Grey,
@@ -385,7 +386,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                                 borderSide: BorderSide.none,
                                               )),
                                           validator: (date) {
-                                            if (insurance.DataKonca == null) {
+                                            if (insurance.dataKonca == null) {
                                               return 'To pole nie może być puste';
                                             }
                                             return null;
@@ -414,7 +415,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: TextFormField(
                                 onSaved: (String? value) {
-                                  insurance.KosztPolisy = double.parse(value!);
+                                  insurance.kosztPolisy = double.parse(value!);
                                 },
                                 cursorColor: Colors.black,
                                 style: TextStyle(color: Colors.black),

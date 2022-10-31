@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
-import 'package:projzespoloey/services/UserModel/UserApiService.dart';
+import 'package:projzespoloey/models/file/file_list.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:byte_converter/byte_converter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,6 +14,8 @@ import 'dart:isolate';
 import 'dart:ui';
 import 'dart:io';
 import 'package:open_file/open_file.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class FilesView extends StatefulWidget {
   const FilesView({Key? key}) : super(key: key);
@@ -52,7 +54,7 @@ class FilesViewState extends State<FilesView> {
         item = item.isNotEmpty
             ? item
             : ModalRoute.of(context)?.settings.arguments as Map;
-        insuranceId = item["data"].IdUbezpieczenia;
+        insuranceId = item["data"].idUbezpieczenia;
       });
       _getData(insuranceId);
     });
@@ -173,23 +175,31 @@ class FilesViewState extends State<FilesView> {
                       ),
                       shadowColor: Colors.white,
                       child: ListTile(
-                        leading: Image.asset(
-                          file.rozszerzenie == ".pdf"
-                              ? "assets/pdf_icon.png"
-                              : file.rozszerzenie == ".txt"
-                                  ? "assets/txt_icon.png"
-                                  : file.rozszerzenie == ".png"
-                                      ? "assets/png_icon.png"
-                                      : file.rozszerzenie == ".jpg" ||
-                                              file.rozszerzenie == ".jpeg"
-                                          ? "assets/jpg_icon.png"
-                                          : file.rozszerzenie == ".zip" ||
-                                                  file.rozszerzenie == ".7z"
-                                              ? "assets/zip_icon.png"
-                                              : "assets/default_icon.png",
-                          width: 50,
-                          height: 50,
-                        ),
+                        leading: (file.rozszerzenie == ".pdf"
+                            ? Image.asset("assets/pdf_icon.png", width: 45, height: 45)
+                            : file.rozszerzenie == ".txt"
+                                ? Image.asset("assets/txt_icon.png", width: 45, height: 45)
+                                : file.rozszerzenie == ".png"
+                                    ? Image.asset("assets/png_icon.png", width: 45, height: 45)
+                                    : file.rozszerzenie == ".jpg" ||
+                                            file.rozszerzenie == ".jpeg" 
+                                        ? CachedNetworkImage(
+                                            imageUrl:
+                                                "$SERVER_IP/api/fileUpload/GetFile/${file.idPliku}",
+                                            placeholder: (context, url) =>
+                                                CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Image.asset("assets/jpg_icon.png"),
+                                                    width: 45,
+                                                    height: 45,
+                                                    fit: BoxFit.cover,
+                                          )
+                                        : file.rozszerzenie == ".zip" ||
+                                                file.rozszerzenie == ".7z"
+                                            ? Image.asset("assets/zip_icon.png", width: 45, height: 45)
+                                            : Image.asset(
+                                                "assets/default_icon.png", width: 45, height: 45)),
                         title: Text(
                           file.nazwaPlikuUzytkownika,
                           maxLines: 1,
@@ -218,24 +228,25 @@ class FilesViewState extends State<FilesView> {
           )),
       floatingActionButton: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: secondColor,
-            foregroundColor: secondColor,
+              primary: secondColor,
+              foregroundColor: secondColor,
               shape: const CircleBorder(),
               padding: const EdgeInsets.all(15)),
-          child: isLoading ? Container(
-            width: 24,
-            height: 24,
-            padding: const EdgeInsets.all(2),
-            child: const CircularProgressIndicator(
-              color: Colors.white,
-              strokeWidth: 3,
-            ),
-          ):
-          const Icon(
-            Icons.add,
-            size: 30,
-            color: bgSmokedWhite,
-          ),
+          child: isLoading
+              ? Container(
+                  width: 24,
+                  height: 24,
+                  padding: const EdgeInsets.all(2),
+                  child: const CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 3,
+                  ),
+                )
+              : const Icon(
+                  Icons.add,
+                  size: 30,
+                  color: bgSmokedWhite,
+                ),
           onPressed: () async {
             await pickFiles();
             if (files.isNotEmpty) {

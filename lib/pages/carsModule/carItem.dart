@@ -8,10 +8,12 @@ import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:animations/animations.dart';
 import 'package:projzespoloey/main.dart';
+import 'package:projzespoloey/models/insurance/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
 import 'package:projzespoloey/pages/form.dart';
+import 'package:projzespoloey/services/insurance_service.dart';
 
 class CarItem extends StatefulWidget {
   String carId;
@@ -24,7 +26,7 @@ class CarItem extends StatefulWidget {
 class _CarItemState extends State<CarItem> {
   late Map<String, dynamic>? carData = {};
 
-  late InsuranceFormModel insuranceData = InsuranceFormModel();
+  late InsuranceModel insuranceData = InsuranceModel();
   late List? serviceData = [];
   final storage = new FlutterSecureStorage();
   String carId = "";
@@ -39,7 +41,7 @@ class _CarItemState extends State<CarItem> {
     String? tokenVal = await storage.read(key: "token");
 
     carData = (await CarApiService().getCar(tokenVal, id));
-    insuranceData = (await CarApiService().getValidInsurance(tokenVal, id));
+    insuranceData = (await getValidOC(tokenVal, id));
     serviceData = (await CarApiService().getService(tokenVal, id));
     setState(() {});
   }
@@ -121,7 +123,7 @@ class _CarItemState extends State<CarItem> {
                         Navigator.pushNamed(context, "/carInsurance",
                             arguments: {
                               "car": carData,
-                              "data": insuranceData.IdUbezpieczenia != null
+                              "data": insuranceData.idUbezpieczenia != null
                                   ? (insuranceData)
                                   : (null)
                             });
@@ -146,7 +148,7 @@ class _CarItemState extends State<CarItem> {
                                   SizedBox(
                                     height: 2,
                                   ),
-                                  if (insuranceData.IdUbezpieczenia !=
+                                  if (insuranceData.idUbezpieczenia !=
                                       null) ...[
                                     Text(
                                       "OKRES WAŻNOŚCI",
@@ -210,7 +212,7 @@ class _CarItemState extends State<CarItem> {
                                           Text(
                                             insuranceData == null ||
                                                     insuranceData
-                                                            .IdRodzajuUbezpieczenia !=
+                                                            .idRodzajuUbezpieczenia !=
                                                         2
                                                 ? ("brak")
                                                 : ("WPISAC DNI"),

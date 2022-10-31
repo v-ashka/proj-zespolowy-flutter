@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'Car.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/models/file/file_list.dart';
+import 'package:projzespoloey/models/insurance/insurace_model.dart';
 
 class CarApiService {
   final today = DateTime.now();
@@ -54,58 +56,7 @@ class CarApiService {
     }
   }
 
-  Future<List?> getInsurance(token, id) async {
-    try {
-      var url = Uri.parse("${SERVER_IP}/api/insurance/GetInsuranceList/${id}");
-      var response = await http.get(url, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': "Bearer ${token}",
-      });
-
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      }
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
-  Future<InsuranceFormModel> getValidInsurance(token, id) async {
-    try {
-      var url = Uri.parse("$SERVER_IP/api/insurance/GetValidOC/$id");
-      var response = await http.get(url, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': "Bearer $token",
-      });
-      if (response.statusCode == 200) {
-        log(response.body.toString());
-        Map<String, dynamic> data = jsonDecode(response.body);
-        InsuranceFormModel model = InsuranceFormModel.fromJson(data);
-        return model;
-      } else {
-        return InsuranceFormModel();
-      }
-    } catch (e) {
-      log(e.toString());
-      throw Exception('Błąd pobierania danych');
-    }
-  }
-
-  Future deleteInsurance(token, id) async {
-    try {
-      var url = Uri.parse("$SERVER_IP/api/insurance/DeleteInsurance/$id");
-      var response = await http.delete(url, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': "Bearer $token",
-      });
-      if (response.statusCode == 200) {
-        return true;
-      }
-    } catch (e) {
-      log(e.toString());
-      return false;
-    }
-  }
+ 
 
   Future<List?> getService(token, id) async {
     try {

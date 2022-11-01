@@ -219,9 +219,9 @@ class _CarListState extends State<CarList> {
                                                                 .car_repair_outlined,
                                                             color: icon70Black),
                                                         Text(
-                                                          carItem!.koniecOC !=
+                                                          carItem.koniecPrzegladu !=
                                                                   null
-                                                              ? "${carItem!.koniecOC} dni"
+                                                              ? "${carItem.koniecPrzegladu} dni"
                                                               : "Brak",
                                                           style: const TextStyle(
                                                               fontFamily:

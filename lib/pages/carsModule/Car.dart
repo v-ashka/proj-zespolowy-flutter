@@ -72,18 +72,21 @@ class CarListView {
       {required this.idSamochodu,
       required this.model,
       required this.marka,
-      required this.koniecOC});
+      required this.koniecOC,
+      required this.koniecPrzegladu});
 
   String idSamochodu;
   String model;
   String marka;
   int? koniecOC;
+  int? koniecPrzegladu;
 
   factory CarListView.fromJson(Map<String, dynamic> json) => CarListView(
       idSamochodu: json["idSamochodu"],
       model: json["model"],
       marka: json["marka"],
-      koniecOC: json["koniecOC"]);
+      koniecOC: json["koniecOC"],
+      koniecPrzegladu: json["koniecPrzegladu"]);
 }
 
 class Insurance {
@@ -132,28 +135,28 @@ class Service {
     required this.czyPozytywny,
     required this.uwagi,
     required this.dataPrzegladu,
-    required this.dataNastepnegoPrzegladu,
+    required this.koniecWaznosciPrzegladu,
   });
 
   String idPrzegladu;
   bool czyPozytywny;
   String uwagi;
   String dataPrzegladu;
-  String dataNastepnegoPrzegladu;
+  String koniecWaznosciPrzegladu;
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
         idPrzegladu: json["idPrzegladu"],
         czyPozytywny: json["czyPozytywny"],
         uwagi: json["uwagi"],
         dataPrzegladu: json["dataPrzegladu"],
-        dataNastepnegoPrzegladu: json["dataNastepnegoPrzegladu"],
+        koniecWaznosciPrzegladu: json["koniecWaznosciPrzegladu"],
       );
 
   Map<String, dynamic> toJson() => {
         "czyPozytywny": czyPozytywny,
         "uwagi": uwagi,
         "dataPrzegladu": dataPrzegladu,
-        "dataNastepnegoPrzegladu": dataNastepnegoPrzegladu,
+        "koniecWaznosciPrzegladu": koniecWaznosciPrzegladu,
       };
 
   factory Service.getData(data) {
@@ -162,7 +165,7 @@ class Service {
         czyPozytywny: data.first["czyPozytywny"],
         uwagi: data.first["uwagi"],
         dataPrzegladu: data.first["dataPrzegladu"],
-        dataNastepnegoPrzegladu: "2020-10-10");
+        koniecWaznosciPrzegladu: data.first["koniecWaznosciPrzegladu"]);
   }
 }
 

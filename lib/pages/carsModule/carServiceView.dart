@@ -231,9 +231,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                                                       BorderRadius.circular(25),
                                                   color: secondaryColor),
                                               child: Text(
-                                                  //".first["dataPrzegladu"].toString().substring(0, 10)} / ${item["data"].first["dataNastepnegoPrzegladu"].toString().substring(0, 10)}",
-                                                  serviceData
-                                                      .dataNastepnegoPrzegladu,
+                                                  "${serviceData.dataPrzegladu} / ${serviceData.koniecWaznosciPrzegladu}",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontSize: 14,
@@ -314,8 +312,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                                       borderRadius: BorderRadius.circular(25),
                                       color: secondaryColor),
                                   child: Text(
-                                      //"${CarApiService().daysBetween(CarApiService().today, DateTime.parse(item["data"].first["dataNastepnegoPrzegladu"]))} dni",
-                                      serviceData.dataPrzegladu,
+                                      "${item["car"]["koniecPrzegladu"].toString()} dni",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 14,

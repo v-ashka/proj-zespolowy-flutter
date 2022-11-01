@@ -38,7 +38,7 @@ class _CarItemState extends State<CarItem> {
     _getData(widget.carId);
   }
 
-  void _getData(id) async {
+   _getData(id) async {
     String? tokenVal = await storage.read(key: "token");
 
     carData = (await CarApiService().getCar(tokenVal, id));
@@ -51,12 +51,6 @@ class _CarItemState extends State<CarItem> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
-
-    // print("item: ");
-    // print(item);
-    // print("car data");
-    // print(carData!.length);
-    // print("test token: ${storage.read(key: "token")}");
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -211,12 +205,9 @@ class _CarItemState extends State<CarItem> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            insuranceData == null ||
-                                                    insuranceData
-                                                            .idRodzajuUbezpieczenia !=
-                                                        2
-                                                ? ("brak")
-                                                : ("WPISAC DNI"),
+                                           carData?["koniecAC"] != null
+                                                ? "${carData!["koniecAC"].toString()} dni"
+                                                : "Brak",
                                             style: TextStyle(
                                               color: fontBlack,
                                             ),
@@ -332,10 +323,9 @@ class _CarItemState extends State<CarItem> {
                                           color: fontGrey,
                                         ),
                                         Text(
-                                          serviceData == null
-                                              ? ("brak")
-                                              //("${CarApiService().daysBetween(CarApiService().today, DateTime.parse(serviceData!["dataNastepnegoPrzegladu"]))} dni")
-                                              : ("brak"),
+                                           carData?["koniecPrzegladu"] != null
+                                                ? "${carData!["koniecPrzegladu"].toString()} dni"
+                                                : "Brak",
                                           style: TextStyle(
                                             color: fontBlack,
                                           ),

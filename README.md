@@ -12,6 +12,7 @@
 8. W InsuranceForm wystepuje bład i sie sypie request 🥵🥵🥵🥵
 9. Zwracając listę nieaktualnych ubezpieczeń posortować po dacie zakończenia malejąco 🥵🥵
 10. Poprawić literówke w endpoint'cie DeleteInsepction -> DeleteInspection 🥵
+11. Zrobić dodatkowy endpoint do przeglądu - GetValidInspection z parametrem idSamochodu
 
 ## TODO - frontend
 

@@ -8,8 +8,8 @@ import 'package:projzespoloey/pages/carsModule/Car.dart';
 List<CarModel> carModelFromJson(String str) =>
     List<CarModel>.from(json.decode(str).map((x) => CarModel.fromJson(x)));
 
-List<CarListView> carListViewFromJson(String str) =>
-    List<CarListView>.from(json.decode(str).map((x) => CarListView.fromJson(x)));
+List<CarListView> carListViewFromJson(String str) => List<CarListView>.from(
+    json.decode(str).map((x) => CarListView.fromJson(x)));
 
 String carModelToJson(List<CarModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -69,12 +69,10 @@ class CarModel {
 
 class CarListView {
   CarListView(
-
-      { required this.idSamochodu,
-        required this.model,
-        required this.marka,
-        required this.koniecOC
-      });
+      {required this.idSamochodu,
+      required this.model,
+      required this.marka,
+      required this.koniecOC});
 
   String idSamochodu;
   String model;
@@ -129,37 +127,43 @@ class Insurance {
 }
 
 class Service {
-  Service(
-      {required this.id,
-      required this.isPositive,
-      required this.additionalNotes,
-      required this.serviceDate,
-      required this.nextServiceDate,
-      required this.regNr});
+  Service({
+    required this.idPrzegladu,
+    required this.czyPozytywny,
+    required this.uwagi,
+    required this.dataPrzegladu,
+    required this.dataNastepnegoPrzegladu,
+  });
 
-  String id;
-  bool isPositive;
-  String additionalNotes;
-  String serviceDate;
-  String nextServiceDate;
-  String regNr;
+  String idPrzegladu;
+  bool czyPozytywny;
+  String uwagi;
+  String dataPrzegladu;
+  String dataNastepnegoPrzegladu;
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
-      id: json["id"],
-      isPositive: json["isPositive"],
-      additionalNotes: json["additionalNotes"],
-      serviceDate: json["serviceDate"],
-      nextServiceDate: json["nextServiceDate"],
-      regNr: json["regNr"]);
+        idPrzegladu: json["idPrzegladu"],
+        czyPozytywny: json["czyPozytywny"],
+        uwagi: json["uwagi"],
+        dataPrzegladu: json["dataPrzegladu"],
+        dataNastepnegoPrzegladu: json["dataNastepnegoPrzegladu"],
+      );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "isPositive": isPositive,
-        "additionalNotes": additionalNotes,
-        "serviceDate": serviceDate,
-        "nextServiceDate": nextServiceDate,
-        "regNr": regNr
+        "czyPozytywny": czyPozytywny,
+        "uwagi": uwagi,
+        "dataPrzegladu": dataPrzegladu,
+        "dataNastepnegoPrzegladu": dataNastepnegoPrzegladu,
       };
+
+  factory Service.getData(data) {
+    return Service(
+        idPrzegladu: data.first["idPrzegladu"],
+        czyPozytywny: data.first["czyPozytywny"],
+        uwagi: data.first["uwagi"],
+        dataPrzegladu: data.first["dataPrzegladu"],
+        dataNastepnegoPrzegladu: "2020-10-10");
+  }
 }
 
 class CarModelForm {
@@ -189,21 +193,18 @@ class CarModelForm {
 }
 
 class ServiceFormModel {
-  String? IdPrzegladu;
   String? DataPrzegladu;
   String? DataNastepnegoPrzegladu;
   String? Uwagi;
   bool? CzyPozytywny;
 
   ServiceFormModel(
-      {this.IdPrzegladu,
-      this.DataPrzegladu,
+      {this.DataPrzegladu,
       this.DataNastepnegoPrzegladu,
       this.Uwagi,
       this.CzyPozytywny});
 
   Map<String, dynamic> toJson() => {
-        "idPrzegladu": IdPrzegladu,
         "czyPozytywny": CzyPozytywny,
         "uwagi": Uwagi,
         "dataPrzegladu": DataPrzegladu,
@@ -212,7 +213,6 @@ class ServiceFormModel {
 
   factory ServiceFormModel.fromJson(Map<String, dynamic> json) =>
       ServiceFormModel(
-        IdPrzegladu: json["idPrzegladu"],
         CzyPozytywny: json["czyPozytywny"],
         Uwagi: json["uwagi"],
         DataPrzegladu: json["dataPrzegladu"],

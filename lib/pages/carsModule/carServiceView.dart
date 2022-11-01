@@ -4,7 +4,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:projzespoloey/components/emptyBox.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
+import 'package:projzespoloey/pages/carsModule/carItem.dart';
+import 'package:projzespoloey/services/CarServices/InspectionApiService.dart';
 
 class CarServiceView extends StatefulWidget {
   const CarServiceView({Key? key}) : super(key: key);
@@ -15,16 +18,25 @@ class CarServiceView extends StatefulWidget {
 
 class _CarServiceViewState extends State<CarServiceView> {
   Map item = {};
+  var serviceData;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     item = item.isNotEmpty
         ? item
         : ModalRoute.of(context)?.settings.arguments as Map;
+    if (item["data"].length > 0) serviceData = Service.getData(item["data"]);
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
 
     print("test: ${item}");
+    print("service data is: ");
+    print(serviceData);
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -73,7 +85,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                 SizedBox(
                   height: 15,
                 ),
-                if (item["data"].length < 1) ...[
+                if (serviceData == null) ...[
                   EmptyBoxInfo(
                       title: "Dodaj przegląd w kilku krokach",
                       description:
@@ -172,15 +184,13 @@ class _CarServiceViewState extends State<CarServiceView> {
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(25),
-                                                  color: item["data"].first[
-                                                              "czyPozytywny"] ==
+                                                  color: serviceData
+                                                              .czyPozytywny ==
                                                           true
                                                       ? (secondaryColor)
                                                       : (errorColor)),
                                               child: Text(
-                                                item["data"].first[
-                                                            "czyPozytywny"] ==
-                                                        true
+                                                serviceData.czyPozytywny == true
                                                     ? ("aktualny")
                                                     : ("nieaktualny"),
                                                 textAlign: TextAlign.center,
@@ -222,7 +232,8 @@ class _CarServiceViewState extends State<CarServiceView> {
                                                   color: secondaryColor),
                                               child: Text(
                                                   //".first["dataPrzegladu"].toString().substring(0, 10)} / ${item["data"].first["dataNastepnegoPrzegladu"].toString().substring(0, 10)}",
-                                                  "ELO",
+                                                  serviceData
+                                                      .dataNastepnegoPrzegladu,
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontSize: 14,
@@ -260,8 +271,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                                                   borderRadius:
                                                       BorderRadius.circular(25),
                                                   color: secondaryColor),
-                                              child: Text(
-                                                  "${item["data"].first["uwagi"]}",
+                                              child: Text(serviceData.uwagi,
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontSize: 14,
@@ -305,7 +315,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                                       color: secondaryColor),
                                   child: Text(
                                       //"${CarApiService().daysBetween(CarApiService().today, DateTime.parse(item["data"].first["dataNastepnegoPrzegladu"]))} dni",
-                                      "ELO",
+                                      serviceData.dataPrzegladu,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 14,
@@ -378,8 +388,39 @@ class _CarServiceViewState extends State<CarServiceView> {
                                                                     .circular(
                                                                         25),
                                                           )),
-                                                  onPressed: () {
+                                                  onPressed: () async {
                                                     print("yes");
+                                                    // insuranceData.IdUbezpieczenia
+                                                    print(
+                                                        "token is ${storage.read(key: "token")}");
+                                                    print(
+                                                        "service id is: $serviceData.idPrzegladu");
+                                                    String? tokenVal =
+                                                        await storage.read(
+                                                            key: "token");
+
+                                                    final deleteRequest =
+                                                        await InspectionApiService()
+                                                            .deleteService(
+                                                                tokenVal,
+                                                                serviceData
+                                                                    .idPrzegladu);
+                                                    setState(() {
+                                                      if (deleteRequest)
+                                                        Navigator
+                                                            .pushAndRemoveUntil(
+                                                                context,
+                                                                MaterialPageRoute<
+                                                                    void>(
+                                                                  builder: (BuildContext
+                                                                          context) =>
+                                                                      CarItem(
+                                                                          carId:
+                                                                              item["car"]["idSamochodu"]!),
+                                                                ),
+                                                                ModalRoute.withName(
+                                                                    "/dashboard"));
+                                                    });
                                                   },
                                                   child: Text(
                                                     "Usuń",

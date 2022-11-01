@@ -13,6 +13,7 @@ import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
 import 'package:projzespoloey/pages/form.dart';
+import 'package:projzespoloey/services/CarServices/InspectionApiService.dart';
 import 'package:projzespoloey/services/insurance_service.dart';
 
 class CarItem extends StatefulWidget {
@@ -42,7 +43,7 @@ class _CarItemState extends State<CarItem> {
 
     carData = (await CarApiService().getCar(tokenVal, id));
     insuranceData = (await getValidOC(tokenVal, id));
-    serviceData = (await CarApiService().getService(tokenVal, id));
+    serviceData = (await InspectionApiService().getService(tokenVal, id));
     setState(() {});
   }
 
@@ -331,8 +332,8 @@ class _CarItemState extends State<CarItem> {
                                           color: fontGrey,
                                         ),
                                         Text(
-                                          serviceData!.length > 1
-                                              ? ("ERROR")
+                                          serviceData == null
+                                              ? ("brak")
                                               //("${CarApiService().daysBetween(CarApiService().today, DateTime.parse(serviceData!["dataNastepnegoPrzegladu"]))} dni")
                                               : ("brak"),
                                           style: TextStyle(

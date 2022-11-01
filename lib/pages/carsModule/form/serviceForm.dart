@@ -10,6 +10,7 @@ import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
+import 'package:projzespoloey/services/CarServices/InspectionApiService.dart';
 
 class ServiceForm extends StatefulWidget {
   const ServiceForm({Key? key}) : super(key: key);
@@ -388,17 +389,19 @@ class _ServiceFormState extends State<ServiceForm> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
-            var insuranceId = await CarApiService()
+            var insuranceId = await InspectionApiService()
                 .addService(tokenVal, service, item["idSamochodu"]);
             var uploadImg =
                 await CarApiService().uploadFiles(tokenVal, files, insuranceId);
             setState(() {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => CarItem(carId: item["idSamochodu"]!),
-                    ));
-                // Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) =>
+                        CarItem(carId: item["idSamochodu"]!),
+                  ),
+                  ModalRoute.withName('/dashboard'));
+              // Navigator.pop(context);
             });
           }
         },

@@ -645,11 +645,18 @@ class _CarFormState extends State<CarForm> {
             // print(carItem);
             setState(() {
               if (uploadImg) {
-                Navigator.popAndPushNamed(context, "/carList", arguments: {
-                  "module_data": "cars",
-                  "user_auth": tokenVal,
-                  "route_name": "cars"
-                });
+                // Navigator.popAndPushNamed(context, "/carList", arguments: {
+                //   "module_data": "cars",
+                //   "user_auth": tokenVal,
+                //   "route_name": "cars"
+                // });
+
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => CarList(),
+                    ),
+                    ModalRoute.withName("/dashboard"));
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute<void>(

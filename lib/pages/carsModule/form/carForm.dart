@@ -6,6 +6,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
@@ -46,7 +47,11 @@ class _CarFormState extends State<CarForm> {
   int? modelItem;
   int prodDate = DateTime.now().year;
   String? imgId = "";
-  CarModelForm carItem = new CarModelForm(RokProdukcji: DateTime.now().year);
+  CarModelForm carItem = CarModelForm(
+      RokProdukcji: DateTime.now().year,
+      DataZakupu: DateTime.now().toString().substring(0, 10));
+  final _formKey = GlobalKey<FormState>();
+  File? image;
 
   @override
   void initState() {
@@ -96,42 +101,26 @@ class _CarFormState extends State<CarForm> {
     );
   }
 
-  // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? picked = await showDatePicker(
-  //       context: context,
-  //       initialDatePickerMode: DatePickerMode.year,
-  //       initialDate: selectedDate,
-  //       firstDate: DateTime(2015, 8),
-  //       lastDate: DateTime(2101));
-  //   if (picked != null && picked != selectedDate) {
-  //     setState(() {
-  //       selectedDate = picked;
-  //     });
-  //   }
-  // }
-
-  final _formKey = GlobalKey<FormState>();
-
-  // Slider values
-  double _currentGuaranteeSliderVal = 0;
-  double _currentRefundSliderVal = 0;
-
-  // Pick image
-  File? image;
-  /*Future pickImage() async {
-    try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image == null) return;
-      final imageTemp = File(image.path);
-      this.image = imageTemp;
-      setState(() {
-        this.image = imageTemp;
-      });
-      print(imageTemp);
-    } on PlatformException catch (e) {
-      print("Failed to pick image $e");
-    }
-  }*/
+  Future<DateTime?> pickDate(context) {
+    var date = showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1960),
+      lastDate: DateTime(2026),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+            primary: mainColor, // header background color
+            onPrimary: bgSmokedWhite, // header text color
+            onSurface: Colors.black, // body text color
+          )),
+          child: child!,
+        );
+      },
+    );
+    return date;
+  }
 
   Future pickImage() async {
     FilePickerResult? result =
@@ -150,26 +139,6 @@ class _CarFormState extends State<CarForm> {
 
   @override
   Widget build(BuildContext context) {
-    /*Map formData = {
-      "pojemnoscSilnika": engineCapacity,
-      "rokProdukcji": prodDate,
-      "numerVin": vin,
-      "dataZakupu": DateTime.now().toString(),
-      "numerRejestracyjny": regNr,
-      "modelId": modelItem,
-      "idZdjecia": "string"
-    };
-    Map formData1 = {
-      "pojemnoscSilnika": "string",
-      "rokProdukcji": "string",
-      "numerVin": "string",
-      "dataZakupu": DateTime.now().toString(),
-      "numerRejestracyjny": "string",
-      "modelId": 10,
-      "idZdjecia": "string"
-    };*/
-    print(brandList);
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -184,7 +153,7 @@ class _CarFormState extends State<CarForm> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
@@ -197,16 +166,16 @@ class _CarFormState extends State<CarForm> {
             fontFamily: 'Lato',
             fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
-        title: Text("Dodaj/Edytuj samochód"),
+        title: const Text("Dodaj samochód"),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/background.png'), fit: BoxFit.fill)),
         child: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25),
@@ -222,7 +191,7 @@ class _CarFormState extends State<CarForm> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                          children: const [
                             Expanded(
                               flex: 12,
                               child: Text(
@@ -236,8 +205,8 @@ class _CarFormState extends State<CarForm> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 15, 0, 5),
                               child: Text(
                                 "Marka samochodu",
                                 style: TextStyle(
@@ -332,7 +301,7 @@ class _CarFormState extends State<CarForm> {
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
@@ -351,16 +320,21 @@ class _CarFormState extends State<CarForm> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 150,
+                                    width: 160,
                                     child: TextFormField(
                                       readOnly: true,
                                       onTap: () =>
                                           handleReadOnlyInputClick(context),
                                       cursorColor: Colors.black,
-                                      style: TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                       decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(15),
-                                          hintText: "${prodDate.toString()}",
+                                          contentPadding:
+                                              const EdgeInsets.all(15),
+                                          hintText:
+                                              carItem.RokProdukcji.toString(),
+                                          hintStyle: const TextStyle(
+                                              color: Colors.black),
                                           fillColor: bg35Grey,
                                           filled: true,
                                           border: OutlineInputBorder(
@@ -394,29 +368,32 @@ class _CarFormState extends State<CarForm> {
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 150,
+                                  width: 160,
                                   child: TextFormField(
-                                      onSaved: (String? value) {
-                                        carItem?.DataZakupu = value!;
-                                      },
-                                      cursorColor: Colors.black,
-                                      style: TextStyle(color: Colors.black),
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(15),
-                                          hintText: "0000-00-00",
-                                          fillColor: bg35Grey,
-                                          filled: true,
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            borderSide: BorderSide.none,
-                                          )),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'To pole nie może być puste';
-                                        }
-                                        return null;
-                                      }),
+                                    readOnly: true,
+                                    onTap: () async {
+                                      DateTime? date = await pickDate(context);
+                                      setState(() {
+                                        carItem.DataZakupu =
+                                            DateFormat('yyyy-MM-dd')
+                                                .format(date!);
+                                      });
+                                    },
+                                    cursorColor: Colors.black,
+                                    style: TextStyle(color: Colors.black),
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.all(15),
+                                        hintText: carItem.DataZakupu,
+                                        hintStyle: const TextStyle(
+                                            color: Colors.black),
+                                        fillColor: bg35Grey,
+                                        filled: true,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          borderSide: BorderSide.none,
+                                        )),
+                                  ),
                                 ),
                               ],
                             ),
@@ -436,28 +413,36 @@ class _CarFormState extends State<CarForm> {
                               ),
                             ),
                             TextFormField(
-                              onSaved: (String? value) {
-                                carItem?.NumerVin = value;
-                              },
-                              cursorColor: Colors.black,
-                              style: TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(15),
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.only(top: 1),
-                                    child: Icon(
-                                      Icons.numbers,
-                                      color: Colors.black,
+                                onSaved: (String? value) {
+                                  carItem?.NumerVin = value;
+                                },
+                                cursorColor: Colors.black,
+                                style: TextStyle(color: Colors.black),
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(15),
+                                    prefixIcon: Padding(
+                                      padding: EdgeInsets.only(top: 1),
+                                      child: Icon(
+                                        Icons.numbers,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                  hintText: "Podaj numer VIN",
-                                  fillColor: bg35Grey,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide.none,
-                                  )),
-                            ),
+                                    hintText: "Podaj numer VIN",
+                                    fillColor: bg35Grey,
+                                    filled: true,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                      borderSide: BorderSide.none,
+                                    )),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'To pole nie może być puste';
+                                  }
+                                  if (value.length != 17) {
+                                    return 'Numer VIN musi składać się z 17 znaków ';
+                                  }
+                                  return null;
+                                }),
                           ],
                         ),
                         Row(

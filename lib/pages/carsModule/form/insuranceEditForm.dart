@@ -45,7 +45,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1960),
-      lastDate: DateTime(2023),
+      lastDate: DateTime(2026),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -278,7 +278,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,7 +295,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 145,
+                                    width: 160,
                                     child: TextFormField(
                                         readOnly: true,
                                         onTap: () async {
@@ -344,7 +344,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                                     padding:
                                     const EdgeInsets.fromLTRB(12, 26, 0, 5),
                                     child: SizedBox(
-                                      width: 145,
+                                      width: 160,
                                       child: TextFormField(
                                           readOnly: true,
                                           onTap: () async {
@@ -412,7 +412,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                               child: TextFormField(
                                 initialValue: insurance.kosztPolisy.toString(),
                                 onSaved: (String? value) {
-                                  insurance.kosztPolisy = double.parse(value!);
+                                  insurance.kosztPolisy = int.parse(value!);
                                 },
                                 cursorColor: Colors.black,
                                 style: TextStyle(color: Colors.black),

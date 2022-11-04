@@ -45,7 +45,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1960),
-      lastDate: DateTime(2023),
+      lastDate: DateTime(2026),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -282,7 +282,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,7 +299,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 145,
+                                    width: 160,
                                     child: TextFormField(
                                         readOnly: true,
                                         onTap: () async {
@@ -348,7 +348,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                     padding:
                                         const EdgeInsets.fromLTRB(12, 26, 0, 5),
                                     child: SizedBox(
-                                      width: 145,
+                                      width: 160,
                                       child: TextFormField(
                                           readOnly: true,
                                           onTap: () async {
@@ -415,7 +415,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: TextFormField(
                                 onSaved: (String? value) {
-                                  insurance.kosztPolisy = double.parse(value!);
+                                  insurance.kosztPolisy = int.parse(value!);
                                 },
                                 cursorColor: Colors.black,
                                 style: TextStyle(color: Colors.black),

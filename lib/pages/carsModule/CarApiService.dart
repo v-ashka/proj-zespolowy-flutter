@@ -130,7 +130,8 @@ class CarApiService {
       var url = Uri.parse(
           "${SERVER_IP}/api/fileUpload/UploadFile?rootFolder=samochod&nazwaFolderu=$id&czyNaglowkowy=true");
       print(url);
-      var request = http.MultipartRequest('POST', url);
+      var request = http.MultipartRequest('POST', url, );
+      request.headers['Authorization'] = 'Bearer $token';
       request.files.add(await http.MultipartFile.fromPath('file', path));
       var response = await request.send();
       if (response.statusCode == 200) {

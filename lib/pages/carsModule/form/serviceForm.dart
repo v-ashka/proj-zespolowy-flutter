@@ -10,7 +10,8 @@ import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
-import 'package:projzespoloey/services/CarServices/InspectionApiService.dart';
+import 'package:projzespoloey/services/car/insurance_service.dart';
+import 'package:projzespoloey/services/car/inspection_service.dart';
 
 class ServiceForm extends StatefulWidget {
   const ServiceForm({Key? key}) : super(key: key);

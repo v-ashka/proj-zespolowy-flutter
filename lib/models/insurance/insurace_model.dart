@@ -17,7 +17,7 @@ class InsuranceModel {
   String? dataZakupu;
   String? dataKonca;
   int? idRodzajuUbezpieczenia;
-  double? kosztPolisy;
+  int? kosztPolisy;
 
   Map<String, dynamic> toJson() => {
         "ubezpieczyciel": ubezpieczyciel,

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:projzespoloey/constants.dart';
 
 class InspectionApiService {
+
   Future getService(token, id) async {
     try {
       var url = Uri.parse("$SERVER_IP/api/inspection/GetInspectionsList/$id");

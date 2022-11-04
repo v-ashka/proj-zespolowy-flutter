@@ -414,7 +414,7 @@ class _CarFormState extends State<CarForm> {
                             ),
                             TextFormField(
                                 onSaved: (String? value) {
-                                  carItem?.NumerVin = value;
+                                  carItem.NumerVin = value;
                                 },
                                 cursorColor: Colors.black,
                                 style: TextStyle(color: Colors.black),

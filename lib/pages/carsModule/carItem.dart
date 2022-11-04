@@ -38,7 +38,7 @@ class _CarItemState extends State<CarItem> {
     _getData(widget.carId);
   }
 
-   _getData(id) async {
+  _getData(id) async {
     String? tokenVal = await storage.read(key: "token");
 
     carData = (await CarApiService().getCar(tokenVal, id));
@@ -205,7 +205,7 @@ class _CarItemState extends State<CarItem> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                           carData?["koniecAC"] != null
+                                            carData?["koniecAC"] != null
                                                 ? "${carData!["koniecAC"].toString()} dni"
                                                 : "Brak",
                                             style: TextStyle(
@@ -295,44 +295,71 @@ class _CarItemState extends State<CarItem> {
                                   SizedBox(
                                     height: 2,
                                   ),
-                                  Text(
-                                    "OKRES WAŻNOŚCI PRZEGLĄDU",
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: fontGrey,
-                                        fontFamily: "Roboto",
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    width: 100,
-                                    padding: EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                      color: secondaryColor,
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Icon(
-                                          Icons.car_repair_outlined,
-                                          size: 20,
+                                  if (serviceData!.isNotEmpty) ...[
+                                    Text(
+                                      "OKRES WAŻNOŚCI PRZEGLĄDU",
+                                      style: TextStyle(
+                                          fontSize: 12,
                                           color: fontGrey,
-                                        ),
-                                        Text(
-                                           carData?["koniecPrzegladu"] != null
+                                          fontFamily: "Roboto",
+                                          fontWeight: FontWeight.w300),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: 100,
+                                      padding: EdgeInsets.all(3),
+                                      decoration: BoxDecoration(
+                                        color: secondaryColor,
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Icon(
+                                            Icons.car_repair_outlined,
+                                            size: 20,
+                                            color: fontGrey,
+                                          ),
+                                          Text(
+                                            carData?["koniecPrzegladu"] != null
                                                 ? "${carData!["koniecPrzegladu"].toString()} dni"
                                                 : "Brak",
-                                          style: TextStyle(
-                                            color: fontBlack,
-                                          ),
-                                        )
-                                      ],
+                                            style: TextStyle(
+                                              color: fontBlack,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
+                                  ] else ...[
+                                    SizedBox(
+                                      width: 220,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Nie dodałeś jeszcze żadnego przeglądu!",
+                                            style: TextStyle(
+                                                color: fontBlack,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            "Po dodaniu dokumentu, w tym miejscu zobaczysz okres jego ważności",
+                                            style: TextStyle(
+                                              color: fontBlack,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ],
                               ),
                               Icon(
@@ -407,7 +434,7 @@ class _CarItemState extends State<CarItem> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
-                                         Icon(
+                                        Icon(
                                           Icons.build_outlined,
                                           size: 20,
                                           color: fontGrey,
@@ -439,15 +466,6 @@ class _CarItemState extends State<CarItem> {
                   ],
                 )),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.pushNamed(context, "/form",
-              arguments: {'form_type': 'add_car'});
-        },
-        backgroundColor: mainColor,
-        label: Text('Dodaj nowy'),
-        icon: Icon(Icons.add),
       ),
     );
   }

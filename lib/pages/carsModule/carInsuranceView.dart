@@ -105,7 +105,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
               SizedBox(
                 height: 15,
               ),
-              if (item["car"]["koniecOC"] == null && item["car"]["koniecOC"] == null) ...[
+              if (item["car"]["koniecOC"] == null &&
+                  item["car"]["koniecOC"] == null) ...[
                 EmptyBoxInfo(
                     title: "Dodaj ubezpieczenie w kilku krokach",
                     description:
@@ -911,7 +912,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                         setState(() {
                                                           if (deleteRes)
                                                             Navigator
-                                                                .pushReplacement(
+                                                                .pushAndRemoveUntil(
                                                                     context,
                                                                     MaterialPageRoute<
                                                                         void>(
@@ -919,7 +920,10 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                                               context) =>
                                                                           CarItem(
                                                                               carId: idSamochodu),
-                                                                    ));
+                                                                    ),
+                                                                    ModalRoute
+                                                                        .withName(
+                                                                            "/dashboard"));
                                                         });
                                                       },
                                                       child: Text(
@@ -1030,94 +1034,95 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                   ),
                 ]
               ],
-              if(insuranceOC.idUbezpieczenia != null || insuranceAC.idUbezpieczenia != null)
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: bgSmokedWhite,
-                    onPrimary: bg35Grey,
-                    padding: EdgeInsets.all(0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    )),
-                onPressed: () {
-                  print("historia ubezpieczenie");
-                  Navigator.pushNamed(context, "/carInsuranceHistory",
-                      arguments: {"car": item["car"]});
-                },
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Historia Ubezpieczeń",
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: fontBlack,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "ILOŚĆ ZARCHIWIOZWANYCH POLIS",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: fontGrey,
-                                  fontFamily: "Roboto",
-                                  fontWeight: FontWeight.w300),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 100,
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                color: secondaryColor,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      Icons.analytics_outlined,
-                                      size: 20,
-                                      color: fontGrey,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "${item["car"]["zarchiwizowanePolisy"]}",
-                                      style: TextStyle(
-                                        color: fontBlack,
-                                      ),
-                                    )
-                                  ],
+              if (insuranceOC.idUbezpieczenia != null ||
+                  insuranceAC.idUbezpieczenia != null)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: bgSmokedWhite,
+                      onPrimary: bg35Grey,
+                      padding: EdgeInsets.all(0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      )),
+                  onPressed: () {
+                    print("historia ubezpieczenie");
+                    Navigator.pushNamed(context, "/carInsuranceHistory",
+                        arguments: {"car": item["car"]});
+                  },
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Historia Ubezpieczeń",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: fontBlack,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          Icons.manage_history_outlined,
-                          size: 82,
-                          color: bg50Grey,
-                        )
-                      ],
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Text(
+                                "ILOŚĆ ZARCHIWIOZWANYCH POLIS",
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: fontGrey,
+                                    fontFamily: "Roboto",
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                width: 100,
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: secondaryColor,
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        Icons.analytics_outlined,
+                                        size: 20,
+                                        color: fontGrey,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "${item["car"]["zarchiwizowanePolisy"]}",
+                                        style: TextStyle(
+                                          color: fontBlack,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Icon(
+                            Icons.manage_history_outlined,
+                            size: 82,
+                            color: bg50Grey,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
             ])),
       ),
       floatingActionButton: FloatingActionButton.extended(

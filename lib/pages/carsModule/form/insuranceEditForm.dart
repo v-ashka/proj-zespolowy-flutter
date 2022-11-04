@@ -12,16 +12,16 @@ import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/models/insurance/insurace_model.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:projzespoloey/pages/carsModule/carItem.dart';
 
 class InsuranceEditForm extends StatefulWidget {
-
   InsuranceModel insurance;
   String carId;
-  InsuranceEditForm({Key? key, required this.insurance, required this.carId}) : super(key: key);
+  InsuranceEditForm({Key? key, required this.insurance, required this.carId})
+      : super(key: key);
 
   @override
   State<InsuranceEditForm> createState() => _InsuranceEditFormState();
-
 }
 
 class _InsuranceEditFormState extends State<InsuranceEditForm> {
@@ -50,10 +50,10 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
         return Theme(
           data: Theme.of(context).copyWith(
               colorScheme: const ColorScheme.light(
-                primary: mainColor, // header background color
-                onPrimary: bgSmokedWhite, // header text color
-                onSurface: Colors.black, // body text color
-              )),
+            primary: mainColor, // header background color
+            onPrimary: bgSmokedWhite, // header text color
+            onSurface: Colors.black, // body text color
+          )),
           child: child!,
         );
       },
@@ -63,7 +63,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
 
   Future pickFiles() async {
     FilePickerResult? result =
-    await FilePicker.platform.pickFiles(allowMultiple: true);
+        await FilePicker.platform.pickFiles(allowMultiple: true);
     if (result != null) {
       setState(() {
         if (files.isNotEmpty) {
@@ -170,7 +170,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                                 onChanged: (value) {
                                   setState(() {
                                     insurance.idRodzajuUbezpieczenia =
-                                    value as int?;
+                                        value as int?;
                                   });
                                 },
                                 items: insuranceTypesList.map((insurance) {
@@ -285,7 +285,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                                 children: [
                                   Padding(
                                     padding:
-                                    const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                        const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                     child: Text(
                                       "Okres ubezpieczenia",
                                       style: TextStyle(
@@ -300,7 +300,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                                         readOnly: true,
                                         onTap: () async {
                                           DateTime? date =
-                                          await pickDate(context);
+                                              await pickDate(context);
                                           setState(() {
                                             insurance.dataZakupu =
                                                 DateFormat('dd-MM-yyyy')
@@ -319,13 +319,13 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                                               ),
                                             ),
                                             hintText:
-                                            insurance.dataZakupu ?? "Od",
+                                                insurance.dataZakupu ?? "Od",
                                             hintStyle: TextStyle(fontSize: 12),
                                             fillColor: bg35Grey,
                                             filled: true,
                                             border: OutlineInputBorder(
                                               borderRadius:
-                                              BorderRadius.circular(50),
+                                                  BorderRadius.circular(50),
                                               borderSide: BorderSide.none,
                                             )),
                                         validator: (date) {
@@ -342,14 +342,14 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                                 children: [
                                   Padding(
                                     padding:
-                                    const EdgeInsets.fromLTRB(12, 26, 0, 5),
+                                        const EdgeInsets.fromLTRB(12, 26, 0, 5),
                                     child: SizedBox(
                                       width: 160,
                                       child: TextFormField(
                                           readOnly: true,
                                           onTap: () async {
                                             DateTime? date =
-                                            await pickDate(context);
+                                                await pickDate(context);
                                             setState(() {
                                               insurance.dataKonca =
                                                   DateFormat('dd-MM-yyyy')
@@ -362,23 +362,23 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                                           decoration: InputDecoration(
                                               prefixIcon: const Padding(
                                                 padding:
-                                                EdgeInsets.only(top: 1),
+                                                    EdgeInsets.only(top: 1),
                                                 child: Icon(
                                                   Icons.calendar_today_outlined,
                                                   color: Colors.black,
                                                 ),
                                               ),
                                               contentPadding:
-                                              const EdgeInsets.all(15),
+                                                  const EdgeInsets.all(15),
                                               hintText:
-                                              insurance.dataKonca ?? "Do",
+                                                  insurance.dataKonca ?? "Do",
                                               hintStyle:
-                                              TextStyle(fontSize: 12),
+                                                  TextStyle(fontSize: 12),
                                               fillColor: bg35Grey,
                                               filled: true,
                                               border: OutlineInputBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(50),
+                                                    BorderRadius.circular(50),
                                                 borderSide: BorderSide.none,
                                               )),
                                           validator: (date) {
@@ -454,11 +454,17 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
-            var update = await CarApiService()
-                .updateInsurance(tokenVal, insurance, insurance.idUbezpieczenia);
+            var update = await CarApiService().updateInsurance(
+                tokenVal, insurance, insurance.idUbezpieczenia);
             print(update);
             //await CarApiService().uploadFiles(tokenVal, files, insuranceId);
-            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) =>
+                      CarItem(carId: item["idSamochodu"]!),
+                ),
+                ModalRoute.withName('/dashboard'));
           }
         },
         backgroundColor: mainColor,

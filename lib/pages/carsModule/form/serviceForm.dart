@@ -5,12 +5,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
-import 'package:projzespoloey/services/car/insurance_service.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
 
 class ServiceForm extends StatefulWidget {
@@ -74,6 +74,7 @@ class _ServiceFormState extends State<ServiceForm> {
     item = item.isNotEmpty
         ? item
         : ModalRoute.of(context)?.settings.arguments as Map;
+
     print(item);
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -130,16 +131,188 @@ class _ServiceFormState extends State<ServiceForm> {
                             Expanded(
                               flex: 12,
                               child: Text(
-                                "Wprowadź dane polisy",
+                                "Wprowadź badanie techiczne",
                                 style: TextStyle(
                                     fontSize: 19, fontWeight: FontWeight.w600),
                               ),
                             ),
                           ],
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Text(
+                                "Nazwa stacji diagnostycznej",
+                                style: TextStyle(
+                                  fontFamily: "Roboto",
+                                  letterSpacing: 1,
+                                ),
+                              ),
+                            ),
+                            TextFormField(
+                                onSaved: (String? value) {
+                                  service.nazwaStacjiDiagnostycznej = value;
+                                },
+                                cursorColor: Colors.black,
+                                style: TextStyle(color: Colors.black),
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(15),
+                                    prefixIcon: Padding(
+                                      padding: EdgeInsets.only(top: 1),
+                                      child: Icon(
+                                        Icons.warehouse,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    hintText: "Nazwa stacji diagnostycznej",
+                                    fillColor: bg35Grey,
+                                    filled: true,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                      borderSide: BorderSide.none,
+                                    )),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'To pole nie może być puste';
+                                  }
+                                  return null;
+                                }),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              width: 300,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 4,
+                                    child: Text(
+                                      "Zarejestrowany przebieg auta",
+                                      style: TextStyle(
+                                        fontFamily: "Roboto",
+                                        letterSpacing: 1,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Text(
+                                      "Numer badania",
+                                      style: TextStyle(
+                                        fontFamily: "Roboto",
+                                        letterSpacing: 1,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextFormField(
+                                          onSaved: (String? value) {
+                                            service.przebieg = value as int;
+                                          },
+                                          cursorColor: Colors.black,
+                                          style: TextStyle(color: Colors.black),
+                                          decoration: InputDecoration(
+                                              contentPadding: EdgeInsets.all(1),
+                                              prefixIcon: Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 1),
+                                                child: Icon(
+                                                  Icons.edit_road_outlined,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              hintText: "Przebieg auta",
+                                              hintStyle:
+                                                  TextStyle(fontSize: 12),
+                                              fillColor: bg35Grey,
+                                              filled: true,
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                borderSide: BorderSide.none,
+                                              )),
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'To pole nie może być puste';
+                                            }
+                                            return null;
+                                          }),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10.0, 0, 0, 0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextFormField(
+                                            onSaved: (String? value) {
+                                              service.numerBadania =
+                                                  value as int;
+                                            },
+                                            cursorColor: Colors.black,
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                            decoration: InputDecoration(
+                                                contentPadding:
+                                                    EdgeInsets.all(15),
+                                                prefixIcon: Padding(
+                                                  padding:
+                                                      EdgeInsets.only(top: 1),
+                                                  child: Icon(
+                                                    Icons.numbers_outlined,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                hintText: "Nr badania",
+                                                hintStyle:
+                                                    TextStyle(fontSize: 12),
+                                                fillColor: bg35Grey,
+                                                filled: true,
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  borderSide: BorderSide.none,
+                                                )),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'To pole nie może być puste';
+                                              }
+                                              return null;
+                                            }),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
                               child: Text(
@@ -151,6 +324,12 @@ class _ServiceFormState extends State<ServiceForm> {
                               ),
                             ),
                             DropdownButtonFormField(
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Proszę wybrać status przeglądu!';
+                                  }
+                                  return null;
+                                },
                                 value: service.CzyPozytywny,
                                 isExpanded: true,
                                 onChanged: (value) {
@@ -172,7 +351,7 @@ class _ServiceFormState extends State<ServiceForm> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    hintText: "Wybierz rodzaj ubezpieczenia",
+                                    hintText: "Wybierz status przeglądu",
                                     fillColor: bg35Grey,
                                     filled: true,
                                     border: OutlineInputBorder(
@@ -190,61 +369,155 @@ class _ServiceFormState extends State<ServiceForm> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                    child: Text(
-                                      "Data zatwierdzenia przeglądu",
-                                      style: TextStyle(
-                                        fontFamily: "Roboto",
-                                        letterSpacing: 1,
-                                      ),
+                                  SizedBox(
+                                    width: 310,
+                                    height: 45,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            "Data zatwierdzenia przeglądu",
+                                            style: TextStyle(
+                                              fontFamily: "Roboto",
+                                              letterSpacing: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                15, 0, 0, 0),
+                                            child: Text(
+                                              "Data następnego przeglądu",
+                                              style: TextStyle(
+                                                fontFamily: "Roboto",
+                                                letterSpacing: 1,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 250,
-                                    child: TextFormField(
-                                        readOnly: true,
-                                        onTap: () async {
-                                          DateTime? date =
-                                              await pickDate(context);
-                                          setState(() {
-                                            service.DataPrzegladu =
-                                                DateFormat('dd-MM-yyyy')
-                                                    .format(date!);
-                                          });
-                                        },
-                                        cursorColor: Colors.black,
-                                        style: TextStyle(color: Colors.black),
-                                        decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(15),
-                                            prefixIcon: Padding(
-                                              padding: EdgeInsets.only(top: 1),
-                                              child: Icon(
-                                                Icons.calendar_today_outlined,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            hintText: service.DataPrzegladu ??
-                                                "Data zatwierdzenia",
-                                            fillColor: bg35Grey,
-                                            filled: true,
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              borderSide: BorderSide.none,
-                                            )),
-                                        validator: (date) {
-                                          if (service.DataPrzegladu == null) {
-                                            return 'To pole nie może być puste';
-                                          }
-                                          return null;
-                                        }),
+                                    width: 310,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 150,
+                                          child: TextFormField(
+                                              readOnly: true,
+                                              onTap: () async {
+                                                DateTime? date =
+                                                    await pickDate(context);
+                                                setState(() {
+                                                  service.DataPrzegladu =
+                                                      DateFormat('dd-MM-yyyy')
+                                                          .format(date!);
+                                                });
+                                              },
+                                              cursorColor: Colors.black,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 11),
+                                              decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.all(15),
+                                                  prefixIcon: Padding(
+                                                    padding:
+                                                        EdgeInsets.only(top: 1),
+                                                    child: Icon(
+                                                      Icons
+                                                          .calendar_month_outlined,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  hintText:
+                                                      service.DataPrzegladu ??
+                                                          "Data zatwierdzenia",
+                                                  fillColor: bg35Grey,
+                                                  filled: true,
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                    borderSide: BorderSide.none,
+                                                  )),
+                                              validator: (date) {
+                                                if (service.DataPrzegladu ==
+                                                    null) {
+                                                  return 'To pole nie może być puste';
+                                                }
+                                                return null;
+                                              }),
+                                        ),
+                                        SizedBox(
+                                          width: 150,
+                                          child: TextFormField(
+                                              readOnly: true,
+                                              onTap: () async {
+                                                DateTime? date =
+                                                    await pickDate(context);
+                                                setState(() {
+                                                  service.DataNastepnegoPrzegladu =
+                                                      DateFormat('dd-MM-yyyy')
+                                                          .format(date!);
+                                                });
+                                              },
+                                              cursorColor: Colors.black,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 11),
+                                              decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.all(15),
+                                                  prefixIcon: Padding(
+                                                    padding:
+                                                        EdgeInsets.only(top: 1),
+                                                    child: Icon(
+                                                      Icons
+                                                          .calendar_month_outlined,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  hintText: service
+                                                          .DataNastepnegoPrzegladu ??
+                                                      "Data kolejnej wizyty",
+                                                  fillColor: bg35Grey,
+                                                  filled: true,
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                    borderSide: BorderSide.none,
+                                                  )),
+                                              validator: (date) {
+                                                if (service
+                                                        .DataNastepnegoPrzegladu ==
+                                                    null) {
+                                                  return 'To pole nie może być puste';
+                                                }
+                                                return null;
+                                              }),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ],
                           ),
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

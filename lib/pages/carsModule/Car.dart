@@ -196,22 +196,31 @@ class CarModelForm {
 }
 
 class ServiceFormModel {
+  int? przebieg;
+  int? numerBadania;
+  String? nazwaStacjiDiagnostycznej;
   String? DataPrzegladu;
   String? DataNastepnegoPrzegladu;
   String? Uwagi;
   bool? CzyPozytywny;
 
   ServiceFormModel(
-      {this.DataPrzegladu,
+      {this.przebieg,
+      this.numerBadania,
+      this.nazwaStacjiDiagnostycznej,
+      this.DataPrzegladu,
       this.DataNastepnegoPrzegladu,
       this.Uwagi,
       this.CzyPozytywny});
 
   Map<String, dynamic> toJson() => {
+        "przebieg": przebieg,
+        "numerBadania": numerBadania,
+        "nazwaStacjiDiagnostycznej": nazwaStacjiDiagnostycznej,
         "czyPozytywny": CzyPozytywny,
         "uwagi": Uwagi,
         "dataPrzegladu": DataPrzegladu,
-        "dataNastepnegoPrzegladu": "2024-01-01",
+        "dataNastepnegoPrzegladu": DataNastepnegoPrzegladu,
       };
 
   factory ServiceFormModel.fromJson(Map<String, dynamic> json) =>

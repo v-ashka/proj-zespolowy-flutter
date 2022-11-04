@@ -551,11 +551,13 @@ class _InsuranceFormState extends State<InsuranceForm> {
                 .addInsurance(tokenVal, insurance, idSamochodu);
             await CarApiService().uploadFiles(tokenVal, files, insuranceId);
             setState(() {
-              Navigator.pushReplacement(
+              Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (BuildContext context) => CarItem(carId: idSamochodu!),
-                  ));
+                    builder: (BuildContext context) =>
+                        CarItem(carId: item["idSamochodu"]!),
+                  ),
+                  ModalRoute.withName('/dashboard'));
             });
           }
         },

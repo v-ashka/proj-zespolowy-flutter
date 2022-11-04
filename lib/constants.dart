@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // server ip addr
 //const SERVER_IP = "http://10.0.2.2:5151";
 
-const SERVER_IP = "https://e750-5-173-194-189.eu.ngrok.io";
+const SERVER_IP = "https://beef-5-173-198-32.eu.ngrok.io";
 
 // basic color app
 
@@ -16,7 +16,7 @@ const buttonColor = Color(0x4000b2ff); //button color
 const errorColor = Color.fromARGB(171, 255, 0, 0);
 const deleteBtn = Color.fromARGB(255, 219, 58, 58);
 // rgba(219, 58, 58, 1)
-// Szablonowe kolory
+// Szablonowe kolorys
 
 // kolor icon
 const icon70Black = Color(0xb3000000);

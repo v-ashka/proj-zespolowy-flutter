@@ -11,7 +11,7 @@ import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
-import 'package:projzespoloey/services/insurance_service.dart';
+import 'package:projzespoloey/services/car/insurance_service.dart';
 
 class CarInsuranceView extends StatefulWidget {
   const CarInsuranceView({Key? key}) : super(key: key);

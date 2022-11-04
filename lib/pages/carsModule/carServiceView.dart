@@ -7,7 +7,7 @@ import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
-import 'package:projzespoloey/services/CarServices/InspectionApiService.dart';
+import 'package:projzespoloey/services/car/inspection_service.dart';
 
 class CarServiceView extends StatefulWidget {
   const CarServiceView({Key? key}) : super(key: key);

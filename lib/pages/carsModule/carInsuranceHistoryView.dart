@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurance/insurace_model.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
-import 'package:projzespoloey/services/insurance_service.dart';
+import 'package:projzespoloey/services/car/insurance_service.dart';
 
 class CarInsuranceHistoryView extends StatefulWidget {
   const CarInsuranceHistoryView({Key? key}) : super(key: key);

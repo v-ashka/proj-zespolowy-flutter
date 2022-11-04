@@ -31,7 +31,7 @@ class _CarListState extends State<CarList> {
 
   void getData() async {
     token = await storage.read(key: "token");
-    carList = (await CarApiService().getCars(token)!);
+    carList = (await CarApiService().getCars(token));
     setState(() {});
   }
 
@@ -79,7 +79,7 @@ class _CarListState extends State<CarList> {
                   image: AssetImage('assets/background.png'),
                   fit: BoxFit.fill)),
           child: Center(
-              child: carList?.length == null
+              child: carList == null
                   ? const Center(
                       child: CircularProgressIndicator(
                       color: mainColor,

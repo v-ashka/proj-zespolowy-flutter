@@ -13,8 +13,8 @@ import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
 import 'package:projzespoloey/pages/form.dart';
-import 'package:projzespoloey/services/CarServices/InspectionApiService.dart';
-import 'package:projzespoloey/services/insurance_service.dart';
+import 'package:projzespoloey/services/car/inspection_service.dart';
+import 'package:projzespoloey/services/car/insurance_service.dart';
 
 class CarItem extends StatefulWidget {
   String carId;
@@ -375,17 +375,17 @@ class _CarItemState extends State<CarItem> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Historia Napraw",
                                     style: TextStyle(
                                       fontSize: 20,
                                       color: fontBlack,
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(
+                                  const Text(
                                     "OSTATNIE NAPRAWY",
                                     style: TextStyle(
                                         fontSize: 12,
@@ -393,7 +393,7 @@ class _CarItemState extends State<CarItem> {
                                         fontFamily: "Roboto",
                                         fontWeight: FontWeight.w300),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Container(
@@ -407,7 +407,7 @@ class _CarItemState extends State<CarItem> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Icon(
+                                         Icon(
                                           Icons.build_outlined,
                                           size: 20,
                                           color: fontGrey,

@@ -98,13 +98,120 @@ class _CarListState extends State<CarList> {
                           } else {
                             return GestureDetector(
                               onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            CarItem(
-                                                carId: carItem.idSamochodu),
-                                      ));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CarItem(carId: carItem.idSamochodu),
+                                    ));
+                              },
+                              onLongPress: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: AlertDialog(
+                                          actionsPadding: EdgeInsets.all(0),
+                                          actionsAlignment:
+                                              MainAxisAlignment.center,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                          ),
+                                          title: Text(
+                                              "Chcesz usunąć lub edytować ten pojazd?"),
+                                          content: Text(
+                                              "Wybierz jedną z opcji dostępnych poniżej."),
+                                          actions: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: mainColor,
+                                                  onPrimary: mainColor,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                  )),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: RichText(
+                                                text: const TextSpan(
+                                                  children: [
+                                                    WidgetSpan(
+                                                      child: Icon(
+                                                        Icons.edit_outlined,
+                                                        size: 20,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                        text: " Edytuj",
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontFamily: 'Lato',
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600)),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: deleteBtn,
+                                                  onPrimary: deleteBtn,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                  )),
+                                              onPressed: () async {
+                                                http.Response deleteCar =
+                                                    await CarApiService()
+                                                        .deleteCar(
+                                                            token,
+                                                            carItem
+                                                                .idSamochodu);
+                                                setState(() {
+                                                  if (deleteCar.statusCode == 202) {
+                                                    Navigator.pushAndRemoveUntil(
+                                                        context,
+                                                        MaterialPageRoute<void>(
+                                                          builder: (BuildContext context) => const CarList(),
+                                                        ),
+                                                        ModalRoute.withName("/dashboard"));
+                                                  }
+                                                });
+                                              },
+                                              child: RichText(
+                                                text: const TextSpan(
+                                                  children: [
+                                                    WidgetSpan(
+                                                      child: Icon(
+                                                        Icons
+                                                            .delete_outline_outlined,
+                                                        size: 20,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                        text: " Usuń",
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontFamily: 'Lato',
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600)),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    });
                               },
                               child: Container(
                                 decoration: BoxDecoration(

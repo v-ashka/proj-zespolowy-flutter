@@ -167,59 +167,129 @@ class FilesViewState extends State<FilesView> {
                         OpenFile.open(path);
                       }
                     },
-                    child: Card(
-                      margin: const EdgeInsets.all(5),
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      shadowColor: Colors.white,
-                      child: ListTile(
-                        leading: (file.rozszerzenie == ".pdf"
-                            ? Image.asset("assets/pdf_icon.png", width: 45, height: 45)
-                            : file.rozszerzenie == ".txt"
-                                ? Image.asset("assets/txt_icon.png", width: 45, height: 45)
-                                : file.rozszerzenie == ".png"
-                                    ? Image.asset("assets/png_icon.png", width: 45, height: 45)
-                                    : file.rozszerzenie == ".jpg" ||
-                                            file.rozszerzenie == ".jpeg" 
-                                        ? CachedNetworkImage(
-                                            imageUrl:
-                                                "$SERVER_IP/api/fileUpload/GetFile/${file.idPliku}",
-                                            placeholder: (context, url) =>
-                                                CircularProgressIndicator(),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Image.asset("assets/jpg_icon.png"),
-                                                    width: 45,
-                                                    height: 45,
-                                                    fit: BoxFit.cover,
-                                          )
-                                        : file.rozszerzenie == ".zip" ||
-                                                file.rozszerzenie == ".7z"
-                                            ? Image.asset("assets/zip_icon.png", width: 45, height: 45)
-                                            : Image.asset(
-                                                "assets/default_icon.png", width: 45, height: 45)),
-                        title: Text(
-                          file.nazwaPlikuUzytkownika,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Text(
-                          file.wielkosc.toDouble() > 1000000
-                              ? "${ByteConverter(file.wielkosc.roundToDouble()).megaBytes.toStringAsFixed(2)} MB"
-                              : "${ByteConverter(file.wielkosc.roundToDouble()).kiloBytes.toStringAsFixed(2)} KB",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        tileColor: Colors.white,
+                    child: Dismissible(
+                      key: Key(file.idPliku),
+                      direction: DismissDirection.endToStart,
+                      behavior: HitTestBehavior.opaque,
+                      confirmDismiss: (DismissDirection direction) async {
+                        return await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              actionsPadding: EdgeInsets.all(0),
+                              actionsAlignment:
+                              MainAxisAlignment.center,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(25),
+                              ),
+                              title: Text(
+                                  "Czy na pewno chcesz usunąć ten element?"),
+                              content: Text(
+                                  "Po usunięciu nie możesz cofnąć tej akcji."),
+                              actions: [
+                                ElevatedButton(
+                                    style: ElevatedButton
+                                        .styleFrom(
+                                        primary: mainColor,
+                                        onPrimary:
+                                        mainColor,
+                                        shape:
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius
+                                              .circular(
+                                              25),
+                                        )),
+                                    onPressed: () {
+                                      print("no");
+                                      Navigator.of(context)
+                                          .pop();
+                                    },
+                                    child: Text(
+                                      "Anuluj",
+                                      style: TextStyle(
+                                          color: Colors.white),
+                                    )),
+                                ElevatedButton(
+                                    style: ElevatedButton
+                                        .styleFrom(
+                                        primary: deleteBtn,
+                                        onPrimary:
+                                        deleteBtn,
+                                        shape:
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius
+                                              .circular(
+                                              25),
+                                        )),
+                                    onPressed: () async {
+                                    },
+                                    child: Text(
+                                      "Usuń",
+                                      style: TextStyle(
+                                          color: Colors.white),
+                                    )),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Card(
+                        margin: const EdgeInsets.all(5),
+                        elevation: 2,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        trailing: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.more_vert_outlined),
-                          tooltip: "Opcje",
+                        shadowColor: Colors.white,
+                        child: ListTile(
+                          leading: (file.rozszerzenie == ".pdf"
+                              ? Image.asset("assets/pdf_icon.png", width: 45, height: 45)
+                              : file.rozszerzenie == ".txt"
+                                  ? Image.asset("assets/txt_icon.png", width: 45, height: 45)
+                                  : file.rozszerzenie == ".png"
+                                      ? Image.asset("assets/png_icon.png", width: 45, height: 45)
+                                      : file.rozszerzenie == ".jpg" ||
+                                              file.rozszerzenie == ".jpeg"
+                                          ? CachedNetworkImage(
+                                              imageUrl:
+                                                  "$SERVER_IP/api/fileUpload/GetFile/${file.idPliku}",
+                                              placeholder: (context, url) =>
+                                                  CircularProgressIndicator(),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Image.asset("assets/jpg_icon.png"),
+                                                      width: 45,
+                                                      height: 45,
+                                                      fit: BoxFit.cover,
+                                            )
+                                          : file.rozszerzenie == ".zip" ||
+                                                  file.rozszerzenie == ".7z"
+                                              ? Image.asset("assets/zip_icon.png", width: 45, height: 45)
+                                              : Image.asset(
+                                                  "assets/default_icon.png", width: 45, height: 45)),
+                          title: Text(
+                            file.nazwaPlikuUzytkownika,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(
+                            file.wielkosc.toDouble() > 1000000
+                                ? "${ByteConverter(file.wielkosc.roundToDouble()).megaBytes.toStringAsFixed(2)} MB"
+                                : "${ByteConverter(file.wielkosc.roundToDouble()).kiloBytes.toStringAsFixed(2)} KB",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          trailing: IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.more_vert_outlined),
+                            tooltip: "Opcje",
+                          ),
                         ),
                       ),
                     ),

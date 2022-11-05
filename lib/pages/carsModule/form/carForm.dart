@@ -216,6 +216,12 @@ class _CarFormState extends State<CarForm> {
                               ),
                             ),
                             DropdownButtonFormField(
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Wybierz markę pojazdu!';
+                                  }
+                                  return null;
+                                },
                                 value: brandItem,
                                 isExpanded: true,
                                 onChanged: (value) {
@@ -267,6 +273,12 @@ class _CarFormState extends State<CarForm> {
                               ),
                             ),
                             DropdownButtonFormField(
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Wybierz model pojazdu!';
+                                  }
+                                  return null;
+                                },
                                 value: modelItem,
                                 isExpanded: true,
                                 onChanged: (value) {
@@ -439,7 +451,7 @@ class _CarFormState extends State<CarForm> {
                                     return 'To pole nie może być puste';
                                   }
                                   if (value.length != 17) {
-                                    return 'Numer VIN musi składać się z 17 znaków ';
+                                    return 'Numer VIN musi składać się z 17 znaków! ';
                                   }
                                   return null;
                                 }),

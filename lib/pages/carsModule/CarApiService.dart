@@ -156,6 +156,7 @@ class CarApiService {
             "${SERVER_IP}/api/fileUpload/UploadFile?rootFolder=pliki&nazwaFolderu=$id&czyNaglowkowy=false");
         print(url);
         var request = http.MultipartRequest('POST', url);
+        request.headers['Authorization'] = 'Bearer $token';
         request.files.add(await http.MultipartFile.fromPath('file', file.path));
         response = await request.send();
       } catch (e) {
@@ -199,4 +200,19 @@ class CarApiService {
       log(e.toString());
     }
   }
+  Future deleteCar(token, id) async {
+    try {
+      var url = Uri.parse("$SERVER_IP/api/car/DeleteCar/$id");
+      var response = await http.delete(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer $token",
+      });
+      return response;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
 }
+
+

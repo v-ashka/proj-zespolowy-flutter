@@ -968,7 +968,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 InsuranceEditForm(
-                                                    insurance: insuranceOC,
+                                                    insurance: insuranceAC,
                                                     carId: idSamochodu),
                                           ));
                                     },
@@ -1028,9 +1028,6 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                   ),
                   SizedBox(
                     height: 15,
-                  ),
-                  SizedBox(
-                    height: 50,
                   ),
                 ]
               ],
@@ -1123,6 +1120,9 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                     ),
                   ),
                 ),
+              SizedBox(
+                height: 100,
+              ),
             ])),
       ),
       floatingActionButton: FloatingActionButton.extended(

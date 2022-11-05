@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'Car.dart';
 import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/models/file/file_list.dart';
-import 'package:projzespoloey/models/insurance/insurace_model.dart';
+import 'package:projzespoloey/models/file_model.dart';
+import 'package:projzespoloey/models/insurace_model.dart';
 
 class CarApiService {
   final today = DateTime.now();

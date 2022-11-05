@@ -2,28 +2,31 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/models/inspection_model.dart';
 
 class InspectionApiService {
-
-  Future getService(token, id) async {
+  
+  Future<InspectionModel?> getInspection(token, id) async {
+    InspectionModel inspection = InspectionModel();
     try {
-      var url = Uri.parse("$SERVER_IP/api/inspection/GetInspectionsList/$id");
+      var url = Uri.parse("$SERVER_IP/api/inspection/GetValidInspection/$id");
       var response = await http.get(url, headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': "Bearer $token",
       });
-
       if (response.statusCode == 200) {
-        print(response.body);
-        return jsonDecode(response.body);
+        Map<String, dynamic> data = jsonDecode(response.body);
+        inspection = InspectionModel.fromJson(data);
+        return inspection;
       }
+      return inspection;
     } catch (e) {
       log(e.toString());
       return null;
     }
   }
 
-  Future addService(token, data, carId) async {
+  Future addInspection(token, data, carId) async {
     try {
       var url = Uri.parse("$SERVER_IP/api/inspection/AddInspection/$carId");
       var response = await http.post(
@@ -40,7 +43,7 @@ class InspectionApiService {
     }
   }
 
-  Future deleteService(token, id) async {
+  Future deleteInspection(token, id) async {
     try {
       var url = Uri.parse("$SERVER_IP/api/inspection/DeleteInsepction/$id");
       var response = await http.delete(
@@ -57,7 +60,7 @@ class InspectionApiService {
     }
   }
 
-  Future updateService(token, data, id) async {
+  Future updateInspection(token, data, id) async {
     try {
       var url = Uri.parse("$SERVER_IP/api/inspection/UpdateInspection/$id");
       var response = await http.put(

@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
-import 'package:projzespoloey/models/insurance/insurace_model.dart';
+import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 
@@ -462,7 +462,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                 context,
                 MaterialPageRoute<void>(
                   builder: (BuildContext context) =>
-                      CarItem(carId: item["idSamochodu"]!),
+                      CarItem(carId: widget.carId),
                 ),
                 ModalRoute.withName('/dashboard'));
           }

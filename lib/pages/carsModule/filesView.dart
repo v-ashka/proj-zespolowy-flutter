@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
-import 'package:projzespoloey/models/file/file_list.dart';
+import 'package:projzespoloey/models/file_model.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:byte_converter/byte_converter.dart';
 import 'package:path_provider/path_provider.dart';

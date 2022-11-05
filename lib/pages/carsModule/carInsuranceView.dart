@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -5,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:projzespoloey/components/emptyBox.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/models/insurance/insurace_model.dart';
+import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
@@ -27,12 +29,13 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
   InsuranceModel insuranceOC = InsuranceModel();
   InsuranceModel insuranceAC = InsuranceModel();
   var idSamochodu;
+  final completer = Completer();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(milliseconds: 0), () {
+    Future.delayed(const Duration(milliseconds: 200), () {
       setState(() {
         item = item.isNotEmpty
             ? item
@@ -42,14 +45,14 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
         _getData(idSamochodu);
       });
     });
+ 
   }
 
-  void _getData(id) async {
+  Future _getData(id) async {
     tokenVal = await storage.read(key: "token");
     insuranceOC = (await getValidOC(tokenVal, id));
     insuranceAC = (await getValidAC(tokenVal, id));
-    Future.delayed(const Duration(milliseconds: 200))
-        .then((value) => setState(() {}));
+    setState(() {});
   }
 
   @override
@@ -106,7 +109,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                 height: 15,
               ),
               if (item["car"]["koniecOC"] == null &&
-                  item["car"]["koniecOC"] == null) ...[
+                  item["car"]["koniecAC"] == null) ...[
                 EmptyBoxInfo(
                     title: "Dodaj ubezpieczenie w kilku krokach",
                     description:
@@ -119,6 +122,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                       }
                     })
               ] else ...[
+                if(item["car"]["koniecOC"] != null)
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
@@ -907,7 +911,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                         var deleteRes =
                                                             await deleteInsurance(
                                                                 tokenVal,
-                                                                insuranceOC
+                                                                insuranceAC
                                                                     .idUbezpieczenia);
                                                         setState(() {
                                                           if (deleteRes)

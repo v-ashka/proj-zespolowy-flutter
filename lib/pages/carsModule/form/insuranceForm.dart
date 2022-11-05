@@ -14,7 +14,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
-import '../../../models/insurance/insurace_model.dart';
+import '../../../models/insurace_model.dart';
 
 class InsuranceForm extends StatefulWidget {
   const InsuranceForm({Key? key}) : super(key: key);

@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -7,29 +8,30 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/models/inspection_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
 
-class ServiceForm extends StatefulWidget {
-  const ServiceForm({Key? key}) : super(key: key);
+class InspectionForm extends StatefulWidget {
+  const InspectionForm({Key? key}) : super(key: key);
 
   @override
-  State<ServiceForm> createState() => _ServiceFormState();
+  State<InspectionForm> createState() => _InspectionFormState();
 }
 
-class _ServiceFormState extends State<ServiceForm> {
+class _InspectionFormState extends State<InspectionForm> {
   final storage = const FlutterSecureStorage();
   final _formKey = GlobalKey<FormState>();
   Map item = {};
-  var serviceStatus = [
-    {"title": "aktualny", "status": true},
-    {"title": "nieaktualny", "status": false}
+  var inspectionStatus = [
+    {"title": "Pozytywny", "status": true},
+    {"title": "Negatywny", "status": false}
   ];
 
-  ServiceFormModel service = ServiceFormModel();
+  InspectionModel inspection = InspectionModel();
   List<PlatformFile> files = [];
 
   Future<DateTime?> pickDate(context) {
@@ -62,7 +64,7 @@ class _ServiceFormState extends State<ServiceForm> {
           files.clear();
         }
         //files = result.paths.map((path) => File(path!)).toList();
-        files = result!.files;
+        files = result.files;
       });
     } else {
       // User canceled the picker
@@ -156,7 +158,7 @@ class _ServiceFormState extends State<ServiceForm> {
                             ),
                             TextFormField(
                                 onSaved: (String? value) {
-                                  service.nazwaStacjiDiagnostycznej = value;
+                                  inspection.nazwaStacjiDiagnostycznej = value;
                                 },
                                 cursorColor: Colors.black,
                                 style: TextStyle(color: Colors.black),
@@ -229,8 +231,12 @@ class _ServiceFormState extends State<ServiceForm> {
                                     children: [
                                       TextFormField(
                                           onSaved: (String? value) {
-                                            service.przebieg = value as int;
+                                            inspection.zarejestrowanyPrzebieg =
+                                                int.parse(value!);
                                           },
+                                          keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+    FilteringTextInputFormatter.digitsOnly],
                                           cursorColor: Colors.black,
                                           style: TextStyle(color: Colors.black),
                                           decoration: InputDecoration(
@@ -273,8 +279,7 @@ class _ServiceFormState extends State<ServiceForm> {
                                       children: [
                                         TextFormField(
                                             onSaved: (String? value) {
-                                              service.numerBadania =
-                                                  value as int;
+                                              inspection.numerBadania = value;
                                             },
                                             cursorColor: Colors.black,
                                             style:
@@ -316,7 +321,7 @@ class _ServiceFormState extends State<ServiceForm> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
                               child: Text(
-                                "Status przeglądu",
+                                "Wynik badania pojazdu",
                                 style: TextStyle(
                                   fontFamily: "Roboto",
                                   letterSpacing: 1,
@@ -326,21 +331,21 @@ class _ServiceFormState extends State<ServiceForm> {
                             DropdownButtonFormField(
                                 validator: (value) {
                                   if (value == null) {
-                                    return 'Proszę wybrać status przeglądu!';
+                                    return 'Proszę wybrać wynik badania!';
                                   }
                                   return null;
                                 },
-                                value: service.CzyPozytywny,
+                                value: inspection.czyPozytywny,
                                 isExpanded: true,
                                 onChanged: (value) {
                                   setState(() {
-                                    service.CzyPozytywny = value as bool;
+                                    inspection.czyPozytywny = value as bool;
                                   });
                                 },
-                                items: serviceStatus.map((service) {
+                                items: inspectionStatus.map((insStatus) {
                                   return DropdownMenuItem(
-                                      value: service['status'],
-                                      child: Text("${service["title"]}"));
+                                      value: insStatus['status'],
+                                      child: Text("${insStatus["title"]}"));
                                 }).toList(),
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(15),
@@ -351,7 +356,7 @@ class _ServiceFormState extends State<ServiceForm> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    hintText: "Wybierz status przeglądu",
+                                    hintText: "Wybierz wynik badania",
                                     fillColor: bg35Grey,
                                     filled: true,
                                     border: OutlineInputBorder(
@@ -419,7 +424,7 @@ class _ServiceFormState extends State<ServiceForm> {
                                                 DateTime? date =
                                                     await pickDate(context);
                                                 setState(() {
-                                                  service.DataPrzegladu =
+                                                  inspection.dataPrzegladu =
                                                       DateFormat('dd-MM-yyyy')
                                                           .format(date!);
                                                 });
@@ -440,9 +445,9 @@ class _ServiceFormState extends State<ServiceForm> {
                                                       color: Colors.black,
                                                     ),
                                                   ),
-                                                  hintText:
-                                                      service.DataPrzegladu ??
-                                                          "Data zatwierdzenia",
+                                                  hintText: inspection
+                                                          .dataPrzegladu ??
+                                                      "Data zatwierdzenia",
                                                   fillColor: bg35Grey,
                                                   filled: true,
                                                   border: OutlineInputBorder(
@@ -452,7 +457,7 @@ class _ServiceFormState extends State<ServiceForm> {
                                                     borderSide: BorderSide.none,
                                                   )),
                                               validator: (date) {
-                                                if (service.DataPrzegladu ==
+                                                if (inspection.dataPrzegladu ==
                                                     null) {
                                                   return 'To pole nie może być puste';
                                                 }
@@ -467,7 +472,8 @@ class _ServiceFormState extends State<ServiceForm> {
                                                 DateTime? date =
                                                     await pickDate(context);
                                                 setState(() {
-                                                  service.DataNastepnegoPrzegladu =
+                                                  inspection
+                                                          .koniecWaznosciPrzegladu =
                                                       DateFormat('dd-MM-yyyy')
                                                           .format(date!);
                                                 });
@@ -488,9 +494,9 @@ class _ServiceFormState extends State<ServiceForm> {
                                                       color: Colors.black,
                                                     ),
                                                   ),
-                                                  hintText: service
-                                                          .DataNastepnegoPrzegladu ??
-                                                      "Data kolejnej wizyty",
+                                                  hintText: inspection
+                                                          .koniecWaznosciPrzegladu ??
+                                                      "Data kolejnego badania",
                                                   fillColor: bg35Grey,
                                                   filled: true,
                                                   border: OutlineInputBorder(
@@ -500,8 +506,8 @@ class _ServiceFormState extends State<ServiceForm> {
                                                     borderSide: BorderSide.none,
                                                   )),
                                               validator: (date) {
-                                                if (service
-                                                        .DataNastepnegoPrzegladu ==
+                                                if (inspection
+                                                        .koniecWaznosciPrzegladu ==
                                                     null) {
                                                   return 'To pole nie może być puste';
                                                 }
@@ -537,7 +543,7 @@ class _ServiceFormState extends State<ServiceForm> {
                               child: TextFormField(
                                 maxLines: 4,
                                 onSaved: (String? value) {
-                                  service.Uwagi = value;
+                                  inspection.uwagi = value;
                                 },
                                 cursorColor: Colors.black,
                                 style: TextStyle(color: Colors.black),
@@ -659,14 +665,15 @@ class _ServiceFormState extends State<ServiceForm> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          print(service.toJson());
+          print(inspection.toJson());
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
             var insuranceId = await InspectionApiService()
-                .addService(tokenVal, service, item["idSamochodu"]);
-            var uploadImg =
-                await CarApiService().uploadFiles(tokenVal, files, insuranceId);
+                .addInspection(tokenVal, inspection, item["idSamochodu"]);
+            if (files.isNotEmpty) {
+              await CarApiService().uploadFiles(tokenVal, files, insuranceId);
+            }
             setState(() {
               Navigator.pushAndRemoveUntil(
                   context,

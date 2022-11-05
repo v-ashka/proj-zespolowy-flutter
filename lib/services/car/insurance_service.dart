@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/models/insurance/insurace_model.dart';
+import 'package:projzespoloey/models/insurace_model.dart';
 
 
 Future<List?> getInsurance(token, id) async {

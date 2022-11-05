@@ -4,10 +4,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:projzespoloey/components/emptyBox.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/models/inspection_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
-import 'package:projzespoloey/pages/carsModule/form/serviceForm.dart';
+import 'package:projzespoloey/pages/carsModule/form/inspection_form.dart';
+import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
 
 class CarServiceView extends StatefulWidget {
@@ -19,25 +21,39 @@ class CarServiceView extends StatefulWidget {
 
 class _CarServiceViewState extends State<CarServiceView> {
   Map item = {};
-  var serviceData;
+  InspectionModel? inspectionData = InspectionModel();
+  String? token;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+     Future.delayed(Duration.zero, () {
+      setState(() {
+        item = item.isNotEmpty
+            ? item
+            : ModalRoute.of(context)?.settings.arguments as Map;
+      });
+      _getData(item["car"]["idSamochodu"]);
+    });
+  }
+
+   _getData(id) async {
+    token = await storage.read(key: "token");
+    inspectionData = (await InspectionApiService().getInspection(token, id));
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    item = item.isNotEmpty
-        ? item
-        : ModalRoute.of(context)?.settings.arguments as Map;
-    if (item["data"].length > 0) serviceData = Service.getData(item["data"]);
+    if(inspectionData == null)
+    {
+      return const LoadingScreen();
+    }
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
 
     print("test: ${item}");
     print("service data is: ");
-    print(serviceData);
+    print(inspectionData!.toJson());
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -85,7 +101,7 @@ class _CarServiceViewState extends State<CarServiceView> {
               SizedBox(
                 height: 15,
               ),
-              if (serviceData == null) ...[
+              if (item["car"]["koniecPrzegladu"] == null) ...[
                 EmptyBoxInfo(
                     title: "Dodaj przegląd w kilku krokach",
                     description:
@@ -167,7 +183,83 @@ class _CarServiceViewState extends State<CarServiceView> {
                                           MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Stan przeglądu:  ",
+                                          "Stacja diagnostyczna:  ",
+                                          style: TextStyle(
+                                            fontFamily: "Lato",
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          fit: FlexFit.loose,
+                                          child: Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                10, 5, 10, 5),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                color: secondaryColor),
+                                            child: Text(
+                                                "${inspectionData?.nazwaStacjiDiagnostycznej}",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                )),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 2),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Numer badania:  ",
+                                          style: TextStyle(
+                                            fontFamily: "Lato",
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          fit: FlexFit.loose,
+                                          child: Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                10, 5, 10, 5),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                color: secondaryColor),
+                                            child: Text(
+                                                "${inspectionData?.numerBadania}",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                )),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 2),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Wynik badania pojazdu:  ",
                                           style: TextStyle(
                                             fontFamily: "Lato",
                                             fontWeight: FontWeight.w900,
@@ -183,14 +275,14 @@ class _CarServiceViewState extends State<CarServiceView> {
                                                 borderRadius:
                                                     BorderRadius.circular(25),
                                                 color:
-                                                    serviceData.czyPozytywny ==
+                                                    inspectionData?.czyPozytywny ==
                                                             true
                                                         ? (secondaryColor)
                                                         : (errorColor)),
                                             child: Text(
-                                              serviceData.czyPozytywny == true
-                                                  ? ("aktualny")
-                                                  : ("nieaktualny"),
+                                              inspectionData?.czyPozytywny == true
+                                                  ? ("Pozytywny")
+                                                  : ("Negatywny"),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontSize: 14,
@@ -229,7 +321,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
                                             child: Text(
-                                                "${serviceData.dataPrzegladu} / ${serviceData.koniecWaznosciPrzegladu}",
+                                                "${inspectionData?.dataPrzegladu} / ${inspectionData?.koniecWaznosciPrzegladu}",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontSize: 14,
@@ -267,7 +359,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                                                 borderRadius:
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
-                                            child: Text(serviceData.uwagi,
+                                            child: Text(inspectionData?.uwagi ?? "Brak dodatkowych informacji",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -384,17 +476,17 @@ class _CarServiceViewState extends State<CarServiceView> {
                                                   print(
                                                       "token is ${storage.read(key: "token")}");
                                                   print(
-                                                      "service id is: $serviceData.idPrzegladu");
+                                                      "service id is: $inspectionData.idPrzegladu");
                                                   String? tokenVal =
                                                       await storage.read(
                                                           key: "token");
 
                                                   final deleteRequest =
                                                       await InspectionApiService()
-                                                          .deleteService(
+                                                          .deleteInspection(
                                                               tokenVal,
-                                                              serviceData
-                                                                  .idPrzegladu);
+                                                              inspectionData
+                                                                  ?.idPrzegladu);
                                                   setState(() {
                                                     if (deleteRequest)
                                                       Navigator
@@ -454,7 +546,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                                 //       builder: (BuildContext context) =>
                                 //           ServiceForm(
                                 //               editRecord: true,
-                                //               service: serviceData,
+                                //               service: inspectionData,
                                 //               carId: item["car"]
                                 //                   ["idSamochodu"]!),
                                 //     ),

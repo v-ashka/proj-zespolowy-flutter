@@ -129,46 +129,6 @@ class Insurance {
       };
 }
 
-class Service {
-  Service({
-    required this.idPrzegladu,
-    required this.czyPozytywny,
-    required this.uwagi,
-    required this.dataPrzegladu,
-    required this.koniecWaznosciPrzegladu,
-  });
-
-  String idPrzegladu;
-  bool czyPozytywny;
-  String uwagi;
-  String dataPrzegladu;
-  String koniecWaznosciPrzegladu;
-
-  factory Service.fromJson(Map<String, dynamic> json) => Service(
-        idPrzegladu: json["idPrzegladu"],
-        czyPozytywny: json["czyPozytywny"],
-        uwagi: json["uwagi"],
-        dataPrzegladu: json["dataPrzegladu"],
-        koniecWaznosciPrzegladu: json["koniecWaznosciPrzegladu"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "czyPozytywny": czyPozytywny,
-        "uwagi": uwagi,
-        "dataPrzegladu": dataPrzegladu,
-        "koniecWaznosciPrzegladu": koniecWaznosciPrzegladu,
-      };
-
-  factory Service.getData(data) {
-    return Service(
-        idPrzegladu: data.first["idPrzegladu"],
-        czyPozytywny: data.first["czyPozytywny"],
-        uwagi: data.first["uwagi"],
-        dataPrzegladu: data.first["dataPrzegladu"],
-        koniecWaznosciPrzegladu: data.first["koniecWaznosciPrzegladu"]);
-  }
-}
-
 class CarModelForm {
   CarModelForm({
     this.PojemnoscSilnika,
@@ -193,41 +153,4 @@ class CarModelForm {
         "numerRejestracyjny": NumerRejestracyjny,
         "idModelu": IdModelu,
       };
-}
-
-class ServiceFormModel {
-  int? przebieg;
-  int? numerBadania;
-  String? nazwaStacjiDiagnostycznej;
-  String? DataPrzegladu;
-  String? DataNastepnegoPrzegladu;
-  String? Uwagi;
-  bool? CzyPozytywny;
-
-  ServiceFormModel(
-      {this.przebieg,
-      this.numerBadania,
-      this.nazwaStacjiDiagnostycznej,
-      this.DataPrzegladu,
-      this.DataNastepnegoPrzegladu,
-      this.Uwagi,
-      this.CzyPozytywny});
-
-  Map<String, dynamic> toJson() => {
-        "przebieg": przebieg,
-        "numerBadania": numerBadania,
-        "nazwaStacjiDiagnostycznej": nazwaStacjiDiagnostycznej,
-        "czyPozytywny": CzyPozytywny,
-        "uwagi": Uwagi,
-        "dataPrzegladu": DataPrzegladu,
-        "dataNastepnegoPrzegladu": DataNastepnegoPrzegladu,
-      };
-
-  factory ServiceFormModel.fromJson(Map<String, dynamic> json) =>
-      ServiceFormModel(
-        CzyPozytywny: json["czyPozytywny"],
-        Uwagi: json["uwagi"],
-        DataPrzegladu: json["dataPrzegladu"],
-        DataNastepnegoPrzegladu: json["dataNastepnegoPrzegladu"],
-      );
 }

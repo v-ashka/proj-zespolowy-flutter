@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/models/insurance/insurace_model.dart';
+import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/_Dashboard.dart';
 import 'package:projzespoloey/pages/_userAuth.dart';
 import 'package:projzespoloey/pages/_userAuthRegister.dart';
@@ -14,7 +14,7 @@ import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/pages/carsModule/carRepairHistory.dart';
 import 'package:projzespoloey/pages/carsModule/carServiceHistory.dart';
-import 'package:projzespoloey/pages/carsModule/carServiceView.dart';
+import 'package:projzespoloey/pages/carsModule/inspection_view.dart';
 import 'package:projzespoloey/pages/carsModule/form/carForm.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceForm.dart';
@@ -31,7 +31,7 @@ import 'package:projzespoloey/pages/loading.dart';
 import 'package:projzespoloey/pages/form.dart';
 
 import 'pages/carsModule/filesView.dart';
-import 'pages/carsModule/form/serviceForm.dart';
+import 'pages/carsModule/form/inspection_form.dart';
 import 'services/UserModel/UserApiService.dart';
 
 // import 'package:projzespoloey/pages/_carList.dart';
@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
         // Car form Route
         '/carForm': (context) => CarForm(),
         '/formCarInsurance': (context) => InsuranceForm(),
-        '/formCarService': (context) => ServiceForm(),
+        '/formCarService': (context) => InspectionForm(),
         // Documents Routes
         '/documentList': (context) => DocumentsList(),
         '/documentItem': (context) => DocumentItem(),

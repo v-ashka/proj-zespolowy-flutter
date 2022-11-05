@@ -8,7 +8,8 @@ import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:animations/animations.dart';
 import 'package:projzespoloey/main.dart';
-import 'package:projzespoloey/models/insurance/insurace_model.dart';
+import 'package:projzespoloey/models/inspection_model.dart';
+import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
@@ -28,7 +29,7 @@ class _CarItemState extends State<CarItem> {
   late Map<String, dynamic>? carData = {};
 
   late InsuranceModel insuranceData = InsuranceModel();
-  late List? serviceData = [];
+  late InspectionModel? inspectionData = InspectionModel();
   final storage = new FlutterSecureStorage();
   String carId = "";
 
@@ -43,7 +44,7 @@ class _CarItemState extends State<CarItem> {
 
     carData = (await CarApiService().getCar(tokenVal, id));
     insuranceData = (await getValidOC(tokenVal, id));
-    serviceData = (await InspectionApiService().getService(tokenVal, id));
+    inspectionData = (await InspectionApiService().getInspection(tokenVal, id));
     setState(() {});
   }
 
@@ -271,7 +272,6 @@ class _CarItemState extends State<CarItem> {
                         // print("przeglad");
                         Navigator.pushNamed(context, "/carService", arguments: {
                           "car": carData,
-                          "data": serviceData,
                           "id": widget.carId,
                         });
                       },
@@ -295,7 +295,7 @@ class _CarItemState extends State<CarItem> {
                                   SizedBox(
                                     height: 2,
                                   ),
-                                  if (serviceData!.isNotEmpty) ...[
+                                  if (carData?["koniecPrzegladu"] != null) ...[
                                     Text(
                                       "OKRES WAŻNOŚCI PRZEGLĄDU",
                                       style: TextStyle(
@@ -389,7 +389,7 @@ class _CarItemState extends State<CarItem> {
                             arguments: {
                               "id": widget.carId,
                               "car": carData,
-                              "data": serviceData
+                              "data": inspectionData
                             });
                       },
                       child: Container(

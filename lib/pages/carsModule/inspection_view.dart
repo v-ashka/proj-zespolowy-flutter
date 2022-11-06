@@ -8,6 +8,7 @@ import 'package:projzespoloey/models/inspection_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
+import 'package:projzespoloey/pages/carsModule/filesView.dart';
 import 'package:projzespoloey/pages/carsModule/form/inspection_form.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
@@ -566,6 +567,39 @@ class _CarServiceViewState extends State<CarServiceView> {
                                 ),
                               ),
                             ),
+                            ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      backgroundColor: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                      foregroundColor: mainColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      )),
+                                  onPressed: () {
+                                    print("file list");
+                                   Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          FilesView(objectId: inspectionData!.idPrzegladu!),
+                                    ));
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: secondColor,
+                                    ),
+                                    child: Icon(
+                                      Icons.file_open_outlined,
+                                      size: 30,
+                                      color: bgSmokedWhite,
+                                    ),
+                                  ),
+                                ),
                           ],
                         ),
                       ),

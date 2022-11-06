@@ -561,9 +561,6 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
                       ],
                     ),
                   );
-                  const SizedBox(
-                    height: 15,
-                  );
                 })),
       ),
     );

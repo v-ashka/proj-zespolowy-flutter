@@ -42,8 +42,9 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
             : ModalRoute.of(context)?.settings.arguments as Map;
         print(item.toString());
         idSamochodu = item["car"]["idSamochodu"];
-        _getData(idSamochodu);
+        
       });
+      _getData(idSamochodu);
     });
  
   }

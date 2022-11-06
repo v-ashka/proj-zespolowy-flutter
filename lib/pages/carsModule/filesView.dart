@@ -18,7 +18,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class FilesView extends StatefulWidget {
-  const FilesView({Key? key}) : super(key: key);
+  final String objectId;
+  const FilesView({Key? key, required this.objectId}) : super(key: key);
 
   @override
   State<FilesView> createState() => FilesViewState();
@@ -27,10 +28,11 @@ class FilesView extends StatefulWidget {
 class FilesViewState extends State<FilesView> {
   List<PlatformFile> files = [];
   late List<FileList>? _files = [];
+  String? token;
   Map item = {};
   ReceivePort _port = ReceivePort();
-  var insuranceId;
   bool isLoading = false;
+  String? objectId;
 
   Future pickFiles() async {
     files.clear();
@@ -38,7 +40,7 @@ class FilesViewState extends State<FilesView> {
         await FilePicker.platform.pickFiles(allowMultiple: true);
     if (result != null) {
       setState(() {
-        files = result!.files;
+        files = result.files;
       });
     } else {
       return null;
@@ -47,17 +49,8 @@ class FilesViewState extends State<FilesView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        item = item.isNotEmpty
-            ? item
-            : ModalRoute.of(context)?.settings.arguments as Map;
-        insuranceId = item["data"].idUbezpieczenia;
-      });
-      _getData(insuranceId);
-    });
+    _getData(widget.objectId);
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
@@ -70,12 +63,9 @@ class FilesViewState extends State<FilesView> {
   }
 
   void _getData(id) async {
-    String? tokenVal = await storage.read(key: "token");
-    _files = (await CarApiService().GetFileList(tokenVal, id));
-    Future.delayed(Duration(seconds: 0)).then((value) => setState(() {
-          print("files view");
-          print(_files);
-        }));
+    token = await storage.read(key: "token");
+    _files = (await CarApiService().GetFileList(token, id));
+    setState(() {});
   }
 
   @override
@@ -177,11 +167,9 @@ class FilesViewState extends State<FilesView> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               actionsPadding: EdgeInsets.all(0),
-                              actionsAlignment:
-                              MainAxisAlignment.center,
+                              actionsAlignment: MainAxisAlignment.center,
                               shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(25),
+                                borderRadius: BorderRadius.circular(25),
                               ),
                               title: Text(
                                   "Czy na pewno chcesz usunąć ten element?"),
@@ -189,47 +177,33 @@ class FilesViewState extends State<FilesView> {
                                   "Po usunięciu nie możesz cofnąć tej akcji."),
                               actions: [
                                 ElevatedButton(
-                                    style: ElevatedButton
-                                        .styleFrom(
+                                    style: ElevatedButton.styleFrom(
                                         primary: mainColor,
-                                        onPrimary:
-                                        mainColor,
-                                        shape:
-                                        RoundedRectangleBorder(
+                                        onPrimary: mainColor,
+                                        shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius
-                                              .circular(
-                                              25),
+                                              BorderRadius.circular(25),
                                         )),
                                     onPressed: () {
                                       print("no");
-                                      Navigator.of(context)
-                                          .pop();
+                                      Navigator.of(context).pop();
                                     },
                                     child: Text(
                                       "Anuluj",
-                                      style: TextStyle(
-                                          color: Colors.white),
+                                      style: TextStyle(color: Colors.white),
                                     )),
                                 ElevatedButton(
-                                    style: ElevatedButton
-                                        .styleFrom(
+                                    style: ElevatedButton.styleFrom(
                                         primary: deleteBtn,
-                                        onPrimary:
-                                        deleteBtn,
-                                        shape:
-                                        RoundedRectangleBorder(
+                                        onPrimary: deleteBtn,
+                                        shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius
-                                              .circular(
-                                              25),
+                                              BorderRadius.circular(25),
                                         )),
-                                    onPressed: () async {
-                                    },
+                                    onPressed: () async {},
                                     child: Text(
                                       "Usuń",
-                                      style: TextStyle(
-                                          color: Colors.white),
+                                      style: TextStyle(color: Colors.white),
                                     )),
                               ],
                             );
@@ -245,11 +219,14 @@ class FilesViewState extends State<FilesView> {
                         shadowColor: Colors.white,
                         child: ListTile(
                           leading: (file.rozszerzenie == ".pdf"
-                              ? Image.asset("assets/pdf_icon.png", width: 45, height: 45)
+                              ? Image.asset("assets/pdf_icon.png",
+                                  width: 45, height: 45)
                               : file.rozszerzenie == ".txt"
-                                  ? Image.asset("assets/txt_icon.png", width: 45, height: 45)
+                                  ? Image.asset("assets/txt_icon.png",
+                                      width: 45, height: 45)
                                   : file.rozszerzenie == ".png"
-                                      ? Image.asset("assets/png_icon.png", width: 45, height: 45)
+                                      ? Image.asset("assets/png_icon.png",
+                                          width: 45, height: 45)
                                       : file.rozszerzenie == ".jpg" ||
                                               file.rozszerzenie == ".jpeg"
                                           ? CachedNetworkImage(
@@ -257,18 +234,24 @@ class FilesViewState extends State<FilesView> {
                                                   "$SERVER_IP/api/fileUpload/GetFile/${file.idPliku}",
                                               placeholder: (context, url) =>
                                                   CircularProgressIndicator(),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Image.asset("assets/jpg_icon.png"),
-                                                      width: 45,
-                                                      height: 45,
-                                                      fit: BoxFit.cover,
+                                              errorWidget: (context, url,
+                                                      error) =>
+                                                  Image.asset(
+                                                      "assets/jpg_icon.png"),
+                                              width: 45,
+                                              height: 45,
+                                              fit: BoxFit.cover,
                                             )
                                           : file.rozszerzenie == ".zip" ||
                                                   file.rozszerzenie == ".7z"
-                                              ? Image.asset("assets/zip_icon.png", width: 45, height: 45)
+                                              ? Image.asset(
+                                                  "assets/zip_icon.png",
+                                                  width: 45,
+                                                  height: 45)
                                               : Image.asset(
-                                                  "assets/default_icon.png", width: 45, height: 45)),
+                                                  "assets/default_icon.png",
+                                                  width: 45,
+                                                  height: 45)),
                           title: Text(
                             file.nazwaPlikuUzytkownika,
                             maxLines: 1,
@@ -326,10 +309,14 @@ class FilesViewState extends State<FilesView> {
               print("TEST PICKOWANIA PLIKU");
               String? tokenVal = await storage.read(key: "token");
               var response = await CarApiService()
-                  .uploadFiles(tokenVal, files, insuranceId);
+                  .uploadFiles(tokenVal, files, widget.objectId);
               if (response.statusCode == 200) {
-                Navigator.popAndPushNamed(context, "/fileList", arguments: {
-                  "data": item["data"],
+                // Navigator.popAndPushNamed(context, "/fileList", arguments: {
+                //   "data": item["data"],
+                // });
+                setState(() {
+                  _getData(widget.objectId);
+                  isLoading = false;
                 });
               }
             }

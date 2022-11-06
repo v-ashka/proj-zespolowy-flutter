@@ -55,7 +55,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   InsuranceModel model = InsuranceModel();
-  String carId = "";
+  String objectId = "";
   MyApp({Key? key}) : super(key: key);
 
   @override
@@ -71,13 +71,13 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) => DashboardPanel(),
         '/form': (context) => DataForm(),
         //File list
-        '/fileList': (context) => FilesView(),
+        '/fileList': (context) => FilesView(objectId: objectId),
         // Car Routes
         '/carList': (context) => CarList(),
-        '/carItem': (context) => CarItem(carId: carId),
+        '/carItem': (context) => CarItem(carId: objectId),
         '/carInsurance': (context) => CarInsuranceView(),
         '/carInsuranceEditForm': (context) =>
-            InsuranceEditForm(insurance: model, carId: carId),
+            InsuranceEditForm(insurance: model, carId: objectId),
         '/carInsuranceHistory': (context) => CarInsuranceHistoryView(),
         '/carService': (context) => CarServiceView(),
         '/carServiceHistory': (context) => CarServiceHistory(),

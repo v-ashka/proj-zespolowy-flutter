@@ -17,6 +17,7 @@ import 'package:projzespoloey/pages/form.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
 import 'package:projzespoloey/services/car/insurance_service.dart';
 
+
 class CarItem extends StatefulWidget {
   String carId;
   CarItem({Key? key, required this.carId}) : super(key: key);

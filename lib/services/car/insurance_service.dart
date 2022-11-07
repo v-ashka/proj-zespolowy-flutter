@@ -83,7 +83,6 @@ Future<InsuranceModel> getValidAC(token, id) async {
     } catch (e) {
       log(e.toString());
     }
-    
   }
 
   Future deleteInsurance(token, id) async {

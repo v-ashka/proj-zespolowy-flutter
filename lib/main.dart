@@ -13,7 +13,7 @@ import 'package:projzespoloey/pages/carsModule/carInsuranceView.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/pages/carsModule/carRepairHistory.dart';
-import 'package:projzespoloey/pages/carsModule/carServiceHistory.dart';
+import 'package:projzespoloey/pages/carsModule/inspection_history_view.dart';
 import 'package:projzespoloey/pages/carsModule/inspection_view.dart';
 import 'package:projzespoloey/pages/carsModule/form/carForm.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
@@ -56,6 +56,7 @@ void main() {
 class MyApp extends StatelessWidget {
   InsuranceModel model = InsuranceModel();
   String objectId = "";
+  String carModel = "";
   MyApp({Key? key}) : super(key: key);
 
   @override
@@ -80,7 +81,7 @@ class MyApp extends StatelessWidget {
             InsuranceEditForm(insurance: model, carId: objectId),
         '/carInsuranceHistory': (context) => CarInsuranceHistoryView(),
         '/carService': (context) => CarServiceView(),
-        '/carServiceHistory': (context) => CarServiceHistory(),
+        '/carServiceHistory': (context) => InspectionHistory(carId: objectId, carModel: carModel),
         '/carRepairHistory': (context) => CarRepairHistoryView(),
         // Car form Route
         '/carForm': (context) => CarForm(),

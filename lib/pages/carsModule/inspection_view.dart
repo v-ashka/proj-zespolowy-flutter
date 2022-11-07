@@ -10,6 +10,7 @@ import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/filesView.dart';
 import 'package:projzespoloey/pages/carsModule/form/inspection_form.dart';
+import 'package:projzespoloey/pages/carsModule/inspection_history_view.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
 
@@ -377,8 +378,8 @@ class _CarServiceViewState extends State<CarServiceView> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: Text(
                           "OKRES WAŻNOŚCI PRZEGLĄDU",
                           style: TextStyle(
@@ -392,7 +393,6 @@ class _CarServiceViewState extends State<CarServiceView> {
                         padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
                               width: 80,
@@ -401,173 +401,176 @@ class _CarServiceViewState extends State<CarServiceView> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
                                     color: secondaryColor),
-                                child: Text(
-                                    "${item["car"]["koniecPrzegladu"].toString()} dni",
+                                child: Text("${item["car"]["koniecPrzegladu"]} dni",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                         color: fontBlack)),
                               ),
                             ),
-                            SizedBox(
-                              width: 100,
+                            const SizedBox(
+                              width: 20,
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(5),
-                                  primary: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  onPrimary: deleteBtn,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100),
-                                  )),
-                              onPressed: () {
-                                print("delete object");
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Container(
-                                        padding: EdgeInsets.all(5),
-                                        child: AlertDialog(
-                                          actionsPadding: EdgeInsets.all(0),
-                                          actionsAlignment:
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      primary: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                      onPrimary: deleteBtn,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(100),
+                                      )),
+                                  onPressed: () {
+                                    print("delete object");
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            padding: EdgeInsets.all(5),
+                                            child: AlertDialog(
+                                              actionsPadding:
+                                              EdgeInsets.all(0),
+                                              actionsAlignment:
                                               MainAxisAlignment.center,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
                                                 BorderRadius.circular(25),
-                                          ),
-                                          title: Text(
-                                              "Czy na pewno chcesz usunąć ten element?"),
-                                          content: Text(
-                                              "Po usunięciu nie możesz cofnąć tej akcji."),
-                                          actions: [
-                                            ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: mainColor,
-                                                    onPrimary: mainColor,
-                                                    shape:
+                                              ),
+                                              title: Text(
+                                                  "Czy na pewno chcesz usunąć ten element?"),
+                                              content: Text(
+                                                  "Po usunięciu nie możesz cofnąć tej akcji."),
+                                              actions: [
+                                                ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                        primary:
+                                                        mainColor,
+                                                        onPrimary:
+                                                        mainColor,
+                                                        shape:
                                                         RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
+                                                          borderRadius:
+                                                          BorderRadius
+                                                              .circular(
                                                               25),
+                                                        )),
+                                                    onPressed: () {
+                                                      print("no");
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text(
+                                                      "Anuluj",
+                                                      style: TextStyle(
+                                                          color:
+                                                          Colors.white),
                                                     )),
-                                                onPressed: () {
-                                                  print("no");
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text(
-                                                  "Anuluj",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                )),
-                                            ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: deleteBtn,
-                                                    onPrimary: deleteBtn,
-                                                    shape:
+                                                ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                        primary:
+                                                        deleteBtn,
+                                                        onPrimary:
+                                                        deleteBtn,
+                                                        shape:
                                                         RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
+                                                          borderRadius:
+                                                          BorderRadius
+                                                              .circular(
                                                               25),
-                                                    )),
-                                                onPressed: () async {
-                                                  print("yes");
-                                                  // insuranceData.IdUbezpieczenia
-                                                  print(
-                                                      "token is ${storage.read(key: "token")}");
-                                                  print(
-                                                      "service id is: $inspectionData.idPrzegladu");
-                                                  String? tokenVal =
-                                                      await storage.read(
-                                                          key: "token");
-
-                                                  final deleteRequest =
-                                                      await InspectionApiService()
-                                                          .deleteInspection(
-                                                              tokenVal,
-                                                              inspectionData
-                                                                  ?.idPrzegladu);
-                                                  setState(() {
-                                                    if (deleteRequest)
-                                                      Navigator
-                                                          .pushAndRemoveUntil(
+                                                        )),
+                                                    onPressed: () async {
+                                                     /* print("yes");
+                                                      // insuranceData.IdUbezpieczenia
+                                                      tokenVal = await storage
+                                                          .read(key: "token");
+                                                      var deleteRes =
+                                                      await deleteInsurance(
+                                                          tokenVal,
+                                                          insuranceOC
+                                                              .idUbezpieczenia);
+                                                      setState(() {
+                                                        if (deleteRes)
+                                                          Navigator
+                                                              .pushReplacement(
                                                               context,
                                                               MaterialPageRoute<
                                                                   void>(
                                                                 builder: (BuildContext
-                                                                        context) =>
+                                                                context) =>
                                                                     CarItem(
-                                                                        carId: item["car"]
-                                                                            [
-                                                                            "idSamochodu"]!),
-                                                              ),
-                                                              ModalRoute.withName(
-                                                                  "/dashboard"));
-                                                  });
-                                                },
-                                                child: Text(
-                                                  "Usuń",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                )),
-                                          ],
-                                        ),
-                                      );
-                                    });
-                              },
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: deleteBtn,
+                                                                        carId: idSamochodu),
+                                                              ));
+                                                      });*/
+                                                    },
+                                                    child: Text(
+                                                      "Usuń",
+                                                      style: TextStyle(
+                                                          color:
+                                                          Colors.white),
+                                                    )),
+                                              ],
+                                            ),
+                                          );
+                                        });
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25),
+                                      color: deleteBtn,
+                                    ),
+                                    child: Icon(
+                                      Icons.delete_outline_rounded,
+                                      size: 30,
+                                      color: bgSmokedWhite,
+                                    ),
+                                  ),
                                 ),
-                                child: Icon(
-                                  Icons.delete_outline_rounded,
-                                  size: 30,
-                                  color: bgSmokedWhite,
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.all(5),
+                                      primary: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                      onPrimary: mainColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(100),
+                                      )),
+                                  onPressed: () {
+                                 /*   print("edit object");
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              InsuranceEditForm(
+                                                  insurance: insuranceOC,
+                                                  carId: idSamochodu),
+                                        ));*/
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: mainColor,
+                                    ),
+                                    child: Icon(
+                                      Icons.edit_outlined,
+                                      size: 30,
+                                      color: bgSmokedWhite,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(5),
-                                  primary: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  onPrimary: mainColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100),
-                                  )),
-                              onPressed: () {
-                                print("edit object");
-                                // Navigator.pushAndRemoveUntil(
-                                //     context,
-                                //     MaterialPageRoute<void>(
-                                //       builder: (BuildContext context) =>
-                                //           ServiceForm(
-                                //               editRecord: true,
-                                //               service: inspectionData,
-                                //               carId: item["car"]
-                                //                   ["idSamochodu"]!),
-                                //     ),
-                                //     ModalRoute.withName("/dashboard"));
-                              },
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: mainColor,
-                                ),
-                                child: Icon(
-                                  Icons.edit_outlined,
-                                  size: 30,
-                                  color: bgSmokedWhite,
-                                ),
-                              ),
-                            ),
-                            ElevatedButton(
+                                ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       padding: EdgeInsets.all(5),
                                       backgroundColor: Colors.transparent,
@@ -575,16 +578,17 @@ class _CarServiceViewState extends State<CarServiceView> {
                                       foregroundColor: mainColor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(100),
+                                        BorderRadius.circular(100),
                                       )),
                                   onPressed: () {
                                     print("file list");
-                                   Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          FilesView(objectId: inspectionData!.idPrzegladu!),
-                                    ));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => FilesView(
+                                              objectId: inspectionData
+                                                  !.idPrzegladu!),
+                                        ));
                                   },
                                   child: Container(
                                     width: 50,
@@ -600,6 +604,8 @@ class _CarServiceViewState extends State<CarServiceView> {
                                     ),
                                   ),
                                 ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -618,9 +624,12 @@ class _CarServiceViewState extends State<CarServiceView> {
                         borderRadius: BorderRadius.circular(25),
                       )),
                   onPressed: () {
-                    print("historia ubezpieczenie");
-                    Navigator.pushNamed(context, "/carServiceHistory",
-                        arguments: {"data": item["data"]});
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                    builder: (context) =>
+                    InspectionHistory(carId: item["car"]["idSamochodu"], carModel: item["car"]["model"]),
+                    ));
                   },
                   child: Container(
                     child: Padding(

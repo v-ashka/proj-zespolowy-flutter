@@ -76,4 +76,25 @@ class InspectionApiService {
       log(e.toString());
     }
   }
+  Future getInspectionList(token, carId) async {
+    try {
+      List<InspectionModel> model;
+      var url = Uri.parse("$SERVER_IP/api/inspection/GetInspectionsList/$carId");
+      var response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer ${token}",
+        },
+      );
+      if (response.statusCode == 200) {
+        model = inspectionListFromJson(response.body);
+        return model;
+      }
+      return response;
+
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 }

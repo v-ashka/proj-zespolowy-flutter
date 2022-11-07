@@ -2,7 +2,6 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
-import 'package:projzespoloey/pages/carsModule/filesView.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/insurance_service.dart';
 
@@ -106,7 +105,8 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
                                     const EdgeInsets.fromLTRB(15, 15, 15, 15),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     ExpandablePanel(
                                       header: Row(
@@ -522,13 +522,11 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
                                                                           100),
                                                             )),
                                                     onPressed: () {
-                                                      print("file list");
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                FilesView(objectId: insurance.idUbezpieczenia!),
-                                                          ));
+                                                      Navigator.pushNamed(context, "/fileList",
+                                                          arguments: {
+                                                            "data": insurance,
+                                                            "form_type": "car_insurance"
+                                                          });
                                                     },
                                                     child: Container(
                                                       width: 50,
@@ -554,7 +552,7 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
                                         ),
                                       ]),
                                     ),
-                                  ], //TUTAJ SIE KONCZY
+                                  ],
                                 ),
                               ),
                             ),

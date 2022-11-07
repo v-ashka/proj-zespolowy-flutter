@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:http/http.dart';
 import 'package:projzespoloey/components/emptyBox.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
@@ -487,28 +488,15 @@ class _CarServiceViewState extends State<CarServiceView> {
                                                               25),
                                                         )),
                                                     onPressed: () async {
-                                                     /* print("yes");
-                                                      // insuranceData.IdUbezpieczenia
-                                                      tokenVal = await storage
-                                                          .read(key: "token");
-                                                      var deleteRes =
-                                                      await deleteInsurance(
-                                                          tokenVal,
-                                                          insuranceOC
-                                                              .idUbezpieczenia);
-                                                      setState(() {
-                                                        if (deleteRes)
-                                                          Navigator
-                                                              .pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute<
-                                                                  void>(
-                                                                builder: (BuildContext
-                                                                context) =>
-                                                                    CarItem(
-                                                                        carId: idSamochodu),
-                                                              ));
-                                                      });*/
+                                                      // Response response = await InspectionApiService().deleteInspection(
+                                                      //     token,
+                                                      //     inspectionData!
+                                                      //         .idPrzegladu);
+                                                      // if(response.statusCode == 200){
+                                                      //   setState(() {
+                                                      //     _getData(item["car"]["idSamochodu"]);
+                                                      //   });
+                                                      // }
                                                     },
                                                     child: Text(
                                                       "Usuń",
@@ -684,7 +672,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                                         width: 10,
                                       ),
                                       Text(
-                                        "10",
+                                        "${item["car"]["zarchiwizowanePrzeglady"]}",
                                         style: TextStyle(
                                           color: fontBlack,
                                         ),

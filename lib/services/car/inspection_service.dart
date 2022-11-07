@@ -53,10 +53,9 @@ class InspectionApiService {
           'Authorization': "Bearer $token",
         },
       );
-      if (response.statusCode == 200) return true;
+      return response;
     } catch (e) {
       log(e.toString());
-      return false;
     }
   }
 

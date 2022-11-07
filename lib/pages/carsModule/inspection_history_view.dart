@@ -1,5 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/inspection_model.dart';
 import 'package:projzespoloey/pages/carsModule/filesView.dart';
@@ -9,7 +10,9 @@ import 'package:projzespoloey/services/car/inspection_service.dart';
 class InspectionHistory extends StatefulWidget {
   final String carId;
   final String carModel;
-  const InspectionHistory({Key? key, required this.carId, required this.carModel}) : super(key: key);
+  const InspectionHistory(
+      {Key? key, required this.carId, required this.carModel})
+      : super(key: key);
 
   @override
   State<InspectionHistory> createState() => _InspectionHistoryState();
@@ -18,6 +21,7 @@ class InspectionHistory extends StatefulWidget {
 class _InspectionHistoryState extends State<InspectionHistory> {
   String? token;
   List<InspectionModel> inspectionList = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -27,13 +31,15 @@ class _InspectionHistoryState extends State<InspectionHistory> {
 
   void getData() async {
     token = await storage.read(key: "token");
-    inspectionList = await InspectionApiService().getInspectionList(token, widget.carId);
-    setState(() {});
+    inspectionList =
+        await InspectionApiService().getInspectionList(token, widget.carId);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -70,9 +76,9 @@ class _InspectionHistoryState extends State<InspectionHistory> {
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
             child: ListView.separated(
                 separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-                  color: Colors.transparent,
-                ),
+                    const Divider(
+                      color: Colors.transparent,
+                    ),
                 itemCount: inspectionList.length,
                 itemBuilder: (BuildContext context, int index) {
                   final inspection = inspectionList[index];
@@ -92,43 +98,66 @@ class _InspectionHistoryState extends State<InspectionHistory> {
                               flex: 5,
                               child: Padding(
                                 padding:
-                                const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                    const EdgeInsets.fromLTRB(15, 15, 15, 15),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceAround,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
+                                    ExpandablePanel(
+                                      header: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 0, 0, 10),
+                                                child: Text(
+                                                  "Przegląd techniczny",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 20),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      collapsed: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2),
+                                        child: Row(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.fromLTRB(
-                                                  0, 0, 0, 10),
-                                              child: Text(
-                                                "Okres ważności przeglądu",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 20),
+                                            const Text(
+                                              "Okres ważności:  ",
+                                              style: TextStyle(
+                                                fontFamily: "Lato",
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 12,
                                               ),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.fromLTRB(
-                                                  0, 0, 0, 10),
+                                            Flexible(
+                                              fit: FlexFit.loose,
                                               child: Container(
                                                 padding:
-                                                const EdgeInsets.fromLTRB(
-                                                    10, 5, 10, 5),
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 5, 10, 5),
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                    BorderRadius.circular(
-                                                        25),
+                                                        BorderRadius.circular(
+                                                            25),
                                                     color: secondaryColor),
                                                 child: Text(
                                                     "${inspection.dataPrzegladu} / ${inspection.koniecWaznosciPrzegladu}",
@@ -136,377 +165,424 @@ class _InspectionHistoryState extends State<InspectionHistory> {
                                                     style: const TextStyle(
                                                         fontSize: 14,
                                                         fontWeight:
-                                                        FontWeight.w600,
+                                                            FontWeight.w600,
                                                         color: fontBlack)),
                                               ),
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.symmetric(vertical: 2),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Stacja diagnostyczna:  ",
-                                            style: TextStyle(
-                                              fontFamily: "Lato",
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          Flexible(
-                                            fit: FlexFit.loose,
-                                            child: Container(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  10, 5, 10, 5),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(25),
-                                                  color: secondaryColor),
-                                              child: Text(
-                                                  "${inspection?.nazwaStacjiDiagnostycznej}",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                  )),
-                                            ),
-                                          ),
-                                        ],
                                       ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.symmetric(vertical: 2),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                      expanded: Column(
                                         children: [
-                                          Text(
-                                            "Numer badania:  ",
-                                            style: TextStyle(
-                                              fontFamily: "Lato",
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          Flexible(
-                                            fit: FlexFit.loose,
-                                            child: Container(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  10, 5, 10, 5),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(25),
-                                                  color: secondaryColor),
-                                              child: Text(
-                                                  "${inspection?.numerBadania}",
-                                                  textAlign: TextAlign.center,
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Stacja diagnostyczna:  ",
                                                   style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                  )),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.symmetric(vertical: 2),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Wynik badania pojazdu:  ",
-                                            style: TextStyle(
-                                              fontFamily: "Lato",
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          Flexible(
-                                            fit: FlexFit.loose,
-                                            child: Container(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  10, 5, 10, 5),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(25),
-                                                  color:
-                                                  inspection?.czyPozytywny ==
-                                                      true
-                                                      ? (secondaryColor)
-                                                      : (errorColor)),
-                                              child: Text(
-                                                inspection?.czyPozytywny == true
-                                                    ? ("Pozytywny")
-                                                    : ("Negatywny"),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
+                                                    fontFamily: "Lato",
+                                                    fontWeight: FontWeight.w900,
+                                                    fontSize: 12,
+                                                  ),
                                                 ),
+                                                Flexible(
+                                                  fit: FlexFit.loose,
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 5, 10, 5),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25),
+                                                        color: secondaryColor),
+                                                    child: Text(
+                                                        "${inspection.nazwaStacjiDiagnostycznej}",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        )),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Numer badania:  ",
+                                                  style: TextStyle(
+                                                    fontFamily: "Lato",
+                                                    fontWeight: FontWeight.w900,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                Flexible(
+                                                  fit: FlexFit.loose,
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 5, 10, 5),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25),
+                                                        color: secondaryColor),
+                                                    child: Text(
+                                                        "${inspection.numerBadania}",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        )),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Wynik badania pojazdu:  ",
+                                                  style: TextStyle(
+                                                    fontFamily: "Lato",
+                                                    fontWeight: FontWeight.w900,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                Flexible(
+                                                  fit: FlexFit.loose,
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 5, 10, 5),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25),
+                                                        color: inspection
+                                                                    .czyPozytywny ==
+                                                                true
+                                                            ? (secondaryColor)
+                                                            : (errorColor)),
+                                                    child: Text(
+                                                      inspection.czyPozytywny ==
+                                                              true
+                                                          ? ("Pozytywny")
+                                                          : ("Negatywny"),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Okres przeglądu:  ",
+                                                  style: TextStyle(
+                                                    fontFamily: "Lato",
+                                                    fontWeight: FontWeight.w900,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                Flexible(
+                                                  fit: FlexFit.loose,
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 5, 10, 5),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25),
+                                                        color: secondaryColor),
+                                                    child: Text(
+                                                        "${inspection.dataPrzegladu} / ${inspection.koniecWaznosciPrzegladu}",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        )),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2),
+                                            child: SizedBox(
+                                              width: double.infinity,
+                                              child: Wrap(
+                                                crossAxisAlignment:
+                                                    WrapCrossAlignment.center,
+                                                textDirection:
+                                                    TextDirection.ltr,
+                                                spacing: 5,
+                                                runSpacing: 5,
+                                                children: [
+                                                  Text(
+                                                    "Dodatkowe informacje:  ",
+                                                    style: TextStyle(
+                                                      fontFamily: "Lato",
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 5, 10, 5),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25),
+                                                        color: secondaryColor),
+                                                    child: Text(
+                                                        inspection.uwagi ??
+                                                            "Brak dodatkowych informacji",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: fontBlack)),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.symmetric(vertical: 2),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Okres przeglądu:  ",
-                                            style: TextStyle(
-                                              fontFamily: "Lato",
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          Flexible(
-                                            fit: FlexFit.loose,
-                                            child: Container(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  10, 5, 10, 5),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(25),
-                                                  color: secondaryColor),
-                                              child: Text(
-                                                  "${inspection?.dataPrzegladu} / ${inspection?.koniecWaznosciPrzegladu}",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                  )),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.symmetric(vertical: 2),
-                                      child: SizedBox(
-                                        width: double.infinity,
-                                        child: Wrap(
-                                          crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                          textDirection: TextDirection.ltr,
-                                          spacing: 5,
-                                          runSpacing: 5,
-                                          children: [
-                                            Text(
-                                              "Dodatkowe informacje:  ",
-                                              style: TextStyle(
-                                                fontFamily: "Lato",
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  10, 5, 10, 5),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(25),
-                                                  color: secondaryColor),
-                                              child: Text(inspection?.uwagi ?? "Brak dodatkowych informacji",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: fontBlack)),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(15, 15, 5, 0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    padding: EdgeInsets.all(5),
-                                                    primary: Colors.transparent,
-                                                    shadowColor: Colors.transparent,
-                                                    onPrimary: deleteBtn,
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                      BorderRadius.circular(100),
-                                                    )),
-                                                onPressed: () {
-                                                  print("delete object");
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext context) {
-                                                        return Container(
-                                                          padding: EdgeInsets.all(5),
-                                                          child: AlertDialog(
-                                                            actionsPadding:
-                                                            EdgeInsets.all(0),
-                                                            actionsAlignment:
-                                                            MainAxisAlignment.center,
-                                                            shape: RoundedRectangleBorder(
-                                                              borderRadius:
-                                                              BorderRadius.circular(25),
-                                                            ),
-                                                            title: Text(
-                                                                "Czy na pewno chcesz usunąć ten element?"),
-                                                            content: Text(
-                                                                "Po usunięciu nie możesz cofnąć tej akcji."),
-                                                            actions: [
-                                                              ElevatedButton(
-                                                                  style: ElevatedButton
-                                                                      .styleFrom(
-                                                                      primary:
-                                                                      mainColor,
-                                                                      onPrimary:
-                                                                      mainColor,
-                                                                      shape:
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                15, 15, 5, 0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(5),
+                                                              primary: Colors
+                                                                  .transparent,
+                                                              shadowColor: Colors
+                                                                  .transparent,
+                                                              onPrimary:
+                                                                  deleteBtn,
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            100),
+                                                              )),
+                                                      onPressed: () {
+                                                        print("delete object");
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return Container(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(5),
+                                                                child:
+                                                                    AlertDialog(
+                                                                  actionsPadding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              0),
+                                                                  actionsAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  shape:
                                                                       RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
                                                                             25),
-                                                                      )),
-                                                                  onPressed: () {
-                                                                    print("no");
-                                                                    Navigator.of(context)
-                                                                        .pop();
-                                                                  },
-                                                                  child: Text(
-                                                                    "Anuluj",
-                                                                    style: TextStyle(
-                                                                        color:
-                                                                        Colors.white),
-                                                                  )),
-                                                              ElevatedButton(
-                                                                  style: ElevatedButton
-                                                                      .styleFrom(
-                                                                      primary:
-                                                                      deleteBtn,
-                                                                      onPrimary:
-                                                                      deleteBtn,
-                                                                      shape:
-                                                                      RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(
-                                                                            25),
-                                                                      )),
-                                                                  onPressed: () async {
-                                                                    /* print("yes");
-                                                      // insuranceData.IdUbezpieczenia
-                                                      tokenVal = await storage
-                                                          .read(key: "token");
-                                                      var deleteRes =
-                                                      await deleteInsurance(
-                                                          tokenVal,
-                                                          insuranceOC
-                                                              .idUbezpieczenia);
-                                                      setState(() {
-                                                        if (deleteRes)
-                                                          Navigator
-                                                              .pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute<
-                                                                  void>(
-                                                                builder: (BuildContext
-                                                                context) =>
-                                                                    CarItem(
-                                                                        carId: idSamochodu),
-                                                              ));
-                                                      });*/
-                                                                  },
-                                                                  child: Text(
-                                                                    "Usuń",
-                                                                    style: TextStyle(
-                                                                        color:
-                                                                        Colors.white),
-                                                                  )),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      });
-                                                },
-                                                child: Container(
-                                                  width: 50,
-                                                  height: 50,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(25),
-                                                    color: deleteBtn,
-                                                  ),
-                                                  child: Icon(
-                                                    Icons.delete_outline_rounded,
-                                                    size: 30,
-                                                    color: bgSmokedWhite,
-                                                  ),
+                                                                  ),
+                                                                  title: Text(
+                                                                      "Czy na pewno chcesz usunąć ten element?"),
+                                                                  content: Text(
+                                                                      "Po usunięciu nie możesz cofnąć tej akcji."),
+                                                                  actions: [
+                                                                    ElevatedButton(
+                                                                        style: ElevatedButton.styleFrom(
+                                                                            primary: mainColor,
+                                                                            onPrimary: mainColor,
+                                                                            shape: RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(25),
+                                                                            )),
+                                                                        onPressed: () {
+                                                                          print(
+                                                                              "no");
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
+                                                                        child: Text(
+                                                                          "Anuluj",
+                                                                          style:
+                                                                              TextStyle(color: Colors.white),
+                                                                        )),
+                                                                    ElevatedButton(
+                                                                        style: ElevatedButton.styleFrom(
+                                                                            primary: deleteBtn,
+                                                                            onPrimary: deleteBtn,
+                                                                            shape: RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(25),
+                                                                            )),
+                                                                        onPressed: () async {
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                          Response
+                                                                              response =
+                                                                              await InspectionApiService().deleteInspection(token, inspection!.idPrzegladu);
+                                                                          if (response.statusCode ==
+                                                                              200) {
+                                                                            setState(() {
+                                                                              getData();
+                                                                            });
+                                                                          }
+                                                                        },
+                                                                        child: Text(
+                                                                          "Usuń",
+                                                                          style:
+                                                                              TextStyle(color: Colors.white),
+                                                                        )),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            });
+                                                      },
+                                                      child: Container(
+                                                        width: 50,
+                                                        height: 50,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(25),
+                                                          color: deleteBtn,
+                                                        ),
+                                                        child: Icon(
+                                                          Icons
+                                                              .delete_outline_rounded,
+                                                          size: 30,
+                                                          color: bgSmokedWhite,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(5),
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              shadowColor: Colors
+                                                                  .transparent,
+                                                              foregroundColor:
+                                                                  mainColor,
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            100),
+                                                              )),
+                                                      onPressed: () {
+                                                        print("file list");
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  FilesView(
+                                                                      objectId:
+                                                                          inspection
+                                                                              .idPrzegladu!),
+                                                            ));
+                                                      },
+                                                      child: Container(
+                                                        width: 50,
+                                                        height: 50,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(50),
+                                                          color: secondColor,
+                                                        ),
+                                                        child: Icon(
+                                                          Icons
+                                                              .file_open_outlined,
+                                                          size: 30,
+                                                          color: bgSmokedWhite,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ),
-                                              ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    padding: EdgeInsets.all(5),
-                                                    backgroundColor: Colors.transparent,
-                                                    shadowColor: Colors.transparent,
-                                                    foregroundColor: mainColor,
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                      BorderRadius.circular(100),
-                                                    )),
-                                                onPressed: () {
-                                                  print("file list");
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) => FilesView(
-                                                            objectId: inspection
-                                                            !.idPrzegladu!),
-                                                      ));
-                                                },
-                                                child: Container(
-                                                  width: 50,
-                                                  height: 50,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(50),
-                                                    color: secondColor,
-                                                  ),
-                                                  child: Icon(
-                                                    Icons.file_open_outlined,
-                                                    size: 30,
-                                                    color: bgSmokedWhite,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),

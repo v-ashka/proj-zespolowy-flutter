@@ -311,9 +311,6 @@ class FilesViewState extends State<FilesView> {
               var response = await CarApiService()
                   .uploadFiles(tokenVal, files, widget.objectId);
               if (response.statusCode == 200) {
-                // Navigator.popAndPushNamed(context, "/fileList", arguments: {
-                //   "data": item["data"],
-                // });
                 setState(() {
                   _getData(widget.objectId);
                   isLoading = false;

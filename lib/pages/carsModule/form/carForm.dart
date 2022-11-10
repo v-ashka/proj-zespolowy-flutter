@@ -13,6 +13,7 @@ import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/pages/old_/_carList.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class CustomTrackShape extends RoundedRectSliderTrackShape {
   Rect getPreferredRect({
@@ -55,7 +56,6 @@ class _CarFormState extends State<CarForm> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getModeleMarki();
   }
@@ -140,191 +140,244 @@ class _CarFormState extends State<CarForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onPrimary: Colors.transparent,
-            shadowColor: Colors.transparent,
-            onSurface: Colors.red,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          elevation: 0.0,
+          leading: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.transparent,
+              onPrimary: Colors.transparent,
+              shadowColor: Colors.transparent,
+              onSurface: Colors.red,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
+          foregroundColor: Colors.transparent,
+          backgroundColor: secondaryColor,
+          shadowColor: Colors.transparent,
+          titleTextStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Lato',
+              fontSize: MediaQuery.of(context).textScaleFactor * 20,
+              color: Colors.black),
+          title: const Text("Dodaj samochód"),
         ),
-        foregroundColor: Colors.transparent,
-        backgroundColor: secondaryColor,
-        shadowColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-        title: const Text("Dodaj samochód"),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/background.png'), fit: BoxFit.fill)),
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  color: Colors.white,
-                ),
-                child: Form(
-                  key: _formKey,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                    child: Column(
-                      // padding: EdgeInsets.only(bottom: 10),
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            Expanded(
-                              flex: 12,
-                              child: Text(
-                                "Wprowadź dane samochodu",
-                                style: TextStyle(
-                                    fontSize: 19, fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(0, 15, 0, 5),
-                              child: Text(
-                                "Marka samochodu",
-                                style: TextStyle(
-                                  fontFamily: "Roboto",
-                                  letterSpacing: 1,
+        body: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/background.png'),
+                  fit: BoxFit.fill)),
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: Colors.white,
+                  ),
+                  child: Form(
+                    key: _formKey,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                      child: Column(
+                        // padding: EdgeInsets.only(bottom: 10),
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Expanded(
+                                flex: 12,
+                                child: Text(
+                                  "Wprowadź dane samochodu",
+                                  style: TextStyle(
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w600),
                                 ),
                               ),
-                            ),
-                            DropdownButtonFormField(
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Wybierz markę pojazdu!';
-                                  }
-                                  return null;
-                                },
-                                value: brandItem,
-                                isExpanded: true,
-                                onChanged: (value) {
-                                  setState(() {
-                                    modelList = [];
-                                    brandItem = value.toString();
-                                    for (int i = 0; i < brandList.length; i++) {
-                                      if (brandList[i]["nazwa"] == value) {
-                                        modelList = brandList[i]["modeleMarki"];
-                                      }
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(0, 15, 0, 5),
+                                child: Text(
+                                  "Marka samochodu",
+                                  style: TextStyle(
+                                    fontFamily: "Roboto",
+                                    letterSpacing: 1,
+                                  ),
+                                ),
+                              ),
+                              DropdownButtonFormField(
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return 'Wybierz markę pojazdu!';
                                     }
-                                    modelItem = null;
-                                  });
-                                },
-                                items: brandList.map((brand) {
-                                  return DropdownMenuItem(
-                                      value: brand['nazwa'],
-                                      child: Text(brand['nazwa']));
-                                }).toList(),
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(15),
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.only(top: 1),
-                                      child: Icon(
-                                        Icons.car_repair,
-                                        color: Colors.black,
+                                    return null;
+                                  },
+                                  value: brandItem,
+                                  isExpanded: true,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      modelList = [];
+                                      brandItem = value.toString();
+                                      for (int i = 0;
+                                          i < brandList.length;
+                                          i++) {
+                                        if (brandList[i]["nazwa"] == value) {
+                                          modelList =
+                                              brandList[i]["modeleMarki"];
+                                        }
+                                      }
+                                      modelItem = null;
+                                    });
+                                  },
+                                  items: brandList.map((brand) {
+                                    return DropdownMenuItem(
+                                        value: brand['nazwa'],
+                                        child: Text(brand['nazwa']));
+                                  }).toList(),
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(15),
+                                      prefixIcon: Padding(
+                                        padding: EdgeInsets.only(top: 1),
+                                        child: Icon(
+                                          Icons.car_repair,
+                                          color: Colors.black,
+                                        ),
                                       ),
-                                    ),
-                                    hintText: "Wybierz markę",
-                                    fillColor: bg35Grey,
-                                    filled: true,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                      borderSide: BorderSide.none,
-                                    ))),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
-                              child: Text(
-                                "Model samochodu",
-                                style: TextStyle(
-                                  fontFamily: "Roboto",
-                                  letterSpacing: 1,
+                                      hintText: "Wybierz markę",
+                                      fillColor: bg35Grey,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                        borderSide: BorderSide.none,
+                                      ))),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
+                                child: Text(
+                                  "Model samochodu",
+                                  style: TextStyle(
+                                    fontFamily: "Roboto",
+                                    letterSpacing: 1,
+                                  ),
                                 ),
                               ),
-                            ),
-                            DropdownButtonFormField(
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Wybierz model pojazdu!';
-                                  }
-                                  return null;
-                                },
-                                value: modelItem,
-                                isExpanded: true,
-                                onChanged: (value) {
-                                  setState(() {
-                                    modelItem = value as int?;
-                                    carItem.IdModelu = modelItem!;
-                                    print(modelItem);
-                                  });
-                                },
-                                items: modelList.map((model) {
-                                  return DropdownMenuItem(
-                                      value: model['id'],
-                                      child: Text(model['nazwa']));
-                                }).toList(),
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(15),
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.only(top: 1),
-                                      child: Icon(
-                                        Icons.car_crash_outlined,
-                                        color: Colors.black,
+                              DropdownButtonFormField(
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return 'Wybierz model pojazdu!';
+                                    }
+                                    return null;
+                                  },
+                                  value: modelItem,
+                                  isExpanded: true,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      modelItem = value as int?;
+                                      carItem.IdModelu = modelItem!;
+                                      print(modelItem);
+                                    });
+                                  },
+                                  items: modelList.map((model) {
+                                    return DropdownMenuItem(
+                                        value: model['id'],
+                                        child: Text(model['nazwa']));
+                                  }).toList(),
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(15),
+                                      prefixIcon: Padding(
+                                        padding: EdgeInsets.only(top: 1),
+                                        child: Icon(
+                                          Icons.car_crash_outlined,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      hintText: "Wybierz model",
+                                      fillColor: bg35Grey,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                        borderSide: BorderSide.none,
+                                      ))),
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                      child: Text(
+                                        "Rok produkcji",
+                                        style: TextStyle(
+                                          fontFamily: "Roboto",
+                                          letterSpacing: 1,
+                                        ),
                                       ),
                                     ),
-                                    hintText: "Wybierz model",
-                                    fillColor: bg35Grey,
-                                    filled: true,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                      borderSide: BorderSide.none,
-                                    ))),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                              child: Column(
+                                    SizedBox(
+                                      width: 160,
+                                      child: TextFormField(
+                                        readOnly: true,
+                                        onTap: () =>
+                                            handleReadOnlyInputClick(context),
+                                        cursorColor: Colors.black,
+                                        style: const TextStyle(
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                            contentPadding:
+                                                const EdgeInsets.all(15),
+                                            hintText:
+                                                carItem.RokProdukcji.toString(),
+                                            hintStyle: const TextStyle(
+                                                color: Colors.black),
+                                            fillColor: bg35Grey,
+                                            filled: true,
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              borderSide: BorderSide.none,
+                                            )),
+                                        /*validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'To pole nie może być puste';
+                                          }
+                                          return null;
+                                        }*/
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                     child: Text(
-                                      "Rok produkcji",
+                                      "Data zakupu",
                                       style: TextStyle(
                                         fontFamily: "Roboto",
                                         letterSpacing: 1,
@@ -335,16 +388,20 @@ class _CarFormState extends State<CarForm> {
                                     width: 160,
                                     child: TextFormField(
                                       readOnly: true,
-                                      onTap: () =>
-                                          handleReadOnlyInputClick(context),
+                                      onTap: () async {
+                                        DateTime? date =
+                                            await pickDate(context);
+                                        setState(() {
+                                          carItem.DataZakupu =
+                                              DateFormat('yyyy-MM-dd')
+                                                  .format(date!);
+                                        });
+                                      },
                                       cursorColor: Colors.black,
-                                      style:
-                                          const TextStyle(color: Colors.black),
+                                      style: TextStyle(color: Colors.black),
                                       decoration: InputDecoration(
-                                          contentPadding:
-                                              const EdgeInsets.all(15),
-                                          hintText:
-                                              carItem.RokProdukcji.toString(),
+                                          contentPadding: EdgeInsets.all(15),
+                                          hintText: carItem.DataZakupu,
                                           hintStyle: const TextStyle(
                                               color: Colors.black),
                                           fillColor: bg35Grey,
@@ -354,191 +411,99 @@ class _CarFormState extends State<CarForm> {
                                                 BorderRadius.circular(50),
                                             borderSide: BorderSide.none,
                                           )),
-                                      /*validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'To pole nie może być puste';
-                                          }
-                                          return null;
-                                        }*/
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Text(
-                                    "Data zakupu",
-                                    style: TextStyle(
-                                      fontFamily: "Roboto",
-                                      letterSpacing: 1,
-                                    ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                child: Text(
+                                  "Numer VIN",
+                                  style: TextStyle(
+                                    fontFamily: "Roboto",
+                                    letterSpacing: 1,
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 160,
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    onTap: () async {
-                                      DateTime? date = await pickDate(context);
-                                      setState(() {
-                                        carItem.DataZakupu =
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(date!);
-                                      });
-                                    },
-                                    cursorColor: Colors.black,
-                                    style: TextStyle(color: Colors.black),
-                                    decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.all(15),
-                                        hintText: carItem.DataZakupu,
-                                        hintStyle: const TextStyle(
-                                            color: Colors.black),
-                                        fillColor: bg35Grey,
-                                        filled: true,
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          borderSide: BorderSide.none,
-                                        )),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                              child: Text(
-                                "Numer VIN",
-                                style: TextStyle(
-                                  fontFamily: "Roboto",
-                                  letterSpacing: 1,
                                 ),
                               ),
-                            ),
-                            TextFormField(
-                                onSaved: (String? value) {
-                                  carItem.NumerVin = value;
-                                },
-                                cursorColor: Colors.black,
-                                style: TextStyle(color: Colors.black),
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(15),
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.only(top: 1),
-                                      child: Icon(
-                                        Icons.numbers,
-                                        color: Colors.black,
+                              TextFormField(
+                                  onSaved: (String? value) {
+                                    carItem.NumerVin = value;
+                                  },
+                                  cursorColor: Colors.black,
+                                  style: TextStyle(color: Colors.black),
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(15),
+                                      prefixIcon: Padding(
+                                        padding: EdgeInsets.only(top: 1),
+                                        child: Icon(
+                                          Icons.numbers,
+                                          color: Colors.black,
+                                        ),
                                       ),
-                                    ),
-                                    hintText: "Podaj numer VIN",
-                                    fillColor: bg35Grey,
-                                    filled: true,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                      borderSide: BorderSide.none,
-                                    )),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'To pole nie może być puste';
-                                  }
-                                  if (value.length != 17) {
-                                    return 'Numer VIN musi składać się z 17 znaków! ';
-                                  }
-                                  return null;
-                                }),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                              child: Text(
-                                "Pojemność silnika i numer rejestracyjny",
-                                style: TextStyle(
-                                  fontFamily: "Roboto",
-                                  letterSpacing: 1,
+                                      hintText: "Podaj numer VIN",
+                                      fillColor: bg35Grey,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                        borderSide: BorderSide.none,
+                                      )),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'To pole nie może być puste';
+                                    }
+                                    if (value.length != 17) {
+                                      return 'Numer VIN musi składać się z 17 znaków! ';
+                                    }
+                                    return null;
+                                  }),
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                child: Text(
+                                  "Pojemność silnika i numer rejestracyjny",
+                                  style: TextStyle(
+                                    fontFamily: "Roboto",
+                                    letterSpacing: 1,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TextFormField(
-                                      onSaved: (String? value) {
-                                        carItem?.PojemnoscSilnika =
-                                            int.parse(value!);
-                                      },
-                                      cursorColor: Colors.black,
-                                      style: TextStyle(color: Colors.black),
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(1),
-                                          prefixIcon: Padding(
-                                            padding: EdgeInsets.only(top: 1),
-                                            child: Icon(
-                                              Icons.abc,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          hintText: "Pojemność silnika",
-                                          hintStyle: TextStyle(fontSize: 12),
-                                          fillColor: bg35Grey,
-                                          filled: true,
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            borderSide: BorderSide.none,
-                                          )),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'To pole nie może być puste';
-                                        }
-                                        return null;
-                                      }),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     TextFormField(
                                         onSaved: (String? value) {
-                                          carItem?.NumerRejestracyjny = value;
+                                          carItem?.PojemnoscSilnika =
+                                              int.parse(value!);
                                         },
                                         cursorColor: Colors.black,
                                         style: TextStyle(color: Colors.black),
                                         decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(10),
+                                            contentPadding: EdgeInsets.all(1),
                                             prefixIcon: Padding(
                                               padding: EdgeInsets.only(top: 1),
                                               child: Icon(
-                                                Icons
-                                                    .format_list_numbered_rounded,
+                                                Icons.abc,
                                                 color: Colors.black,
                                               ),
                                             ),
-                                            hintText: "Numer rej.",
+                                            hintText: "Pojemność silnika",
                                             hintStyle: TextStyle(fontSize: 12),
                                             fillColor: bg35Grey,
                                             filled: true,
@@ -556,119 +521,191 @@ class _CarFormState extends State<CarForm> {
                                   ],
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 25),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                    child: Text("Zdjęcie produktu"),
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextFormField(
+                                          onSaved: (String? value) {
+                                            carItem?.NumerRejestracyjny = value;
+                                          },
+                                          cursorColor: Colors.black,
+                                          style: TextStyle(color: Colors.black),
+                                          decoration: InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.all(10),
+                                              prefixIcon: Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 1),
+                                                child: Icon(
+                                                  Icons
+                                                      .format_list_numbered_rounded,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              hintText: "Numer rej.",
+                                              hintStyle:
+                                                  TextStyle(fontSize: 12),
+                                              fillColor: bg35Grey,
+                                              filled: true,
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                borderSide: BorderSide.none,
+                                              )),
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'To pole nie może być puste';
+                                            }
+                                            return null;
+                                          }),
+                                    ],
                                   ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: secondaryColor,
-                                      onPrimary: second50Color,
-                                      padding: EdgeInsets.all(40),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(25)),
-                                    ),
-                                    onPressed: () {
-                                      print("test: $image");
-                                      pickImage();
-                                      //imgId = image!.path.toString();
-                                      print("sciezka fotki");
-                                      print(imgId);
-                                    },
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 28,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            if (image != null) ...[
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: secondaryColor,
-                                      image: DecorationImage(
-                                        image: FileImage(image!),
-                                        fit: BoxFit.scaleDown,
-                                      ),
-                                      border: Border.all(
-                                          color: secondaryColor, width: 5)),
-                                  width: 90,
-                                  height: 90,
                                 ),
-                              )
-                            ]
-                          ],
-                        ),
-                      ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 25),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                      child: Text("Zdjęcie produktu"),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: secondaryColor,
+                                        onPrimary: second50Color,
+                                        padding: EdgeInsets.all(40),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25)),
+                                      ),
+                                      onPressed: () {
+                                        print("test: $image");
+                                        pickImage();
+                                        //imgId = image!.path.toString();
+                                        print("sciezka fotki");
+                                        print(imgId);
+                                      },
+                                      child: Icon(
+                                        Icons.add,
+                                        size: 28,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (image != null) ...[
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(25),
+                                        color: secondaryColor,
+                                        image: DecorationImage(
+                                          image: FileImage(image!),
+                                          fit: BoxFit.scaleDown,
+                                        ),
+                                        border: Border.all(
+                                            color: secondaryColor, width: 5)),
+                                    width: 90,
+                                    height: 90,
+                                  ),
+                                )
+                              ]
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 30,
-            )
-          ],
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          //print(formData);
-          if (_formKey.currentState!.validate()) {
-            _formKey.currentState!.save();
-            String? tokenVal = await storage.read(key: "token");
-            var id = await CarApiService().addCar(tokenVal, carItem);
-            var uploadImg =
-                await CarApiService().uploadFile(tokenVal, imgId, id.body);
-            // print(carItem);
-            setState(() {
-              if (uploadImg) {
-                // Navigator.popAndPushNamed(context, "/carList", arguments: {
-                //   "module_data": "cars",
-                //   "user_auth": tokenVal,
-                //   "route_name": "cars"
-                // });
+        floatingActionButton: Padding(
+          padding: MediaQuery.of(context).viewInsets.bottom != 0
+              ? const EdgeInsets.fromLTRB(0, 0, 0, 30)
+              : EdgeInsets.zero,
+          child: FloatingActionButton.extended(
+            onPressed: () async {
+              //print(formData);
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
+                String? tokenVal = await storage.read(key: "token");
+                var id = await CarApiService().addCar(tokenVal, carItem);
+                var uploadImg =
+                    await CarApiService().uploadFile(tokenVal, imgId, id.body);
+                // print(carItem);
+                setState(() {
+                  if (uploadImg) {
+                    // Navigator.popAndPushNamed(context, "/carList", arguments: {
+                    //   "module_data": "cars",
+                    //   "user_auth": tokenVal,
+                    //   "route_name": "cars"
+                    // });
 
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => CarList(),
-                    ),
-                    ModalRoute.withName("/dashboard"));
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute<void>(
-                //       builder: (BuildContext context) => ,
-                //     ));
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) => CarList(),
+                        ),
+                        ModalRoute.withName("/dashboard"));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute<void>(
+                    //       builder: (BuildContext context) => ,
+                    //     ));
+                    // Navigator.pop(context);
+                  }
+                });
                 // Navigator.pop(context);
               }
-            });
-            // Navigator.pop(context);
-          }
-        },
-        backgroundColor: mainColor,
-        label: Text("Zapisz pojazd"),
-        icon: Icon(Icons.check),
-      ),
-    );
+            },
+            backgroundColor: mainColor,
+            label: Text("Zapisz pojazd"),
+            icon: Icon(Icons.check),
+          ),
+        ),
+        bottomSheet: MediaQuery.of(context).viewInsets.bottom > 150
+            ? GestureDetector(
+              onTap: () => print("CIPSKO"),
+              child: Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(color: bg35Grey),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.camera_alt_outlined),
+                      SizedBox(width: 10),
+                      Text(
+                        "Zeskanuj",
+                        style: TextStyle(
+                            fontFamily: 'Lato', fontWeight: FontWeight.w600),
+                      )
+                    ],
+                  )),
+            )
+            : SizedBox.shrink());
   }
 }

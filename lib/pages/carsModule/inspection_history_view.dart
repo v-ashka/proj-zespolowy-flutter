@@ -21,7 +21,6 @@ class InspectionHistory extends StatefulWidget {
 class _InspectionHistoryState extends State<InspectionHistory> {
   String? token;
   List<InspectionModel> inspectionList = [];
-  bool isLoading = true;
 
   @override
   void initState() {
@@ -33,9 +32,7 @@ class _InspectionHistoryState extends State<InspectionHistory> {
     token = await storage.read(key: "token");
     inspectionList =
         await InspectionApiService().getInspectionList(token, widget.carId);
-    setState(() {
-      isLoading = false;
-    });
+    setState(() {});
   }
 
   @override
@@ -350,6 +347,7 @@ class _InspectionHistoryState extends State<InspectionHistory> {
                                               ],
                                             ),
                                           ),
+                                          if (inspection.uwagi != null)
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 2),
@@ -382,8 +380,7 @@ class _InspectionHistoryState extends State<InspectionHistory> {
                                                                 .circular(25),
                                                         color: secondaryColor),
                                                     child: Text(
-                                                        inspection.uwagi ??
-                                                            "Brak dodatkowych informacji",
+                                                        "${inspection.uwagi}",
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: TextStyle(

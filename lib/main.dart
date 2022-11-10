@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/_Dashboard.dart';
@@ -12,7 +13,8 @@ import 'package:projzespoloey/pages/carsModule/carInsuranceHistoryView.dart';
 import 'package:projzespoloey/pages/carsModule/carInsuranceView.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
-import 'package:projzespoloey/pages/carsModule/carRepairHistory.dart';
+import 'package:projzespoloey/pages/carsModule/car_repair_history_view.dart';
+import 'package:projzespoloey/pages/carsModule/form/car_repair_form.dart';
 import 'package:projzespoloey/pages/carsModule/inspection_history_view.dart';
 import 'package:projzespoloey/pages/carsModule/inspection_view.dart';
 import 'package:projzespoloey/pages/carsModule/form/carForm.dart';
@@ -50,7 +52,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   HttpOverrides.global = PostHttpOverrides();
-  runApp(MyApp());
+  runApp(MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -62,6 +64,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('pl', 'PL'), // English, no country code
+        Locale('en', ''), // Spanish, no country code
+      ],
       initialRoute: '/',
       routes: {
         '/': (context) => Loading(),
@@ -81,12 +92,15 @@ class MyApp extends StatelessWidget {
             InsuranceEditForm(insurance: model, carId: objectId),
         '/carInsuranceHistory': (context) => CarInsuranceHistoryView(),
         '/carService': (context) => CarServiceView(),
-        '/carServiceHistory': (context) => InspectionHistory(carId: objectId, carModel: carModel),
-        '/carRepairHistory': (context) => CarRepairHistoryView(),
+        '/carServiceHistory': (context) =>
+            InspectionHistory(carId: objectId, carModel: carModel),
+        '/carRepairHistory': (context) =>
+            CarRepairHistoryView(carId: objectId, carModel: carModel),
         // Car form Route
         '/carForm': (context) => CarForm(),
         '/formCarInsurance': (context) => InsuranceForm(),
         '/formCarService': (context) => InspectionForm(),
+        '/formCarRepair': (context) => CarRepairForm(carId: objectId),
         // Documents Routes
         '/documentList': (context) => DocumentsList(),
         '/documentItem': (context) => DocumentItem(),

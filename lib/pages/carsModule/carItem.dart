@@ -12,6 +12,7 @@ import 'package:projzespoloey/models/inspection_model.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
+import 'package:projzespoloey/pages/carsModule/car_repair_history_view.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
 import 'package:projzespoloey/pages/form.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
@@ -386,12 +387,12 @@ class _CarItemState extends State<CarItem> {
                           )),
                       onPressed: () {
                         // print("naprawy");
-                        Navigator.pushNamed(context, "/carRepairHistory",
-                            arguments: {
-                              "id": widget.carId,
-                              "car": carData,
-                              "data": inspectionData
-                            });
+                        Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CarRepairHistoryView(carId: carData!["idSamochodu"], carModel: carData!["model"],),
+                                    ));
                       },
                       child: Container(
                         child: Padding(

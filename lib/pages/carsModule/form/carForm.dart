@@ -657,7 +657,7 @@ class _CarFormState extends State<CarForm> {
                     await CarApiService().uploadFile(tokenVal, imgId, id.body);
                 // print(carItem);
                 setState(() {
-                  if (uploadImg) {
+                  
                     // Navigator.popAndPushNamed(context, "/carList", arguments: {
                     //   "module_data": "cars",
                     //   "user_auth": tokenVal,
@@ -676,7 +676,7 @@ class _CarFormState extends State<CarForm> {
                     //       builder: (BuildContext context) => ,
                     //     ));
                     // Navigator.pop(context);
-                  }
+                  
                 });
                 // Navigator.pop(context);
               }

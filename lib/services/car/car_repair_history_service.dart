@@ -70,7 +70,8 @@ class CarRepairHistoryService {
         },
         body: jsonEncode(data),
       );
-      return response.body;
+      print(jsonEncode(data));
+      return response;
     } catch (e) {
       log(e.toString());
     }

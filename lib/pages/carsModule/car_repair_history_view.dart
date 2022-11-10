@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/car_repair_model.dart';
 import 'package:projzespoloey/pages/carsModule/filesView.dart';
+import 'package:projzespoloey/pages/carsModule/form/car_repair_edit_form.dart';
 import 'package:projzespoloey/pages/carsModule/form/car_repair_form.dart';
 import 'package:projzespoloey/services/car/car_repair_history_service.dart';
 
@@ -61,7 +62,7 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
         titleTextStyle: TextStyle(
             fontWeight: FontWeight.bold,
             fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 16,
+            fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
         title: Text("Historia Napraw - ${widget.carModel}"),
       ),
@@ -217,7 +218,8 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                             ],
                                           ),
                                         ),
-                                        if (repair.warsztat != null && repair.warsztat != "")
+                                        if (repair.warsztat != null &&
+                                            repair.warsztat != "")
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 2),
@@ -422,7 +424,8 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                               ),
                                             ),
                                           ),
-                                        if (repair.opis != null && repair.opis != "")
+                                        if (repair.opis != null &&
+                                            repair.opis != "")
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 2),
@@ -623,14 +626,16 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                                           100),
                                                             )),
                                                     onPressed: () {
-                                                      // Navigator.push(
-                                                      //     context,
-                                                      //     MaterialPageRoute(
-                                                      //       builder: (context) =>
-                                                      //           InsuranceEditForm(
-                                                      //               insurance: insuranceOC,
-                                                      //               carId: idSamochodu),
-                                                      //     ));
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                CarRepairEditForm(
+                                                                    carId:
+                                                                        widget.carId,
+                                                                        carModel: widget.carModel,
+                                                                        carRepair: repair),
+                                                          ));
                                                     },
                                                     child: Container(
                                                       width: 50,

@@ -72,6 +72,57 @@ class CarApiService {
     }
   }
 
+  Future getFuelTypes(token) async {
+    try {
+      var url = Uri.parse("$SERVER_IP/api/car/GetFuelTypes");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': "application/json",
+        "Authorization": "Bearer $token"
+      });
+
+      if (response.statusCode == 200) {
+        log(response.body);
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future getTransmissionTypes(token) async {
+    try {
+      var url = Uri.parse("$SERVER_IP/api/car/GetTransmissionTypes");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': "application/json",
+        "Authorization": "Bearer $token"
+      });
+
+      if (response.statusCode == 200) {
+        log(response.body);
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future getDrivetrainTypes(token) async {
+    try {
+      var url = Uri.parse("$SERVER_IP/api/car/GetDrivetrainTypes");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': "application/json",
+        "Authorization": "Bearer $token"
+      });
+
+      if (response.statusCode == 200) {
+        log(response.body);
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   Future getInsuranceTypes(token) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/insurance/api/GetInsuranceTypes");
@@ -130,7 +181,10 @@ class CarApiService {
       var url = Uri.parse(
           "${SERVER_IP}/api/fileUpload/UploadFile?rootFolder=samochod&nazwaFolderu=$id&czyNaglowkowy=true");
       print(url);
-      var request = http.MultipartRequest('POST', url, );
+      var request = http.MultipartRequest(
+        'POST',
+        url,
+      );
       request.headers['Authorization'] = 'Bearer $token';
       request.files.add(await http.MultipartFile.fromPath('file', path));
       var response = await request.send();
@@ -200,6 +254,7 @@ class CarApiService {
       log(e.toString());
     }
   }
+
   Future deleteCar(token, id) async {
     try {
       var url = Uri.parse("$SERVER_IP/api/car/DeleteCar/$id");
@@ -214,5 +269,3 @@ class CarApiService {
     }
   }
 }
-
-

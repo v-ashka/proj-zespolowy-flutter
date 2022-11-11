@@ -130,20 +130,29 @@ class Insurance {
 }
 
 class CarModelForm {
-  CarModelForm({
-    this.PojemnoscSilnika,
-    this.RokProdukcji,
-    this.NumerVin,
-    this.DataZakupu,
-    this.NumerRejestracyjny,
-    this.IdModelu,
-  });
+  CarModelForm(
+      {this.PojemnoscSilnika,
+      this.RokProdukcji,
+      this.NumerVin,
+      this.DataZakupu,
+      this.NumerRejestracyjny,
+      this.IdModelu,
+      this.Moc,
+      this.Przebieg,
+      this.idRodzajuNapedu,
+      this.idRodzajuPaliwa,
+      this.idRodzajuSkrzyniBiegow});
   int? PojemnoscSilnika;
   int? RokProdukcji;
   String? NumerVin;
   String? DataZakupu;
   String? NumerRejestracyjny;
   int? IdModelu;
+  int? Moc;
+  int? Przebieg;
+  int? idRodzajuSkrzyniBiegow;
+  int? idRodzajuNapedu;
+  int? idRodzajuPaliwa;
 
   Map<String, dynamic> toJson() => {
         "pojemnoscSilnika": PojemnoscSilnika,
@@ -151,6 +160,11 @@ class CarModelForm {
         "numerVin": NumerVin,
         "dataZakupu": DataZakupu,
         "numerRejestracyjny": NumerRejestracyjny,
+        "moc": Moc,
+        "przebieg": Przebieg,
+        "idRodzajuSkrzyniBiegow": idRodzajuSkrzyniBiegow,
+        "idRodzajuNapedu": idRodzajuNapedu,
+        "idRodzajuPaliwa": idRodzajuPaliwa,
         "idModelu": IdModelu,
       };
 }

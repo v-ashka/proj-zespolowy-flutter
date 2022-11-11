@@ -18,7 +18,6 @@ import 'package:projzespoloey/pages/form.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
 import 'package:projzespoloey/services/car/insurance_service.dart';
 
-
 class CarItem extends StatefulWidget {
   String carId;
   CarItem({Key? key, required this.carId}) : super(key: key);
@@ -388,11 +387,13 @@ class _CarItemState extends State<CarItem> {
                       onPressed: () {
                         // print("naprawy");
                         Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          CarRepairHistoryView(carId: carData!["idSamochodu"], carModel: carData!["model"],),
-                                    ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CarRepairHistoryView(
+                                carId: carData!["idSamochodu"],
+                                carModel: carData!["model"],
+                              ),
+                            ));
                       },
                       child: Container(
                         child: Padding(

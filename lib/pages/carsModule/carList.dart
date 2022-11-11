@@ -175,13 +175,19 @@ class _CarListState extends State<CarList> {
                                                             carItem
                                                                 .idSamochodu);
                                                 setState(() {
-                                                  if (deleteCar.statusCode == 202) {
-                                                    Navigator.pushAndRemoveUntil(
-                                                        context,
-                                                        MaterialPageRoute<void>(
-                                                          builder: (BuildContext context) => const CarList(),
-                                                        ),
-                                                        ModalRoute.withName("/dashboard"));
+                                                  if (deleteCar.statusCode ==
+                                                      202) {
+                                                    Navigator
+                                                        .pushAndRemoveUntil(
+                                                            context,
+                                                            MaterialPageRoute<
+                                                                void>(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  const CarList(),
+                                                            ),
+                                                            ModalRoute.withName(
+                                                                "/dashboard"));
                                                   }
                                                 });
                                               },

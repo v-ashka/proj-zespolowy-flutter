@@ -81,10 +81,10 @@ class _CarServiceViewState extends State<CarServiceView> {
         titleTextStyle: TextStyle(
             fontWeight: FontWeight.bold,
             fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 18,
+            fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
         title:
-            Text("Przegląd - ${item["car"]["marka"]} ${item["car"]["model"]}"),
+            Text("Przegląd - ${item["car"]["model"]}"),
       ),
       body: Container(
         decoration: BoxDecoration(

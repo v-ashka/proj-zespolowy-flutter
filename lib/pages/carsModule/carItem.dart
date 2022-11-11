@@ -222,10 +222,11 @@ class _CarItemState extends State<CarItem> {
                                       height: 5,
                                     ),
                                     SizedBox(
-                                      width: 220,
+                                      width: 290,
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             "Nie dodałeś jeszcze żadnego ubezpieczenia!",
@@ -237,7 +238,7 @@ class _CarItemState extends State<CarItem> {
                                             height: 5,
                                           ),
                                           Text(
-                                            "W tym miejscu pojawi się okres ważności ubezpieczenia OC oraz AC",
+                                            "W tym miejscu pojawi się okres ważności ubezpieczenia OC oraz AC.",
                                             style: TextStyle(
                                               color: fontBlack,
                                             ),
@@ -337,10 +338,12 @@ class _CarItemState extends State<CarItem> {
                                     ),
                                   ] else ...[
                                     SizedBox(
-                                      width: 220,
+                                      width: 260,
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                            
                                         children: [
                                           Text(
                                             "Nie dodałeś jeszcze żadnego przeglądu!",
@@ -352,7 +355,7 @@ class _CarItemState extends State<CarItem> {
                                             height: 5,
                                           ),
                                           Text(
-                                            "Po dodaniu dokumentu, w tym miejscu zobaczysz okres jego ważności",
+                                            "Po dodaniu dokumentu, w tym miejscu zobaczysz okres jego ważności.",
                                             style: TextStyle(
                                               color: fontBlack,
                                             ),
@@ -415,8 +418,9 @@ class _CarItemState extends State<CarItem> {
                                   const SizedBox(
                                     height: 2,
                                   ),
+                                  if (carData?["ostatniaNaprawa"] != null) ...[
                                   const Text(
-                                    "OSTATNIE NAPRAWY",
+                                    "OSTATNIA NAPRAWA",
                                     style: TextStyle(
                                         fontSize: 12,
                                         color: fontGrey,
@@ -443,7 +447,7 @@ class _CarItemState extends State<CarItem> {
                                           color: fontGrey,
                                         ),
                                         Text(
-                                          "320 dni temu",
+                                          "${carData!["ostatniaNaprawa"]} dni temu",
                                           style: TextStyle(
                                             color: fontBlack,
                                           ),
@@ -451,6 +455,33 @@ class _CarItemState extends State<CarItem> {
                                       ],
                                     ),
                                   ),
+                                  ] else ...[
+                                    SizedBox(
+                                      width: 290,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Nie dodałeś jeszcze żadnej naprawy!",
+                                            style: TextStyle(
+                                                color: fontBlack,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            "W tym miejscu zobaczysz ilość dni, które upłynęły od ostatniej naprawy.",
+                                            style: TextStyle(
+                                              color: fontBlack,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ],
                               ),
                               Icon(

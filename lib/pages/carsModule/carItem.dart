@@ -222,11 +222,12 @@ class _CarItemState extends State<CarItem> {
                                       height: 5,
                                     ),
                                     SizedBox(
-                                      width: 290,
+                                      width: 220,
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             "Nie dodałeś jeszcze żadnego ubezpieczenia!",
@@ -338,12 +339,12 @@ class _CarItemState extends State<CarItem> {
                                     ),
                                   ] else ...[
                                     SizedBox(
-                                      width: 260,
+                                      width: 220,
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                            
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             "Nie dodałeś jeszcze żadnego przeglądu!",
@@ -419,49 +420,50 @@ class _CarItemState extends State<CarItem> {
                                     height: 2,
                                   ),
                                   if (carData?["ostatniaNaprawa"] != null) ...[
-                                  const Text(
-                                    "OSTATNIA NAPRAWA",
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: fontGrey,
-                                        fontFamily: "Roboto",
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    width: 150,
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: secondaryColor,
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Icon(
-                                          Icons.build_outlined,
-                                          size: 20,
+                                    const Text(
+                                      "OSTATNIA NAPRAWA",
+                                      style: TextStyle(
+                                          fontSize: 12,
                                           color: fontGrey,
-                                        ),
-                                        Text(
-                                          "${carData!["ostatniaNaprawa"]} dni temu",
-                                          style: TextStyle(
-                                            color: fontBlack,
-                                          ),
-                                        )
-                                      ],
+                                          fontFamily: "Roboto",
+                                          fontWeight: FontWeight.w300),
                                     ),
-                                  ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: 150,
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        color: secondaryColor,
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Icon(
+                                            Icons.build_outlined,
+                                            size: 20,
+                                            color: fontGrey,
+                                          ),
+                                          Text(
+                                            "${carData!["ostatniaNaprawa"]} dni temu",
+                                            style: TextStyle(
+                                              color: fontBlack,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ] else ...[
                                     SizedBox(
-                                      width: 290,
+                                      width: 220,
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             "Nie dodałeś jeszcze żadnej naprawy!",

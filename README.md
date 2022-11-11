@@ -25,10 +25,10 @@
 7. Sprawdzic czy gdzies nie wyrzuca błędów z przesłanymi nullowymi wartościami 🥵🥵
 8. ~~Ogarnąć Navigator.pop aby odswieżał prawidłowo strone 🥵🥵~~ (użyto pushAndRemoveUntil przykład w CarForm)
 9. Stworzyć komponent pod AppBar 🥵
-10. ~~Refactor carInsuranceView - stworzenie komponentu pod ubezpieczenie z parametrem OC czy AC 🥵🥵 ~~
-11. Dodanie informacji do samochodu (rodzaj paliwa, skrzynia biegów), przebudowanie formularza i widoku 🥵🥵🥵🥵🥵🥵🥵🥵
+10. ~~Refactor carInsuranceView - stworzenie komponentu pod ubezpieczenie z parametrem OC czy AC 🥵🥵~~
+11. ~~Dodanie informacji do samochodu (rodzaj paliwa, skrzynia biegów), przebudowanie formularza i widoku 🥵🥵🥵🥵🥵🥵🥵🥵~~
 12. Refactor floatingActionButton dodawania nowego rekordu (nachodzi na ListView i słabo to wygląda) 🥵
-13. Dodać warunek czy można dodać puste ubezpieczenie/przegląd bez załącznika 🥵🥵
+13. ~~Dodać warunek czy można dodać puste ubezpieczenie/przegląd bez załącznika 🥵🥵~~
 14. Dodanie seState na przyciskach dodawania itemów, aby w trakcie dodawania pojawiało się kółko ładownia a przycisk był zablokowany
 15. Poprawić przesyłanie danych poprzez konstruktor głównie, aby przesyłał token i idki
 16. Pokroić możliwe elementy i stworzyć z nich komponenty

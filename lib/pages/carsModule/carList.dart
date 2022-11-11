@@ -175,7 +175,8 @@ class _CarListState extends State<CarList> {
                                                             carItem
                                                                 .idSamochodu);
                                                 setState(() {
-                                                  if (deleteCar.statusCode == 200) {
+                                                  if (deleteCar.statusCode ==
+                                                      200) {
                                                     Navigator.pop(context);
                                                     getData();
                                                   }

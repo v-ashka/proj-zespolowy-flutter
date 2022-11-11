@@ -6,6 +6,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:projzespoloey/components/add_attachment_button.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/main.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
@@ -15,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import '../../../models/insurace_model.dart';
+import '../../../utils/file_picker.dart';
 
 class InsuranceForm extends StatefulWidget {
   const InsuranceForm({Key? key}) : super(key: key);
@@ -59,22 +61,6 @@ class _InsuranceFormState extends State<InsuranceForm> {
       },
     );
     return date;
-  }
-
-  Future pickFiles() async {
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(allowMultiple: true);
-    if (result != null) {
-      setState(() {
-        if (files.isNotEmpty) {
-          files.clear();
-        }
-        //files = result.paths.map((path) => File(path!)).toList();
-        files = result!.files;
-      });
-    } else {
-      // User canceled the picker
-    }
   }
 
   @override
@@ -439,96 +425,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 25),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                    child: Text("Załączniki"),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: secondaryColor,
-                                      onPrimary: second50Color,
-                                      padding: EdgeInsets.all(40),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(25)),
-                                    ),
-                                    onPressed: () {
-                                      pickFiles();
-                                      print("TEST LISTY PLIKOW");
-                                      print(files);
-                                    },
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 28,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            if (files.isNotEmpty) ...[
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Container(
-                                  height: 150,
-                                  width: 230,
-                                  child: ListView.separated(
-                                      separatorBuilder:
-                                          (BuildContext context, int index) =>
-                                              const Divider(
-                                                height: 0,
-                                                color: Colors.transparent,
-                                              ),
-                                      itemCount: files!.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        final file = files[index];
-                                        return GestureDetector(
-                                          onTap: () {
-                                            //_download("$SERVER_IP/api/fileUpload/GetFile/${_files![index].idPliku}?naglowkowy=false");
-                                          },
-                                          child: Card(
-                                            margin: const EdgeInsets.all(5),
-                                            elevation: 2,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            shadowColor: fontBlack,
-                                            child: ListTile(
-                                              leading: Icon(Icons.abc),
-                                              title: Text(
-                                                file.name,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(fontSize: 12),
-                                              ),
-                                              tileColor: Colors.white,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }),
-                                ),
-                              )
-                            ]
-                          ],
-                        ),
+                      AddAttachmentButton(files: files, formType: FormType.insurance)
                       ],
                     ),
                   ),
@@ -546,10 +443,6 @@ class _InsuranceFormState extends State<InsuranceForm> {
           print(insurance.toJson());
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
-            String? tokenVal = await storage.read(key: "token");
-            var insuranceId = await CarApiService()
-                .addInsurance(tokenVal, insurance, idSamochodu);
-            await CarApiService().uploadFiles(tokenVal, files, insuranceId);
             setState(() {
               Navigator.pushAndRemoveUntil(
                   context,

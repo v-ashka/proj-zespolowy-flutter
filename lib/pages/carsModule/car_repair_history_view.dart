@@ -1,12 +1,14 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/car_repair_model.dart';
 import 'package:projzespoloey/pages/carsModule/filesView.dart';
 import 'package:projzespoloey/pages/carsModule/form/car_repair_edit_form.dart';
 import 'package:projzespoloey/pages/carsModule/form/car_repair_form.dart';
 import 'package:projzespoloey/services/car/car_repair_history_service.dart';
+import 'package:projzespoloey/utils/http_delete.dart';
 
 class CarRepairHistoryView extends StatefulWidget {
   final String carId;
@@ -29,11 +31,13 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
     getData();
   }
 
-  void getData() async {
+  getData() async {
     token = await storage.read(key: "token");
     repairList =
         await CarRepairHistoryService().getRepairList(token, widget.carId);
-    setState(() {});
+    setState(() {
+      print(repairList);
+    });
   }
 
   @override
@@ -440,7 +444,7 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                 runSpacing: 5,
                                                 children: [
                                                   Text(
-                                                    "Opis:  ",
+                                                    "OpisXD:  ",
                                                     style: TextStyle(
                                                       fontFamily: "Lato",
                                                       fontWeight:
@@ -487,125 +491,145 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    5),
-                                                            primary: Colors
-                                                                .transparent,
-                                                            shadowColor: Colors
-                                                                .transparent,
-                                                            onPrimary:
-                                                                deleteBtn,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100),
-                                                            )),
-                                                    onPressed: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return Container(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(5),
-                                                              child:
-                                                                  AlertDialog(
-                                                                actionsPadding:
-                                                                    EdgeInsets
-                                                                        .all(0),
-                                                                actionsAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              25),
-                                                                ),
-                                                                title: Text(
-                                                                    "Czy na pewno chcesz usunąć ten element?"),
-                                                                content: Text(
-                                                                    "Po usunięciu nie możesz cofnąć tej akcji."),
-                                                                actions: [
-                                                                  ElevatedButton(
-                                                                      style: ElevatedButton.styleFrom(
-                                                                          primary: mainColor,
-                                                                          onPrimary: mainColor,
-                                                                          shape: RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(25),
-                                                                          )),
-                                                                      onPressed: () {
-                                                                        print(
-                                                                            "no");
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      },
-                                                                      child: Text(
-                                                                        "Anuluj",
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white),
-                                                                      )),
-                                                                  ElevatedButton(
-                                                                      style: ElevatedButton.styleFrom(
-                                                                          primary: deleteBtn,
-                                                                          onPrimary: deleteBtn,
-                                                                          shape: RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(25),
-                                                                          )),
-                                                                      onPressed: () async {
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                        Response
-                                                                            response =
-                                                                            await CarRepairHistoryService().deleteRepair(token,
-                                                                                repair.idNaprawy);
-                                                                        if (response.statusCode ==
-                                                                            200) {
-                                                                          setState(
-                                                                              () {
-                                                                            getData();
-                                                                          });
-                                                                        }
-                                                                      },
-                                                                      child: Text(
-                                                                        "Usuń",
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white),
-                                                                      )),
-                                                                ],
-                                                              ),
-                                                            );
-                                                          });
-                                                    },
-                                                    child: Container(
-                                                      width: 50,
-                                                      height: 50,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: deleteBtn,
-                                                      ),
-                                                      child: Icon(
-                                                        Icons
-                                                            .delete_outline_rounded,
-                                                        size: 30,
-                                                        color: bgSmokedWhite,
-                                                      ),
-                                                    ),
-                                                  ),
+                                                  DeleteButton(
+                                                      endpoint:
+                                                          Endpoints.carRepair,
+                                                      token: token,
+                                                      id: repair.idNaprawy,
+                                                      callback: getData(),
+                                                      dialogtype:
+                                                          AlertDialogType
+                                                              .carRepair),
+                                                  // DeleteButton(
+                                                  //     responseType:
+                                                  //         CarRepairHistoryService()
+                                                  //             .deleteRepair(
+                                                  //                 token,
+                                                  //                 repair
+                                                  //                     .idNaprawy),
+                                                  //     refreshData: getData(),
+                                                  //     dialogtype:
+                                                  //         AlertDialogType
+                                                  //             .carRepair),
+                                                  // ElevatedButton(
+                                                  //   style: ElevatedButton
+                                                  //       .styleFrom(
+                                                  //           padding:
+                                                  //               EdgeInsets.all(
+                                                  //                   5),
+                                                  //           primary: Colors
+                                                  //               .transparent,
+                                                  //           shadowColor: Colors
+                                                  //               .transparent,
+                                                  //           onPrimary:
+                                                  //               deleteBtn,
+                                                  //           shape:
+                                                  //               RoundedRectangleBorder(
+                                                  //             borderRadius:
+                                                  //                 BorderRadius
+                                                  //                     .circular(
+                                                  //                         100),
+                                                  //           )),
+                                                  //   onPressed: () {
+                                                  //     showDialog(
+                                                  //         context: context,
+                                                  //         builder: (BuildContext
+                                                  //             context) {
+                                                  //           return Container(
+                                                  //             padding:
+                                                  //                 EdgeInsets
+                                                  //                     .all(5),
+                                                  //             child:
+                                                  //                 AlertDialog(
+                                                  //               actionsPadding:
+                                                  //                   EdgeInsets
+                                                  //                       .all(0),
+                                                  //               actionsAlignment:
+                                                  //                   MainAxisAlignment
+                                                  //                       .center,
+                                                  //               shape:
+                                                  //                   RoundedRectangleBorder(
+                                                  //                 borderRadius:
+                                                  //                     BorderRadius
+                                                  //                         .circular(
+                                                  //                             25),
+                                                  //               ),
+                                                  //               title: Text(
+                                                  //                   "Czy na pewno chcesz usunąć ten element?"),
+                                                  //               content: Text(
+                                                  //                   "Po usunięciu nie możesz cofnąć tej akcji."),
+                                                  //               actions: [
+                                                  //                 ElevatedButton(
+                                                  //                     style: ElevatedButton.styleFrom(
+                                                  //                         primary: mainColor,
+                                                  //                         onPrimary: mainColor,
+                                                  //                         shape: RoundedRectangleBorder(
+                                                  //                           borderRadius:
+                                                  //                               BorderRadius.circular(25),
+                                                  //                         )),
+                                                  //                     onPressed: () {
+                                                  //                       print(
+                                                  //                           "no");
+                                                  //                       Navigator.of(context)
+                                                  //                           .pop();
+                                                  //                     },
+                                                  //                     child: Text(
+                                                  //                       "Anuluj",
+                                                  //                       style: TextStyle(
+                                                  //                           color:
+                                                  //                               Colors.white),
+                                                  //                     )),
+                                                  //                 ElevatedButton(
+                                                  //                     style: ElevatedButton.styleFrom(
+                                                  //                         primary: deleteBtn,
+                                                  //                         onPrimary: deleteBtn,
+                                                  //                         shape: RoundedRectangleBorder(
+                                                  //                           borderRadius:
+                                                  //                               BorderRadius.circular(25),
+                                                  //                         )),
+                                                  //                     onPressed: () async {
+                                                  //                       Navigator.of(context)
+                                                  //                           .pop();
+                                                  //                       Response
+                                                  //                           response =
+                                                  //                           await CarRepairHistoryService().deleteRepair(token,
+                                                  //                               repair.idNaprawy);
+                                                  //                       if (response.statusCode ==
+                                                  //                           200) {
+                                                  //                         setState(
+                                                  //                             () {
+                                                  //                           getData();
+                                                  //                         });
+                                                  //                       }
+                                                  //                     },
+                                                  //                     child: Text(
+                                                  //                       "Usuń",
+                                                  //                       style: TextStyle(
+                                                  //                           color:
+                                                  //                               Colors.white),
+                                                  //                     )),
+                                                  //               ],
+                                                  //             ),
+                                                  //           );
+                                                  //         });
+                                                  //   },
+                                                  //   child: Container(
+                                                  //     width: 50,
+                                                  //     height: 50,
+                                                  //     decoration: BoxDecoration(
+                                                  //       borderRadius:
+                                                  //           BorderRadius
+                                                  //               .circular(25),
+                                                  //       color: deleteBtn,
+                                                  //     ),
+                                                  //     child: Icon(
+                                                  //       Icons
+                                                  //           .delete_outline_rounded,
+                                                  //       size: 30,
+                                                  //       color: bgSmokedWhite,
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
                                                   ElevatedButton(
                                                     style: ElevatedButton
                                                         .styleFrom(
@@ -631,10 +655,12 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                           MaterialPageRoute(
                                                             builder: (context) =>
                                                                 CarRepairEditForm(
-                                                                    carId:
-                                                                        widget.carId,
-                                                                        carModel: widget.carModel,
-                                                                        carRepair: repair),
+                                                                    carId: widget
+                                                                        .carId,
+                                                                    carModel: widget
+                                                                        .carModel,
+                                                                    carRepair:
+                                                                        repair),
                                                           ));
                                                     },
                                                     child: Container(

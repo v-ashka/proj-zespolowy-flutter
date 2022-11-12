@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:http/http.dart';
+import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/components/emptyBox.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
@@ -14,6 +15,7 @@ import 'package:projzespoloey/pages/carsModule/form/inspection_form.dart';
 import 'package:projzespoloey/pages/carsModule/inspection_history_view.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
+import 'package:projzespoloey/utils/http_delete.dart';
 
 class CarServiceView extends StatefulWidget {
   const CarServiceView({Key? key}) : super(key: key);
@@ -29,7 +31,7 @@ class _CarServiceViewState extends State<CarServiceView> {
   @override
   void initState() {
     super.initState();
-     Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () {
       setState(() {
         item = item.isNotEmpty
             ? item
@@ -39,7 +41,7 @@ class _CarServiceViewState extends State<CarServiceView> {
     });
   }
 
-   _getData(id) async {
+  _getData(id) async {
     token = await storage.read(key: "token");
     inspectionData = (await InspectionApiService().getInspection(token, id));
     setState(() {});
@@ -47,8 +49,7 @@ class _CarServiceViewState extends State<CarServiceView> {
 
   @override
   Widget build(BuildContext context) {
-    if(inspectionData == null)
-    {
+    if (inspectionData == null) {
       return const LoadingScreen();
     }
     final size = MediaQuery.of(context).size;
@@ -83,8 +84,7 @@ class _CarServiceViewState extends State<CarServiceView> {
             fontFamily: 'Lato',
             fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
-        title:
-            Text("Przegląd - ${item["car"]["model"]}"),
+        title: Text("Przegląd - ${item["car"]["model"]}"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -277,13 +277,14 @@ class _CarServiceViewState extends State<CarServiceView> {
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(25),
-                                                color:
-                                                    inspectionData?.czyPozytywny ==
-                                                            true
-                                                        ? (secondaryColor)
-                                                        : (errorColor)),
+                                                color: inspectionData
+                                                            ?.czyPozytywny ==
+                                                        true
+                                                    ? (secondaryColor)
+                                                    : (errorColor)),
                                             child: Text(
-                                              inspectionData?.czyPozytywny == true
+                                              inspectionData?.czyPozytywny ==
+                                                      true
                                                   ? ("Pozytywny")
                                                   : ("Negatywny"),
                                               textAlign: TextAlign.center,
@@ -362,7 +363,9 @@ class _CarServiceViewState extends State<CarServiceView> {
                                                 borderRadius:
                                                     BorderRadius.circular(25),
                                                 color: secondaryColor),
-                                            child: Text(inspectionData?.uwagi ?? "Brak dodatkowych informacji",
+                                            child: Text(
+                                                inspectionData?.uwagi ??
+                                                    "Brak dodatkowych informacji",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 14,
@@ -402,7 +405,8 @@ class _CarServiceViewState extends State<CarServiceView> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
                                     color: secondaryColor),
-                                child: Text("${item["car"]["koniecPrzegladu"]} dni",
+                                child: Text(
+                                    "${item["car"]["koniecPrzegladu"]} dni",
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         fontSize: 14,
@@ -417,112 +421,13 @@ class _CarServiceViewState extends State<CarServiceView> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.all(5),
-                                      primary: Colors.transparent,
-                                      shadowColor: Colors.transparent,
-                                      onPrimary: deleteBtn,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(100),
-                                      )),
-                                  onPressed: () {
-                                    print("delete object");
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Container(
-                                            padding: EdgeInsets.all(5),
-                                            child: AlertDialog(
-                                              actionsPadding:
-                                              EdgeInsets.all(0),
-                                              actionsAlignment:
-                                              MainAxisAlignment.center,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius.circular(25),
-                                              ),
-                                              title: Text(
-                                                  "Czy na pewno chcesz usunąć ten element?"),
-                                              content: Text(
-                                                  "Po usunięciu nie możesz cofnąć tej akcji."),
-                                              actions: [
-                                                ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                        primary:
-                                                        mainColor,
-                                                        onPrimary:
-                                                        mainColor,
-                                                        shape:
-                                                        RoundedRectangleBorder(
-                                                          borderRadius:
-                                                          BorderRadius
-                                                              .circular(
-                                                              25),
-                                                        )),
-                                                    onPressed: () {
-                                                      print("no");
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: Text(
-                                                      "Anuluj",
-                                                      style: TextStyle(
-                                                          color:
-                                                          Colors.white),
-                                                    )),
-                                                ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                        primary:
-                                                        deleteBtn,
-                                                        onPrimary:
-                                                        deleteBtn,
-                                                        shape:
-                                                        RoundedRectangleBorder(
-                                                          borderRadius:
-                                                          BorderRadius
-                                                              .circular(
-                                                              25),
-                                                        )),
-                                                    onPressed: () async {
-                                                      // Response response = await InspectionApiService().deleteInspection(
-                                                      //     token,
-                                                      //     inspectionData!
-                                                      //         .idPrzegladu);
-                                                      // if(response.statusCode == 200){
-                                                      //   setState(() {
-                                                      //     _getData(item["car"]["idSamochodu"]);
-                                                      //   });
-                                                      // }
-                                                    },
-                                                    child: Text(
-                                                      "Usuń",
-                                                      style: TextStyle(
-                                                          color:
-                                                          Colors.white),
-                                                    )),
-                                              ],
-                                            ),
-                                          );
-                                        });
-                                  },
-                                  child: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: deleteBtn,
-                                    ),
-                                    child: Icon(
-                                      Icons.delete_outline_rounded,
-                                      size: 30,
-                                      color: bgSmokedWhite,
-                                    ),
-                                  ),
-                                ),
+                                DeleteButton(
+                                    endpoint: Endpoints.carInspection,
+                                    token: token,
+                                    id: item["id"],
+                                    dialogtype: AlertDialogType.carInspection,
+                                    callback:
+                                        _getData(item["car"]["idSamochodu"])),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       padding: EdgeInsets.all(5),
@@ -531,10 +436,10 @@ class _CarServiceViewState extends State<CarServiceView> {
                                       onPrimary: mainColor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(100),
+                                            BorderRadius.circular(100),
                                       )),
                                   onPressed: () {
-                                 /*   print("edit object");
+                                    /*   print("edit object");
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -566,7 +471,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                                       foregroundColor: mainColor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(100),
+                                            BorderRadius.circular(100),
                                       )),
                                   onPressed: () {
                                     print("file list");
@@ -574,8 +479,8 @@ class _CarServiceViewState extends State<CarServiceView> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => FilesView(
-                                              objectId: inspectionData
-                                                  !.idPrzegladu!),
+                                              objectId:
+                                                  inspectionData!.idPrzegladu!),
                                         ));
                                   },
                                   child: Container(
@@ -613,11 +518,12 @@ class _CarServiceViewState extends State<CarServiceView> {
                       )),
                   onPressed: () {
                     Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                    builder: (context) =>
-                    InspectionHistory(carId: item["car"]["idSamochodu"], carModel: item["car"]["model"]),
-                    ));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => InspectionHistory(
+                              carId: item["car"]["idSamochodu"],
+                              carModel: item["car"]["model"]),
+                        ));
                   },
                   child: Container(
                     child: Padding(

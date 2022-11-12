@@ -1,37 +1,13 @@
-import 'dart:developer';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
-import 'package:projzespoloey/pages/old_/_carList.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-
-class CustomTrackShape extends RoundedRectSliderTrackShape {
-  Rect getPreferredRect({
-    required RenderBox parentBox,
-    Offset offset = Offset.zero,
-    required SliderThemeData sliderTheme,
-    bool isEnabled = false,
-    bool isDiscrete = false,
-  }) {
-    final double trackHeight = sliderTheme.trackHeight!;
-    final double trackLeft = offset.dx;
-    final double trackTop =
-        offset.dy + (parentBox.size.height - trackHeight) / 2;
-    final double trackWidth = parentBox.size.width;
-    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
-  }
-}
+import 'package:projzespoloey/utils/photo_picker.dart';
 
 class CarForm extends StatefulWidget {
   const CarForm({Key? key}) : super(key: key);
@@ -41,9 +17,7 @@ class CarForm extends StatefulWidget {
 }
 
 class _CarFormState extends State<CarForm> {
-  final storage = new FlutterSecureStorage();
   bool isValid = false;
-
   bool isLoading = true;
   bool isLoadingBtn = false;
   List brandList = [];
@@ -54,7 +28,6 @@ class _CarFormState extends State<CarForm> {
   int? fuelType;
   int? transmissionType;
   int? drivetrainType;
-  String? _selectedValue;
   String? brandItem;
   int? modelItem;
   int prodDate = DateTime.now().year;
@@ -117,19 +90,19 @@ class _CarFormState extends State<CarForm> {
     );
   }
 
-  void _showAddCarLoadingDialog(isShowing) {
+  void showAddCarLoadingDialog(isShowing) {
     if (isShowing) {
       showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25.0))),
-              title: Text('Dodaję pojazd...'),
+              title: const Text('Dodaję pojazd...'),
               content: Container(
                   height: 150,
                   width: 150,
-                  child: Center(
+                  child: const Center(
                       child: CircularProgressIndicator(color: mainColor))),
             );
           });
@@ -138,7 +111,7 @@ class _CarFormState extends State<CarForm> {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute<void>(
-            builder: (BuildContext context) => CarList(),
+            builder: (BuildContext context) => const CarList(),
           ),
           ModalRoute.withName("/dashboard"));
     }
@@ -163,22 +136,6 @@ class _CarFormState extends State<CarForm> {
       },
     );
     return date;
-  }
-
-  Future pickImage() async {
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(type: FileType.image);
-    if (result != null) {
-      var imageTemp = File(result.files.single.path!);
-      image = imageTemp;
-
-      setState(() {
-        image = imageTemp;
-        imgId = image!.path.toString();
-      });
-    } else {
-      // User canceled the picker
-    }
   }
 
   @override
@@ -220,7 +177,7 @@ class _CarFormState extends State<CarForm> {
           child: ListView(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 60),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
@@ -236,15 +193,6 @@ class _CarFormState extends State<CarForm> {
                         )
                       : Form(
                           key: _formKey,
-                          onChanged: () {
-                            final formValidation =
-                                _formKey.currentState!.validate();
-                            if (isValid != formValidation) {
-                              setState(() {
-                                isValid = formValidation;
-                              });
-                            }
-                          },
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                             child: Column(
@@ -588,7 +536,8 @@ class _CarFormState extends State<CarForm> {
                                                   color: Colors.black),
                                               decoration: InputDecoration(
                                                   contentPadding:
-                                                      EdgeInsets.all(1),
+                                                      EdgeInsets.fromLTRB(
+                                                          10, 1, 20, 1),
                                                   prefixIcon: Padding(
                                                     padding:
                                                         EdgeInsets.only(top: 1),
@@ -598,6 +547,7 @@ class _CarFormState extends State<CarForm> {
                                                     ),
                                                   ),
                                                   hintText: "Pojemność silnika",
+                                                  suffixText: "cm3",
                                                   hintStyle:
                                                       TextStyle(fontSize: 12),
                                                   fillColor: bg35Grey,
@@ -1006,56 +956,50 @@ class _CarFormState extends State<CarForm> {
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
-                                                0, 5, 0, 5),
-                                            child: Text("Zdjęcie produktu"),
+                                                0, 10, 0, 10),
+                                            child: Text("Zdjęcie pojazdu"),
                                           ),
                                           ElevatedButton(
                                             style: ElevatedButton.styleFrom(
-                                              primary: secondaryColor,
-                                              onPrimary: second50Color,
-                                              padding: EdgeInsets.all(40),
+                                              backgroundColor: secondaryColor,
+                                              padding: image != null
+                                                  ? const EdgeInsets.all(0)
+                                                  : const EdgeInsets.all(35),
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           25)),
                                             ),
-                                            onPressed: () {
-                                              print("test: $image");
-                                              pickImage();
-                                              //imgId = image!.path.toString();
-                                              print("sciezka fotki");
-                                              print(imgId);
+                                            onPressed: () async {
+                                              image = await pickImage();
+                                              setState(() {
+                                                image;
+                                              });
                                             },
-                                            child: Icon(
-                                              Icons.add,
-                                              size: 28,
-                                              color: Colors.black,
-                                            ),
+                                            child: image != null
+                                                ? Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25),
+                                                      color: secondaryColor,
+                                                      image: DecorationImage(
+                                                        image:
+                                                            FileImage(image!),
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    width: 100,
+                                                    height: 100,
+                                                  )
+                                                : const Icon(
+                                                    Icons.add_a_photo_outlined,
+                                                    size: 25,
+                                                    color: Colors.black),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    if (image != null) ...[
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            10, 0, 0, 0),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                              color: secondaryColor,
-                                              image: DecorationImage(
-                                                image: FileImage(image!),
-                                                fit: BoxFit.scaleDown,
-                                              ),
-                                              border: Border.all(
-                                                  color: secondaryColor,
-                                                  width: 5)),
-                                          width: 90,
-                                          height: 90,
-                                        ),
-                                      )
-                                    ]
                                   ],
                                 ),
                               ],
@@ -1064,7 +1008,7 @@ class _CarFormState extends State<CarForm> {
                         ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
             ],
@@ -1078,33 +1022,24 @@ class _CarFormState extends State<CarForm> {
                     : EdgeInsets.zero,
                 child: FloatingActionButton.extended(
                   onPressed: () async {
-                    //print(formData);
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       setState(() {
                         isLoadingBtn = true;
                       });
-                      _showAddCarLoadingDialog(true);
+                      showAddCarLoadingDialog(true);
                       String? tokenVal = await storage.read(key: "token");
                       var id = await CarApiService().addCar(tokenVal, carItem);
-
-                      var uploadImg = await CarApiService()
-                          .uploadFile(tokenVal, imgId, id.body);
-
-                      // print(carItem);
+                      var uploadImg = await CarApiService().uploadFile(
+                          tokenVal, image!.path.toString(), id.body);
                       setState(() {
-                        _showAddCarLoadingDialog(false);
+                        showAddCarLoadingDialog(false);
                       });
                     }
                   },
                   backgroundColor: mainColor,
-                  label: Text("Zapisz pojazd"),
-                  icon: isLoadingBtn
-                      ? Container(
-                          width: 20,
-                          height: 20,
-                          child: (CircularProgressIndicator()))
-                      : Icon(Icons.check),
+                  label: const Text("Zapisz pojazd"),
+                  icon: const Icon(Icons.check),
                 ),
               ),
         bottomSheet: MediaQuery.of(context).viewInsets.bottom > 150
@@ -1116,7 +1051,7 @@ class _CarFormState extends State<CarForm> {
                     decoration: BoxDecoration(color: bg35Grey),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: const [
                         Icon(Icons.camera_alt_outlined),
                         SizedBox(width: 10),
                         Text(
@@ -1127,6 +1062,6 @@ class _CarFormState extends State<CarForm> {
                       ],
                     )),
               )
-            : SizedBox.shrink());
+            : const SizedBox.shrink());
   }
 }

@@ -55,7 +55,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
                     borderRadius: BorderRadius.circular(25)),
               ),
               onPressed: () async {
-                files = await pickFiles(files);
+                files = await filePicker(files);
                 setState(() {
                   files;
                 });

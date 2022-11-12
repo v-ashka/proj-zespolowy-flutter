@@ -1,6 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 
-Future <List<PlatformFile>> pickFiles(List<PlatformFile> fileList) async {
+Future <List<PlatformFile>> filePicker(List<PlatformFile> fileList) async {
   FilePickerResult? result =
       await FilePicker.platform.pickFiles(allowMultiple: true);
   if (result != null) {

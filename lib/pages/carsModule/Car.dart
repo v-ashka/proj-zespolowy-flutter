@@ -32,6 +32,7 @@ class CarModel {
     this.koniecPrzegladu,
     this.zarchiwizowanePolisy,
     this.zarchiwizowanePrzeglady,
+    this.ostatniaNaprawa
   });
 
   String? idSamochodu;
@@ -50,6 +51,7 @@ class CarModel {
   int? koniecPrzegladu;
   int? zarchiwizowanePolisy;
   int? zarchiwizowanePrzeglady;
+  int? ostatniaNaprawa;
 
   factory CarModel.fromJson(Map<String, dynamic> json) => CarModel(
       idSamochodu: json["idSamochodu"],
@@ -67,7 +69,8 @@ class CarModel {
       zarchiwizowanePrzeglady: json["zarchiwizowanePrzeglady"],
       przebieg: json["przebieg"],
       rodzajSkrzyniBiegow: json["rodzajSkrzyniBiegow"],
-      rodzajNapedu: json["rodzajNapedu"]);
+      rodzajNapedu: json["rodzajNapedu"],
+      ostatniaNaprawa: json["ostatniaNaprawa"]);
 
   Map<String, dynamic> toJson() => {
         "idSamochodu": idSamochodu,
@@ -85,7 +88,8 @@ class CarModel {
         "zarchiwizowanePrzeglady": zarchiwizowanePrzeglady,
         "przebieg": przebieg,
         "rodzajSkrzyniBiegow": rodzajSkrzyniBiegow,
-        "rodzajNapedu": rodzajNapedu
+        "rodzajNapedu": rodzajNapedu,
+        "ostatniaNaprawa": ostatniaNaprawa
       };
 }
 

@@ -29,7 +29,8 @@ class CarRepairForm extends StatefulWidget {
 
 class _CarRepairFormState extends State<CarRepairForm> {
   final _formKey = GlobalKey<FormState>();
-  CarRepairModel carRepair = CarRepairModel();
+  CarRepairModel carRepair = CarRepairModel(
+      dataNaprawy: DateFormat('dd.MM.yyyy').format(DateTime.now()));
   List<PlatformFile> files = [];
 
   Future<DateTime?> pickDate(context) {
@@ -247,7 +248,7 @@ class _CarRepairFormState extends State<CarRepairForm> {
                                                 await pickDate(context);
                                             setState(() {
                                               carRepair.dataNaprawy =
-                                                  DateFormat('dd-MM-yyyy')
+                                                  DateFormat('dd.MM.yyyy')
                                                       .format(date!);
                                             });
                                           },
@@ -461,48 +462,46 @@ class _CarRepairFormState extends State<CarRepairForm> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextFormField(
-                                            onSaved: (String? value) {
-                                              carRepair
-                                                      .liczbaKilometrowDoNastepnejWymiany =
-                                                  int.parse(value!);
-                                            },
-                                            keyboardType: TextInputType.number,
-                                            inputFormatters: <
-                                                TextInputFormatter>[
-                                              FilteringTextInputFormatter
-                                                  .digitsOnly
-                                            ],
-                                            cursorColor: Colors.black,
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                            decoration: InputDecoration(
-                                                contentPadding:
-                                                    EdgeInsets.all(1),
-                                                prefixIcon: Padding(
-                                                  padding:
-                                                      EdgeInsets.only(top: 1),
-                                                  child: Icon(
-                                                    Icons.add_road_outlined,
-                                                    color: Colors.black,
-                                                  ),
+                                          onSaved: (String? value) {
+                                            carRepair
+                                                    .liczbaKilometrowDoNastepnejWymiany =
+                                                int.parse(value!);
+                                          },
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ],
+                                          cursorColor: Colors.black,
+                                          style: TextStyle(color: Colors.black),
+                                          decoration: InputDecoration(
+                                              contentPadding: EdgeInsets.all(1),
+                                              prefixIcon: Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 1),
+                                                child: Icon(
+                                                  Icons.add_road_outlined,
+                                                  color: Colors.black,
                                                 ),
-                                                hintText: "Liczba kilometrów",
-                                                hintStyle:
-                                                    TextStyle(fontSize: 12),
-                                                fillColor: bg35Grey,
-                                                filled: true,
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  borderSide: BorderSide.none,
-                                                )),
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return 'To pole nie może być puste';
-                                              }
-                                              return null;
-                                            }),
+                                              ),
+                                              hintText: "Liczba kilometrów",
+                                              hintStyle:
+                                                  TextStyle(fontSize: 12),
+                                              fillColor: bg35Grey,
+                                              filled: true,
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                borderSide: BorderSide.none,
+                                              )),
+                                          // validator: (value) {
+                                          //   if (value == null ||
+                                          //       value.isEmpty) {
+                                          //     return 'To pole nie może być puste';
+                                          //   }
+                                          //   return null;
+                                          // }
+                                        ),
                                       ],
                                     ),
                                   ),

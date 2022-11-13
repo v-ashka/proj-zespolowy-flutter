@@ -34,7 +34,7 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
     repairList = await CarRepairHistoryService()
         .getRepairList(token, widget.car.idSamochodu);
     setState(() {
-      print(repairList);
+      print("WYKONUJE FUNKCJE NA ZEWNATRZ");
     });
   }
 

@@ -29,8 +29,6 @@ class CarItem extends StatefulWidget {
 }
 
 class _CarItemState extends State<CarItem> {
-  late Map<String, dynamic>? carData = {};
-
   late CarModel? carModel = CarModel();
   late InsuranceModel insuranceData = InsuranceModel();
   late InspectionModel? inspectionData = InspectionModel();
@@ -431,7 +429,7 @@ class _CarItemState extends State<CarItem> {
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  if (carData?["ostatniaNaprawa"] != null) ...[
+                                  if (carModel!.ostatniaNaprawa != null) ...[
                                     const Text(
                                       "OSTATNIA NAPRAWA",
                                       style: TextStyle(
@@ -460,7 +458,7 @@ class _CarItemState extends State<CarItem> {
                                             color: fontGrey,
                                           ),
                                           Text(
-                                            "${carData!["ostatniaNaprawa"]} dni temu",
+                                            "${carModel!.ostatniaNaprawa} dni temu",
                                             style: TextStyle(
                                               color: fontBlack,
                                             ),

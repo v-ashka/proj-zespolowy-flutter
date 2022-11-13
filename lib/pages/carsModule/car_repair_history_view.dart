@@ -495,7 +495,7 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                           Endpoints.carRepair,
                                                       token: token,
                                                       id: repair.idNaprawy,
-                                                      callback: () => getData(),
+                                                      callback: getData,
                                                       dialogtype:
                                                           AlertDialogType
                                                               .carRepair),

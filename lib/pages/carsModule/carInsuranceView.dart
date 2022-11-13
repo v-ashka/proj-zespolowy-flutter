@@ -11,6 +11,7 @@ import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
+import 'package:projzespoloey/pages/carsModule/carInsuranceHistoryView.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/filesView.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
@@ -939,9 +940,12 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                         borderRadius: BorderRadius.circular(25),
                       )),
                   onPressed: () {
-                    print("historia ubezpieczenie");
-                    Navigator.pushNamed(context, "/carInsuranceHistory",
-                        arguments: {"car": item["car"]});
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CarInsuranceHistoryView(car: widget.car),
+                        ));
                   },
                   child: Container(
                     child: Padding(

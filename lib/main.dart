@@ -93,7 +93,9 @@ class MyApp extends StatelessWidget {
             ),
         '/carInsuranceEditForm': (context) =>
             InsuranceEditForm(insurance: model, carId: objectId),
-        '/carInsuranceHistory': (context) => CarInsuranceHistoryView(),
+        '/carInsuranceHistory': (context) => CarInsuranceHistoryView(
+              car: car,
+            ),
         '/carService': (context) => CarServiceView(
               car: car,
             ),

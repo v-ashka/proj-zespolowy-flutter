@@ -57,6 +57,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   InsuranceModel model = InsuranceModel();
+  CarModel car = CarModel();
   String objectId = "";
   String carModel = "";
   MyApp({Key? key}) : super(key: key);
@@ -87,19 +88,30 @@ class MyApp extends StatelessWidget {
         // Car Routes
         '/carList': (context) => CarList(),
         '/carItem': (context) => CarItem(carId: objectId),
-        '/carInsurance': (context) => CarInsuranceView(),
+        '/carInsurance': (context) => CarInsuranceView(
+              car: car,
+            ),
         '/carInsuranceEditForm': (context) =>
             InsuranceEditForm(insurance: model, carId: objectId),
-        '/carInsuranceHistory': (context) => CarInsuranceHistoryView(),
-        '/carService': (context) => CarServiceView(),
+        '/carInsuranceHistory': (context) => CarInsuranceHistoryView(
+              car: car,
+            ),
+        '/carService': (context) => CarServiceView(
+              car: car,
+            ),
         '/carServiceHistory': (context) =>
             InspectionHistory(carId: objectId, carModel: carModel),
-        '/carRepairHistory': (context) =>
-            CarRepairHistoryView(carId: objectId, carModel: carModel),
+        '/carRepairHistory': (context) => CarRepairHistoryView(
+              car: car,
+            ),
         // Car form Route
         '/carForm': (context) => CarForm(),
-        '/formCarInsurance': (context) => InsuranceForm(),
-        '/formCarService': (context) => InspectionForm(),
+        '/formCarInsurance': (context) => InsuranceForm(
+              carId: objectId,
+            ),
+        '/formCarService': (context) => InspectionForm(
+              carId: objectId,
+            ),
         '/formCarRepair': (context) => CarRepairForm(carId: objectId),
         // Documents Routes
         '/documentList': (context) => DocumentsList(),

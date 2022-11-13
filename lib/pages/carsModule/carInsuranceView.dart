@@ -4,20 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/components/emptyBox.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
+import 'package:projzespoloey/pages/carsModule/carInsuranceHistoryView.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/filesView.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/insurance_service.dart';
+import 'package:projzespoloey/utils/http_delete.dart';
+
+import 'form/insuranceForm.dart';
 
 class CarInsuranceView extends StatefulWidget {
-  const CarInsuranceView({Key? key}) : super(key: key);
+  final CarModel car;
+  const CarInsuranceView({Key? key, required this.car}) : super(key: key);
 
   @override
   State<CarInsuranceView> createState() => _CarInsuranceViewState();
@@ -29,29 +35,20 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
   String? tokenVal;
   InsuranceModel insuranceOC = InsuranceModel();
   InsuranceModel insuranceAC = InsuranceModel();
-  var idSamochodu;
+  // var idSamochodu;
   final completer = Completer();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(milliseconds: 200), () {
-      setState(() {
-        item = item.isNotEmpty
-            ? item
-            : ModalRoute.of(context)?.settings.arguments as Map;
-        print(item.toString());
-        idSamochodu = item["car"]["idSamochodu"];
-      });
-      _getData(idSamochodu);
-    });
+    _getData();
   }
 
-  Future _getData(id) async {
+  Future _getData() async {
     tokenVal = await storage.read(key: "token");
-    insuranceOC = (await getValidOC(tokenVal, id));
-    insuranceAC = (await getValidAC(tokenVal, id));
+    insuranceOC = (await getValidOC(tokenVal, widget.car.idSamochodu));
+    insuranceAC = (await getValidAC(tokenVal, widget.car.idSamochodu));
     setState(() {});
   }
 
@@ -59,8 +56,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
-    if (item.isEmpty) {
-      return const LoadingScreen();
+    if (widget.car.idSamochodu == null) {
+      return LoadingScreen();
     }
     return Scaffold(
       appBar: AppBar(
@@ -88,7 +85,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
             fontFamily: 'Lato',
             fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
-        title: Text("Ubezpieczenie - ${item["car"]["model"]}"),
+        title: Text("Ubezpieczenie - ${widget.car.marka} ${widget.car.model}"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -98,31 +95,26 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
             child: ListView(children: [
               CarImageContainer(
-                  image: item["car"]["idSamochodu"],
-                  brand: item["car"]["marka"],
-                  model: item["car"]["model"],
-                  prodDate: item["car"]["rokProdukcji"],
-                  engine: item["car"]["pojemnoscSilnika"],
-                  vinNr: item["car"]["numerVin"],
-                  carRegNumber: item["car"]["numerRejestracyjny"]),
+                  image: widget.car.idSamochodu!,
+                  brand: widget.car.marka!,
+                  model: widget.car.model!,
+                  prodDate: widget.car.rokProdukcji!,
+                  engine: widget.car.pojemnoscSilnika!,
+                  vinNr: widget.car.numerVin!,
+                  carRegNumber: widget.car.numerRejestracyjny!),
               SizedBox(
                 height: 15,
               ),
-              if (item["car"]["koniecOC"] == null &&
-                  item["car"]["koniecAC"] == null) ...[
+              if (widget.car.koniecOC == null &&
+                  widget.car.koniecAC == null) ...[
                 EmptyBoxInfo(
-                    title: "Dodaj ubezpieczenie w kilku krokach",
-                    description:
-                        "Aktualnie nie dodałeś jeszcze żadnego ubezpieczenia, zrób to już teraz",
-                    addRouteLink: {
-                      "routeName": "/formCarInsurance",
-                      "arguments": {
-                        "form_type": "car_insurance",
-                        'idSamochodu': item["car"]["idSamochodu"],
-                      }
-                    })
+                  title: "Dodaj ubezpieczenie w kilku krokach",
+                  description:
+                      "Aktualnie nie dodałeś jeszcze żadnego ubezpieczenia, zrób to już teraz",
+                  pageRoute: () => InsuranceForm(carId: widget.car.idSamochodu),
+                ),
               ] else ...[
-                if (item["car"]["koniecOC"] != null)
+                if (widget.car.koniecOC != null)
                   Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25),
@@ -368,7 +360,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(25),
                                       color: secondaryColor),
-                                  child: Text("${item["car"]["koniecOC"]} dni",
+                                  child: Text("${widget.car.koniecOC} dni",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 14,
@@ -383,125 +375,12 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.all(5),
-                                        primary: Colors.transparent,
-                                        shadowColor: Colors.transparent,
-                                        onPrimary: deleteBtn,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                        )),
-                                    onPressed: () {
-                                      print("delete object");
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return Container(
-                                              padding: EdgeInsets.all(5),
-                                              child: AlertDialog(
-                                                actionsPadding:
-                                                    EdgeInsets.all(0),
-                                                actionsAlignment:
-                                                    MainAxisAlignment.center,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(25),
-                                                ),
-                                                title: Text(
-                                                    "Czy na pewno chcesz usunąć ten element?"),
-                                                content: Text(
-                                                    "Po usunięciu nie możesz cofnąć tej akcji."),
-                                                actions: [
-                                                  ElevatedButton(
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                              primary:
-                                                                  mainColor,
-                                                              onPrimary:
-                                                                  mainColor,
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            25),
-                                                              )),
-                                                      onPressed: () {
-                                                        print("no");
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Text(
-                                                        "Anuluj",
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      )),
-                                                  ElevatedButton(
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                              primary:
-                                                                  deleteBtn,
-                                                              onPrimary:
-                                                                  deleteBtn,
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            25),
-                                                              )),
-                                                      onPressed: () async {
-                                                        print("yes");
-                                                        // insuranceData.IdUbezpieczenia
-                                                        tokenVal = await storage
-                                                            .read(key: "token");
-                                                        var deleteRes =
-                                                            await deleteInsurance(
-                                                                tokenVal,
-                                                                insuranceOC
-                                                                    .idUbezpieczenia);
-                                                        setState(() {
-                                                          if (deleteRes)
-                                                            Navigator
-                                                                .pushReplacement(
-                                                                    context,
-                                                                    MaterialPageRoute<
-                                                                        void>(
-                                                                      builder: (BuildContext
-                                                                              context) =>
-                                                                          CarItem(
-                                                                              carId: idSamochodu),
-                                                                    ));
-                                                        });
-                                                      },
-                                                      child: Text(
-                                                        "Usuń",
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      )),
-                                                ],
-                                              ),
-                                            );
-                                          });
-                                    },
-                                    child: Container(
-                                      width: 50,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(25),
-                                        color: deleteBtn,
-                                      ),
-                                      child: Icon(
-                                        Icons.delete_outline_rounded,
-                                        size: 30,
-                                        color: bgSmokedWhite,
-                                      ),
-                                    ),
-                                  ),
+                                  DeleteButton(
+                                      endpoint: Endpoints.carInsurance,
+                                      token: tokenVal,
+                                      id: insuranceOC.idUbezpieczenia,
+                                      dialogtype: AlertDialogType.carInspection,
+                                      callback: _getData),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         padding: EdgeInsets.all(5),
@@ -520,7 +399,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                             builder: (context) =>
                                                 InsuranceEditForm(
                                                     insurance: insuranceOC,
-                                                    carId: idSamochodu),
+                                                    carId: widget
+                                                        .car.idSamochodu!),
                                           ));
                                     },
                                     child: Container(
@@ -828,7 +708,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(25),
                                       color: secondaryColor),
-                                  child: Text("${item["car"]["koniecAC"]} dni",
+                                  child: Text("${widget.car.koniecAC} dni",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 14,
@@ -924,7 +804,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                                 insuranceAC
                                                                     .idUbezpieczenia);
                                                         setState(() {
-                                                          if (deleteRes)
+                                                          if (deleteRes) {
                                                             Navigator
                                                                 .pushAndRemoveUntil(
                                                                     context,
@@ -933,11 +813,12 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                                                       builder: (BuildContext
                                                                               context) =>
                                                                           CarItem(
-                                                                              carId: idSamochodu),
+                                                                              carId: widget.car.idSamochodu!),
                                                                     ),
                                                                     ModalRoute
                                                                         .withName(
                                                                             "/dashboard"));
+                                                          }
                                                         });
                                                       },
                                                       child: Text(
@@ -983,7 +864,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                             builder: (context) =>
                                                 InsuranceEditForm(
                                                     insurance: insuranceAC,
-                                                    carId: idSamochodu),
+                                                    carId: widget
+                                                        .car.idSamochodu!),
                                           ));
                                     },
                                     child: Container(
@@ -1058,9 +940,12 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                         borderRadius: BorderRadius.circular(25),
                       )),
                   onPressed: () {
-                    print("historia ubezpieczenie");
-                    Navigator.pushNamed(context, "/carInsuranceHistory",
-                        arguments: {"car": item["car"]});
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CarInsuranceHistoryView(car: widget.car),
+                        ));
                   },
                   child: Container(
                     child: Padding(
@@ -1115,7 +1000,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                         width: 10,
                                       ),
                                       Text(
-                                        "${item["car"]["zarchiwizowanePolisy"]}",
+                                        "${widget.car.zarchiwizowanePolisy}",
                                         style: TextStyle(
                                           color: fontBlack,
                                         ),
@@ -1143,10 +1028,12 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, "/formCarInsurance", arguments: {
-            'form_type': 'car_insurance',
-            'idSamochodu': item["car"]["idSamochodu"]
-          });
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    InsuranceForm(carId: widget.car.idSamochodu),
+              ));
         },
         backgroundColor: mainColor,
         label: Text('Dodaj nowy'),

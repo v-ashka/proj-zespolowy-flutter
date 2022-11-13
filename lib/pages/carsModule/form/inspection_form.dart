@@ -17,7 +17,8 @@ import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
 
 class InspectionForm extends StatefulWidget {
-  const InspectionForm({Key? key}) : super(key: key);
+  final String carId;
+  const InspectionForm({Key? key, required this.carId}) : super(key: key);
 
   @override
   State<InspectionForm> createState() => _InspectionFormState();
@@ -26,7 +27,6 @@ class InspectionForm extends StatefulWidget {
 class _InspectionFormState extends State<InspectionForm> {
   final storage = const FlutterSecureStorage();
   final _formKey = GlobalKey<FormState>();
-  Map item = {};
   var inspectionStatus = [
     {"title": "Pozytywny", "status": true},
     {"title": "Negatywny", "status": false}
@@ -74,11 +74,6 @@ class _InspectionFormState extends State<InspectionForm> {
 
   @override
   Widget build(BuildContext context) {
-    item = item.isNotEmpty
-        ? item
-        : ModalRoute.of(context)?.settings.arguments as Map;
-
-    print(item);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -236,8 +231,10 @@ class _InspectionFormState extends State<InspectionForm> {
                                                 int.parse(value!);
                                           },
                                           keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-    FilteringTextInputFormatter.digitsOnly],
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ],
                                           cursorColor: Colors.black,
                                           style: TextStyle(color: Colors.black),
                                           decoration: InputDecoration(
@@ -563,7 +560,8 @@ class _InspectionFormState extends State<InspectionForm> {
                             ),
                           ],
                         ),
-                        AddAttachmentButton(files: files, formType: FormType.inspection)
+                        AddAttachmentButton(
+                            files: files, formType: FormType.inspection)
                       ],
                     ),
                   ),
@@ -583,7 +581,7 @@ class _InspectionFormState extends State<InspectionForm> {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
             var insuranceId = await InspectionApiService()
-                .addInspection(tokenVal, inspection, item["idSamochodu"]);
+                .addInspection(tokenVal, inspection, widget.carId);
             if (files.isNotEmpty) {
               await CarApiService().uploadFiles(tokenVal, files, insuranceId);
             }
@@ -592,7 +590,7 @@ class _InspectionFormState extends State<InspectionForm> {
                   context,
                   MaterialPageRoute<void>(
                     builder: (BuildContext context) =>
-                        CarItem(carId: item["idSamochodu"]!),
+                        CarItem(carId: widget.carId),
                   ),
                   ModalRoute.withName('/dashboard'));
               // Navigator.pop(context);

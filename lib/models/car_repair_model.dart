@@ -4,13 +4,13 @@ class CarRepairModel {
   CarRepairModel(
       {this.idNaprawy,
       this.nazwaNaprawy,
-       this.dataNaprawy,
-       this.kosztNaprawy,
-       this.opis,
-       this.warsztat,
-       this.przebieg,
-       this.dataNastepnejWymiany,
-       this.liczbaKilometrowDoNastepnejWymiany});
+      this.dataNaprawy,
+      this.kosztNaprawy,
+      this.opis,
+      this.warsztat,
+      this.przebieg,
+      this.dataNastepnejWymiany,
+      this.liczbaKilometrowDoNastepnejWymiany});
 
   String? idNaprawy;
   String? nazwaNaprawy;
@@ -22,7 +22,6 @@ class CarRepairModel {
   String? dataNastepnejWymiany;
   int? liczbaKilometrowDoNastepnejWymiany;
 
-
   factory CarRepairModel.fromJson(Map<String, dynamic> json) => CarRepairModel(
       idNaprawy: json["idNaprawy"],
       nazwaNaprawy: json["nazwaNaprawy"],
@@ -32,7 +31,8 @@ class CarRepairModel {
       warsztat: json["warsztat"],
       przebieg: json["przebieg"],
       dataNastepnejWymiany: json["dataNastepnejWymiany"],
-      liczbaKilometrowDoNastepnejWymiany: json["liczbaKilometrowDoNastepnejWymiany"]);
+      liczbaKilometrowDoNastepnejWymiany:
+          json["liczbaKilometrowDoNastepnejWymiany"]);
 
   Map<String, dynamic> toJson() => {
         "idNaprawy": idNaprawy,
@@ -48,4 +48,5 @@ class CarRepairModel {
 }
 
 List<CarRepairModel> carRepairListFromJson(String str) =>
-    List<CarRepairModel>.from(json.decode(str).map((x) => CarRepairModel.fromJson(x)));
+    List<CarRepairModel>.from(
+        json.decode(str).map((x) => CarRepairModel.fromJson(x)));

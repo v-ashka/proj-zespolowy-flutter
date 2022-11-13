@@ -1,9 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:http/http.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/utils/http_delete.dart';
 
@@ -34,15 +29,13 @@ class DeleteButton extends StatefulWidget {
   final String? token;
   final String? id;
   final AlertDialogType dialogtype;
-  Future<dynamic>? refreshData;
-  final VoidCallback callback;
-  DeleteButton(
+  final Function() callback;
+  const DeleteButton(
       {Key? key,
       required this.endpoint,
       required this.token,
       required this.id,
       required this.dialogtype,
-      this.refreshData,
       required this.callback})
       : super(key: key);
 
@@ -56,11 +49,11 @@ class _DeleteButtonState extends State<DeleteButton> {
       showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
+            return const AlertDialog(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25.0))),
               title: Text('Usuwam...'),
-              content: Container(
+              content: SizedBox(
                   height: 150,
                   width: 150,
                   child: Center(
@@ -76,10 +69,10 @@ class _DeleteButtonState extends State<DeleteButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.all(5),
-          primary: Colors.transparent,
+          foregroundColor: deleteBtn,
+          backgroundColor: Colors.transparent,
+          padding: const EdgeInsets.all(5),
           shadowColor: Colors.transparent,
-          onPrimary: deleteBtn,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
           )),
@@ -88,54 +81,48 @@ class _DeleteButtonState extends State<DeleteButton> {
             context: context,
             builder: (BuildContext context) {
               return Container(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 child: AlertDialog(
-                  actionsPadding: EdgeInsets.all(0),
+                  actionsPadding: const EdgeInsets.all(0),
                   actionsAlignment: MainAxisAlignment.center,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
                   title: Text(
                       "Czy na pewno chcesz usunąć ${widget.dialogtype.text}?"),
-                  content: Text("Po usunięciu nie możesz cofnąć tej akcji."),
+                  content: const Text("Po usunięciu nie możesz cofnąć tej akcji."),
                   actions: [
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: mainColor,
-                            onPrimary: mainColor,
+                            foregroundColor: mainColor, backgroundColor: mainColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25),
                             )),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text(
+                        child: const Text(
                           "Anuluj",
                           style: TextStyle(color: Colors.white),
                         )),
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: deleteBtn,
-                            onPrimary: deleteBtn,
+                            foregroundColor: deleteBtn,
+                            backgroundColor: deleteBtn,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25),
                             )),
                         onPressed: () async {
-                          print("delete test");
                           Navigator.of(context).pop();
                           _showAddCarLoadingDialog(true);
-                          var response = await deleteRecord(
+                          bool response = await deleteRecord(
                               widget.endpoint.text, widget.token, widget.id);
-                          if (response as bool) {
-                            setState(() {
-                              print("test del;ete");
-
-                              widget.callback;
-                              _showAddCarLoadingDialog(false);
-                            });
+                          if (response) {
+                            widget.callback.call();
+                            _showAddCarLoadingDialog(false);
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           "Usuń",
                           style: TextStyle(color: Colors.white),
                         )),
@@ -151,7 +138,7 @@ class _DeleteButtonState extends State<DeleteButton> {
           borderRadius: BorderRadius.circular(25),
           color: deleteBtn,
         ),
-        child: Icon(
+        child: const Icon(
           Icons.delete_outline_rounded,
           size: 30,
           color: bgSmokedWhite,

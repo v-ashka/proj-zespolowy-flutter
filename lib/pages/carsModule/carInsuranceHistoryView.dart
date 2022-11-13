@@ -2,11 +2,14 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
+import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/insurance_service.dart';
 
 class CarInsuranceHistoryView extends StatefulWidget {
-  const CarInsuranceHistoryView({Key? key}) : super(key: key);
+  final CarModel? car;
+  const CarInsuranceHistoryView({Key? key, required this.car})
+      : super(key: key);
 
   @override
   State<CarInsuranceHistoryView> createState() =>
@@ -14,26 +17,19 @@ class CarInsuranceHistoryView extends StatefulWidget {
 }
 
 class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
-  Map item = {};
+  // Map item = {};
   List<InsuranceModel> insuranceList = [];
   String? token;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 0), () {
-      setState(() {
-        item = item.isNotEmpty
-            ? item
-            : ModalRoute.of(context)?.settings.arguments as Map;
-      });
-    });
     getData();
   }
 
   void getData() async {
     token = await storage.read(key: "token");
-    insuranceList = await getInsuranceList(token, item["car"]["idSamochodu"]);
+    insuranceList = await getInsuranceList(token, widget.car!.idSamochodu);
     setState(() {});
   }
 
@@ -41,7 +37,7 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
-    if (item.isEmpty) {
+    if (widget.car!.idSamochodu == null) {
       return const LoadingScreen();
     }
     return Scaffold(
@@ -70,7 +66,8 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
             fontFamily: 'Lato',
             fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
-        title: Text("Historia ubezpieczeń - ${item["car"]["model"]}"),
+        title: Text(
+            "Historia ubezpieczeń - ${widget.car!.marka} ${widget.car!.model}"),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -501,7 +498,6 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
                                                       ),
                                                     ),
                                                   ),
-                                                  
                                                   ElevatedButton(
                                                     style: ElevatedButton
                                                         .styleFrom(
@@ -522,10 +518,12 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
                                                                           100),
                                                             )),
                                                     onPressed: () {
-                                                      Navigator.pushNamed(context, "/fileList",
+                                                      Navigator.pushNamed(
+                                                          context, "/fileList",
                                                           arguments: {
                                                             "data": insurance,
-                                                            "form_type": "car_insurance"
+                                                            "form_type":
+                                                                "car_insurance"
                                                           });
                                                     },
                                                     child: Container(

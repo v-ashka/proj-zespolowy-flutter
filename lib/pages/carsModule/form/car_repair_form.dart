@@ -144,7 +144,8 @@ class _CarRepairFormState extends State<CarRepairForm> {
                                     prefixIcon: Padding(
                                       padding: EdgeInsets.only(top: 1),
                                       child: Icon(
-                                        Icons.drive_file_rename_outline_outlined,
+                                        Icons
+                                            .drive_file_rename_outline_outlined,
                                         color: Colors.black,
                                       ),
                                     ),
@@ -172,28 +173,28 @@ class _CarRepairFormState extends State<CarRepairForm> {
                               ),
                             ),
                             TextFormField(
-                                onSaved: (String? value) {
-                                  carRepair.warsztat = value;
-                                },
-                                cursorColor: Colors.black,
-                                style: TextStyle(color: Colors.black),
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(15),
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.only(top: 1),
-                                      child: Icon(
-                                        Icons.warehouse,
-                                        color: Colors.black,
-                                      ),
+                              onSaved: (String? value) {
+                                carRepair.warsztat = value;
+                              },
+                              cursorColor: Colors.black,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(15),
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.only(top: 1),
+                                    child: Icon(
+                                      Icons.warehouse,
+                                      color: Colors.black,
                                     ),
-                                    hintText: "Nazwa warsztatu",
-                                    fillColor: bg35Grey,
-                                    filled: true,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                      borderSide: BorderSide.none,
-                                    )),
-                                ),
+                                  ),
+                                  hintText: "Nazwa warsztatu",
+                                  fillColor: bg35Grey,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    borderSide: BorderSide.none,
+                                  )),
+                            ),
                             SizedBox(
                               height: 10,
                             ),
@@ -240,48 +241,47 @@ class _CarRepairFormState extends State<CarRepairForm> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       TextFormField(
-                                        readOnly: true,
-                                              onTap: () async {
-                                                DateTime? date =
-                                                    await pickDate(context);
-                                                setState(() {
-                                                   carRepair.dataNaprawy =
-                                                       DateFormat('dd-MM-yyyy')
-                                                           .format(date!);
-                                                });
-                                              },
-                                            cursorColor: Colors.black,
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                            decoration: InputDecoration(
-                                                contentPadding:
-                                                    EdgeInsets.all(15),
-                                                prefixIcon: Padding(
-                                                  padding:
-                                                      EdgeInsets.only(top: 1),
-                                                  child: Icon(
-                                                    Icons.calendar_month_outlined,
-                                                    color: Colors.black,
-                                                  ),
+                                          readOnly: true,
+                                          onTap: () async {
+                                            DateTime? date =
+                                                await pickDate(context);
+                                            setState(() {
+                                              carRepair.dataNaprawy =
+                                                  DateFormat('dd-MM-yyyy')
+                                                      .format(date!);
+                                            });
+                                          },
+                                          cursorColor: Colors.black,
+                                          style: TextStyle(color: Colors.black),
+                                          decoration: InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.all(15),
+                                              prefixIcon: Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 1),
+                                                child: Icon(
+                                                  Icons.calendar_month_outlined,
+                                                  color: Colors.black,
                                                 ),
-                                                hintText: carRepair.dataNaprawy ?? "Data naprawy",
-                                                hintStyle:
-                                                    TextStyle(fontSize: 12),
-                                                fillColor: bg35Grey,
-                                                filled: true,
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  borderSide: BorderSide.none,
-                                                )),
-                                            validator: (date) {
-                                              // if (date == null ||
-                                              //     date.isEmpty) {
-                                              //   return 'To pole nie może być puste';
-                                              // }
-                                              // return null;
-                                            }),
-                                    
+                                              ),
+                                              hintText: carRepair.dataNaprawy ??
+                                                  "Data naprawy",
+                                              hintStyle:
+                                                  TextStyle(fontSize: 12),
+                                              fillColor: bg35Grey,
+                                              filled: true,
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                borderSide: BorderSide.none,
+                                              )),
+                                          validator: (date) {
+                                            // if (date == null ||
+                                            //     date.isEmpty) {
+                                            //   return 'To pole nie może być puste';
+                                            // }
+                                            // return null;
+                                          }),
                                     ],
                                   ),
                                 ),
@@ -295,10 +295,8 @@ class _CarRepairFormState extends State<CarRepairForm> {
                                       children: [
                                         TextFormField(
                                           onSaved: (String? value) {
-                                            if(value != ""){
                                             carRepair.przebieg =
-                                                int.parse(value!);}
-                                            carRepair.przebieg = null;
+                                                int.parse(value!);
                                           },
                                           keyboardType: TextInputType.number,
                                           inputFormatters: <TextInputFormatter>[
@@ -327,7 +325,7 @@ class _CarRepairFormState extends State<CarRepairForm> {
                                                     BorderRadius.circular(50),
                                                 borderSide: BorderSide.none,
                                               )),
-                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -345,35 +343,34 @@ class _CarRepairFormState extends State<CarRepairForm> {
                               ),
                             ),
                             TextFormField(
-                              
-                                onSaved: (String? value) {
-                                  if(value != "") {
-                                    carRepair.kosztNaprawy = double.parse(value!);
-                                  }
-                                  carRepair.kosztNaprawy = null;
-                                },
-                                cursorColor: Colors.black,
-                                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                inputFormatters: [FilteringTextInputFormatter.deny(RegExp("[,]"))],         
-                                style: TextStyle(color: Colors.black),
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(15),
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.only(top: 1),
-                                      child: Icon(
-                                        Icons.attach_money_outlined,
-                                        color: Colors.black,
-                                      ),
+                              onSaved: (String? value) {
+                                carRepair.kosztNaprawy = double.parse(value!);
+                              },
+                              cursorColor: Colors.black,
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.deny(RegExp("[,]"))
+                              ],
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(15),
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.only(top: 1),
+                                    child: Icon(
+                                      Icons.attach_money_outlined,
+                                      color: Colors.black,
                                     ),
-                                    hintText: "Koszt naprawy",
-                                    fillColor: bg35Grey,
-                                    filled: true,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                      borderSide: BorderSide.none,
-                                    )),
-                               ),
-                                SizedBox(
+                                  ),
+                                  hintText: "Koszt naprawy",
+                                  fillColor: bg35Grey,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    borderSide: BorderSide.none,
+                                  )),
+                            ),
+                            SizedBox(
                               height: 10,
                             ),
                             SizedBox(
@@ -420,41 +417,38 @@ class _CarRepairFormState extends State<CarRepairForm> {
                                     children: [
                                       TextFormField(
                                         readOnly: true,
-                                              onTap: () async {
-                                                DateTime? date =
-                                                    await pickDate(context);
-                                                setState(() {
-                                                   carRepair.dataNastepnejWymiany =
-                                                       DateFormat('dd-MM-yyyy')
-                                                           .format(date!);
-                                                });
-                                              },
-                                            cursorColor: Colors.black,
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                            decoration: InputDecoration(
-                                                contentPadding:
-                                                    EdgeInsets.all(15),
-                                                prefixIcon: Padding(
-                                                  padding:
-                                                      EdgeInsets.only(top: 1),
-                                                  child: Icon(
-                                                    Icons.calendar_month_outlined,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                hintText: carRepair.dataNastepnejWymiany ?? "Data następnej naprawy",
-                                                hintStyle:
-                                                    TextStyle(fontSize: 12),
-                                                fillColor: bg35Grey,
-                                                filled: true,
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  borderSide: BorderSide.none,
-                                                )),
-                                           ),
-                                    
+                                        onTap: () async {
+                                          DateTime? date =
+                                              await pickDate(context);
+                                          setState(() {
+                                            carRepair.dataNastepnejWymiany =
+                                                DateFormat('dd-MM-yyyy')
+                                                    .format(date!);
+                                          });
+                                        },
+                                        cursorColor: Colors.black,
+                                        style: TextStyle(color: Colors.black),
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(15),
+                                            prefixIcon: Padding(
+                                              padding: EdgeInsets.only(top: 1),
+                                              child: Icon(
+                                                Icons.calendar_month_outlined,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            hintText: carRepair
+                                                    .dataNastepnejWymiany ??
+                                                "Data następnej naprawy",
+                                            hintStyle: TextStyle(fontSize: 12),
+                                            fillColor: bg35Grey,
+                                            filled: true,
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              borderSide: BorderSide.none,
+                                            )),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -467,44 +461,48 @@ class _CarRepairFormState extends State<CarRepairForm> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextFormField(
-                                          onSaved: (String? value) {
-                                            carRepair.liczbaKilometrowDoNastepnejWymiany =
-                                                int.parse(value!);
-                                          },
-                                          keyboardType: TextInputType.number,
-                                          inputFormatters: <TextInputFormatter>[
-                                            FilteringTextInputFormatter
-                                                .digitsOnly
-                                          ],
-                                          cursorColor: Colors.black,
-                                          style: TextStyle(color: Colors.black),
-                                          decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.all(1),
-                                              prefixIcon: Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 1),
-                                                child: Icon(
-                                                  Icons.add_road_outlined,
-                                                  color: Colors.black,
+                                            onSaved: (String? value) {
+                                              carRepair
+                                                      .liczbaKilometrowDoNastepnejWymiany =
+                                                  int.parse(value!);
+                                            },
+                                            keyboardType: TextInputType.number,
+                                            inputFormatters: <
+                                                TextInputFormatter>[
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ],
+                                            cursorColor: Colors.black,
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                            decoration: InputDecoration(
+                                                contentPadding:
+                                                    EdgeInsets.all(1),
+                                                prefixIcon: Padding(
+                                                  padding:
+                                                      EdgeInsets.only(top: 1),
+                                                  child: Icon(
+                                                    Icons.add_road_outlined,
+                                                    color: Colors.black,
+                                                  ),
                                                 ),
-                                              ),
-                                              hintText: "Liczba kilometrów",
-                                              hintStyle:
-                                                  TextStyle(fontSize: 12),
-                                              fillColor: bg35Grey,
-                                              filled: true,
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                borderSide: BorderSide.none,
-                                              )),
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'To pole nie może być puste';
-                                            }
-                                            return null;
-                                          }),
+                                                hintText: "Liczba kilometrów",
+                                                hintStyle:
+                                                    TextStyle(fontSize: 12),
+                                                fillColor: bg35Grey,
+                                                filled: true,
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  borderSide: BorderSide.none,
+                                                )),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'To pole nie może być puste';
+                                              }
+                                              return null;
+                                            }),
                                       ],
                                     ),
                                   ),
@@ -513,7 +511,6 @@ class _CarRepairFormState extends State<CarRepairForm> {
                             ),
                           ],
                         ),
-                    
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -551,14 +548,14 @@ class _CarRepairFormState extends State<CarRepairForm> {
                             ),
                           ],
                         ),
-                        AddAttachmentButton(files: files, formType: FormType.carRepair)
+                        AddAttachmentButton(
+                            files: files, formType: FormType.carRepair)
                       ],
                     ),
                   ),
                 ),
               ),
             ),
-
           ],
         ),
       ),
@@ -573,18 +570,18 @@ class _CarRepairFormState extends State<CarRepairForm> {
             if (files.isNotEmpty && response.statusCode == 200) {
               await CarApiService().uploadFiles(token, files, response.body);
             }
-            response.statusCode == 200 ?
-            setState(() {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) =>
-                        CarItem(carId: widget.carId),
-                  ),
-                  ModalRoute.withName('/dashboard'));
-              // Navigator.pop(context);
-            })
-            : print("BŁĄD PRZESYŁANIA DANYCH");  
+            response.statusCode == 200
+                ? setState(() {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) =>
+                              CarItem(carId: widget.carId),
+                        ),
+                        ModalRoute.withName('/dashboard'));
+                    // Navigator.pop(context);
+                  })
+                : print("BŁĄD PRZESYŁANIA DANYCH");
           }
         },
         backgroundColor: mainColor,

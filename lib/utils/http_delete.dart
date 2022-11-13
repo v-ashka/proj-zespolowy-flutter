@@ -33,6 +33,10 @@ Future deleteRecord(endpoint, token, id) async {
       'Content-Type': 'application/json',
       'Authorization': "Bearer $token",
     });
+    print(id);
+    print(url);
+    print(response.statusCode);
+    print(response.reasonPhrase);
     if (response.statusCode == 200 || response.statusCode == 202) {
       print("passed");
       return true;

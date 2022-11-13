@@ -122,16 +122,17 @@ class _DeleteButtonState extends State<DeleteButton> {
                             )),
                         onPressed: () async {
                           print("delete test");
-                          Navigator.of(context).pop();
-                          _showAddCarLoadingDialog(true);
+                          // Navigator.of(context).pop();
+                          // _showAddCarLoadingDialog(true);
                           var response = await deleteRecord(
                               widget.endpoint.text, widget.token, widget.id);
                           if (response as bool) {
                             setState(() {
                               print("test del;ete");
 
+                              // _showAddCarLoadingDialog(false);
                               widget.callback;
-                              _showAddCarLoadingDialog(false);
+                              print(widget.callback);
                             });
                           }
                         },

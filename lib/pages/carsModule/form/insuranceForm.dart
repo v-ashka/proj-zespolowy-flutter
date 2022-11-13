@@ -19,7 +19,8 @@ import '../../../models/insurace_model.dart';
 import '../../../utils/file_picker.dart';
 
 class InsuranceForm extends StatefulWidget {
-  const InsuranceForm({Key? key}) : super(key: key);
+  final String? carId;
+  const InsuranceForm({Key? key, required this.carId}) : super(key: key);
 
   @override
   State<InsuranceForm> createState() => _InsuranceFormState();
@@ -32,14 +33,12 @@ class _InsuranceFormState extends State<InsuranceForm> {
   String? dateFrom;
   String? dateTo;
   InsuranceModel insurance = InsuranceModel();
-  Map item = {};
   List<PlatformFile> files = [];
-  String? idSamochodu;
 
   void _getInsuranceTypes() async {
     String? tokenVal = await storage.read(key: "token");
     insuranceTypesList = (await CarApiService().getInsuranceTypes(tokenVal));
-    Future.delayed(Duration(seconds: 0)).then((value) => setState(() {}));
+    setState(() {});
   }
 
   Future<DateTime?> pickDate(context) {
@@ -66,14 +65,6 @@ class _InsuranceFormState extends State<InsuranceForm> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        item = item.isNotEmpty
-            ? item
-            : ModalRoute.of(context)?.settings.arguments as Map;
-        idSamochodu = item["idSamochodu"];
-      });
-    });
 
     _getInsuranceTypes();
   }
@@ -425,7 +416,8 @@ class _InsuranceFormState extends State<InsuranceForm> {
                             ),
                           ],
                         ),
-                      AddAttachmentButton(files: files, formType: FormType.insurance)
+                        AddAttachmentButton(
+                            files: files, formType: FormType.insurance)
                       ],
                     ),
                   ),
@@ -443,12 +435,15 @@ class _InsuranceFormState extends State<InsuranceForm> {
           print(insurance.toJson());
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
+            String? tokenVal = await storage.read(key: "token");
+            var insuranceRes = await CarApiService()
+                .addInsurance(tokenVal, insurance, widget.carId);
             setState(() {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute<void>(
                     builder: (BuildContext context) =>
-                        CarItem(carId: item["idSamochodu"]!),
+                        CarItem(carId: widget.carId!),
                   ),
                   ModalRoute.withName('/dashboard'));
             });

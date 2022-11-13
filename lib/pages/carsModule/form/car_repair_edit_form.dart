@@ -20,15 +20,13 @@ import 'package:projzespoloey/services/car/car_repair_history_service.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
 
 class CarRepairEditForm extends StatefulWidget {
-  final String carId;
-  final String carModel;
+  final CarModel car;
   final CarRepairModel carRepair;
-  const CarRepairEditForm(
-      {Key? key,
-      required this.carId,
-      required this.carRepair,
-      required this.carModel})
-      : super(key: key);
+  const CarRepairEditForm({
+    Key? key,
+    required this.car,
+    required this.carRepair,
+  }) : super(key: key);
 
   @override
   State<CarRepairEditForm> createState() => _CarRepairEditFormState();
@@ -691,9 +689,7 @@ class _CarRepairEditFormState extends State<CarRepairEditForm> {
                         context,
                         MaterialPageRoute<void>(
                           builder: (BuildContext context) =>
-                              CarRepairHistoryView(
-                                  carId: widget.carId,
-                                  carModel: widget.carModel),
+                              CarRepairHistoryView(car: widget.car),
                         ),
                         ModalRoute.withName('/dashboard'));
                   })

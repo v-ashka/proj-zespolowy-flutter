@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/car_repair_model.dart';
+import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/filesView.dart';
 import 'package:projzespoloey/pages/carsModule/form/car_repair_edit_form.dart';
 import 'package:projzespoloey/pages/carsModule/form/car_repair_form.dart';
@@ -11,11 +12,8 @@ import 'package:projzespoloey/services/car/car_repair_history_service.dart';
 import 'package:projzespoloey/utils/http_delete.dart';
 
 class CarRepairHistoryView extends StatefulWidget {
-  final String carId;
-  final String carModel;
-  const CarRepairHistoryView(
-      {Key? key, required this.carId, required this.carModel})
-      : super(key: key);
+  final CarModel car;
+  const CarRepairHistoryView({Key? key, required this.car}) : super(key: key);
 
   @override
   State<CarRepairHistoryView> createState() => _CarRepairHistoryViewState();
@@ -33,8 +31,8 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
 
   getData() async {
     token = await storage.read(key: "token");
-    repairList =
-        await CarRepairHistoryService().getRepairList(token, widget.carId);
+    repairList = await CarRepairHistoryService()
+        .getRepairList(token, widget.car.idSamochodu);
     setState(() {
       print(repairList);
     });
@@ -68,7 +66,8 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
             fontFamily: 'Lato',
             fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
-        title: Text("Historia Napraw - ${widget.carModel}"),
+        title:
+            Text("Historia Napraw - ${widget.car.marka} ${widget.car.model}"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -496,7 +495,7 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                           Endpoints.carRepair,
                                                       token: token,
                                                       id: repair.idNaprawy,
-                                                      callback: getData(),
+                                                      callback: () => getData(),
                                                       dialogtype:
                                                           AlertDialogType
                                                               .carRepair),
@@ -655,10 +654,8 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                           MaterialPageRoute(
                                                             builder: (context) =>
                                                                 CarRepairEditForm(
-                                                                    carId: widget
-                                                                        .carId,
-                                                                    carModel: widget
-                                                                        .carModel,
+                                                                    car: widget
+                                                                        .car,
                                                                     carRepair:
                                                                         repair),
                                                           ));
@@ -749,7 +746,8 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => CarRepairForm(carId: widget.carId),
+                builder: (context) =>
+                    CarRepairForm(carId: widget.car.idSamochodu!),
               ));
         },
         backgroundColor: mainColor,

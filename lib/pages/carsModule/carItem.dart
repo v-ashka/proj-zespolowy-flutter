@@ -12,7 +12,9 @@ import 'package:projzespoloey/models/inspection_model.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
+import 'package:projzespoloey/pages/carsModule/carInsuranceView.dart';
 import 'package:projzespoloey/pages/carsModule/car_repair_history_view.dart';
+import 'package:projzespoloey/pages/carsModule/inspection_view.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
 import 'package:projzespoloey/pages/form.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
@@ -29,6 +31,7 @@ class CarItem extends StatefulWidget {
 class _CarItemState extends State<CarItem> {
   late Map<String, dynamic>? carData = {};
 
+  late CarModel? carModel = CarModel();
   late InsuranceModel insuranceData = InsuranceModel();
   late InspectionModel? inspectionData = InspectionModel();
   final storage = new FlutterSecureStorage();
@@ -43,7 +46,7 @@ class _CarItemState extends State<CarItem> {
   _getData(id) async {
     String? tokenVal = await storage.read(key: "token");
 
-    carData = (await CarApiService().getCar(tokenVal, id));
+    carModel = (await CarApiService().getCarTest(tokenVal, id));
     insuranceData = (await getValidOC(tokenVal, id));
     inspectionData = (await InspectionApiService().getInspection(tokenVal, id));
     setState(() {});
@@ -79,9 +82,9 @@ class _CarItemState extends State<CarItem> {
             fontFamily: 'Lato',
             fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
-        title: Text(carData!.length == 0
+        title: Text(carModel?.idSamochodu == null
             ? ("Ładuję...")
-            : ("Pojazd - ${carData!["marka"]} ${carData!["model"]}  ")),
+            : ("Pojazd - ${carModel!.marka} ${carModel!.model}")),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -89,7 +92,7 @@ class _CarItemState extends State<CarItem> {
                 image: AssetImage('assets/background.png'), fit: BoxFit.fill)),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-          child: carData!.length == 0
+          child: carModel?.idSamochodu == null
               ? ((Center(
                   child: CircularProgressIndicator(
                   color: mainColor,
@@ -97,13 +100,13 @@ class _CarItemState extends State<CarItem> {
               : (ListView(
                   children: [
                     CarImageContainer(
-                        image: carData!["idSamochodu"],
-                        brand: carData!["marka"],
-                        model: carData!["model"],
-                        prodDate: carData!["rokProdukcji"],
-                        engine: carData!["pojemnoscSilnika"],
-                        vinNr: carData!["numerVin"],
-                        carRegNumber: carData!["numerRejestracyjny"]),
+                        image: carModel!.idSamochodu!,
+                        brand: carModel!.marka!,
+                        model: carModel!.model!,
+                        prodDate: carModel!.rokProdukcji!,
+                        engine: carModel!.pojemnoscSilnika!,
+                        vinNr: carModel!.numerVin!,
+                        carRegNumber: carModel!.numerRejestracyjny!),
                     SizedBox(
                       height: 15,
                     ),
@@ -117,13 +120,21 @@ class _CarItemState extends State<CarItem> {
                           )),
                       onPressed: () {
                         // print("ubezpieczenie");
-                        Navigator.pushNamed(context, "/carInsurance",
-                            arguments: {
-                              "car": carData,
-                              "data": insuranceData.idUbezpieczenia != null
-                                  ? (insuranceData)
-                                  : (null)
-                            });
+                        // Navigator.pushNamed(context, "/carInsurance",
+                        //     arguments: {
+                        //       "car": carModel,
+                        //       "data": insuranceData.idUbezpieczenia != null
+                        //           ? (insuranceData)
+                        //           : (null)
+                        //     });
+
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CarInsuranceView(
+                                car: carModel!,
+                              ),
+                            ));
                       },
                       child: Container(
                         child: Padding(
@@ -176,8 +187,8 @@ class _CarItemState extends State<CarItem> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            carData?["koniecOC"] != null
-                                                ? "${carData!["koniecOC"].toString()} dni"
+                                            carModel!.koniecOC != null
+                                                ? "${carModel!.koniecOC} dni"
                                                 : "brak",
                                             style: TextStyle(
                                               color: fontBlack,
@@ -207,9 +218,9 @@ class _CarItemState extends State<CarItem> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            carData?["koniecAC"] != null
-                                                ? "${carData!["koniecAC"].toString()} dni"
-                                                : "Brak",
+                                            carModel!.koniecAC != null
+                                                ? "${carModel!.koniecAC} dni"
+                                                : "brak",
                                             style: TextStyle(
                                               color: fontBlack,
                                             ),
@@ -273,10 +284,13 @@ class _CarItemState extends State<CarItem> {
                           )),
                       onPressed: () {
                         // print("przeglad");
-                        Navigator.pushNamed(context, "/carService", arguments: {
-                          "car": carData,
-                          "id": widget.carId,
-                        });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CarServiceView(
+                                car: carModel!,
+                              ),
+                            ));
                       },
                       child: Container(
                         child: Padding(
@@ -298,7 +312,7 @@ class _CarItemState extends State<CarItem> {
                                   SizedBox(
                                     height: 2,
                                   ),
-                                  if (carData?["koniecPrzegladu"] != null) ...[
+                                  if (carModel!.koniecPrzegladu != null) ...[
                                     Text(
                                       "OKRES WAŻNOŚCI PRZEGLĄDU",
                                       style: TextStyle(
@@ -327,8 +341,8 @@ class _CarItemState extends State<CarItem> {
                                             color: fontGrey,
                                           ),
                                           Text(
-                                            carData?["koniecPrzegladu"] != null
-                                                ? "${carData!["koniecPrzegladu"].toString()} dni"
+                                            carModel!.koniecPrzegladu != null
+                                                ? "${carModel!.koniecPrzegladu} dni"
                                                 : "Brak",
                                             style: TextStyle(
                                               color: fontBlack,
@@ -393,10 +407,8 @@ class _CarItemState extends State<CarItem> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CarRepairHistoryView(
-                                carId: carData!["idSamochodu"],
-                                carModel: carData!["model"],
-                              ),
+                              builder: (context) =>
+                                  CarRepairHistoryView(car: carModel!),
                             ));
                       },
                       child: Container(

@@ -8,12 +8,12 @@ class EmptyBoxInfo extends StatelessWidget {
   const EmptyBoxInfo({
     required this.title,
     required this.description,
-    required this.addRouteLink,
+    required this.pageRoute,
   });
 
   final String title;
   final String description;
-  final Map addRouteLink;
+  final Widget Function() pageRoute;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,11 @@ class EmptyBoxInfo extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
       onPressed: () {
-        Navigator.pushNamed(context, addRouteLink["routeName"],
-            arguments: addRouteLink["arguments"]);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => pageRoute(),
+            ));
       },
       child: Container(
         child: Padding(

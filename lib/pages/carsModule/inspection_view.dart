@@ -18,35 +18,30 @@ import 'package:projzespoloey/services/car/inspection_service.dart';
 import 'package:projzespoloey/utils/http_delete.dart';
 
 class CarServiceView extends StatefulWidget {
-  const CarServiceView({Key? key}) : super(key: key);
+  final CarModel car;
+  const CarServiceView({Key? key, required this.car}) : super(key: key);
 
   @override
   State<CarServiceView> createState() => _CarServiceViewState();
 }
 
 class _CarServiceViewState extends State<CarServiceView> {
-  Map item = {};
   InspectionModel? inspectionData = InspectionModel();
   String? token;
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        item = item.isNotEmpty
-            ? item
-            : ModalRoute.of(context)?.settings.arguments as Map;
-      });
-      _getData(item["car"]["idSamochodu"]);
-    });
+    getData();
   }
 
-  _getData(id) async {
+  getData() async {
     token = await storage.read(key: "token");
-    inspectionData = (await InspectionApiService().getInspection(token, id));
+    inspectionData = (await InspectionApiService()
+        .getInspection(token, widget.car.idSamochodu));
     setState(() {});
   }
 
+  var item;
   @override
   Widget build(BuildContext context) {
     if (inspectionData == null) {
@@ -55,9 +50,9 @@ class _CarServiceViewState extends State<CarServiceView> {
     final size = MediaQuery.of(context).size;
     final today = DateTime.now();
 
-    print("test: ${item}");
-    print("service data is: ");
-    print(inspectionData!.toJson());
+    // print("test: ${item}");
+    // print("service data is: ");
+    // print(inspectionData!.toJson());
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -84,7 +79,7 @@ class _CarServiceViewState extends State<CarServiceView> {
             fontFamily: 'Lato',
             fontSize: MediaQuery.of(context).textScaleFactor * 20,
             color: Colors.black),
-        title: Text("Przegląd - ${item["car"]["model"]}"),
+        title: Text("Przegląd - ${widget.car.marka} ${widget.car.model}"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -94,28 +89,25 @@ class _CarServiceViewState extends State<CarServiceView> {
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
             child: ListView(children: [
               CarImageContainer(
-                  image: item["car"]["idSamochodu"],
-                  brand: item["car"]["marka"],
-                  model: item["car"]["model"],
-                  prodDate: item["car"]["rokProdukcji"],
-                  engine: item["car"]["pojemnoscSilnika"],
-                  vinNr: item["car"]["numerVin"],
-                  carRegNumber: item["car"]["numerRejestracyjny"]),
+                image: widget.car.idSamochodu!,
+                brand: widget.car.marka!,
+                model: widget.car.model!,
+                prodDate: widget.car.rokProdukcji!,
+                engine: widget.car.pojemnoscSilnika!,
+                vinNr: widget.car.numerVin!,
+                carRegNumber: widget.car.numerRejestracyjny!,
+              ),
               SizedBox(
                 height: 15,
               ),
-              if (item["car"]["koniecPrzegladu"] == null) ...[
+              if (widget.car.koniecPrzegladu == null) ...[
                 EmptyBoxInfo(
-                    title: "Dodaj przegląd w kilku krokach",
-                    description:
-                        "Aktualnie nie dodałeś jeszcze żadnego przeglądu zrób to już teraz klikając w to powiadomienie!",
-                    addRouteLink: {
-                      "routeName": "/formCarService",
-                      "arguments": {
-                        "form_type": "car_insurance",
-                        'idSamochodu': item["car"]["idSamochodu"],
-                      }
-                    })
+                  title: "Dodaj przegląd w kilku krokach",
+                  description:
+                      "Aktualnie nie dodałeś jeszcze żadnego przeglądu zrób to już teraz klikając w to powiadomienie!",
+                  pageRoute: () =>
+                      InspectionForm(carId: widget.car.idSamochodu!),
+                )
               ] else ...[
                 Container(
                   decoration: BoxDecoration(
@@ -405,8 +397,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
                                     color: secondaryColor),
-                                child: Text(
-                                    "${item["car"]["koniecPrzegladu"]} dni",
+                                child: Text("${widget.car.koniecPrzegladu} dni",
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         fontSize: 14,
@@ -424,10 +415,9 @@ class _CarServiceViewState extends State<CarServiceView> {
                                 DeleteButton(
                                     endpoint: Endpoints.carInspection,
                                     token: token,
-                                    id: item["id"],
+                                    id: inspectionData!.idPrzegladu,
                                     dialogtype: AlertDialogType.carInspection,
-                                    callback:
-                                        _getData(item["car"]["idSamochodu"])),
+                                    callback: getData),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       padding: EdgeInsets.all(5),
@@ -521,8 +511,8 @@ class _CarServiceViewState extends State<CarServiceView> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => InspectionHistory(
-                              carId: item["car"]["idSamochodu"],
-                              carModel: item["car"]["model"]),
+                              carId: widget.car.idSamochodu!,
+                              carModel: widget.car.model!),
                         ));
                   },
                   child: Container(
@@ -578,7 +568,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                                         width: 10,
                                       ),
                                       Text(
-                                        "${item["car"]["zarchiwizowanePrzeglady"]}",
+                                        "${widget.car.zarchiwizowanePrzeglady}",
                                         style: TextStyle(
                                           color: fontBlack,
                                         ),
@@ -607,8 +597,12 @@ class _CarServiceViewState extends State<CarServiceView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, "/formCarService",
-              arguments: {'idSamochodu': item["car"]["idSamochodu"]});
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    InspectionForm(carId: widget.car.idSamochodu!),
+              ));
         },
         backgroundColor: mainColor,
         child: Icon(Icons.add),

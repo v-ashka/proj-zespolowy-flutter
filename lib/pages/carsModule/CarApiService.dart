@@ -55,6 +55,25 @@ class CarApiService {
     }
   }
 
+  Future<CarModel?> getCarTest(token, id) async {
+    try {
+      var url = Uri.parse("${SERVER_IP}/api/car/GetCar/${id}");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer ${token}",
+      });
+
+      if (response.statusCode == 200) {
+        var car = jsonDecode(response.body);
+        return CarModel.fromJson(car);
+      }
+      return null;
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
   Future getModeleMarki(token) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/car/MarkiModele");

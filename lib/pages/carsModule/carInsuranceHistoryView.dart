@@ -2,6 +2,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/delete_button.dart';
+import 'package:projzespoloey/components/detail_bar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
@@ -11,6 +12,7 @@ import 'package:projzespoloey/utils/http_delete.dart';
 
 class CarInsuranceHistoryView extends StatefulWidget {
   final CarModel? car;
+
   const CarInsuranceHistoryView({Key? key, required this.car})
       : super(key: key);
 
@@ -116,216 +118,29 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
                                           ),
                                         ],
                                       ),
-                                      collapsed: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 2),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              "Okres ubezpieczenia:  ",
-                                              style: TextStyle(
-                                                fontFamily: "Lato",
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                            Flexible(
-                                              fit: FlexFit.loose,
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        10, 5, 10, 5),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25),
-                                                    color: secondaryColor),
-                                                child: Text(
-                                                    "${insurance.dataZakupu} / ${insurance.dataKonca}",
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: fontBlack)),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      collapsed: DetailBar(
+                                          title: "Okres ubezpieczenia",
+                                          value:
+                                              "${insurance.dataZakupu} / ${insurance.dataKonca}"),
                                       expanded: Column(children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 2),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                "Numer polisy:  ",
-                                                style: TextStyle(
-                                                  fontFamily: "Lato",
-                                                  fontWeight: FontWeight.w900,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                              Flexible(
-                                                fit: FlexFit.loose,
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          10, 5, 10, 5),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
-                                                      color: secondaryColor),
-                                                  child: Text(
-                                                    "${insurance.nrPolisy}",
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 2),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                "Nazwa ubezpieczyciela:  ",
-                                                style: TextStyle(
-                                                  fontFamily: "Lato",
-                                                  fontWeight: FontWeight.w900,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                              Flexible(
-                                                fit: FlexFit.loose,
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          10, 5, 10, 5),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
-                                                      color: secondaryColor),
-                                                  child: Text(
-                                                      "${insurance.ubezpieczyciel}",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      )),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 2),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                "Okres ubezpieczenia:  ",
-                                                style: TextStyle(
-                                                  fontFamily: "Lato",
-                                                  fontWeight: FontWeight.w900,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                              Flexible(
-                                                fit: FlexFit.loose,
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          10, 5, 10, 5),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
-                                                      color: secondaryColor),
-                                                  child: Text(
-                                                      "${insurance.dataZakupu} / ${insurance.dataKonca}",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: fontBlack)),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 2),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                "Składka OC:  ",
-                                                style: TextStyle(
-                                                  fontFamily: "Lato",
-                                                  fontWeight: FontWeight.w900,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                              Flexible(
-                                                fit: FlexFit.loose,
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          10, 5, 10, 5),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
-                                                      color: secondaryColor),
-                                                  child: Text(
-                                                      "${insurance.kosztPolisy}",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: fontBlack)),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                        DetailBar(
+                                            title: "Numer polisy",
+                                            value: insurance.nrPolisy!),
+                                        DetailBar(
+                                            title: "Nazwa ubezpieczyciela",
+                                            value: insurance.ubezpieczyciel!),
+                                        DetailBar(
+                                            title: "Okres ubezpieczenia",
+                                            value:
+                                                "${insurance.dataZakupu} / ${insurance.dataKonca}"),
+                                        DetailBar(
+                                            title: insurance
+                                                        .idRodzajuUbezpieczenia ==
+                                                    1
+                                                ? "Składka OC"
+                                                : "Składka AC",
+                                            value: "${insurance.kosztPolisy} zł"
+                                                .toString()),
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               15, 0, 0, 5),

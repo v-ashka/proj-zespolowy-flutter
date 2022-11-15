@@ -27,6 +27,8 @@ class CarModel with ChangeNotifier {
       this.marka,
       this.rodzajSkrzyniBiegow,
       this.rodzajNapedu,
+      this.rodzajPaliwa,
+      this.moc,
       this.koniecOC,
       this.koniecAC,
       this.koniecPrzegladu,
@@ -45,6 +47,8 @@ class CarModel with ChangeNotifier {
   String? marka;
   String? rodzajSkrzyniBiegow;
   String? rodzajNapedu;
+  String? rodzajPaliwa;
+  int? moc;
   int? koniecOC;
   int? koniecAC;
   int? koniecPrzegladu;
@@ -69,6 +73,8 @@ class CarModel with ChangeNotifier {
       przebieg: json["przebieg"],
       rodzajSkrzyniBiegow: json["rodzajSkrzyniBiegow"],
       rodzajNapedu: json["rodzajNapedu"],
+      rodzajPaliwa: json["rodzajPaliwa"],
+      moc: json["moc"],
       ostatniaNaprawa: json["ostatniaNaprawa"]);
 
   Map<String, dynamic> toJson() => {
@@ -88,6 +94,8 @@ class CarModel with ChangeNotifier {
         "przebieg": przebieg,
         "rodzajSkrzyniBiegow": rodzajSkrzyniBiegow,
         "rodzajNapedu": rodzajNapedu,
+        "rodzajPaliwa": rodzajPaliwa,
+        "moc": moc,
         "ostatniaNaprawa": ostatniaNaprawa
       };
 }
@@ -127,6 +135,7 @@ class CarModelForm {
       this.idRodzajuNapedu,
       this.idRodzajuPaliwa,
       this.idRodzajuSkrzyniBiegow});
+
   int? PojemnoscSilnika;
   int? RokProdukcji;
   String? NumerVin;

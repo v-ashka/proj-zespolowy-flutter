@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/delete_button.dart';
+import 'package:projzespoloey/components/detail_bar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/car_repair_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
@@ -14,6 +15,7 @@ import 'package:projzespoloey/utils/http_delete.dart';
 
 class CarRepairHistoryView extends StatefulWidget {
   final CarModel car;
+
   const CarRepairHistoryView({Key? key, required this.car}) : super(key: key);
 
   @override
@@ -34,8 +36,7 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
     token = await storage.read(key: "token");
     repairList = await CarRepairHistoryService()
         .getRepairList(token, widget.car.idSamochodu);
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -113,341 +114,44 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                           ),
                                         ],
                                       ),
-                                      collapsed: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 2),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Data naprawy:  ",
-                                              style: TextStyle(
-                                                fontFamily: "Lato",
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                            Flexible(
-                                              fit: FlexFit.loose,
-                                              child: Container(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    10, 5, 10, 5),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25),
-                                                    color: secondaryColor),
-                                                child: Text(
-                                                    "${repair.dataNaprawy}",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    )),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      collapsed: DetailBar(title: "Data naprawy", value: repair.dataNaprawy!),
                                       expanded: Column(children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 2),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Data naprawy:  ",
-                                                style: TextStyle(
-                                                  fontFamily: "Lato",
-                                                  fontWeight: FontWeight.w900,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                              Flexible(
-                                                fit: FlexFit.loose,
-                                                child: Container(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      10, 5, 10, 5),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
-                                                      color: secondaryColor),
-                                                  child: Text(
-                                                      "${repair.dataNaprawy}",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      )),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                        DetailBar(title: "Data naprawy", value: repair.dataNaprawy!),
                                         if (repair.warsztat != null &&
                                             repair.warsztat != "")
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Warsztat:  ",
-                                                  style: TextStyle(
-                                                    fontFamily: "Lato",
-                                                    fontWeight: FontWeight.w900,
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                                Flexible(
-                                                  fit: FlexFit.loose,
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 5, 10, 5),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: secondaryColor),
-                                                    child: Text(
-                                                        "${repair.warsztat}",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        )),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                          DetailBar(title: "Warsztat", value: repair.warsztat!),
                                         if (repair.kosztNaprawy != null)
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2),
-                                            child: SizedBox(
-                                              width: double.infinity,
-                                              child: Wrap(
-                                                crossAxisAlignment:
-                                                    WrapCrossAlignment.center,
-                                                textDirection:
-                                                    TextDirection.ltr,
-                                                spacing: 5,
-                                                runSpacing: 5,
-                                                children: [
-                                                  Text(
-                                                    "Koszt naprawy:  ",
-                                                    style: TextStyle(
-                                                      fontFamily: "Lato",
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 5, 10, 5),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: secondaryColor),
-                                                    child: Text(
-                                                        "${repair.kosztNaprawy} zł",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: fontBlack)),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
+                                          DetailBar(
+                                              title: "Koszt naprawy",
+                                              value: repair.kosztNaprawy
+                                                  .toString()),
                                         if (repair.przebieg != null)
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2),
-                                            child: SizedBox(
-                                              width: double.infinity,
-                                              child: Wrap(
-                                                crossAxisAlignment:
-                                                    WrapCrossAlignment.center,
-                                                textDirection:
-                                                    TextDirection.ltr,
-                                                spacing: 5,
-                                                runSpacing: 5,
-                                                children: [
-                                                  Text(
-                                                    "Przebieg:  ",
-                                                    style: TextStyle(
-                                                      fontFamily: "Lato",
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 5, 10, 5),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: secondaryColor),
-                                                    child: Text(
-                                                        "${repair.przebieg} km",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: fontBlack)),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
+                                          DetailBar(
+                                              title: "Przebieg",
+                                              value:
+                                                  repair.przebieg.toString()),
                                         if (repair.dataNastepnejWymiany !=
                                                 null ||
                                             repair.liczbaKilometrowDoNastepnejWymiany !=
                                                 null)
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2),
-                                            child: SizedBox(
-                                              width: double.infinity,
-                                              child: Wrap(
-                                                crossAxisAlignment:
-                                                    WrapCrossAlignment.center,
-                                                textDirection:
-                                                    TextDirection.ltr,
-                                                spacing: 5,
-                                                runSpacing: 5,
-                                                children: [
-                                                  Text(
-                                                    "Następna wymiana:  ",
-                                                    style: TextStyle(
-                                                      fontFamily: "Lato",
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 5, 10, 5),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: secondaryColor),
-                                                    child: repair.dataNastepnejWymiany != null &&
-                                                            repair.liczbaKilometrowDoNastepnejWymiany ==
-                                                                null
-                                                        ? Text("${repair.dataNastepnejWymiany}",
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color:
-                                                                    fontBlack))
-                                                        : repair.dataNastepnejWymiany == null &&
-                                                                repair.liczbaKilometrowDoNastepnejWymiany !=
-                                                                    null
-                                                            ? Text("${repair.liczbaKilometrowDoNastepnejWymiany}",
-                                                                textAlign: TextAlign
-                                                                    .center,
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    color:
-                                                                        fontBlack))
-                                                            : Text("${repair.dataNastepnejWymiany} lub po ${repair.liczbaKilometrowDoNastepnejWymiany} km",
-                                                                textAlign: TextAlign.center,
-                                                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: fontBlack)),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
+                                          DetailBar(
+                                              title: "Następna wymiana",
+                                              value: repair.dataNastepnejWymiany !=
+                                                          null &&
+                                                      repair.liczbaKilometrowDoNastepnejWymiany ==
+                                                          null
+                                                  ? "${repair.dataNastepnejWymiany}"
+                                                  : repair.dataNastepnejWymiany ==
+                                                              null &&
+                                                          repair.liczbaKilometrowDoNastepnejWymiany !=
+                                                              null
+                                                      ? "${repair.liczbaKilometrowDoNastepnejWymiany}"
+                                                      : "${repair.dataNastepnejWymiany} lub po ${repair.liczbaKilometrowDoNastepnejWymiany} km"),
                                         if (repair.opis != null &&
                                             repair.opis != "")
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2),
-                                            child: SizedBox(
-                                              width: double.infinity,
-                                              child: Wrap(
-                                                crossAxisAlignment:
-                                                    WrapCrossAlignment.center,
-                                                textDirection:
-                                                    TextDirection.ltr,
-                                                spacing: 5,
-                                                runSpacing: 5,
-                                                children: [
-                                                  Text(
-                                                    "Opis:  ",
-                                                    style: TextStyle(
-                                                      fontFamily: "Lato",
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 5, 10, 5),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: secondaryColor),
-                                                    child: Text(
-                                                        "${repair.opis}",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: fontBlack)),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
+                                          DetailBar(
+                                              title: "Opis",
+                                              value: repair.opis!),
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               15, 15, 5, 0),
@@ -473,136 +177,6 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                       dialogtype:
                                                           AlertDialogType
                                                               .carRepair),
-                                                  // DeleteButton(
-                                                  //     responseType:
-                                                  //         CarRepairHistoryService()
-                                                  //             .deleteRepair(
-                                                  //                 token,
-                                                  //                 repair
-                                                  //                     .idNaprawy),
-                                                  //     refreshData: getData(),
-                                                  //     dialogtype:
-                                                  //         AlertDialogType
-                                                  //             .carRepair),
-                                                  // ElevatedButton(
-                                                  //   style: ElevatedButton
-                                                  //       .styleFrom(
-                                                  //           padding:
-                                                  //               EdgeInsets.all(
-                                                  //                   5),
-                                                  //           primary: Colors
-                                                  //               .transparent,
-                                                  //           shadowColor: Colors
-                                                  //               .transparent,
-                                                  //           onPrimary:
-                                                  //               deleteBtn,
-                                                  //           shape:
-                                                  //               RoundedRectangleBorder(
-                                                  //             borderRadius:
-                                                  //                 BorderRadius
-                                                  //                     .circular(
-                                                  //                         100),
-                                                  //           )),
-                                                  //   onPressed: () {
-                                                  //     showDialog(
-                                                  //         context: context,
-                                                  //         builder: (BuildContext
-                                                  //             context) {
-                                                  //           return Container(
-                                                  //             padding:
-                                                  //                 EdgeInsets
-                                                  //                     .all(5),
-                                                  //             child:
-                                                  //                 AlertDialog(
-                                                  //               actionsPadding:
-                                                  //                   EdgeInsets
-                                                  //                       .all(0),
-                                                  //               actionsAlignment:
-                                                  //                   MainAxisAlignment
-                                                  //                       .center,
-                                                  //               shape:
-                                                  //                   RoundedRectangleBorder(
-                                                  //                 borderRadius:
-                                                  //                     BorderRadius
-                                                  //                         .circular(
-                                                  //                             25),
-                                                  //               ),
-                                                  //               title: Text(
-                                                  //                   "Czy na pewno chcesz usunąć ten element?"),
-                                                  //               content: Text(
-                                                  //                   "Po usunięciu nie możesz cofnąć tej akcji."),
-                                                  //               actions: [
-                                                  //                 ElevatedButton(
-                                                  //                     style: ElevatedButton.styleFrom(
-                                                  //                         primary: mainColor,
-                                                  //                         onPrimary: mainColor,
-                                                  //                         shape: RoundedRectangleBorder(
-                                                  //                           borderRadius:
-                                                  //                               BorderRadius.circular(25),
-                                                  //                         )),
-                                                  //                     onPressed: () {
-                                                  //                       print(
-                                                  //                           "no");
-                                                  //                       Navigator.of(context)
-                                                  //                           .pop();
-                                                  //                     },
-                                                  //                     child: Text(
-                                                  //                       "Anuluj",
-                                                  //                       style: TextStyle(
-                                                  //                           color:
-                                                  //                               Colors.white),
-                                                  //                     )),
-                                                  //                 ElevatedButton(
-                                                  //                     style: ElevatedButton.styleFrom(
-                                                  //                         primary: deleteBtn,
-                                                  //                         onPrimary: deleteBtn,
-                                                  //                         shape: RoundedRectangleBorder(
-                                                  //                           borderRadius:
-                                                  //                               BorderRadius.circular(25),
-                                                  //                         )),
-                                                  //                     onPressed: () async {
-                                                  //                       Navigator.of(context)
-                                                  //                           .pop();
-                                                  //                       Response
-                                                  //                           response =
-                                                  //                           await CarRepairHistoryService().deleteRepair(token,
-                                                  //                               repair.idNaprawy);
-                                                  //                       if (response.statusCode ==
-                                                  //                           200) {
-                                                  //                         setState(
-                                                  //                             () {
-                                                  //                           getData();
-                                                  //                         });
-                                                  //                       }
-                                                  //                     },
-                                                  //                     child: Text(
-                                                  //                       "Usuń",
-                                                  //                       style: TextStyle(
-                                                  //                           color:
-                                                  //                               Colors.white),
-                                                  //                     )),
-                                                  //               ],
-                                                  //             ),
-                                                  //           );
-                                                  //         });
-                                                  //   },
-                                                  //   child: Container(
-                                                  //     width: 50,
-                                                  //     height: 50,
-                                                  //     decoration: BoxDecoration(
-                                                  //       borderRadius:
-                                                  //           BorderRadius
-                                                  //               .circular(25),
-                                                  //       color: deleteBtn,
-                                                  //     ),
-                                                  //     child: Icon(
-                                                  //       Icons
-                                                  //           .delete_outline_rounded,
-                                                  //       size: 30,
-                                                  //       color: bgSmokedWhite,
-                                                  //     ),
-                                                  //   ),
-                                                  // ),
                                                   ElevatedButton(
                                                     style: ElevatedButton
                                                         .styleFrom(

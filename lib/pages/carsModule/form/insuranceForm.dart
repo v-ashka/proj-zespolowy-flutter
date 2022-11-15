@@ -392,7 +392,11 @@ class _InsuranceFormState extends State<InsuranceForm> {
                                 cursorColor: Colors.black,
                                 style: TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(15),
+
+                                    suffixText: "zł",
+                                    contentPadding:
+                                    EdgeInsets.fromLTRB(
+                                        10, 1, 20, 1),
                                     prefixIcon: Padding(
                                       padding: EdgeInsets.only(top: 1),
                                       child: Icon(

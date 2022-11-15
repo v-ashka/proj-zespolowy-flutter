@@ -568,7 +568,7 @@ class _CarServiceViewState extends State<CarServiceView> {
                   ),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 80,
                 ),
               ]
             ])),

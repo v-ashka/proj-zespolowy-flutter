@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
@@ -105,33 +106,7 @@ class FilesViewState extends State<FilesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: secondaryColor,
-            //onPrimary: Colors.transparent,
-            //shadowColor: Colors.red,
-            disabledBackgroundColor: Colors.red,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        foregroundColor: Colors.transparent,
-        backgroundColor: secondaryColor,
-        shadowColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-        title: Text("Lista plików"),
-      ),
+      appBar: myAppBar(context, HeaderTitleType.fileList),
       body: Container(
           decoration: BoxDecoration(
               image: DecorationImage(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:http/http.dart';
+import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/components/emptyBox.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
@@ -12,6 +13,7 @@ import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/filesView.dart';
 import 'package:projzespoloey/pages/carsModule/form/inspection_form.dart';
+import 'package:projzespoloey/pages/carsModule/form/insuranceForm.dart';
 import 'package:projzespoloey/pages/carsModule/inspection_history_view.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
@@ -54,33 +56,8 @@ class _CarServiceViewState extends State<CarServiceView> {
     // print("service data is: ");
     // print(inspectionData!.toJson());
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onPrimary: Colors.transparent,
-            shadowColor: Colors.transparent,
-            onSurface: Colors.red,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        foregroundColor: Colors.transparent,
-        backgroundColor: secondaryColor,
-        shadowColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-        title: Text("Przegląd - ${widget.car.marka} ${widget.car.model}"),
-      ),
+      appBar: myAppBar(context, HeaderTitleType.carInspection, "-",
+          widget.car.marka, widget.car.model),
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -429,15 +406,16 @@ class _CarServiceViewState extends State<CarServiceView> {
                                             BorderRadius.circular(100),
                                       )),
                                   onPressed: () {
-                                    /*   print("edit object");
+                                    print("edit object");
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              InsuranceEditForm(
-                                                  insurance: insuranceOC,
-                                                  carId: idSamochodu),
-                                        ));*/
+                                          builder: (context) => InspectionForm(
+                                            carId: widget.car.idSamochodu!,
+                                            isEditing: true,
+                                            editModel: inspectionData,
+                                          ),
+                                        ));
                                   },
                                   child: Container(
                                     width: 50,

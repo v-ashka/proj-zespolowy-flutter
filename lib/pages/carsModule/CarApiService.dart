@@ -63,6 +63,7 @@ class CarApiService {
         'Authorization': "Bearer ${token}",
       });
 
+      log(id.toString());
       if (response.statusCode == 200) {
         var car = jsonDecode(response.body);
         return CarModel.fromJson(car);

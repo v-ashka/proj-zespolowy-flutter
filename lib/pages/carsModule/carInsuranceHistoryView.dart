@@ -1,10 +1,13 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:projzespoloey/components/appbar.dart';
+import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/insurance_service.dart';
+import 'package:projzespoloey/utils/http_delete.dart';
 
 class CarInsuranceHistoryView extends StatefulWidget {
   final CarModel? car;
@@ -17,7 +20,6 @@ class CarInsuranceHistoryView extends StatefulWidget {
 }
 
 class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
-  // Map item = {};
   List<InsuranceModel> insuranceList = [];
   String? token;
 
@@ -35,40 +37,12 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final today = DateTime.now();
     if (widget.car!.idSamochodu == null) {
       return const LoadingScreen();
     }
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onPrimary: Colors.transparent,
-            shadowColor: Colors.transparent,
-            onSurface: Colors.red,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        foregroundColor: Colors.transparent,
-        backgroundColor: secondaryColor,
-        shadowColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-        title: Text(
-            "Historia ubezpieczeń - ${widget.car!.marka} ${widget.car!.model}"),
-      ),
+      appBar: myAppBar(context, HeaderTitleType.carInsuracneHistory, "-",
+          widget.car?.marka, widget.car?.model),
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
@@ -368,136 +342,16 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            foregroundColor:
-                                                                deleteBtn,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(5),
-                                                            shadowColor: Colors
-                                                                .transparent,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100),
-                                                            )),
-                                                    onPressed: () {
-                                                      print("delete object");
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return Container(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(5),
-                                                              child:
-                                                                  AlertDialog(
-                                                                actionsPadding:
-                                                                    const EdgeInsets
-                                                                        .all(0),
-                                                                actionsAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              25),
-                                                                ),
-                                                                title: const Text(
-                                                                    "Czy na pewno chcesz usunąć ten element?"),
-                                                                content: const Text(
-                                                                    "Po usunięciu nie możesz cofnąć tej akcji."),
-                                                                actions: [
-                                                                  ElevatedButton(
-                                                                      style: ElevatedButton.styleFrom(
-                                                                          primary: mainColor,
-                                                                          onPrimary: mainColor,
-                                                                          shape: RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(25),
-                                                                          )),
-                                                                      onPressed: () {
-                                                                        print(
-                                                                            "no");
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      },
-                                                                      child: const Text(
-                                                                        "Anuluj",
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white),
-                                                                      )),
-                                                                  ElevatedButton(
-                                                                      style: ElevatedButton.styleFrom(
-                                                                          primary: deleteBtn,
-                                                                          onPrimary: deleteBtn,
-                                                                          shape: RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(25),
-                                                                          )),
-                                                                      onPressed: () async {
-                                                                        // print("yes");
-                                                                        // // insuranceData.IdUbezpieczenia
-                                                                        // tokenVal = await storage
-                                                                        //     .read(key: "token");
-                                                                        // var deleteRes =
-                                                                        //     await CarApiService()
-                                                                        //         .deleteInsurance(
-                                                                        //             tokenVal,
-                                                                        //             insuranceData
-                                                                        //                 .IdUbezpieczenia);
-                                                                        // setState(() {
-                                                                        //   if (deleteRes)
-                                                                        //     Navigator
-                                                                        //         .pushReplacement(
-                                                                        //             context,
-                                                                        //             MaterialPageRoute<
-                                                                        //                 void>(
-                                                                        //               builder: (BuildContext
-                                                                        //                       context) =>
-                                                                        //                   CarItem(carId: idSamochodu),
-                                                                        //             ));
-                                                                        // });
-                                                                      },
-                                                                      child: const Text(
-                                                                        "Usuń",
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white),
-                                                                      )),
-                                                                ],
-                                                              ),
-                                                            );
-                                                          });
-                                                    },
-                                                    child: Container(
-                                                      width: 50,
-                                                      height: 50,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: deleteBtn,
-                                                      ),
-                                                      child: const Icon(
-                                                        Icons
-                                                            .delete_outline_rounded,
-                                                        size: 30,
-                                                        color: bgSmokedWhite,
-                                                      ),
-                                                    ),
-                                                  ),
+                                                  DeleteButton(
+                                                      endpoint: Endpoints
+                                                          .carInsurance,
+                                                      token: token,
+                                                      id: insurance
+                                                          .idUbezpieczenia,
+                                                      dialogtype:
+                                                          AlertDialogType
+                                                              .carInsurance,
+                                                      callback: getData),
                                                   ElevatedButton(
                                                     style: ElevatedButton
                                                         .styleFrom(

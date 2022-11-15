@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/car_repair_model.dart';
 import 'package:projzespoloey/models/inspection_model.dart';
@@ -79,32 +80,7 @@ class _CarRepairEditFormState extends State<CarRepairEditForm> {
     carRepair = widget.carRepair;
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.transparent,
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        foregroundColor: Colors.transparent,
-        backgroundColor: secondaryColor,
-        shadowColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-        title: Text("${widget.carRepair.nazwaNaprawy} - Edycja"),
-      ),
+      appBar: myAppBar(context, HeaderTitleType.formEditRepair),
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(

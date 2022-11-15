@@ -14,26 +14,25 @@ List<CarListView> carListViewFromJson(String str) => List<CarListView>.from(
 String carModelToJson(List<CarModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class CarModel {
-  CarModel({
-    this.idSamochodu,
-    this.pojemnoscSilnika,
-    this.rokProdukcji,
-    this.numerVin,
-    this.dataZakupu,
-    this.numerRejestracyjny,
-    this.przebieg,
-    this.model,
-    this.marka,
-    this.rodzajSkrzyniBiegow,
-    this.rodzajNapedu,
-    this.koniecOC,
-    this.koniecAC,
-    this.koniecPrzegladu,
-    this.zarchiwizowanePolisy,
-    this.zarchiwizowanePrzeglady,
-    this.ostatniaNaprawa
-  });
+class CarModel with ChangeNotifier {
+  CarModel(
+      {this.idSamochodu,
+      this.pojemnoscSilnika,
+      this.rokProdukcji,
+      this.numerVin,
+      this.dataZakupu,
+      this.numerRejestracyjny,
+      this.przebieg,
+      this.model,
+      this.marka,
+      this.rodzajSkrzyniBiegow,
+      this.rodzajNapedu,
+      this.koniecOC,
+      this.koniecAC,
+      this.koniecPrzegladu,
+      this.zarchiwizowanePolisy,
+      this.zarchiwizowanePrzeglady,
+      this.ostatniaNaprawa});
 
   String? idSamochodu;
   int? pojemnoscSilnika;

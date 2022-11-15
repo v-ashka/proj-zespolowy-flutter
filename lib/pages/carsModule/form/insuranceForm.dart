@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projzespoloey/components/add_attachment_button.dart';
+import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/main.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
@@ -20,7 +21,11 @@ import '../../../utils/file_picker.dart';
 
 class InsuranceForm extends StatefulWidget {
   final String? carId;
-  const InsuranceForm({Key? key, required this.carId}) : super(key: key);
+  final bool? isEditing;
+  final InsuranceModel? editModel;
+  const InsuranceForm(
+      {Key? key, required this.carId, this.isEditing = false, this.editModel})
+      : super(key: key);
 
   @override
   State<InsuranceForm> createState() => _InsuranceFormState();
@@ -39,6 +44,12 @@ class _InsuranceFormState extends State<InsuranceForm> {
     String? tokenVal = await storage.read(key: "token");
     insuranceTypesList = (await CarApiService().getInsuranceTypes(tokenVal));
     setState(() {});
+  }
+
+  void checkIfEditForm(isEdit, editModel) async {
+    if (isEdit) {
+      insurance = editModel;
+    }
   }
 
   Future<DateTime?> pickDate(context) {
@@ -65,41 +76,19 @@ class _InsuranceFormState extends State<InsuranceForm> {
   @override
   void initState() {
     super.initState();
-
     _getInsuranceTypes();
+    checkIfEditForm(widget.isEditing, widget.editModel);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onPrimary: Colors.transparent,
-            shadowColor: Colors.transparent,
-            onSurface: Colors.red,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        foregroundColor: Colors.transparent,
-        backgroundColor: secondaryColor,
-        shadowColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-        title: Text("Dodaj ubezpieczenie"),
-      ),
+      appBar: myAppBar(
+          context,
+          widget.isEditing!
+              ? (HeaderTitleType.formEditInsurance)
+              : (HeaderTitleType.formAddInsurance)),
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -116,7 +105,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                 child: Form(
                   key: _formKey,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 20),
                     child: Column(
                       // padding: EdgeInsets.only(bottom: 10),
                       children: [
@@ -193,6 +182,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                               ),
                             ),
                             TextFormField(
+                              initialValue: insurance.ubezpieczyciel ?? "",
                               onSaved: (String? value) {
                                 insurance.ubezpieczyciel = value;
                               },
@@ -231,6 +221,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                               ),
                             ),
                             TextFormField(
+                              initialValue: insurance.nrPolisy ?? "",
                               onSaved: (String? value) {
                                 insurance.nrPolisy = value;
                               },
@@ -391,6 +382,10 @@ class _InsuranceFormState extends State<InsuranceForm> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: TextFormField(
+                                initialValue: widget.isEditing!
+                                    ? (insurance.kosztPolisy.toString())
+                                    : (''),
+                                keyboardType: TextInputType.number,
                                 onSaved: (String? value) {
                                   insurance.kosztPolisy = int.parse(value!);
                                 },
@@ -416,8 +411,9 @@ class _InsuranceFormState extends State<InsuranceForm> {
                             ),
                           ],
                         ),
-                        AddAttachmentButton(
-                            files: files, formType: FormType.insurance)
+                        if (!widget.isEditing!)
+                          AddAttachmentButton(
+                              files: files, formType: FormType.insurance)
                       ],
                     ),
                   ),
@@ -436,8 +432,14 @@ class _InsuranceFormState extends State<InsuranceForm> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
-            var insuranceRes = await CarApiService()
-                .addInsurance(tokenVal, insurance, widget.carId);
+            if (!widget.isEditing!) {
+              await CarApiService().updateInsurance(
+                  tokenVal, insurance, insurance.idUbezpieczenia);
+            } else {
+              await CarApiService()
+                  .addInsurance(tokenVal, insurance, widget.carId);
+            }
+
             setState(() {
               Navigator.pushAndRemoveUntil(
                   context,
@@ -450,7 +452,9 @@ class _InsuranceFormState extends State<InsuranceForm> {
           }
         },
         backgroundColor: mainColor,
-        label: Text("Dodaj ubezpieczenie"),
+        label: Text(widget.isEditing!
+            ? ("Zapisz ubezpieczenie")
+            : ("Dodaj ubezpieczenie")),
         icon: Icon(Icons.check),
       ),
     );

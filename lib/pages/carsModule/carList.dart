@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:projzespoloey/components/appbar.dart';
 import "package:projzespoloey/components/module_list.dart";
 import 'package:http/http.dart' as http;
 import 'package:projzespoloey/pages/_Dashboard.dart';
@@ -44,33 +45,7 @@ class _CarListState extends State<CarList> {
     // data = ModalRoute.of(context)?.settings.arguments as UserDataArguments;
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('Pojazdy'),
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            disabledForegroundColor: Colors.red.withOpacity(0.38),
-            disabledBackgroundColor: Colors.red.withOpacity(0.12),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        foregroundColor: Colors.black,
-        //Theme.of(context).colorScheme.secondary,
-        backgroundColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-      ),
+      appBar: myAppBar(context, HeaderTitleType.carList),
       body: Container(
           height: double.infinity,
           width: double.infinity,

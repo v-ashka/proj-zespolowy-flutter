@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/components/emptyBox.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
@@ -60,33 +61,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
       return LoadingScreen();
     }
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onPrimary: Colors.transparent,
-            shadowColor: Colors.transparent,
-            onSurface: Colors.red,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        foregroundColor: Colors.transparent,
-        backgroundColor: secondaryColor,
-        shadowColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-        title: Text("Ubezpieczenie - ${widget.car.marka} ${widget.car.model}"),
-      ),
+      appBar: myAppBar(context, HeaderTitleType.carInsurance, "-",
+          widget.car.marka, widget.car.model),
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -376,11 +352,12 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   DeleteButton(
-                                      endpoint: Endpoints.carInsurance,
-                                      token: tokenVal,
-                                      id: insuranceOC.idUbezpieczenia,
-                                      dialogtype: AlertDialogType.carInspection,
-                                      callback: _getData),
+                                    endpoint: Endpoints.carInsurance,
+                                    token: tokenVal,
+                                    id: insuranceOC.idUbezpieczenia,
+                                    dialogtype: AlertDialogType.carInspection,
+                                    callback: _getData,
+                                  ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         padding: EdgeInsets.all(5),
@@ -392,15 +369,14 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                               BorderRadius.circular(100),
                                         )),
                                     onPressed: () {
-                                      print("edit object");
+                                      print("edit object oc");
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                InsuranceEditForm(
-                                                    insurance: insuranceOC,
-                                                    carId: widget
-                                                        .car.idSamochodu!),
+                                            builder: (context) => InsuranceForm(
+                                                editModel: insuranceOC,
+                                                isEditing: true,
+                                                carId: widget.car.idSamochodu!),
                                           ));
                                     },
                                     child: Container(
@@ -857,15 +833,14 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                               BorderRadius.circular(100),
                                         )),
                                     onPressed: () {
-                                      print("edit object");
+                                      print("edit object ac");
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                InsuranceEditForm(
-                                                    insurance: insuranceAC,
-                                                    carId: widget
-                                                        .car.idSamochodu!),
+                                            builder: (context) => InsuranceForm(
+                                                carId: widget.car.idSamochodu!,
+                                                isEditing: true,
+                                                editModel: insuranceAC),
                                           ));
                                     },
                                     child: Container(

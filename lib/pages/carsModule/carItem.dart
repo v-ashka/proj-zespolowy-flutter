@@ -21,6 +21,8 @@ import 'package:projzespoloey/pages/form.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
 import 'package:projzespoloey/services/car/insurance_service.dart';
 
+import '../../components/appbar.dart';
+
 class CarItem extends StatefulWidget {
   String carId;
   CarItem({Key? key, required this.carId}) : super(key: key);
@@ -53,38 +55,9 @@ class _CarItemState extends State<CarItem> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final today = DateTime.now();
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: secondaryColor,
-            //onPrimary: Colors.transparent,
-            //shadowColor: Colors.red,
-            onSurface: Colors.red,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        foregroundColor: Colors.transparent,
-        backgroundColor: secondaryColor,
-        shadowColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-        title: Text(carModel?.idSamochodu == null
-            ? ("Ładuję...")
-            : ("Pojazd - ${carModel!.marka} ${carModel!.model}")),
-      ),
+      appBar: myAppBar(context, HeaderTitleType.carDefault, "-",
+          carModel?.marka, carModel?.model),
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(

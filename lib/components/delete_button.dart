@@ -30,13 +30,15 @@ class DeleteButton extends StatefulWidget {
   final String? id;
   final AlertDialogType dialogtype;
   final Function() callback;
-  const DeleteButton(
+  Function()? callbackSec;
+  DeleteButton(
       {Key? key,
       required this.endpoint,
       required this.token,
       required this.id,
       required this.dialogtype,
-      required this.callback})
+      required this.callback,
+      this.callbackSec})
       : super(key: key);
 
   @override
@@ -90,11 +92,13 @@ class _DeleteButtonState extends State<DeleteButton> {
                   ),
                   title: Text(
                       "Czy na pewno chcesz usunąć ${widget.dialogtype.text}?"),
-                  content: const Text("Po usunięciu nie możesz cofnąć tej akcji."),
+                  content:
+                      const Text("Po usunięciu nie możesz cofnąć tej akcji."),
                   actions: [
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            foregroundColor: mainColor, backgroundColor: mainColor,
+                            foregroundColor: mainColor,
+                            backgroundColor: mainColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25),
                             )),
@@ -115,10 +119,13 @@ class _DeleteButtonState extends State<DeleteButton> {
                         onPressed: () async {
                           Navigator.of(context).pop();
                           _showAddCarLoadingDialog(true);
+
                           bool response = await deleteRecord(
                               widget.endpoint.text, widget.token, widget.id);
+
                           if (response) {
                             widget.callback.call();
+                            widget.callbackSec?.call();
                             _showAddCarLoadingDialog(false);
                           }
                         },

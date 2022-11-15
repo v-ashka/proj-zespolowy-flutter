@@ -1,11 +1,14 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:projzespoloey/components/appbar.dart';
+import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/inspection_model.dart';
 import 'package:projzespoloey/pages/carsModule/filesView.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
+import 'package:projzespoloey/utils/http_delete.dart';
 
 class InspectionHistory extends StatefulWidget {
   final String carId;
@@ -38,33 +41,7 @@ class _InspectionHistoryState extends State<InspectionHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onPrimary: Colors.transparent,
-            shadowColor: Colors.transparent,
-            onSurface: Colors.red,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        foregroundColor: Colors.transparent,
-        backgroundColor: secondaryColor,
-        shadowColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-        title: Text("Historia przeglądów - ${widget.carModel}"),
-      ),
+      appBar: myAppBar(context, HeaderTitleType.carInsepctionHistory),
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
@@ -348,51 +325,55 @@ class _InspectionHistoryState extends State<InspectionHistory> {
                                             ),
                                           ),
                                           if (inspection.uwagi != null)
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2),
-                                            child: SizedBox(
-                                              width: double.infinity,
-                                              child: Wrap(
-                                                crossAxisAlignment:
-                                                    WrapCrossAlignment.center,
-                                                textDirection:
-                                                    TextDirection.ltr,
-                                                spacing: 5,
-                                                runSpacing: 5,
-                                                children: [
-                                                  Text(
-                                                    "Dodatkowe informacje:  ",
-                                                    style: TextStyle(
-                                                      fontFamily: "Lato",
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      fontSize: 12,
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 2),
+                                              child: SizedBox(
+                                                width: double.infinity,
+                                                child: Wrap(
+                                                  crossAxisAlignment:
+                                                      WrapCrossAlignment.center,
+                                                  textDirection:
+                                                      TextDirection.ltr,
+                                                  spacing: 5,
+                                                  runSpacing: 5,
+                                                  children: [
+                                                    Text(
+                                                      "Dodatkowe informacje:  ",
+                                                      style: TextStyle(
+                                                        fontFamily: "Lato",
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        fontSize: 12,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 5, 10, 5),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: secondaryColor),
-                                                    child: Text(
-                                                        "${inspection.uwagi}",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: fontBlack)),
-                                                  ),
-                                                ],
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              10, 5, 10, 5),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(25),
+                                                          color:
+                                                              secondaryColor),
+                                                      child: Text(
+                                                          "${inspection.uwagi}",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  fontBlack)),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 15, 15, 5, 0),
@@ -410,122 +391,16 @@ class _InspectionHistoryState extends State<InspectionHistory> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    ElevatedButton(
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(5),
-                                                              primary: Colors
-                                                                  .transparent,
-                                                              shadowColor: Colors
-                                                                  .transparent,
-                                                              onPrimary:
-                                                                  deleteBtn,
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            100),
-                                                              )),
-                                                      onPressed: () {
-                                                        print("delete object");
-                                                        showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return Container(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(5),
-                                                                child:
-                                                                    AlertDialog(
-                                                                  actionsPadding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              0),
-                                                                  actionsAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  shape:
-                                                                      RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            25),
-                                                                  ),
-                                                                  title: Text(
-                                                                      "Czy na pewno chcesz usunąć ten element?"),
-                                                                  content: Text(
-                                                                      "Po usunięciu nie możesz cofnąć tej akcji."),
-                                                                  actions: [
-                                                                    ElevatedButton(
-                                                                        style: ElevatedButton.styleFrom(
-                                                                            primary: mainColor,
-                                                                            onPrimary: mainColor,
-                                                                            shape: RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.circular(25),
-                                                                            )),
-                                                                        onPressed: () {
-                                                                          print(
-                                                                              "no");
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                        },
-                                                                        child: Text(
-                                                                          "Anuluj",
-                                                                          style:
-                                                                              TextStyle(color: Colors.white),
-                                                                        )),
-                                                                    ElevatedButton(
-                                                                        style: ElevatedButton.styleFrom(
-                                                                            primary: deleteBtn,
-                                                                            onPrimary: deleteBtn,
-                                                                            shape: RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.circular(25),
-                                                                            )),
-                                                                        onPressed: () async {
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                          Response
-                                                                              response =
-                                                                              await InspectionApiService().deleteInspection(token, inspection!.idPrzegladu);
-                                                                          if (response.statusCode ==
-                                                                              200) {
-                                                                            setState(() {
-                                                                              getData();
-                                                                            });
-                                                                          }
-                                                                        },
-                                                                        child: Text(
-                                                                          "Usuń",
-                                                                          style:
-                                                                              TextStyle(color: Colors.white),
-                                                                        )),
-                                                                  ],
-                                                                ),
-                                                              );
-                                                            });
-                                                      },
-                                                      child: Container(
-                                                        width: 50,
-                                                        height: 50,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(25),
-                                                          color: deleteBtn,
-                                                        ),
-                                                        child: Icon(
-                                                          Icons
-                                                              .delete_outline_rounded,
-                                                          size: 30,
-                                                          color: bgSmokedWhite,
-                                                        ),
-                                                      ),
-                                                    ),
+                                                    DeleteButton(
+                                                        endpoint: Endpoints
+                                                            .carInspection,
+                                                        token: token,
+                                                        id: inspection
+                                                            .idPrzegladu,
+                                                        dialogtype:
+                                                            AlertDialogType
+                                                                .carInspection,
+                                                        callback: getData),
                                                     ElevatedButton(
                                                       style: ElevatedButton
                                                           .styleFrom(

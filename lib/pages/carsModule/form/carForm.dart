@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
@@ -142,33 +143,7 @@ class _CarFormState extends State<CarForm> {
   Widget build(BuildContext context) {
     return Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          elevation: 0.0,
-          leading: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.transparent,
-              onPrimary: Colors.transparent,
-              shadowColor: Colors.transparent,
-              onSurface: Colors.red,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-          ),
-          foregroundColor: Colors.transparent,
-          backgroundColor: secondaryColor,
-          shadowColor: Colors.transparent,
-          titleTextStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Lato',
-              fontSize: MediaQuery.of(context).textScaleFactor * 20,
-              color: Colors.black),
-          title: const Text("Dodaj samochód"),
-        ),
+        appBar: myAppBar(context, HeaderTitleType.formAddCar),
         body: Container(
           decoration: const BoxDecoration(
               image: DecorationImage(

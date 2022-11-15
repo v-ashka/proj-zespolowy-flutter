@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:projzespoloey/components/car_details_box.dart';
 import 'package:projzespoloey/components/imageContainer.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:animations/animations.dart';
@@ -105,6 +106,10 @@ class _CarItemState extends State<CarItem> {
                         engine: carModel!.pojemnoscSilnika!,
                         vinNr: carModel!.numerVin!,
                         carRegNumber: carModel!.numerRejestracyjny!),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    CarDetailBox(carModel: carModel!),
                     SizedBox(
                       height: 15,
                     ),

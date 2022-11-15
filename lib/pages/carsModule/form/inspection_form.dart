@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projzespoloey/components/add_attachment_button.dart';
+import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/inspection_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
@@ -18,7 +19,11 @@ import 'package:projzespoloey/services/car/inspection_service.dart';
 
 class InspectionForm extends StatefulWidget {
   final String carId;
-  const InspectionForm({Key? key, required this.carId}) : super(key: key);
+  final bool? isEditing;
+  final InspectionModel? editModel;
+  const InspectionForm(
+      {Key? key, required this.carId, this.isEditing = false, this.editModel})
+      : super(key: key);
 
   @override
   State<InspectionForm> createState() => _InspectionFormState();
@@ -27,13 +32,28 @@ class InspectionForm extends StatefulWidget {
 class _InspectionFormState extends State<InspectionForm> {
   final storage = const FlutterSecureStorage();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    checkIfEditForm(widget.isEditing, widget.editModel);
+  }
+
   var inspectionStatus = [
     {"title": "Pozytywny", "status": true},
     {"title": "Negatywny", "status": false}
   ];
-
   InspectionModel inspection = InspectionModel();
+
   List<PlatformFile> files = [];
+
+  void checkIfEditForm(isEdit, editModel) async {
+    if (isEdit) {
+      inspection = editModel;
+    }
+  }
 
   Future<DateTime?> pickDate(context) {
     var date = showDatePicker(
@@ -76,32 +96,11 @@ class _InspectionFormState extends State<InspectionForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.transparent,
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        foregroundColor: Colors.transparent,
-        backgroundColor: secondaryColor,
-        shadowColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-        title: Text("Dodaj nowy przegląd"),
-      ),
+      appBar: myAppBar(
+          context,
+          widget.isEditing!
+              ? (HeaderTitleType.formEditInspection)
+              : (HeaderTitleType.formAddInspection)),
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -153,6 +152,8 @@ class _InspectionFormState extends State<InspectionForm> {
                               ),
                             ),
                             TextFormField(
+                                initialValue:
+                                    inspection.nazwaStacjiDiagnostycznej ?? "",
                                 onSaved: (String? value) {
                                   inspection.nazwaStacjiDiagnostycznej = value;
                                 },
@@ -226,6 +227,11 @@ class _InspectionFormState extends State<InspectionForm> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       TextFormField(
+                                          initialValue: widget.isEditing!
+                                              ? (inspection
+                                                  .zarejestrowanyPrzebieg
+                                                  .toString())
+                                              : (''),
                                           onSaved: (String? value) {
                                             inspection.zarejestrowanyPrzebieg =
                                                 int.parse(value!);
@@ -276,6 +282,8 @@ class _InspectionFormState extends State<InspectionForm> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextFormField(
+                                            initialValue:
+                                                inspection.numerBadania ?? "",
                                             onSaved: (String? value) {
                                               inspection.numerBadania = value;
                                             },
@@ -539,6 +547,7 @@ class _InspectionFormState extends State<InspectionForm> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: TextFormField(
+                                initialValue: inspection.uwagi ?? "",
                                 maxLines: 4,
                                 onSaved: (String? value) {
                                   inspection.uwagi = value;
@@ -560,8 +569,10 @@ class _InspectionFormState extends State<InspectionForm> {
                             ),
                           ],
                         ),
-                        AddAttachmentButton(
-                            files: files, formType: FormType.inspection)
+                        if (!widget.isEditing!) ...[
+                          AddAttachmentButton(
+                              files: files, formType: FormType.inspection)
+                        ]
                       ],
                     ),
                   ),
@@ -580,11 +591,19 @@ class _InspectionFormState extends State<InspectionForm> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
-            var insuranceId = await InspectionApiService()
-                .addInspection(tokenVal, inspection, widget.carId);
-            if (files.isNotEmpty) {
-              await CarApiService().uploadFiles(tokenVal, files, insuranceId);
+
+            if (!widget.isEditing!) {
+              var inspectionId = await InspectionApiService()
+                  .addInspection(tokenVal, inspection, widget.carId);
+              if (files.isNotEmpty) {
+                await CarApiService()
+                    .uploadFiles(tokenVal, files, inspectionId);
+              }
+            } else {
+              await InspectionApiService().updateInspection(
+                  tokenVal, inspection, widget.editModel!.idPrzegladu);
             }
+
             setState(() {
               Navigator.pushAndRemoveUntil(
                   context,
@@ -598,7 +617,8 @@ class _InspectionFormState extends State<InspectionForm> {
           }
         },
         backgroundColor: mainColor,
-        label: Text("Dodaj przegląd"),
+        label:
+            Text(widget.isEditing! ? ("Zapisz przegląd") : ("Dodaj przegląd")),
         icon: Icon(Icons.check),
       ),
     );

@@ -5,7 +5,6 @@ import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/inspection_model.dart';
 
 class InspectionApiService {
-  
   Future<InspectionModel?> getInspection(token, id) async {
     InspectionModel inspection = InspectionModel();
     try {
@@ -70,15 +69,20 @@ class InspectionApiService {
         },
         body: jsonEncode(data),
       );
+      log("$token $data $id");
+      log(response.statusCode.toString());
+      log(response.reasonPhrase.toString());
       return response.body;
     } catch (e) {
       log(e.toString());
     }
   }
+
   Future getInspectionList(token, carId) async {
     try {
       List<InspectionModel> model;
-      var url = Uri.parse("$SERVER_IP/api/inspection/GetInspectionsList/$carId");
+      var url =
+          Uri.parse("$SERVER_IP/api/inspection/GetInspectionsList/$carId");
       var response = await http.get(
         url,
         headers: <String, String>{
@@ -91,7 +95,6 @@ class InspectionApiService {
         return model;
       }
       return response;
-
     } catch (e) {
       log(e.toString());
     }

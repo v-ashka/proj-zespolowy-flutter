@@ -1,6 +1,7 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/car_repair_model.dart';
@@ -41,34 +42,8 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onPrimary: Colors.transparent,
-            shadowColor: Colors.transparent,
-            onSurface: Colors.red,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        foregroundColor: Colors.transparent,
-        backgroundColor: secondaryColor,
-        shadowColor: Colors.transparent,
-        titleTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Lato',
-            fontSize: MediaQuery.of(context).textScaleFactor * 20,
-            color: Colors.black),
-        title:
-            Text("Historia Napraw - ${widget.car.marka} ${widget.car.model}"),
-      ),
+      appBar: myAppBar(context, HeaderTitleType.carRepair, "-",
+          widget.car.marka, widget.car.model),
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -443,7 +418,7 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                 runSpacing: 5,
                                                 children: [
                                                   Text(
-                                                    "OpisXD:  ",
+                                                    "Opis:  ",
                                                     style: TextStyle(
                                                       fontFamily: "Lato",
                                                       fontWeight:

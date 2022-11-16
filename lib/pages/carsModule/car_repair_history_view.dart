@@ -628,11 +628,12 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
-                                                                CarRepairEditForm(
-                                                                    car: widget
-                                                                        .car,
-                                                                    carRepair:
-                                                                        repair),
+                                                                CarRepairForm(
+                                                              carId: widget.car
+                                                                  .idSamochodu!,
+                                                              editModel: repair,
+                                                              isEditing: true,
+                                                            ),
                                                           ));
                                                     },
                                                     child: Container(

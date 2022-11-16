@@ -22,7 +22,11 @@ import 'package:projzespoloey/services/car/inspection_service.dart';
 
 class CarRepairForm extends StatefulWidget {
   final String carId;
-  const CarRepairForm({Key? key, required this.carId}) : super(key: key);
+  final bool? isEditing;
+  final CarRepairModel? editModel;
+  const CarRepairForm(
+      {Key? key, required this.carId, this.isEditing = false, this.editModel})
+      : super(key: key);
 
   @override
   State<CarRepairForm> createState() => _CarRepairFormState();
@@ -33,6 +37,18 @@ class _CarRepairFormState extends State<CarRepairForm> {
   CarRepairModel carRepair = CarRepairModel(
       dataNaprawy: DateFormat('dd.MM.yyyy').format(DateTime.now()));
   List<PlatformFile> files = [];
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfEditForm(widget.isEditing, widget.editModel);
+  }
+
+  void checkIfEditForm(isEdit, editModel) async {
+    if (isEdit) {
+      carRepair = editModel;
+    }
+  }
 
   Future<DateTime?> pickDate(context) {
     var date = showDatePicker(
@@ -59,7 +75,11 @@ class _CarRepairFormState extends State<CarRepairForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: myAppBar(context, HeaderTitleType.formAddRepair),
+      appBar: myAppBar(
+          context,
+          widget.isEditing!
+              ? (HeaderTitleType.formEditRepair)
+              : (HeaderTitleType.carRepair)),
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -111,6 +131,7 @@ class _CarRepairFormState extends State<CarRepairForm> {
                               ),
                             ),
                             TextFormField(
+                                initialValue: carRepair.nazwaNaprawy ?? "",
                                 onSaved: (String? value) {
                                   carRepair.nazwaNaprawy = value;
                                 },
@@ -150,6 +171,7 @@ class _CarRepairFormState extends State<CarRepairForm> {
                               ),
                             ),
                             TextFormField(
+                              initialValue: carRepair.warsztat ?? "",
                               onSaved: (String? value) {
                                 carRepair.warsztat = value;
                               },
@@ -271,6 +293,10 @@ class _CarRepairFormState extends State<CarRepairForm> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextFormField(
+                                          initialValue: widget.isEditing! &&
+                                                  carRepair.przebieg != null
+                                              ? (carRepair.przebieg.toString())
+                                              : (""),
                                           onSaved: (String? value) {
                                             carRepair.przebieg =
                                                 int.parse(value!);
@@ -320,6 +346,10 @@ class _CarRepairFormState extends State<CarRepairForm> {
                               ),
                             ),
                             TextFormField(
+                              initialValue: widget.isEditing! &&
+                                      carRepair.przebieg != null
+                                  ? (carRepair.przebieg.toString())
+                                  : (""),
                               onSaved: (String? value) {
                                 carRepair.kosztNaprawy = double.parse(value!);
                               },
@@ -438,6 +468,14 @@ class _CarRepairFormState extends State<CarRepairForm> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextFormField(
+                                          initialValue: widget.isEditing! &&
+                                                  carRepair
+                                                          .liczbaKilometrowDoNastepnejWymiany !=
+                                                      null
+                                              ? (carRepair
+                                                  .liczbaKilometrowDoNastepnejWymiany
+                                                  .toString())
+                                              : (""),
                                           onSaved: (String? value) {
                                             carRepair
                                                     .liczbaKilometrowDoNastepnejWymiany =
@@ -502,6 +540,7 @@ class _CarRepairFormState extends State<CarRepairForm> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: TextFormField(
+                                initialValue: carRepair.opis ?? "",
                                 maxLines: 4,
                                 onSaved: (String? value) {
                                   carRepair.opis = value;
@@ -523,8 +562,9 @@ class _CarRepairFormState extends State<CarRepairForm> {
                             ),
                           ],
                         ),
-                        AddAttachmentButton(
-                            files: files, formType: FormType.carRepair)
+                        if (!widget.isEditing!)
+                          AddAttachmentButton(
+                              files: files, formType: FormType.carRepair)
                       ],
                     ),
                   ),
@@ -540,27 +580,47 @@ class _CarRepairFormState extends State<CarRepairForm> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             String? token = await storage.read(key: "token");
-            Response response = await CarRepairHistoryService()
-                .addRepair(token, carRepair, widget.carId);
-            if (files.isNotEmpty && response.statusCode == 200) {
-              await CarApiService().uploadFiles(token, files, response.body);
+            if (!widget.isEditing!) {
+              Response response = await CarRepairHistoryService()
+                  .addRepair(token, carRepair, widget.carId);
+              if (files.isNotEmpty && response.statusCode == 200 ||
+                  response.statusCode == 202) {
+                await CarApiService().uploadFiles(token, files, response.body);
+              }
+              response.statusCode == 200 || response.statusCode == 202
+                  ? setState(() {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                CarItem(carId: widget.carId),
+                          ),
+                          ModalRoute.withName('/dashboard'));
+                      // Navigator.pop(context);
+                    })
+                  : print("BŁĄD PRZESYŁANIA DANYCH");
+            } else {
+              Response res = await CarRepairHistoryService()
+                  .updateRepair(token, carRepair, carRepair.idNaprawy);
+              print(res.statusCode);
+              print(res.reasonPhrase);
+              res.statusCode == 200 || res.statusCode == 202
+                  ? setState(() {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                CarItem(carId: widget.carId),
+                          ),
+                          ModalRoute.withName('/dashboard'));
+                      // Navigator.pop(context);
+                    })
+                  : print("BŁĄD PRZESYŁANIA DANYCH");
             }
-            response.statusCode == 200
-                ? setState(() {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (BuildContext context) =>
-                              CarItem(carId: widget.carId),
-                        ),
-                        ModalRoute.withName('/dashboard'));
-                    // Navigator.pop(context);
-                  })
-                : print("BŁĄD PRZESYŁANIA DANYCH");
           }
         },
         backgroundColor: mainColor,
-        label: Text("Dodaj naprawę"),
+        label: Text(widget.isEditing! ? ("Zapisz naprawę") : ("Dodaj naprawę")),
         icon: Icon(Icons.check),
       ),
     );

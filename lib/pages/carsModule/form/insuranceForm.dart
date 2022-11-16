@@ -433,11 +433,11 @@ class _InsuranceFormState extends State<InsuranceForm> {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
             if (!widget.isEditing!) {
-              await CarApiService().updateInsurance(
-                  tokenVal, insurance, insurance.idUbezpieczenia);
-            } else {
               await CarApiService()
                   .addInsurance(tokenVal, insurance, widget.carId);
+            } else {
+              await CarApiService().updateInsurance(
+                  tokenVal, insurance, insurance.idUbezpieczenia);
             }
 
             setState(() {

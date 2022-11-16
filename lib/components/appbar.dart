@@ -92,7 +92,7 @@ PreferredSizeWidget myAppBar(BuildContext context, HeaderTitleType titleType,
     titleTextStyle: TextStyle(
         fontWeight: FontWeight.bold,
         fontFamily: 'Lato',
-        fontSize: MediaQuery.of(context).textScaleFactor * 20,
+        fontSize: MediaQuery.of(context).textScaleFactor * 17,
         color: Colors.black),
     title: Text(
         "${titleType.text} ${additionalChar ?? ""} ${additionalText?.text ?? ""} ${firstParam ?? ""} ${secondParam ?? ""}"),

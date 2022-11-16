@@ -1,32 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:projzespoloey/constants.dart';
 
 // item["data"]["car_info"]["image"]
 class CarImageContainer extends StatelessWidget {
-  const CarImageContainer(
-      {required this.image,
-      required this.brand,
-      required this.model,
-      required this.prodDate,
-      required this.engine,
-      required this.vinNr,
-      required this.carRegNumber});
   final String image;
   final String brand;
   final String model;
-  final int prodDate;
-  final int engine;
-  final String vinNr;
+  final int prodYear;
   final String carRegNumber;
+
+  const CarImageContainer(
+      {Key? key,
+      required this.image,
+      required this.brand,
+      required this.model,
+      required this.prodYear,
+      required this.carRegNumber})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
             image: NetworkImage(
-                "${SERVER_IP}/api/fileUpload/GetFile/$image?naglowkowy=true"),
+                "$SERVER_IP/api/fileUpload/GetFile/$image?naglowkowy=true"),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(25),
@@ -41,6 +39,9 @@ class CarImageContainer extends StatelessWidget {
               children: [
                 Column(
                   children: [
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -48,8 +49,8 @@ class CarImageContainer extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25),
                                 color: secondaryColor),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 2),
                               child: Text("MARKA",
                                   style: TextStyle(
@@ -65,8 +66,8 @@ class CarImageContainer extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 2),
                               child: Text(
-                                "${brand}",
-                                style: TextStyle(
+                                brand,
+                                style: const TextStyle(
                                   color: fontWhite,
                                   fontSize: 12,
                                 ),
@@ -76,49 +77,12 @@ class CarImageContainer extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
-                Column(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                                color: secondaryColor),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 2),
-                              child: Text("NR REJ.",
-                                  style: TextStyle(
-                                    color: fontBlack,
-                                    fontSize: 6,
-                                  )),
-                            )),
-                        Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                                color: mainColor),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 2),
-                              child: Text(
-                                "${carRegNumber}",
-                                style: TextStyle(
-                                  color: fontWhite,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            )),
-                      ],
-                    ),
-                  ],
-                )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Column(
@@ -130,9 +94,9 @@ class CarImageContainer extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
                             color: secondaryColor),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2),
+                        child: const Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                           child: Text("MODEL",
                               style: TextStyle(
                                 color: fontBlack,
@@ -147,8 +111,8 @@ class CarImageContainer extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 2),
                           child: Text(
-                            "${model}",
-                            style: TextStyle(
+                            model,
+                            style: const TextStyle(
                               color: fontWhite,
                               fontSize: 12,
                             ),
@@ -158,7 +122,7 @@ class CarImageContainer extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Column(
@@ -170,10 +134,10 @@ class CarImageContainer extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
                             color: secondaryColor),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2),
-                          child: Text("`DATA PROD`.",
+                        child: const Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                          child: Text("ROCZNIK",
                               style: TextStyle(
                                 color: fontBlack,
                                 fontSize: 6,
@@ -187,8 +151,8 @@ class CarImageContainer extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 2),
                           child: Text(
-                            "${prodDate}",
-                            style: TextStyle(
+                            "$prodYear",
+                            style: const TextStyle(
                               color: fontWhite,
                               fontSize: 12,
                             ),
@@ -198,7 +162,7 @@ class CarImageContainer extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Column(
@@ -210,10 +174,10 @@ class CarImageContainer extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
                             color: secondaryColor),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2),
-                          child: Text("SILNIK",
+                        child: const Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                          child: Text("NR REJESTRACYJNY",
                               style: TextStyle(
                                 color: fontBlack,
                                 fontSize: 6,
@@ -227,8 +191,8 @@ class CarImageContainer extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 2),
                           child: Text(
-                            "${engine}",
-                            style: TextStyle(
+                            carRegNumber,
+                            style: const TextStyle(
                               color: fontWhite,
                               fontSize: 12,
                             ),
@@ -238,46 +202,9 @@ class CarImageContainer extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
-            Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: secondaryColor),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2),
-                          child: Text("VIN",
-                              style: TextStyle(
-                                color: fontBlack,
-                                fontSize: 6,
-                              )),
-                        )),
-                    Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: mainColor),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 2),
-                          child: Text(
-                            "${vinNr}",
-                            style: TextStyle(
-                              color: fontWhite,
-                              fontSize: 12,
-                            ),
-                          ),
-                        )),
-                  ],
-                ),
-              ],
-            )
           ],
         ),
       ),

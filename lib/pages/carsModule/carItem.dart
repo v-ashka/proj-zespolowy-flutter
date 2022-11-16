@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:projzespoloey/components/imageContainer.dart';
+import 'package:projzespoloey/components/car_details_box.dart';
+import 'package:projzespoloey/components/car_image_container.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:animations/animations.dart';
 import 'package:projzespoloey/main.dart';
@@ -17,6 +18,7 @@ import 'package:projzespoloey/pages/carsModule/car_repair_history_view.dart';
 import 'package:projzespoloey/pages/carsModule/inspection_view.dart';
 import 'package:projzespoloey/pages/dashboard.dart';
 import 'package:projzespoloey/pages/form.dart';
+import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
 import 'package:projzespoloey/services/car/insurance_service.dart';
 
@@ -34,8 +36,9 @@ class _CarItemState extends State<CarItem> {
   late CarModel? carModel = CarModel();
   late InsuranceModel insuranceData = InsuranceModel();
   late InspectionModel? inspectionData = InspectionModel();
-  final storage = new FlutterSecureStorage();
+  String? token;
   String carId = "";
+  bool isGetDataFinished = false;
 
   @override
   void initState() {
@@ -44,16 +47,18 @@ class _CarItemState extends State<CarItem> {
   }
 
   _getData(id) async {
-    String? tokenVal = await storage.read(key: "token");
-
-    carModel = (await CarApiService().getCarTest(tokenVal, id));
-    insuranceData = (await getValidOC(tokenVal, id));
-    inspectionData = (await InspectionApiService().getInspection(tokenVal, id));
-    setState(() {});
+    token = await storage.read(key: "token");
+    carModel = (await CarApiService().getCarTest(token, id));
+    insuranceData = (await getValidOC(token, id));
+    inspectionData = (await InspectionApiService().getInspection(token, id));
+    setState(() {isGetDataFinished = true;});
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!isGetDataFinished) {
+      return const LoadingScreen();
+    }
     return Scaffold(
       appBar: myAppBar(context, HeaderTitleType.carDefault, "-",
           carModel?.marka, carModel?.model),
@@ -74,10 +79,12 @@ class _CarItemState extends State<CarItem> {
                         image: carModel!.idSamochodu!,
                         brand: carModel!.marka!,
                         model: carModel!.model!,
-                        prodDate: carModel!.rokProdukcji!,
-                        engine: carModel!.pojemnoscSilnika!,
-                        vinNr: carModel!.numerVin!,
+                        prodYear: carModel!.rokProdukcji!,
                         carRegNumber: carModel!.numerRejestracyjny!),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    CarDetailBox(carModel: carModel!, context: context, token: token!),
                     SizedBox(
                       height: 15,
                     ),

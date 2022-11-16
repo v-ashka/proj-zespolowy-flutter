@@ -1,12 +1,27 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/components/detail_bar.dart';
+import 'package:projzespoloey/components/files_button.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
+import 'package:projzespoloey/pages/carsModule/carList.dart';
+import 'package:projzespoloey/utils/http_delete.dart';
 
 class CarDetailBox extends StatelessWidget {
   final CarModel carModel;
-  const CarDetailBox({Key? key, required this.carModel}) : super(key: key);
+  final String token;
+  final BuildContext context;
+  const CarDetailBox({Key? key, required this.carModel, required this.token, required this.context}) : super(key: key);
+
+  pushAndRemoveUntil() async{
+    await Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => const CarList(),
+        ),
+        ModalRoute.withName("/dashboard"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +59,7 @@ class CarDetailBox extends StatelessWidget {
                           children: const [
                             Text(
                               "Dane pojazdu",
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontSize: 20, 
                                   color: fontBlack,
                                   fontWeight: FontWeight.w600),
@@ -73,195 +88,56 @@ class CarDetailBox extends StatelessWidget {
                         DetailBar(title: "Skrzynia biegów", value: carModel.rodzajSkrzyniBiegow!),
                         DetailBar(title: "Moc", value: "${carModel.moc.toString()} KM"),
                         DetailBar(title: "Napęd", value: carModel.rodzajNapedu!),
-                        DetailBar(title: "Data zakupu", value: carModel.dataZakupu!)
-                        // Padding(
-                        //   padding: const EdgeInsets.fromLTRB(
-                        //       15, 15, 5, 0),
-                        //   child: Row(
-                        //     mainAxisAlignment:
-                        //         MainAxisAlignment
-                        //             .spaceBetween,
-                        //     children: [
-                        //       const SizedBox(
-                        //         width: 20,
-                        //       ),
-                        //       Row(
-                        //         mainAxisAlignment:
-                        //             MainAxisAlignment.start,
-                        //         crossAxisAlignment:
-                        //             CrossAxisAlignment.start,
-                        //         children: [
-                        //           ElevatedButton(
-                        //             style: ElevatedButton
-                        //                 .styleFrom(
-                        //                     padding:
-                        //                         EdgeInsets
-                        //                             .all(5),
-                        //                     primary: Colors
-                        //                         .transparent,
-                        //                     shadowColor: Colors
-                        //                         .transparent,
-                        //                     onPrimary:
-                        //                         deleteBtn,
-                        //                     shape:
-                        //                         RoundedRectangleBorder(
-                        //                       borderRadius:
-                        //                           BorderRadius
-                        //                               .circular(
-                        //                                   100),
-                        //                     )),
-                        //             onPressed: () {
-                        //               print("delete object");
-                        //               showDialog(
-                        //                   context: context,
-                        //                   builder:
-                        //                       (BuildContext
-                        //                           context) {
-                        //                     return Container(
-                        //                       padding:
-                        //                           EdgeInsets
-                        //                               .all(5),
-                        //                       child:
-                        //                           AlertDialog(
-                        //                         actionsPadding:
-                        //                             EdgeInsets
-                        //                                 .all(
-                        //                                     0),
-                        //                         actionsAlignment:
-                        //                             MainAxisAlignment
-                        //                                 .center,
-                        //                         shape:
-                        //                             RoundedRectangleBorder(
-                        //                           borderRadius:
-                        //                               BorderRadius.circular(
-                        //                                   25),
-                        //                         ),
-                        //                         title: Text(
-                        //                             "Czy na pewno chcesz usunąć ten element?"),
-                        //                         content: Text(
-                        //                             "Po usunięciu nie możesz cofnąć tej akcji."),
-                        //                         actions: [
-                        //                           ElevatedButton(
-                        //                               style: ElevatedButton.styleFrom(
-                        //                                   primary: mainColor,
-                        //                                   onPrimary: mainColor,
-                        //                                   shape: RoundedRectangleBorder(
-                        //                                     borderRadius: BorderRadius.circular(25),
-                        //                                   )),
-                        //                               onPressed: () {
-                        //                                 print(
-                        //                                     "no");
-                        //                                 Navigator.of(context)
-                        //                                     .pop();
-                        //                               },
-                        //                               child: Text(
-                        //                                 "Anuluj",
-                        //                                 style:
-                        //                                     TextStyle(color: Colors.white),
-                        //                               )),
-                        //                           ElevatedButton(
-                        //                               style: ElevatedButton.styleFrom(
-                        //                                   primary: deleteBtn,
-                        //                                   onPrimary: deleteBtn,
-                        //                                   shape: RoundedRectangleBorder(
-                        //                                     borderRadius: BorderRadius.circular(25),
-                        //                                   )),
-                        //                               onPressed: () async {
-                        //                                 Navigator.of(context)
-                        //                                     .pop();
-                        //                                 Response
-                        //                                     response =
-                        //                                     await InspectionApiService().deleteInspection(token, inspection!.idPrzegladu);
-                        //                                 if (response.statusCode ==
-                        //                                     200) {
-                        //                                   setState(() {
-                        //                                     getData();
-                        //                                   });
-                        //                                 }
-                        //                               },
-                        //                               child: Text(
-                        //                                 "Usuń",
-                        //                                 style:
-                        //                                     TextStyle(color: Colors.white),
-                        //                               )),
-                        //                         ],
-                        //                       ),
-                        //                     );
-                        //                   });
-                        //             },
-                        //             child: Container(
-                        //               width: 50,
-                        //               height: 50,
-                        //               decoration:
-                        //                   BoxDecoration(
-                        //                 borderRadius:
-                        //                     BorderRadius
-                        //                         .circular(25),
-                        //                 color: deleteBtn,
-                        //               ),
-                        //               child: Icon(
-                        //                 Icons
-                        //                     .delete_outline_rounded,
-                        //                 size: 30,
-                        //                 color: bgSmokedWhite,
-                        //               ),
-                        //             ),
-                        //           ),
-                        //           ElevatedButton(
-                        //             style: ElevatedButton
-                        //                 .styleFrom(
-                        //                     padding:
-                        //                         EdgeInsets
-                        //                             .all(5),
-                        //                     backgroundColor:
-                        //                         Colors
-                        //                             .transparent,
-                        //                     shadowColor: Colors
-                        //                         .transparent,
-                        //                     foregroundColor:
-                        //                         mainColor,
-                        //                     shape:
-                        //                         RoundedRectangleBorder(
-                        //                       borderRadius:
-                        //                           BorderRadius
-                        //                               .circular(
-                        //                                   100),
-                        //                     )),
-                        //             onPressed: () {
-                        //               print("file list");
-                        //               Navigator.push(
-                        //                   context,
-                        //                   MaterialPageRoute(
-                        //                     builder: (context) =>
-                        //                         FilesView(
-                        //                             objectId:
-                        //                                 inspection
-                        //                                     .idPrzegladu!),
-                        //                   ));
-                        //             },
-                        //             child: Container(
-                        //               width: 50,
-                        //               height: 50,
-                        //               decoration:
-                        //                   BoxDecoration(
-                        //                 borderRadius:
-                        //                     BorderRadius
-                        //                         .circular(50),
-                        //                 color: secondColor,
-                        //               ),
-                        //               child: Icon(
-                        //                 Icons
-                        //                     .file_open_outlined,
-                        //                 size: 30,
-                        //                 color: bgSmokedWhite,
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
+                        DetailBar(title: "Data zakupu", value: carModel.dataZakupu!),
+                        const SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            DeleteButton(
+                                endpoint: Endpoints.carDefault,
+                                token: token,
+                                id: carModel.idSamochodu,
+                                dialogtype: AlertDialogType.car,
+                                callback: pushAndRemoveUntil),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.all(5),
+                                  primary: Colors.transparent,
+                                  shadowColor: Colors.transparent,
+                                  onPrimary: mainColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(100),
+                                  )),
+                              onPressed: () {
+                                // print("edit object ac");
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //       builder: (context) => InsuranceForm(
+                                //           carId: widget.car.idSamochodu!,
+                                //           isEditing: true,
+                                //           editModel: insuranceAC!),
+                                //     ));
+                              },
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: mainColor,
+                                ),
+                                child: const Icon(
+                                  Icons.edit_outlined,
+                                  size: 30,
+                                  color: bgSmokedWhite,
+                                ),
+                              ),
+                            ),
+                            FilesButton(objectId: carModel!.idSamochodu!),
+                          ],
+                        ),
                       ],
                     ),
                   ),

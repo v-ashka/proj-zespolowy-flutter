@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/components/detail_bar.dart';
+import 'package:projzespoloey/components/files_button.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/car_repair_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
@@ -224,53 +225,7 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                       ),
                                                     ),
                                                   ),
-                                                  ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    5),
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            shadowColor: Colors
-                                                                .transparent,
-                                                            foregroundColor:
-                                                                mainColor,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100),
-                                                            )),
-                                                    onPressed: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                FilesView(
-                                                                    objectId: repair
-                                                                        .idNaprawy!),
-                                                          ));
-                                                    },
-                                                    child: Container(
-                                                      width: 50,
-                                                      height: 50,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(50),
-                                                        color: secondColor,
-                                                      ),
-                                                      child: Icon(
-                                                        Icons
-                                                            .file_open_outlined,
-                                                        size: 30,
-                                                        color: bgSmokedWhite,
-                                                      ),
-                                                    ),
-                                                  ),
+                                                  FilesButton(objectId: repair!.idNaprawy!)
                                                 ],
                                               ),
                                             ],

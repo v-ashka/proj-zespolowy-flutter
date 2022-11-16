@@ -5,10 +5,12 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:projzespoloey/components/appbar.dart';
+import 'package:projzespoloey/components/box_title_bar.dart';
 import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/components/detail_bar.dart';
 import 'package:projzespoloey/components/emptyBox.dart';
-import 'package:projzespoloey/components/imageContainer.dart';
+import 'package:projzespoloey/components/files_button.dart';
+import 'package:projzespoloey/components/car_image_container.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
@@ -78,9 +80,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                   image: widget.car.idSamochodu!,
                   brand: widget.car.marka!,
                   model: widget.car.model!,
-                  prodDate: widget.car.rokProdukcji!,
-                  engine: widget.car.pojemnoscSilnika!,
-                  vinNr: widget.car.numerVin!,
+                  prodYear: widget.car.rokProdukcji!,
                   carRegNumber: widget.car.numerRejestracyjny!),
               SizedBox(
                 height: 15,
@@ -117,45 +117,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Polisa OC",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 20),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5),
-                                              child: Text(
-                                                "DANE DOTYCZĄCE POLISY",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: fontGrey,
-                                                    fontFamily: "Roboto",
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Icon(
-                                          Icons.text_snippet_outlined,
-                                          size: 82,
-                                          color: bg50Grey,
-                                        ),
-                                      ],
-                                    ),
+                                    const BoxTitleBar(title: "Polisa OC", description: "DANE DOTYCZĄCE POLISY", icon: Icons.text_snippet_outlined),
                                     DetailBar(
                                         title: "Numer polisy",
                                         value: insuranceOC.nrPolisy!),
@@ -255,39 +217,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                       ),
                                     ),
                                   ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.all(5),
-                                        backgroundColor: Colors.transparent,
-                                        shadowColor: Colors.transparent,
-                                        foregroundColor: mainColor,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                        )),
-                                    onPressed: () {
-                                      print("file list");
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => FilesView(
-                                                objectId: insuranceOC.idUbezpieczenia!),
-                                          ));
-                                    },
-                                    child: Container(
-                                      width: 50,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        color: secondColor,
-                                      ),
-                                      child: Icon(
-                                        Icons.file_open_outlined,
-                                        size: 30,
-                                        color: bgSmokedWhite,
-                                      ),
-                                    ),
-                                  ),
+                                  FilesButton(objectId: insuranceOC!.idUbezpieczenia!),
                                 ],
                               ),
                             ],
@@ -296,7 +226,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                       ],
                     ),
                   ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 if (insuranceAC.idUbezpieczenia != null) ...[
@@ -322,45 +252,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Polisa AC",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 20),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5),
-                                              child: Text(
-                                                "DANE DOTYCZĄCE POLISY",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: fontGrey,
-                                                    fontFamily: "Roboto",
-                                                    fontWeight:
-                                                        FontWeight.w300),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Icon(
-                                          Icons.text_snippet_outlined,
-                                          size: 82,
-                                          color: bg50Grey,
-                                        ),
-                                      ],
-                                    ),
+                                    const BoxTitleBar(title: "Polisa AC", description: "DANE DOTYCZĄCE POLISY", icon: Icons.text_snippet_outlined),
                                     DetailBar(
                                         title: "Numer polisy",
                                         value: insuranceAC.nrPolisy!),
@@ -459,39 +351,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                       ),
                                     ),
                                   ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.all(5),
-                                        backgroundColor: Colors.transparent,
-                                        shadowColor: Colors.transparent,
-                                        foregroundColor: mainColor,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                        )),
-                                    onPressed: () {
-                                      print("file list");
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => FilesView(
-                                                objectId: insuranceAC.idUbezpieczenia!),
-                                          ));
-                                    },
-                                    child: Container(
-                                      width: 50,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        color: secondColor,
-                                      ),
-                                      child: Icon(
-                                        Icons.file_open_outlined,
-                                        size: 30,
-                                        color: bgSmokedWhite,
-                                      ),
-                                    ),
-                                  ),
+                                  FilesButton(objectId: insuranceAC!.idUbezpieczenia!),
                                 ],
                               ),
                             ],

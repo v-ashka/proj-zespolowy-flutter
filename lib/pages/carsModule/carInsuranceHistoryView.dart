@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/components/detail_bar.dart';
+import 'package:projzespoloey/components/files_button.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
@@ -167,51 +168,7 @@ class _CarInsuranceHistoryViewState extends State<CarInsuranceHistoryView> {
                                                           AlertDialogType
                                                               .carInsurance,
                                                       callback: getData),
-                                                  ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(5),
-                                                            backgroundColor: Colors
-                                                                .transparent,
-                                                            shadowColor: Colors
-                                                                .transparent,
-                                                            foregroundColor:
-                                                                mainColor,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100),
-                                                            )),
-                                                    onPressed: () {
-                                                      Navigator.pushNamed(
-                                                          context, "/fileList",
-                                                          arguments: {
-                                                            "data": insurance,
-                                                            "form_type":
-                                                                "car_insurance"
-                                                          });
-                                                    },
-                                                    child: Container(
-                                                      width: 50,
-                                                      height: 50,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(50),
-                                                        color: secondColor,
-                                                      ),
-                                                      child: const Icon(
-                                                        Icons
-                                                            .file_open_outlined,
-                                                        size: 30,
-                                                        color: bgSmokedWhite,
-                                                      ),
-                                                    ),
-                                                  ),
+                                                  FilesButton(objectId: insurance!.idUbezpieczenia!)
                                                 ],
                                               ),
                                             ],

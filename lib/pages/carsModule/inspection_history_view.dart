@@ -1,18 +1,18 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/delete_button.dart';
+import 'package:projzespoloey/components/detail_bar.dart';
+import 'package:projzespoloey/components/files_button.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/inspection_model.dart';
-import 'package:projzespoloey/pages/carsModule/filesView.dart';
-import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
 import 'package:projzespoloey/utils/http_delete.dart';
 
 class InspectionHistory extends StatefulWidget {
   final String carId;
   final String carModel;
+
   const InspectionHistory(
       {Key? key, required this.carId, required this.carModel})
       : super(key: key);
@@ -88,10 +88,10 @@ class _InspectionHistoryState extends State<InspectionHistory> {
                                                 CrossAxisAlignment.start,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
-                                            children: [
+                                            children: const [
                                               Padding(
                                                 padding:
-                                                    const EdgeInsets.fromLTRB(
+                                                     EdgeInsets.fromLTRB(
                                                         0, 0, 0, 10),
                                                 child: Text(
                                                   "Przegląd techniczny",
@@ -105,275 +105,34 @@ class _InspectionHistoryState extends State<InspectionHistory> {
                                           ),
                                         ],
                                       ),
-                                      collapsed: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 2),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              "Okres ważności:  ",
-                                              style: TextStyle(
-                                                fontFamily: "Lato",
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                            Flexible(
-                                              fit: FlexFit.loose,
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        10, 5, 10, 5),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25),
-                                                    color: secondaryColor),
-                                                child: Text(
-                                                    "${inspection.dataPrzegladu} / ${inspection.koniecWaznosciPrzegladu}",
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: fontBlack)),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      collapsed: DetailBar(
+                                          title: "Okres ważności",
+                                          value:
+                                              "${inspection.dataPrzegladu} / ${inspection.koniecWaznosciPrzegladu}"),
                                       expanded: Column(
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Stacja diagnostyczna:  ",
-                                                  style: TextStyle(
-                                                    fontFamily: "Lato",
-                                                    fontWeight: FontWeight.w900,
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                                Flexible(
-                                                  fit: FlexFit.loose,
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 5, 10, 5),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: secondaryColor),
-                                                    child: Text(
-                                                        "${inspection.nazwaStacjiDiagnostycznej}",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        )),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Numer badania:  ",
-                                                  style: TextStyle(
-                                                    fontFamily: "Lato",
-                                                    fontWeight: FontWeight.w900,
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                                Flexible(
-                                                  fit: FlexFit.loose,
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 5, 10, 5),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: secondaryColor),
-                                                    child: Text(
-                                                        "${inspection.numerBadania}",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        )),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Wynik badania pojazdu:  ",
-                                                  style: TextStyle(
-                                                    fontFamily: "Lato",
-                                                    fontWeight: FontWeight.w900,
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                                Flexible(
-                                                  fit: FlexFit.loose,
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 5, 10, 5),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: inspection
-                                                                    .czyPozytywny ==
-                                                                true
-                                                            ? (secondaryColor)
-                                                            : (errorColor)),
-                                                    child: Text(
-                                                      inspection.czyPozytywny ==
-                                                              true
-                                                          ? ("Pozytywny")
-                                                          : ("Negatywny"),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 2),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Okres przeglądu:  ",
-                                                  style: TextStyle(
-                                                    fontFamily: "Lato",
-                                                    fontWeight: FontWeight.w900,
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                                Flexible(
-                                                  fit: FlexFit.loose,
-                                                  child: Container(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 5, 10, 5),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: secondaryColor),
-                                                    child: Text(
-                                                        "${inspection.dataPrzegladu} / ${inspection.koniecWaznosciPrzegladu}",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        )),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                          DetailBar(
+                                              title: "Stacja diagnostyczna",
+                                              value:
+                                                  "${inspection.nazwaStacjiDiagnostycznej}"),
+                                          DetailBar(
+                                              title: "Numer badania",
+                                              value:
+                                                  "${inspection.numerBadania}"),
+                                          DetailBar(
+                                              title: "Wynik badania pojazdu",
+                                              value: inspection.czyPozytywny ==
+                                                      true
+                                                  ? ("Pozytywny")
+                                                  : ("Negatywny")),
+                                          DetailBar(
+                                              title: "Okres ważności",
+                                              value:
+                                                  "${inspection.dataPrzegladu} / ${inspection.koniecWaznosciPrzegladu}"),
                                           if (inspection.uwagi != null)
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 2),
-                                              child: SizedBox(
-                                                width: double.infinity,
-                                                child: Wrap(
-                                                  crossAxisAlignment:
-                                                      WrapCrossAlignment.center,
-                                                  textDirection:
-                                                      TextDirection.ltr,
-                                                  spacing: 5,
-                                                  runSpacing: 5,
-                                                  children: [
-                                                    Text(
-                                                      "Dodatkowe informacje:  ",
-                                                      style: TextStyle(
-                                                        fontFamily: "Lato",
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        fontSize: 12,
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              10, 5, 10, 5),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(25),
-                                                          color:
-                                                              secondaryColor),
-                                                      child: Text(
-                                                          "${inspection.uwagi}",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              color:
-                                                                  fontBlack)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
+                                            DetailBar(
+                                                title: "Dodatkowe informacje",
+                                                value: "${inspection.uwagi}"),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 15, 15, 5, 0),
@@ -401,56 +160,9 @@ class _InspectionHistoryState extends State<InspectionHistory> {
                                                             AlertDialogType
                                                                 .carInspection,
                                                         callback: getData),
-                                                    ElevatedButton(
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(5),
-                                                              backgroundColor:
-                                                                  Colors
-                                                                      .transparent,
-                                                              shadowColor: Colors
-                                                                  .transparent,
-                                                              foregroundColor:
-                                                                  mainColor,
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            100),
-                                                              )),
-                                                      onPressed: () {
-                                                        print("file list");
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  FilesView(
-                                                                      objectId:
-                                                                          inspection
-                                                                              .idPrzegladu!),
-                                                            ));
-                                                      },
-                                                      child: Container(
-                                                        width: 50,
-                                                        height: 50,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: secondColor,
-                                                        ),
-                                                        child: Icon(
-                                                          Icons
-                                                              .file_open_outlined,
-                                                          size: 30,
-                                                          color: bgSmokedWhite,
-                                                        ),
-                                                      ),
-                                                    ),
+                                                    FilesButton(
+                                                        objectId: inspection
+                                                            .idPrzegladu!)
                                                   ],
                                                 ),
                                               ],

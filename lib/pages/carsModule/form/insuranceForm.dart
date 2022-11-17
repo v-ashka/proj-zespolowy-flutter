@@ -16,6 +16,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
+import 'package:projzespoloey/utils/date_picker.dart';
 import '../../../models/insurace_model.dart';
 import '../../../utils/file_picker.dart';
 
@@ -50,27 +51,6 @@ class _InsuranceFormState extends State<InsuranceForm> {
     if (isEdit) {
       insurance = editModel;
     }
-  }
-
-  Future<DateTime?> pickDate(context) {
-    var date = showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1960),
-      lastDate: DateTime(2026),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-              colorScheme: const ColorScheme.light(
-            primary: mainColor, // header background color
-            onPrimary: bgSmokedWhite, // header text color
-            onSurface: Colors.black, // body text color
-          )),
-          child: child!,
-        );
-      },
-    );
-    return date;
   }
 
   @override

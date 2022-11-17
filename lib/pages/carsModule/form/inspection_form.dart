@@ -16,6 +16,8 @@ import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
+import 'package:projzespoloey/services/files_service.dart';
+import 'package:projzespoloey/utils/date_picker.dart';
 
 class InspectionForm extends StatefulWidget {
   final String carId;
@@ -53,27 +55,6 @@ class _InspectionFormState extends State<InspectionForm> {
     if (isEdit) {
       inspection = editModel;
     }
-  }
-
-  Future<DateTime?> pickDate(context) {
-    var date = showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1960),
-      lastDate: DateTime(2023),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-              colorScheme: const ColorScheme.light(
-            primary: mainColor, // header background color
-            onPrimary: bgSmokedWhite, // header text color
-            onSurface: Colors.black, // body text color
-          )),
-          child: child!,
-        );
-      },
-    );
-    return date;
   }
 
   Future pickFiles() async {
@@ -596,7 +577,7 @@ class _InspectionFormState extends State<InspectionForm> {
               var inspectionId = await InspectionApiService()
                   .addInspection(tokenVal, inspection, widget.carId);
               if (files.isNotEmpty) {
-                await CarApiService()
+                await FilesService()
                     .uploadFiles(tokenVal, files, inspectionId);
               }
             } else {

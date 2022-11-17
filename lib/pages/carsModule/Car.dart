@@ -100,6 +100,20 @@ class CarModel with ChangeNotifier {
       };
 }
 
+// extension CarModelExtension on CarModel{
+//   CarModelForm get toFormModel => CarModelForm(
+//       PojemnoscSilnika: pojemnoscSilnika, RokProdukcji: rokProdukcji,
+//       NumerVin: numerVin,
+//       DataZakupu: dataZakupu,
+//       NumerRejestracyjny: numerRejestracyjny,
+//       Moc: moc,
+//       Przebieg: przebieg,
+//       idRodzajuSkrzyniBiegow: rodzajSkrzyniBiegow;
+//   idRodzajuNapedu;
+//   idRodzajuPaliwa;
+//   );
+// }
+
 class CarListView {
   CarListView(
       {required this.idSamochodu,

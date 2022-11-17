@@ -16,10 +16,14 @@ import 'dart:ui';
 import 'dart:io';
 import 'package:open_file/open_file.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:projzespoloey/services/files_service.dart';
+import 'package:projzespoloey/utils/file_picker.dart';
+import 'package:projzespoloey/utils/http_delete.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class FilesView extends StatefulWidget {
   final String objectId;
+
   const FilesView({Key? key, required this.objectId}) : super(key: key);
 
   @override
@@ -34,19 +38,6 @@ class FilesViewState extends State<FilesView> {
   ReceivePort _port = ReceivePort();
   bool isLoading = false;
   String? objectId;
-
-  Future pickFiles() async {
-    files.clear();
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(allowMultiple: true);
-    if (result != null) {
-      setState(() {
-        files = result.files;
-      });
-    } else {
-      return null;
-    }
-  }
 
   @override
   void initState() {
@@ -65,8 +56,29 @@ class FilesViewState extends State<FilesView> {
 
   void _getData(id) async {
     token = await storage.read(key: "token");
-    _files = (await CarApiService().GetFileList(token, id));
+    _files = (await FilesService().getFileList(token, id));
     setState(() {});
+  }
+
+  void _showAddCarLoadingDialog(isShowing) {
+    if (isShowing) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(25.0))),
+              title: Text('Usuwam...'),
+              content: SizedBox(
+                  height: 150,
+                  width: 150,
+                  child: Center(
+                      child: CircularProgressIndicator(color: mainColor))),
+            );
+          });
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
   }
 
   @override
@@ -118,6 +130,7 @@ class FilesViewState extends State<FilesView> {
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(
                       color: Colors.transparent,
+                      height: 0,
                     ),
                 itemCount: _files!.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -147,7 +160,7 @@ class FilesViewState extends State<FilesView> {
                                 borderRadius: BorderRadius.circular(25),
                               ),
                               title: Text(
-                                  "Czy na pewno chcesz usunąć ten element?"),
+                                  "Czy na pewno chcesz usunąć ten plik?"),
                               content: Text(
                                   "Po usunięciu nie możesz cofnąć tej akcji."),
                               actions: [
@@ -175,7 +188,16 @@ class FilesViewState extends State<FilesView> {
                                           borderRadius:
                                               BorderRadius.circular(25),
                                         )),
-                                    onPressed: () async {},
+                                    onPressed: () async {
+                                      Navigator.of(context).pop();
+                                      _showAddCarLoadingDialog(true);
+                                      bool response = await deleteRecord(
+                                          Endpoints.file, token, file.idPliku);
+                                      if (response) {
+                                        _getData(widget.objectId);
+                                        _showAddCarLoadingDialog(false);
+                                      }
+                                    },
                                     child: Text(
                                       "Usuń",
                                       style: TextStyle(color: Colors.white),
@@ -243,11 +265,6 @@ class FilesViewState extends State<FilesView> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          trailing: IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.more_vert_outlined),
-                            tooltip: "Opcje",
-                          ),
                         ),
                       ),
                     ),
@@ -276,14 +293,13 @@ class FilesViewState extends State<FilesView> {
                   color: bgSmokedWhite,
                 ),
           onPressed: () async {
-            await pickFiles();
+            files = await filePicker(files);
             if (files.isNotEmpty) {
               setState(() {
                 isLoading = true;
               });
-              print("TEST PICKOWANIA PLIKU");
               String? tokenVal = await storage.read(key: "token");
-              var response = await CarApiService()
+              var response = await FilesService()
                   .uploadFiles(tokenVal, files, widget.objectId);
               if (response.statusCode == 200) {
                 setState(() {

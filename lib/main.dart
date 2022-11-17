@@ -10,7 +10,7 @@ import 'package:projzespoloey/pages/_userAuth.dart';
 import 'package:projzespoloey/pages/_userAuthRegister.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/carInsuranceHistoryView.dart';
-import 'package:projzespoloey/pages/carsModule/carInsuranceView.dart';
+import 'package:projzespoloey/pages/carsModule/car_insurance_view.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/pages/carsModule/car_repair_history_view.dart';

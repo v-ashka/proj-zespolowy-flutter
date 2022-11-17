@@ -19,6 +19,8 @@ import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/services/car/car_repair_history_service.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
+import 'package:projzespoloey/services/files_service.dart';
+import 'package:projzespoloey/utils/date_picker.dart';
 
 class CarRepairForm extends StatefulWidget {
   final String carId;
@@ -48,27 +50,6 @@ class _CarRepairFormState extends State<CarRepairForm> {
     if (isEdit) {
       carRepair = editModel;
     }
-  }
-
-  Future<DateTime?> pickDate(context) {
-    var date = showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1960),
-      lastDate: DateTime(2030),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-              colorScheme: const ColorScheme.light(
-            primary: mainColor, // header background color
-            onPrimary: bgSmokedWhite, // header text color
-            onSurface: Colors.black, // body text color
-          )),
-          child: child!,
-        );
-      },
-    );
-    return date;
   }
 
   @override
@@ -527,8 +508,8 @@ class _CarRepairFormState extends State<CarRepairForm> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
                               child: Text(
                                 "Opis naprawy",
                                 style: TextStyle(
@@ -585,7 +566,7 @@ class _CarRepairFormState extends State<CarRepairForm> {
                   .addRepair(token, carRepair, widget.carId);
               if (files.isNotEmpty && response.statusCode == 200 ||
                   response.statusCode == 202) {
-                await CarApiService().uploadFiles(token, files, response.body);
+                await FilesService().uploadFiles(token, files, response.body);
               }
               response.statusCode == 200 || response.statusCode == 202
                   ? setState(() {

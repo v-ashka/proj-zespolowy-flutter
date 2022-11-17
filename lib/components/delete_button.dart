@@ -124,7 +124,7 @@ class _DeleteButtonState extends State<DeleteButton> {
                           _showAddCarLoadingDialog(true);
 
                           bool response = await deleteRecord(
-                              widget.endpoint.text, widget.token, widget.id);
+                              widget.endpoint, widget.token, widget.id);
 
                           if (response) {
                             widget.callback.call();

@@ -19,6 +19,7 @@ import 'package:projzespoloey/pages/carsModule/carList.dart';
 import 'package:projzespoloey/pages/carsModule/car_repair_history_view.dart';
 import 'package:projzespoloey/services/car/car_repair_history_service.dart';
 import 'package:projzespoloey/services/car/inspection_service.dart';
+import 'package:projzespoloey/utils/date_picker.dart';
 
 class CarRepairEditForm extends StatefulWidget {
   final CarModel car;
@@ -37,43 +38,6 @@ class _CarRepairEditFormState extends State<CarRepairEditForm> {
   final _formKey = GlobalKey<FormState>();
   CarRepairModel carRepair = CarRepairModel();
   List<PlatformFile> files = [];
-
-  Future<DateTime?> pickDate(context) {
-    var date = showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1960),
-      lastDate: DateTime(2030),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-              colorScheme: const ColorScheme.light(
-            primary: mainColor, // header background color
-            onPrimary: bgSmokedWhite, // header text color
-            onSurface: Colors.black, // body text color
-          )),
-          child: child!,
-        );
-      },
-    );
-    return date;
-  }
-
-  Future pickFiles() async {
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(allowMultiple: true);
-    if (result != null) {
-      setState(() {
-        if (files.isNotEmpty) {
-          files.clear();
-        }
-        //files = result.paths.map((path) => File(path!)).toList();
-        files = result.files;
-      });
-    } else {
-      // User canceled the picker
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

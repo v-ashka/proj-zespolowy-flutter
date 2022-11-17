@@ -1,8 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/box_title_bar.dart';
@@ -14,15 +10,10 @@ import 'package:projzespoloey/components/car_image_container.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
-import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carInsuranceHistoryView.dart';
-import 'package:projzespoloey/pages/carsModule/carItem.dart';
-import 'package:projzespoloey/pages/carsModule/filesView.dart';
-import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/car/insurance_service.dart';
 import 'package:projzespoloey/utils/http_delete.dart';
-
 import 'form/insuranceForm.dart';
 
 class CarInsuranceView extends StatefulWidget {
@@ -42,12 +33,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
   InsuranceModel insuranceAC = InsuranceModel();
   bool isGetDataFinished = false;
 
-  // var idSamochodu;
-  final completer = Completer();
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getData();
   }
@@ -56,13 +43,13 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
     tokenVal = await storage.read(key: "token");
     insuranceOC = (await getValidOC(tokenVal, widget.car.idSamochodu));
     insuranceAC = (await getValidAC(tokenVal, widget.car.idSamochodu));
-    setState(() {isGetDataFinished = true;});
+    setState(() {
+      isGetDataFinished = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final today = DateTime.now();
     if (widget.car.idSamochodu == null || isGetDataFinished == false) {
       return const LoadingScreen();
     }
@@ -70,7 +57,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
       appBar: myAppBar(context, HeaderTitleType.carInsurance, "-",
           widget.car.marka, widget.car.model),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/background.png'), fit: BoxFit.fill)),
         child: Padding(
@@ -82,7 +69,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                   model: widget.car.model!,
                   prodYear: widget.car.rokProdukcji!,
                   carRegNumber: widget.car.numerRejestracyjny!),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               if (widget.car.koniecOC == null &&
@@ -117,7 +104,10 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    const BoxTitleBar(title: "Polisa OC", description: "DANE DOTYCZĄCE POLISY", icon: Icons.text_snippet_outlined),
+                                    const BoxTitleBar(
+                                        title: "Polisa OC",
+                                        description: "DANE DOTYCZĄCE POLISY",
+                                        icon: Icons.text_snippet_outlined),
                                     DetailBar(
                                         title: "Numer polisy",
                                         value: insuranceOC.nrPolisy!),
@@ -127,7 +117,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                     DetailBar(
                                         title: "Okres ubezpieczenia",
                                         value:
-                                        "${insuranceOC.dataZakupu}  /  ${insuranceOC.dataKonca}"),
+                                            "${insuranceOC.dataZakupu}  /  ${insuranceOC.dataKonca}"),
                                     DetailBar(
                                         title: "Składka OC",
                                         value: "${insuranceOC.kosztPolisy} zł")
@@ -137,8 +127,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: Text(
                             "OKRES WAŻNOŚCI POLISY",
                             style: TextStyle(
@@ -152,23 +142,23 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                           padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      width: 80,
-                                      child: Container(
-                                        padding: EdgeInsets.all(2),
-                                        decoration: BoxDecoration(
+                            children: [
+                              SizedBox(
+                                width: 80,
+                                child: Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(25),
                                       color: secondaryColor),
                                   child: Text("${widget.car.koniecOC} dni",
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
                                           color: fontBlack)),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 20,
                               ),
                               Row(
@@ -184,24 +174,23 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                   ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.all(5),
-                                        primary: Colors.transparent,
+                                        foregroundColor: mainColor,
+                                        backgroundColor: Colors.transparent,
+                                        padding: const EdgeInsets.all(5),
                                         shadowColor: Colors.transparent,
-                                        onPrimary: mainColor,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(100),
                                         )),
                                     onPressed: () {
-                                      // print("edit object oc");
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //       builder: (context) => InsuranceForm(
-                                      //           editModel: insuranceOC,
-                                      //           isEditing: true,
-                                      //           carId: widget.car.idSamochodu!),
-                                      //     ));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => InsuranceForm(
+                                                editModel: insuranceOC,
+                                                isEditing: true,
+                                                carId: widget.car.idSamochodu!),
+                                          ));
                                     },
                                     child: Container(
                                       width: 50,
@@ -210,14 +199,15 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                         borderRadius: BorderRadius.circular(50),
                                         color: mainColor,
                                       ),
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.edit_outlined,
                                         size: 30,
                                         color: bgSmokedWhite,
                                       ),
                                     ),
                                   ),
-                                  FilesButton(objectId: insuranceOC!.idUbezpieczenia!),
+                                  FilesButton(
+                                      objectId: insuranceOC.idUbezpieczenia!),
                                 ],
                               ),
                             ],
@@ -252,7 +242,10 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    const BoxTitleBar(title: "Polisa AC", description: "DANE DOTYCZĄCE POLISY", icon: Icons.text_snippet_outlined),
+                                    const BoxTitleBar(
+                                        title: "Polisa AC",
+                                        description: "DANE DOTYCZĄCE POLISY",
+                                        icon: Icons.text_snippet_outlined),
                                     DetailBar(
                                         title: "Numer polisy",
                                         value: insuranceAC.nrPolisy!),
@@ -262,10 +255,10 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                     DetailBar(
                                         title: "Okres ubezpieczenia",
                                         value:
-                                            "${insuranceAC?.dataZakupu}  /  ${insuranceAC?.dataKonca}"),
+                                            "${insuranceAC.dataZakupu}  /  ${insuranceAC.dataKonca}"),
                                     DetailBar(
                                         title: "Składka AC",
-                                        value: "${insuranceAC?.kosztPolisy} zł")
+                                        value: "${insuranceAC.kosztPolisy} zł")
                                   ],
                                 ),
                               ),
@@ -318,24 +311,23 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                       callback: _getData),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.all(5),
-                                        primary: Colors.transparent,
+                                        foregroundColor: mainColor,
+                                        backgroundColor: Colors.transparent,
+                                        padding: const EdgeInsets.all(5),
                                         shadowColor: Colors.transparent,
-                                        onPrimary: mainColor,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(100),
                                         )),
                                     onPressed: () {
-                                      // print("edit object ac");
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //       builder: (context) => InsuranceForm(
-                                      //           carId: widget.car.idSamochodu!,
-                                      //           isEditing: true,
-                                      //           editModel: insuranceAC!),
-                                      //     ));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => InsuranceForm(
+                                                carId: widget.car.idSamochodu!,
+                                                isEditing: true,
+                                                editModel: insuranceAC),
+                                          ));
                                     },
                                     child: Container(
                                       width: 50,
@@ -344,14 +336,15 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                                         borderRadius: BorderRadius.circular(50),
                                         color: mainColor,
                                       ),
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.edit_outlined,
                                         size: 30,
                                         color: bgSmokedWhite,
                                       ),
                                     ),
                                   ),
-                                  FilesButton(objectId: insuranceAC!.idUbezpieczenia!),
+                                  FilesButton(
+                                      objectId: insuranceAC.idUbezpieczenia!),
                                 ],
                               ),
                             ],
@@ -360,7 +353,7 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                 ]
@@ -369,9 +362,9 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                   insuranceAC.idUbezpieczenia != null)
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: bgSmokedWhite,
-                      onPrimary: bg35Grey,
-                      padding: EdgeInsets.all(0),
+                      foregroundColor: bg35Grey,
+                      backgroundColor: bgSmokedWhite,
+                      padding: const EdgeInsets.all(0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
                       )),
@@ -383,81 +376,79 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
                               CarInsuranceHistoryView(car: widget.car),
                         ));
                   },
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Historia Ubezpieczeń",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: fontBlack,
-                                ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Historia Ubezpieczeń",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: fontBlack,
                               ),
-                              SizedBox(
-                                height: 2,
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            const Text(
+                              "ILOŚĆ ZARCHIWIOZWANYCH POLIS",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: fontGrey,
+                                  fontFamily: "Roboto",
+                                  fontWeight: FontWeight.w300),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 100,
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: secondaryColor,
+                                borderRadius: BorderRadius.circular(25),
                               ),
-                              Text(
-                                "ILOŚĆ ZARCHIWIOZWANYCH POLIS",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: fontGrey,
-                                    fontFamily: "Roboto",
-                                    fontWeight: FontWeight.w300),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                width: 100,
-                                padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: secondaryColor,
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        Icons.analytics_outlined,
-                                        size: 20,
-                                        color: fontGrey,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.analytics_outlined,
+                                      size: 20,
+                                      color: fontGrey,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "${widget.car.zarchiwizowanePolisy}",
+                                      style: const TextStyle(
+                                        color: fontBlack,
                                       ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        "${widget.car.zarchiwizowanePolisy}",
-                                        style: TextStyle(
-                                          color: fontBlack,
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                    )
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                          Icon(
-                            Icons.manage_history_outlined,
-                            size: 82,
-                            color: bg50Grey,
-                          )
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                        const Icon(
+                          Icons.manage_history_outlined,
+                          size: 82,
+                          color: bg50Grey,
+                        )
+                      ],
                     ),
                   ),
                 ),
-              SizedBox(
+              const SizedBox(
                 height: 100,
               ),
             ])),
@@ -472,8 +463,8 @@ class _CarInsuranceViewState extends State<CarInsuranceView> {
               ));
         },
         backgroundColor: mainColor,
-        label: Text('Dodaj nowy'),
-        icon: Icon(Icons.add),
+        label: const Text('Dodaj nowy'),
+        icon: const Icon(Icons.add),
       ),
     );
   }

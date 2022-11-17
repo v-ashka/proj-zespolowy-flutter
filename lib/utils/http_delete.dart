@@ -3,12 +3,14 @@ import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/utils/http_delete.dart';
 
 enum Endpoints {
   carDefault,
   carInsurance,
   carInspection,
   carRepair,
+  file
 }
 
 extension EndpointsExtension on Endpoints {
@@ -22,13 +24,15 @@ extension EndpointsExtension on Endpoints {
         return '$SERVER_IP/api/inspection/DeleteInspection';
       case Endpoints.carRepair:
         return '$SERVER_IP/api/repair/DeleteRepair';
+      case Endpoints.file:
+        return '$SERVER_IP/api/fileUpload/DeleteFile';
     }
   }
 }
 
-Future deleteRecord(endpoint, token, id) async {
+Future deleteRecord(Endpoints endpoint, token, id) async {
   try {
-    var url = Uri.parse("$endpoint/$id");
+    var url = Uri.parse("${endpoint.text}/$id");
     var response = await http.delete(url, headers: <String, String>{
       'Content-Type': 'application/json',
       'Authorization': "Bearer $token",

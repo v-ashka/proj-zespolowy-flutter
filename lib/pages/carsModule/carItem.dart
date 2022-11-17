@@ -13,7 +13,7 @@ import 'package:projzespoloey/models/inspection_model.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
-import 'package:projzespoloey/pages/carsModule/carInsuranceView.dart';
+import 'package:projzespoloey/pages/carsModule/car_insurance_view.dart';
 import 'package:projzespoloey/pages/carsModule/car_repair_history_view.dart';
 import 'package:projzespoloey/pages/carsModule/inspection_view.dart';
 import 'package:projzespoloey/pages/dashboard.dart';

@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 
-
 Future<List?> getInsurance(token, id) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/insurance/GetInsuranceList/${id}");

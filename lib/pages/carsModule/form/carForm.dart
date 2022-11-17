@@ -1,13 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
+import 'package:projzespoloey/services/files_service.dart';
+import 'package:projzespoloey/utils/date_picker.dart';
 import 'package:projzespoloey/utils/photo_picker.dart';
 
 class CarForm extends StatefulWidget {
@@ -33,9 +34,7 @@ class _CarFormState extends State<CarForm> {
   int? modelItem;
   int prodDate = DateTime.now().year;
   String? imgId = "";
-  CarModelForm carItem = CarModelForm(
-      RokProdukcji: DateTime.now().year,
-      DataZakupu: DateTime.now().toString().substring(0, 10));
+  CarModelForm carItem = CarModelForm();
   final _formKey = GlobalKey<FormState>();
   File? image;
 
@@ -56,20 +55,20 @@ class _CarFormState extends State<CarForm> {
     });
   }
 
-  void handleReadOnlyInputClick(context) {
+  void yearPicker(context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Theme(
             data: Theme.of(context).copyWith(
-                colorScheme: ColorScheme.light(
+                colorScheme: const ColorScheme.light(
               primary: mainColor, // header background color
               onPrimary: bgSmokedWhite, // header text color
               onSurface: Colors.black, // body text color
             )),
             child: AlertDialog(
-              title: Text("Wybierz rok produkcji"),
-              content: Container(
+              title: const Text("Wybierz rok produkcji"),
+              content: SizedBox(
                 width: 100,
                 height: 300,
                 child: YearPicker(
@@ -80,7 +79,6 @@ class _CarFormState extends State<CarForm> {
                     setState(() {
                       prodDate = dateTime.year;
                       carItem.RokProdukcji = prodDate;
-                      print("${prodDate}");
                     });
                     Navigator.pop(context);
                   },
@@ -96,14 +94,14 @@ class _CarFormState extends State<CarForm> {
       showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
-              shape: const RoundedRectangleBorder(
+            return const AlertDialog(
+              shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25.0))),
-              title: const Text('Dodaję pojazd...'),
-              content: Container(
+              title: Text('Dodaję pojazd...'),
+              content: SizedBox(
                   height: 150,
                   width: 150,
-                  child: const Center(
+                  child: Center(
                       child: CircularProgressIndicator(color: mainColor))),
             );
           });
@@ -116,27 +114,6 @@ class _CarFormState extends State<CarForm> {
           ),
           ModalRoute.withName("/dashboard"));
     }
-  }
-
-  Future<DateTime?> pickDate(context) {
-    var date = showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1960),
-      lastDate: DateTime(2026),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-              colorScheme: const ColorScheme.light(
-            primary: mainColor, // header background color
-            onPrimary: bgSmokedWhite, // header text color
-            onSurface: Colors.black, // body text color
-          )),
-          child: child!,
-        );
-      },
-    );
-    return date;
   }
 
   @override
@@ -159,7 +136,7 @@ class _CarFormState extends State<CarForm> {
                     color: Colors.white,
                   ),
                   child: isLoading
-                      ? Center(
+                      ? const Center(
                           child: CircularProgressIndicator(
                             color: mainColor,
                             strokeWidth: 5,
@@ -233,8 +210,8 @@ class _CarFormState extends State<CarForm> {
                                               child: Text(brand['nazwa']));
                                         }).toList(),
                                         decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(15),
-                                            prefixIcon: Padding(
+                                            contentPadding: const EdgeInsets.all(15),
+                                            prefixIcon: const Padding(
                                               padding: EdgeInsets.only(top: 1),
                                               child: Icon(
                                                 Icons.directions_car_outlined,
@@ -254,8 +231,8 @@ class _CarFormState extends State<CarForm> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
+                                    const Padding(
+                                      padding: EdgeInsets.fromLTRB(
                                           0, 15, 0, 5),
                                       child: Text(
                                         "Model samochodu",
@@ -278,7 +255,6 @@ class _CarFormState extends State<CarForm> {
                                           setState(() {
                                             modelItem = value as int?;
                                             carItem.IdModelu = modelItem!;
-                                            print(modelItem);
                                           });
                                         },
                                         items: modelList.map((model) {
@@ -287,8 +263,8 @@ class _CarFormState extends State<CarForm> {
                                               child: Text(model['nazwa']));
                                         }).toList(),
                                         decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(15),
-                                            prefixIcon: Padding(
+                                            contentPadding: const EdgeInsets.all(15),
+                                            prefixIcon: const Padding(
                                               padding: EdgeInsets.only(top: 1),
                                               child: Icon(
                                                 Icons.car_crash_outlined,
@@ -307,7 +283,8 @@ class _CarFormState extends State<CarForm> {
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Padding(
                                       padding:
@@ -316,8 +293,8 @@ class _CarFormState extends State<CarForm> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
+                                          const Padding(
+                                            padding: EdgeInsets.fromLTRB(
                                                 0, 5, 0, 5),
                                             child: Text(
                                               "Rok produkcji",
@@ -328,21 +305,28 @@ class _CarFormState extends State<CarForm> {
                                             ),
                                           ),
                                           SizedBox(
-                                            width: MediaQuery.of(context).size.width/2.4,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                2.4,
                                             child: TextFormField(
                                               readOnly: true,
-                                              onTap: () =>
-                                                  handleReadOnlyInputClick(
-                                                      context),
+                                              onTap: () => yearPicker(context),
                                               cursorColor: Colors.black,
                                               style: const TextStyle(
                                                   color: Colors.black),
                                               decoration: InputDecoration(
-                                                prefixIcon: Icon(Icons.event_outlined, color: Colors.black),
+                                                  prefixIcon: const Icon(
+                                                      Icons.event_outlined,
+                                                      color: Colors.black),
                                                   contentPadding:
                                                       const EdgeInsets.all(15),
-                                                  hintText: carItem.RokProdukcji
-                                                      .toString(),
+                                                  hintText:
+                                                      carItem.RokProdukcji !=
+                                                              null
+                                                          ? carItem.RokProdukcji
+                                                              .toString()
+                                                          : "Wybierz rok",
                                                   hintStyle: const TextStyle(
                                                       fontSize: 14),
                                                   fillColor: bg35Grey,
@@ -353,24 +337,17 @@ class _CarFormState extends State<CarForm> {
                                                             50),
                                                     borderSide: BorderSide.none,
                                                   )),
-                                              /*validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'To pole nie może być puste';
-                                        }
-                                        return null;
-                                      }*/
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
+                                        const Padding(
+                                          padding: EdgeInsets.fromLTRB(
                                               0, 5, 0, 5),
                                           child: Text(
                                             "Data zakupu",
@@ -381,7 +358,10 @@ class _CarFormState extends State<CarForm> {
                                           ),
                                         ),
                                         SizedBox(
-                                          width: MediaQuery.of(context).size.width/2.4,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2.4,
                                           child: TextFormField(
                                             readOnly: true,
                                             onTap: () async {
@@ -395,12 +375,16 @@ class _CarFormState extends State<CarForm> {
                                             },
                                             cursorColor: Colors.black,
                                             style:
-                                                TextStyle(color: Colors.black),
+                                                const TextStyle(color: Colors.black),
                                             decoration: InputDecoration(
-                                                prefixIcon: const Icon(Icons.event_available_outlined, color: Colors.black),
+                                                prefixIcon: const Icon(
+                                                    Icons
+                                                        .event_available_outlined,
+                                                    color: Colors.black),
                                                 contentPadding:
-                                                    EdgeInsets.all(15),
-                                                hintText: carItem.DataZakupu,
+                                                    const EdgeInsets.all(15),
+                                                hintText: carItem.DataZakupu ??
+                                                    "Wybierz datę",
                                                 hintStyle: const TextStyle(
                                                     fontSize: 14),
                                                 fillColor: bg35Grey,
@@ -419,9 +403,9 @@ class _CarFormState extends State<CarForm> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
+                                    const Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                          EdgeInsets.fromLTRB(0, 5, 0, 5),
                                       child: Text(
                                         "Numer VIN",
                                         style: TextStyle(
@@ -438,10 +422,10 @@ class _CarFormState extends State<CarForm> {
                                           LengthLimitingTextInputFormatter(17)
                                         ],
                                         cursorColor: Colors.black,
-                                        style: TextStyle(color: Colors.black),
+                                        style: const TextStyle(color: Colors.black),
                                         decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(15),
-                                            prefixIcon: Padding(
+                                            contentPadding: const EdgeInsets.all(15),
+                                            prefixIcon: const Padding(
                                               padding: EdgeInsets.only(top: 1),
                                               child: Icon(
                                                 Icons.numbers,
@@ -470,10 +454,10 @@ class _CarFormState extends State<CarForm> {
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
+                                  children: const[
+                                     Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                          EdgeInsets.fromLTRB(0, 5, 0, 5),
                                       child: Text(
                                         "Pojemność silnika i numer rejestracyjny",
                                         style: TextStyle(
@@ -507,13 +491,13 @@ class _CarFormState extends State<CarForm> {
                                                     .digitsOnly,
                                               ],
                                               cursorColor: Colors.black,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.black),
                                               decoration: InputDecoration(
                                                   contentPadding:
-                                                      EdgeInsets.fromLTRB(
+                                                      const EdgeInsets.fromLTRB(
                                                           10, 1, 20, 1),
-                                                  prefixIcon: Padding(
+                                                  prefixIcon: const Padding(
                                                     padding:
                                                         EdgeInsets.only(top: 1),
                                                     child: Icon(
@@ -524,7 +508,7 @@ class _CarFormState extends State<CarForm> {
                                                   hintText: "Pojemność silnika",
                                                   suffixText: "cm3",
                                                   hintStyle:
-                                                      TextStyle(fontSize: 12),
+                                                      const TextStyle(fontSize: 12),
                                                   fillColor: bg35Grey,
                                                   filled: true,
                                                   border: OutlineInputBorder(
@@ -556,14 +540,16 @@ class _CarFormState extends State<CarForm> {
                                                   carItem.NumerRejestracyjny =
                                                       value;
                                                 },
-                                                textCapitalization: TextCapitalization.characters,
+                                                textCapitalization:
+                                                    TextCapitalization
+                                                        .characters,
                                                 cursorColor: Colors.black,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.black),
                                                 decoration: InputDecoration(
                                                     contentPadding:
-                                                        EdgeInsets.all(10),
-                                                    prefixIcon: Padding(
+                                                        const EdgeInsets.all(10),
+                                                    prefixIcon: const Padding(
                                                       padding: EdgeInsets.only(
                                                           top: 1),
                                                       child: Icon(
@@ -574,7 +560,7 @@ class _CarFormState extends State<CarForm> {
                                                     ),
                                                     hintText: "Numer rej.",
                                                     hintStyle:
-                                                        TextStyle(fontSize: 12),
+                                                        const TextStyle(fontSize: 12),
                                                     fillColor: bg35Grey,
                                                     filled: true,
                                                     border: OutlineInputBorder(
@@ -600,10 +586,10 @@ class _CarFormState extends State<CarForm> {
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
+                                  children: const [
                                     Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                          EdgeInsets.fromLTRB(0, 5, 0, 5),
                                       child: Text(
                                         "Rodzaj paliwa i typ skrzyni biegów",
                                         style: TextStyle(
@@ -638,15 +624,15 @@ class _CarFormState extends State<CarForm> {
                                                     value: fuels['id'],
                                                     child: Text(
                                                       fuels['nazwa'],
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           fontSize: 11),
                                                     ));
                                               }).toList(),
                                               decoration: InputDecoration(
                                                   contentPadding:
-                                                      EdgeInsets.fromLTRB(
+                                                      const EdgeInsets.fromLTRB(
                                                           0, 0, 15, 0),
-                                                  prefixIcon: Padding(
+                                                  prefixIcon: const Padding(
                                                       padding: EdgeInsets.only(
                                                           top: 1),
                                                       child: Icon(
@@ -655,7 +641,7 @@ class _CarFormState extends State<CarForm> {
                                                         color: fontBlack,
                                                       )),
                                                   hintText: "Rodzaj paliwa",
-                                                  hintStyle: TextStyle(
+                                                  hintStyle: const TextStyle(
                                                     fontSize: 11,
                                                   ),
                                                   fillColor: bg35Grey,
@@ -693,17 +679,17 @@ class _CarFormState extends State<CarForm> {
                                                       value: transmission['id'],
                                                       child: Text(
                                                         transmission['nazwa'],
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             fontSize: 11),
                                                       ));
                                                 }).toList(),
                                                 decoration: InputDecoration(
                                                     contentPadding:
-                                                        EdgeInsets.fromLTRB(
+                                                        const EdgeInsets.fromLTRB(
                                                             0, 0, 15, 0),
                                                     prefixIcon: Padding(
                                                       padding:
-                                                          EdgeInsets.fromLTRB(
+                                                          const EdgeInsets.fromLTRB(
                                                               10, 10, 10, 10),
                                                       child: Image.asset(
                                                         "assets/ico/manual-transmission.png",
@@ -713,7 +699,7 @@ class _CarFormState extends State<CarForm> {
                                                     ),
                                                     hintText: "Typ skrzyni",
                                                     hintStyle:
-                                                        TextStyle(fontSize: 11),
+                                                        const TextStyle(fontSize: 11),
                                                     fillColor: bg35Grey,
                                                     filled: true,
                                                     border: OutlineInputBorder(
@@ -732,10 +718,10 @@ class _CarFormState extends State<CarForm> {
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
+                                  children: const[
+                                     Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                          EdgeInsets.fromLTRB(0, 5, 0, 5),
                                       child: Text(
                                         "Moc i rodzaj napędu",
                                         style: TextStyle(
@@ -768,15 +754,15 @@ class _CarFormState extends State<CarForm> {
                                                     .digitsOnly
                                               ],
                                               cursorColor: Colors.black,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.black),
                                               decoration: InputDecoration(
                                                   contentPadding:
-                                                      EdgeInsets.fromLTRB(
+                                                      const EdgeInsets.fromLTRB(
                                                           10, 1, 20, 1),
                                                   prefixIcon: Padding(
                                                     padding:
-                                                        EdgeInsets.fromLTRB(
+                                                        const EdgeInsets.fromLTRB(
                                                             15, 15, 5, 15),
                                                     child: Image.asset(
                                                       "assets/ico/car-engine.png",
@@ -787,7 +773,7 @@ class _CarFormState extends State<CarForm> {
                                                   hintText: "Moc",
                                                   suffixText: "KM",
                                                   hintStyle:
-                                                      TextStyle(fontSize: 12),
+                                                      const TextStyle(fontSize: 12),
                                                   fillColor: bg35Grey,
                                                   filled: true,
                                                   border: OutlineInputBorder(
@@ -829,17 +815,17 @@ class _CarFormState extends State<CarForm> {
                                                       value: drivetrain['id'],
                                                       child: Text(
                                                         drivetrain['nazwa'],
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             fontSize: 11),
                                                       ));
                                                 }).toList(),
                                                 decoration: InputDecoration(
                                                     contentPadding:
-                                                        EdgeInsets.fromLTRB(
+                                                        const EdgeInsets.fromLTRB(
                                                             0, 0, 20, 0),
                                                     prefixIcon: Padding(
                                                       padding:
-                                                          EdgeInsets.fromLTRB(
+                                                          const EdgeInsets.fromLTRB(
                                                               15, 15, 5, 15),
                                                       child: Image.asset(
                                                         "assets/ico/all-wheel-drive.png",
@@ -849,7 +835,7 @@ class _CarFormState extends State<CarForm> {
                                                     ),
                                                     hintText: "Napęd",
                                                     hintStyle:
-                                                        TextStyle(fontSize: 12),
+                                                        const TextStyle(fontSize: 12),
                                                     fillColor: bg35Grey,
                                                     filled: true,
                                                     border: OutlineInputBorder(
@@ -868,9 +854,9 @@ class _CarFormState extends State<CarForm> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
+                                    const Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                          EdgeInsets.fromLTRB(0, 5, 0, 5),
                                       child: Text(
                                         "Przebieg pojazdu",
                                         style: TextStyle(
@@ -888,12 +874,12 @@ class _CarFormState extends State<CarForm> {
                                           FilteringTextInputFormatter.digitsOnly
                                         ],
                                         cursorColor: Colors.black,
-                                        style: TextStyle(color: Colors.black),
+                                        style: const TextStyle(color: Colors.black),
                                         decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.fromLTRB(
+                                            contentPadding: const EdgeInsets.fromLTRB(
                                                 10, 1, 20, 1),
                                             prefixIcon: Padding(
-                                              padding: EdgeInsets.fromLTRB(
+                                              padding: const EdgeInsets.fromLTRB(
                                                   15, 15, 5, 15),
                                               child: Image.asset(
                                                 "assets/ico/counter.png",
@@ -903,7 +889,7 @@ class _CarFormState extends State<CarForm> {
                                             ),
                                             hintText: "Przebieg pojazdu",
                                             suffixText: "km",
-                                            hintStyle: TextStyle(fontSize: 12),
+                                            hintStyle: const TextStyle(fontSize: 12),
                                             fillColor: bg35Grey,
                                             filled: true,
                                             border: OutlineInputBorder(
@@ -930,8 +916,8 @@ class _CarFormState extends State<CarForm> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
+                                          const Padding(
+                                            padding: EdgeInsets.fromLTRB(
                                                 0, 10, 0, 10),
                                             child: Text("Zdjęcie pojazdu"),
                                           ),
@@ -991,7 +977,7 @@ class _CarFormState extends State<CarForm> {
           ),
         ),
         floatingActionButton: isLoadingBtn
-            ? (SizedBox.shrink())
+            ? (const SizedBox.shrink())
             : Padding(
                 padding: MediaQuery.of(context).viewInsets.bottom != 0
                     ? const EdgeInsets.fromLTRB(0, 0, 0, 30)
@@ -1002,12 +988,17 @@ class _CarFormState extends State<CarForm> {
                       _formKey.currentState!.save();
                       setState(() {
                         isLoadingBtn = true;
+                        carItem.RokProdukcji ??= DateTime.now().year;
+                        carItem.DataZakupu ??=
+                            DateTime.now().toString().substring(0, 10);
                       });
                       showAddCarLoadingDialog(true);
                       String? tokenVal = await storage.read(key: "token");
                       var id = await CarApiService().addCar(tokenVal, carItem);
-                      var uploadImg = await CarApiService().uploadFile(
-                          tokenVal, image!.path.toString(), id.body);
+                      if (image != null) {
+                        await FilesService().uploadFile(
+                            tokenVal, image!.path.toString(), id.body);
+                      }
                       setState(() {
                         showAddCarLoadingDialog(false);
                       });
@@ -1020,11 +1011,11 @@ class _CarFormState extends State<CarForm> {
               ),
         bottomSheet: MediaQuery.of(context).viewInsets.bottom > 150
             ? GestureDetector(
-                onTap: () => print("CIPSKO"),
+                onTap: () => {},
                 child: Container(
                     height: 40,
                     width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(color: bg35Grey),
+                    decoration: const BoxDecoration(color: bg35Grey),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [

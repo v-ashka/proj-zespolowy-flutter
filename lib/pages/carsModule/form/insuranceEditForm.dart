@@ -14,6 +14,7 @@ import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
+import 'package:projzespoloey/utils/date_picker.dart';
 
 class InsuranceEditForm extends StatefulWidget {
   InsuranceModel insurance;
@@ -39,27 +40,6 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
     String? tokenVal = await storage.read(key: "token");
     insuranceTypesList = (await CarApiService().getInsuranceTypes(tokenVal));
     Future.delayed(Duration(seconds: 0)).then((value) => setState(() {}));
-  }
-
-  Future<DateTime?> pickDate(context) {
-    var date = showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1960),
-      lastDate: DateTime(2026),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-              colorScheme: const ColorScheme.light(
-            primary: mainColor, // header background color
-            onPrimary: bgSmokedWhite, // header text color
-            onSurface: Colors.black, // body text color
-          )),
-          child: child!,
-        );
-      },
-    );
-    return date;
   }
 
   Future pickFiles() async {

@@ -17,7 +17,7 @@ import 'package:projzespoloey/pages/carsModule/car_repair_history_view.dart';
 import 'package:projzespoloey/pages/carsModule/form/car_repair_form.dart';
 import 'package:projzespoloey/pages/carsModule/inspection_history_view.dart';
 import 'package:projzespoloey/pages/carsModule/inspection_view.dart';
-import 'package:projzespoloey/pages/carsModule/form/carForm.dart';
+import 'package:projzespoloey/pages/carsModule/form/car_form.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceForm.dart';
 import 'package:projzespoloey/pages/dashboard.dart';

@@ -6,6 +6,7 @@ import 'package:projzespoloey/components/files_button.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/carList.dart';
+import 'package:projzespoloey/pages/carsModule/form/car_form.dart';
 import 'package:projzespoloey/utils/http_delete.dart';
 
 class CarDetailBox extends StatelessWidget {
@@ -111,15 +112,15 @@ class CarDetailBox extends StatelessWidget {
                                     BorderRadius.circular(100),
                                   )),
                               onPressed: () {
-                                // print("edit object ac");
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //       builder: (context) => InsuranceForm(
-                                //           carId: widget.car.idSamochodu!,
-                                //           isEditing: true,
-                                //           editModel: insuranceAC!),
-                                //     ));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CarForm(
+                                          carId: carModel.idSamochodu,
+                                          isEditing: true,
+                                          brand: carModel.marka,
+                                          make: carModel.model),
+                                    ));
                               },
                               child: Container(
                                 width: 50,

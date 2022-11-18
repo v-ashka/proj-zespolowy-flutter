@@ -55,6 +55,27 @@ class CarApiService {
     }
   }
 
+  Future<CarModelForm> getCarFormData(token, id) async {
+    try {
+      var url = Uri.parse("${SERVER_IP}/api/car/GetCarForm/${id}");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer ${token}",
+      });
+      if (response.statusCode == 200) {
+        log(response.body.toString());
+        Map<String, dynamic> data = jsonDecode(response.body);
+        CarModelForm model = CarModelForm.fromJson(data);
+        return model;
+      } else {
+        return CarModelForm();
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return CarModelForm();
+  }
+
   Future<CarModel?> getCarTest(token, id) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/car/GetCar/${id}");
@@ -211,6 +232,22 @@ class CarApiService {
     }
   }
 
+  Future updateCar(token, data, carId) async {
+    try {
+      var url = Uri.parse("$SERVER_IP/api/car/UpdateCar/$carId");
+      var response = await http.put(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer ${token}",
+        },
+        body: jsonEncode(data),
+      );
+      return response.statusCode;
+    } catch (e) {
+      log(e.toString());
+    }
+  }
   Future deleteCar(token, id) async {
     try {
       var url = Uri.parse("$SERVER_IP/api/car/DeleteCar/$id");

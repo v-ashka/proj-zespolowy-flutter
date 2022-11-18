@@ -138,41 +138,57 @@ class CarListView {
 
 class CarModelForm {
   CarModelForm(
-      {this.PojemnoscSilnika,
-      this.RokProdukcji,
-      this.NumerVin,
-      this.DataZakupu,
-      this.NumerRejestracyjny,
-      this.IdModelu,
-      this.Moc,
-      this.Przebieg,
+      {this.pojemnoscSilnika,
+      this.rokProdukcji,
+      this.numerVin,
+      this.dataZakupu,
+      this.numerRejestracyjny,
+      this.idModelu,
+      this.moc,
+      this.przebieg,
       this.idRodzajuNapedu,
       this.idRodzajuPaliwa,
       this.idRodzajuSkrzyniBiegow});
 
-  int? PojemnoscSilnika;
-  int? RokProdukcji;
-  String? NumerVin;
-  String? DataZakupu;
-  String? NumerRejestracyjny;
-  int? IdModelu;
-  int? Moc;
-  int? Przebieg;
+  String? pojemnoscSilnika;
+  String? rokProdukcji;
+  String? numerVin;
+  String? dataZakupu;
+  String? numerRejestracyjny;
+  int? idModelu;
+  String? moc;
+  String? przebieg;
   int? idRodzajuSkrzyniBiegow;
   int? idRodzajuNapedu;
   int? idRodzajuPaliwa;
 
   Map<String, dynamic> toJson() => {
-        "pojemnoscSilnika": PojemnoscSilnika,
-        "rokProdukcji": RokProdukcji,
-        "numerVin": NumerVin,
-        "dataZakupu": DataZakupu,
-        "numerRejestracyjny": NumerRejestracyjny,
-        "moc": Moc,
-        "przebieg": Przebieg,
+        "pojemnoscSilnika": pojemnoscSilnika,
+        "rokProdukcji": rokProdukcji,
+        "numerVin": numerVin,
+        "dataZakupu": dataZakupu,
+        "numerRejestracyjny": numerRejestracyjny,
+        "moc": moc,
+        "przebieg": przebieg,
         "idRodzajuSkrzyniBiegow": idRodzajuSkrzyniBiegow,
         "idRodzajuNapedu": idRodzajuNapedu,
         "idRodzajuPaliwa": idRodzajuPaliwa,
-        "idModelu": IdModelu,
+        "idModelu": idModelu,
       };
+
+  factory CarModelForm.fromJson(Map<String, dynamic> json) {
+    return CarModelForm(
+  pojemnoscSilnika: json["pojemnoscSilnika"],
+  rokProdukcji: json["rokProdukcji"],
+  numerVin: json["numerVin"],
+  dataZakupu: json["dataZakupu"],
+  numerRejestracyjny: json["numerRejestracyjny"],
+  moc: json["moc"],
+  przebieg: json["przebieg"],
+  idRodzajuSkrzyniBiegow: json["idRodzajuSkrzyniBiegow"],
+  idRodzajuNapedu: json["idRodzajuNapedu"],
+  idRodzajuPaliwa: json["idRodzajuNapedu"],
+  idModelu: json["idModelu"]);
+  }
+
 }

@@ -4,8 +4,8 @@ import 'package:projzespoloey/components/container.dart';
 import 'package:projzespoloey/components/header.dart';
 import 'package:projzespoloey/constants.dart';
 // db class
-import 'package:projzespoloey/services/db_provider.dart';
-import 'package:projzespoloey/services/user.dart';
+import 'package:projzespoloey/pages/old_/db_provider.dart';
+import 'package:projzespoloey/pages/old_/user.dart';
 
 
 class Dashboard extends StatefulWidget {

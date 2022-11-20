@@ -20,7 +20,7 @@ import 'package:projzespoloey/pages/carsModule/inspection_view.dart';
 import 'package:projzespoloey/pages/carsModule/form/car_form.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceForm.dart';
-import 'package:projzespoloey/pages/dashboard.dart';
+import 'package:projzespoloey/pages/old_/dashboard.dart';
 import 'package:projzespoloey/pages/documentsModule/documentItem.dart';
 import 'package:projzespoloey/pages/documentsModule/documentsList.dart';
 import 'package:projzespoloey/pages/homeModule/homeItem.dart';
@@ -28,7 +28,7 @@ import 'package:projzespoloey/pages/homeModule/homeItem.dart';
 import 'package:projzespoloey/pages/homeModule/homeList.dart';
 import 'package:projzespoloey/pages/receiptsModule/receiptItem.dart';
 import 'package:projzespoloey/pages/receiptsModule/receiptList.dart';
-import 'package:projzespoloey/pages/userauth.dart';
+import 'package:projzespoloey/pages/old_/userauth.dart';
 import 'package:projzespoloey/pages/loading.dart';
 import 'package:projzespoloey/pages/form.dart';
 

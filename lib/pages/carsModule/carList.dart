@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,9 @@ import 'package:projzespoloey/pages/_Dashboard.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
+import 'package:projzespoloey/pages/carsModule/form/car_form.dart';
+import 'package:projzespoloey/utils/delete_dialog.dart';
+import 'package:projzespoloey/utils/http_delete.dart';
 
 import '../../constants.dart';
 
@@ -39,6 +43,27 @@ class _CarListState extends State<CarList> {
   String getPhoto(carId) {
     var url = '$SERVER_IP/api/fileUpload/GetFile/$carId?naglowkowy=true';
     return url;
+  }
+
+  void showDeleteDialog(isShowing) {
+    if (isShowing) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(25.0))),
+              title: Text('Usuwam...'),
+              content: SizedBox(
+                  height: 150,
+                  width: 150,
+                  child: Center(
+                      child: CircularProgressIndicator(color: mainColor))),
+            );
+          });
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
   }
 
   Widget build(BuildContext context) {
@@ -81,22 +106,24 @@ class _CarListState extends State<CarList> {
                                     ));
                               },
                               onLongPress: () {
+                                HapticFeedback.heavyImpact();
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return Container(
-                                        padding: EdgeInsets.all(5),
+                                        padding: const EdgeInsets.all(5),
                                         child: AlertDialog(
-                                          actionsPadding: EdgeInsets.all(0),
+                                          actionsPadding:
+                                              const EdgeInsets.all(0),
                                           actionsAlignment:
                                               MainAxisAlignment.center,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(25),
                                           ),
-                                          title: Text(
+                                          title: const Text(
                                               "Chcesz usunąć lub edytować ten pojazd?"),
-                                          content: Text(
+                                          content: const Text(
                                               "Wybierz jedną z opcji dostępnych poniżej."),
                                           actions: [
                                             ElevatedButton(
@@ -109,7 +136,20 @@ class _CarListState extends State<CarList> {
                                                             25),
                                                   )),
                                               onPressed: () {
-                                                Navigator.of(context).pop();
+                                                Navigator.pop(context);
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          CarForm(
+                                                              carId: carItem
+                                                                  .idSamochodu,
+                                                              isEditing: true,
+                                                              brand:
+                                                                  carItem.marka,
+                                                              make: carItem
+                                                                  .model),
+                                                    ));
                                               },
                                               child: RichText(
                                                 text: const TextSpan(
@@ -143,19 +183,17 @@ class _CarListState extends State<CarList> {
                                                             25),
                                                   )),
                                               onPressed: () async {
-                                                http.Response deleteCar =
-                                                    await CarApiService()
-                                                        .deleteCar(
-                                                            token,
-                                                            carItem
-                                                                .idSamochodu);
-                                                setState(() {
-                                                  if (deleteCar.statusCode ==
-                                                      200) {
-                                                    Navigator.pop(context);
-                                                    getData();
-                                                  }
-                                                });
+                                                Navigator.of(context).pop();
+                                                showDeleteDialog(true);
+                                                bool response =
+                                                    await deleteRecord(
+                                                        Endpoints.carDefault,
+                                                        token,
+                                                        carItem.idSamochodu);
+                                                if (response) {
+                                                  showDeleteDialog(false);
+                                                  getData();
+                                                }
                                               },
                                               child: RichText(
                                                 text: const TextSpan(
@@ -209,7 +247,7 @@ class _CarListState extends State<CarList> {
                                             padding: const EdgeInsets.fromLTRB(
                                                 10, 10, 0, 0),
                                             child: Text(
-                                                "${carItem!.marka} ${carItem!.model}",
+                                                "${carItem.marka} ${carItem.model}",
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                 ),
@@ -258,9 +296,9 @@ class _CarListState extends State<CarList> {
                                                                 .text_snippet_outlined,
                                                             color: icon70Black),
                                                         Text(
-                                                          carItem!.koniecOC !=
+                                                          carItem.koniecOC !=
                                                                   null
-                                                              ? "${carItem!.koniecOC} dni"
+                                                              ? "${carItem.koniecOC} dni"
                                                               : "Brak",
                                                           style: const TextStyle(
                                                               fontFamily:
@@ -363,7 +401,7 @@ class _CarListState extends State<CarList> {
                                                       BorderRadius.circular(25),
                                                   child: Image.network(
                                                     getPhoto(
-                                                        carItem!.idSamochodu),
+                                                        carItem.idSamochodu),
                                                     width: 170,
                                                     height: 150,
                                                     fit: BoxFit.cover,

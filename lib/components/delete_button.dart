@@ -49,7 +49,7 @@ class DeleteButton extends StatefulWidget {
 }
 
 class _DeleteButtonState extends State<DeleteButton> {
-  void _showAddCarLoadingDialog(isShowing) {
+  void showDeleteDialog(isShowing) {
     if (isShowing) {
       showDialog(
           context: context,
@@ -121,7 +121,7 @@ class _DeleteButtonState extends State<DeleteButton> {
                             )),
                         onPressed: () async {
                           Navigator.of(context).pop();
-                          _showAddCarLoadingDialog(true);
+                          showDeleteDialog(true);
 
                           bool response = await deleteRecord(
                               widget.endpoint, widget.token, widget.id);
@@ -129,7 +129,7 @@ class _DeleteButtonState extends State<DeleteButton> {
                           if (response) {
                             widget.callback.call();
                             widget.callbackSec?.call();
-                            _showAddCarLoadingDialog(false);
+                            showDeleteDialog(false);
                           }
                         },
                         child: const Text(

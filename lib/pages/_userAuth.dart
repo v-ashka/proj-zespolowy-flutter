@@ -167,6 +167,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                               height: 10,
                             ),
                             TextFormField(
+                              obscureText: true,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return "Proszę podać hasło";

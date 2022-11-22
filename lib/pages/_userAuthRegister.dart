@@ -206,6 +206,7 @@ class _UserAuthenticationRegisterState
                               height: 10,
                             ),
                             TextFormField(
+                              obscureText: true,
                               controller: testPass1,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -242,6 +243,7 @@ class _UserAuthenticationRegisterState
                               height: 10,
                             ),
                             TextFormField(
+                              obscureText: true,
                               controller: testPass2,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {

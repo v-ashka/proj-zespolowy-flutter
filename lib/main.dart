@@ -31,6 +31,7 @@ import 'package:projzespoloey/pages/receiptsModule/receiptList.dart';
 import 'package:projzespoloey/pages/old_/userauth.dart';
 import 'package:projzespoloey/pages/loading.dart';
 import 'package:projzespoloey/pages/form.dart';
+import 'package:projzespoloey/pages/receiptsModule/receipt_form.dart';
 
 import 'pages/carsModule/filesView.dart';
 import 'pages/carsModule/form/inspection_form.dart';
@@ -120,8 +121,11 @@ class MyApp extends StatelessWidget {
         '/homeList': (context) => HomeList(),
         '/homeItem': (context) => HomeItem(),
         // Receipts Routes
+        '/receiptForm': (context) => ReceiptForm(),
         '/receiptList': (context) => ReceiptList(),
-        '/receiptItem': (context) => ReceiptItem(),
+        '/receiptItem': (context) => ReceiptItem(
+              receiptId: objectId,
+            ),
       },
       title: 'OrganizerPRO',
       theme: ThemeData(

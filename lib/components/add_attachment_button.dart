@@ -3,12 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/utils/file_picker.dart';
 
-enum FormType {
-  car,
-  insurance,
-  inspection,
-  carRepair,
-}
+enum FormType { car, insurance, inspection, carRepair, receipt }
 
 extension FormTypeExtension on FormType {
   String get text {
@@ -21,6 +16,8 @@ extension FormTypeExtension on FormType {
         return 'przeglądu';
       case FormType.carRepair:
         return 'naprawy';
+      case FormType.receipt:
+        return 'paragonu';
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projzespoloey/components/add_attachment_button.dart';
@@ -574,11 +575,11 @@ class _InspectionFormState extends State<InspectionForm> {
             String? tokenVal = await storage.read(key: "token");
 
             if (!widget.isEditing!) {
-              var inspectionId = await InspectionApiService()
+              Response response = await InspectionApiService()
                   .addInspection(tokenVal, inspection, widget.carId);
-              if (files.isNotEmpty) {
-                await FilesService()
-                    .uploadFiles(tokenVal, files, inspectionId);
+              if (files.isNotEmpty && response.statusCode == 200 ||
+                  response.statusCode == 202) {
+                await FilesService().uploadFiles(tokenVal, files, response.body);
               }
             } else {
               await InspectionApiService().updateInspection(

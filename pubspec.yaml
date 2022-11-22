@@ -66,6 +66,7 @@ dependencies:
   cached_network_image: ^3.2.2
   video_thumbnail: ^0.5.3
   provider: ^6.0.4
+  chip_list: ^2.3.3+8
 dependency_overrides:
   ffi: ^1.0.0
 

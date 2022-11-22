@@ -12,7 +12,6 @@ import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
 import 'package:projzespoloey/pages/carsModule/carItem.dart';
 import 'package:projzespoloey/pages/carsModule/form/car_form.dart';
-import 'package:projzespoloey/utils/delete_dialog.dart';
 import 'package:projzespoloey/utils/http_delete.dart';
 
 import '../../constants.dart';

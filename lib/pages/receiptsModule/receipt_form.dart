@@ -667,7 +667,11 @@ class _ReceiptFormState extends State<ReceiptForm> {
                             ]),
                         if (!widget.isEditing)
                           AddAttachmentButton(
-                              files: files, formType: FormType.receipt)
+                            //files: files,
+                              formType: FormType.receipt,
+                              onChanged: (filesList) {
+                                files = filesList;
+                              })
                       ],
                     ),
                   ),

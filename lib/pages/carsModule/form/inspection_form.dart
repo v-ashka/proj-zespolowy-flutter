@@ -553,7 +553,11 @@ class _InspectionFormState extends State<InspectionForm> {
                         ),
                         if (!widget.isEditing!) ...[
                           AddAttachmentButton(
-                              files: files, formType: FormType.inspection)
+                            //files: files,
+                              formType: FormType.carRepair,
+                              onChanged: (filesList) {
+                                files = filesList;
+                              })
                         ]
                       ],
                     ),

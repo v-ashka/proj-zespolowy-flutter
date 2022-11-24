@@ -26,6 +26,7 @@ class CarRepairForm extends StatefulWidget {
   final String carId;
   final bool? isEditing;
   final CarRepairModel? editModel;
+
   const CarRepairForm(
       {Key? key, required this.carId, this.isEditing = false, this.editModel})
       : super(key: key);
@@ -545,7 +546,11 @@ class _CarRepairFormState extends State<CarRepairForm> {
                         ),
                         if (!widget.isEditing!)
                           AddAttachmentButton(
-                              files: files, formType: FormType.carRepair)
+                              //files: files,
+                              formType: FormType.carRepair,
+                              onChanged: (filesList) {
+                                files = filesList;
+                              })
                       ],
                     ),
                   ),

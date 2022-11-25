@@ -23,19 +23,17 @@ extension FormTypeExtension on FormType {
 }
 
 class AddAttachmentButton extends StatefulWidget {
-  final List<PlatformFile> files;
+  final ValueChanged<List<PlatformFile>>? onChanged;
   final FormType formType;
   const AddAttachmentButton(
-      {Key? key, required this.files, required this.formType})
+      {Key? key, required this.formType, required this.onChanged})
       : super(key: key);
 
   @override
   State<AddAttachmentButton> createState() => _AddAttachmentButtonState();
 }
-
 class _AddAttachmentButtonState extends State<AddAttachmentButton> {
-  late List<PlatformFile> files = widget.files;
-
+  List<PlatformFile> files = [];
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -54,7 +52,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
               onPressed: () async {
                 files = await filePicker(files);
                 setState(() {
-                  files;
+                  widget.onChanged!(files);
                 });
               },
               child: Row(
@@ -62,7 +60,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
                   const Icon(Icons.file_upload_outlined),
                   const SizedBox(width: 2),
                   Text(
-                      files.isEmpty
+                     files.isEmpty
                           ? "Dodaj załączniki do ${widget.formType.text}"
                           : files.length == 1
                               ? "Dodano 1 załącznik do ${widget.formType.text}"

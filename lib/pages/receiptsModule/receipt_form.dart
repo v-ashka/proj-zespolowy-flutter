@@ -75,7 +75,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
 
   getData() async {
     token = await storage.read(key: "token");
-    categoryList = await ReceiptApiService().getReceiptList(token, id)
+    // categoryList = await ReceiptApiService().getReceiptList(token, id)
     // async function to fetch here ...
     if (widget.isEditing) {
       receiptItem = (await ReceiptApiService()
@@ -450,7 +450,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        DropDownTextField(dropDownList: dropDownList)
+                                        // DropDownTextField(dropDownList: dropDownList)
                                         TextFormField(
                                             initialValue:
                                                 receiptItem.nazwaKategorii,
@@ -738,9 +738,9 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                       ),
                                     ),
                                   ]),
-                              if (!widget.isEditing)
-                                AddAttachmentButton(
-                                    files: files, formType: FormType.receipt)
+                              if (!widget.isEditing) Text("test"),
+                              // AddAttachmentButton(
+                              //     files: files, formType: FormType.receipt)
                             ],
                           ),
                         ),

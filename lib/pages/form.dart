@@ -7,23 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projzespoloey/constants.dart';
 
-class CustomTrackShape extends RoundedRectSliderTrackShape {
-  Rect getPreferredRect({
-    required RenderBox parentBox,
-    Offset offset = Offset.zero,
-    required SliderThemeData sliderTheme,
-    bool isEnabled = false,
-    bool isDiscrete = false,
-  }) {
-    final double trackHeight = sliderTheme.trackHeight!;
-    final double trackLeft = offset.dx;
-    final double trackTop =
-        offset.dy + (parentBox.size.height - trackHeight) / 2;
-    final double trackWidth = parentBox.size.width;
-    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
-  }
-}
-
 class DataForm extends StatefulWidget {
   const DataForm({Key? key}) : super(key: key);
 
@@ -55,34 +38,8 @@ class _DataFormState extends State<DataForm> {
   };
 
   final _formKey = GlobalKey<FormState>();
-  // Slider values
-  double _currentGuaranteeSliderVal = 0;
-  double _currentRefundSliderVal = 0;
-
-  // Pick image
-  File? image;
-  Future pickImage() async {
-    try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image == null) return;
-      final imageTemp = File(image.path);
-      this.image = imageTemp;
-      setState(() {
-        this.image = imageTemp;
-      });
-      print(imageTemp);
-    } on PlatformException catch (e) {
-      print("Failed to pick image $e");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    data = data.isNotEmpty
-        ? data
-        : ModalRoute.of(context)?.settings.arguments as Map;
-
-    print(image);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -139,24 +96,9 @@ class _DataFormState extends State<DataForm> {
                             Expanded(
                               flex: 12,
                               child: Text(
-                                "Podaj dane ${formHeaderText[data['form_type']]}",
+                                "Podaj dane dokumentu",
                                 style: TextStyle(
                                     fontSize: 19, fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: mainColor,
-                                  shape: CircleBorder(),
-                                  padding: EdgeInsets.all(10),
-                                ),
-                                onPressed: () {},
-                                child: Icon(
-                                  Icons.qr_code_scanner_rounded,
-                                  size: 30,
-                                ),
                               ),
                             ),
                           ],
@@ -514,87 +456,6 @@ class _DataFormState extends State<DataForm> {
                                 }),
                           ],
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              child: Text("Okres gwarancji"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              child: Text(
-                                "${_currentGuaranteeSliderVal.toInt()} miesięce",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Roboto"),
-                              ),
-                            ),
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                  trackHeight: 10.0,
-                                  trackShape: CustomTrackShape(),
-                                  thumbShape: RoundSliderThumbShape(
-                                      enabledThumbRadius: 15)),
-                              child: Slider(
-                                min: 0,
-                                value: _currentGuaranteeSliderVal,
-                                max: 60,
-                                divisions: 5,
-                                label: _currentGuaranteeSliderVal.toString(),
-                                thumbColor: mainColor,
-                                activeColor: main50Color,
-                                inactiveColor: secondaryColor,
-                                onChanged: (double value) {
-                                  setState(() {
-                                    _currentGuaranteeSliderVal = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              child: Text("Okres zwrotu"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              child: Text(
-                                "${_currentRefundSliderVal.toInt()} dni",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: "Roboto"),
-                              ),
-                            ),
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                  trackHeight: 8.0,
-                                  trackShape: CustomTrackShape(),
-                                  thumbShape: RoundSliderThumbShape(
-                                      enabledThumbRadius: 15)),
-                              child: Slider(
-                                min: 0,
-                                max: 14,
-                                divisions: 14,
-                                value: _currentRefundSliderVal,
-                                label: _currentRefundSliderVal.toString(),
-                                thumbColor: mainColor,
-                                activeColor: main50Color,
-                                inactiveColor: secondaryColor,
-                                onChanged: (double value) {
-                                  setState(() {
-                                    _currentRefundSliderVal = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -609,47 +470,10 @@ class _DataFormState extends State<DataForm> {
                                         const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                     child: Text("Zdjęcie produktu"),
                                   ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: secondaryColor,
-                                      onPrimary: second50Color,
-                                      padding: EdgeInsets.all(40),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(25)),
-                                    ),
-                                    onPressed: () {
-                                      print("test: $image");
-                                      pickImage();
-                                    },
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 28,
-                                      color: Colors.black,
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
-                            if (image != null) ...[
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
-                                      color: secondaryColor,
-                                      image: DecorationImage(
-                                        image: FileImage(image!),
-                                        fit: BoxFit.scaleDown,
-                                      ),
-                                      border: Border.all(
-                                          color: secondaryColor, width: 5)),
-                                  width: 90,
-                                  height: 90,
-                                ),
-                              )
-                            ]
-                          ],
+                          ]
                         ),
                       ],
                     ),

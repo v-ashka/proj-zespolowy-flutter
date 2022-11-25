@@ -57,7 +57,7 @@ class DocumentService {
 
   Future getDocumentList(token) async {
     try {
-      List<DocumentModel>? model;
+      List<DocumentModel>? model = [];
       var url =
       Uri.parse("$SERVER_IP/api/document/GetList/");
       var response = await http.get(

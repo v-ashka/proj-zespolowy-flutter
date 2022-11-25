@@ -27,7 +27,8 @@ class _DocumentsListState extends State<DocumentsList> {
   }
 
   String? token;
-  List<DocumentModel>? documentList;
+  List<DocumentModel>? documentList = [];
+  List<DocumentModel>? filteredList = [];
   DocumentModel document = DocumentModel();
   bool isGetDataFinished = false;
   List documentCategories = [];
@@ -38,15 +39,19 @@ class _DocumentsListState extends State<DocumentsList> {
   void getData() async {
     token = await storage.read(key: "token");
     documentList = await DocumentService().getDocumentList(token);
+    filteredList = documentList;
     documentCategories = (await DocumentService().getCategories(token));
     categoryList =
         documentCategories.map((e) => e["nazwa"].toString()).toList();
     categoryList.insert(0, "Wszystkie");
+    String? categoryName =
+        documentCategories.firstWhere((element) => element["id"] == 1)["nazwa"];
+    print(categoryName);
     setState(() {
       isGetDataFinished = true;
     });
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +64,7 @@ class _DocumentsListState extends State<DocumentsList> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
                 child: ChipList(
                   listOfChipNames: categoryList,
                   activeBgColorList: const [secondColor],
@@ -71,20 +76,27 @@ class _DocumentsListState extends State<DocumentsList> {
                   style: const TextStyle(fontSize: 13),
                   extraOnToggle: (val) {
                     currentCategory = val;
-                    setState(() {});
+                    setState(() {
+                      if (currentCategory == 0) {
+                        filteredList = documentList;
+                      } else {
+                        filteredList = documentList!
+                            .where((e) => e.kategoria == currentCategory)
+                            .toList();
+                      }
+                    });
                   },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              Expanded(
                 child: ListView.separated(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.all(10),
-                  itemCount: documentList!.length,
+                  // shrinkWrap: true,
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 85),
+                  itemCount: filteredList!.length,
                   itemBuilder: (BuildContext context, int index) {
-                    document = documentList![index];
+                    document = filteredList![index];
                     return Padding(
-                      padding: const EdgeInsets.fromLTRB(10,0, 10, 0),
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
@@ -97,22 +109,22 @@ class _DocumentsListState extends State<DocumentsList> {
                               flex: 5,
                               child: Padding(
                                 padding:
-                                const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                    const EdgeInsets.fromLTRB(15, 15, 15, 15),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     ExpandablePanel(
                                       header: Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                                MainAxisAlignment.start,
                                             children: [
                                               Text(
                                                 "${document.nazwaDokumentu}",
@@ -130,7 +142,7 @@ class _DocumentsListState extends State<DocumentsList> {
                                                       color: fontGrey,
                                                       fontFamily: "Roboto",
                                                       fontWeight:
-                                                      FontWeight.w300),
+                                                          FontWeight.w300),
                                                 ),
                                               ),
                                             ],
@@ -141,7 +153,7 @@ class _DocumentsListState extends State<DocumentsList> {
                                         Container(
                                           decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(25),
+                                                  BorderRadius.circular(25),
                                               color: bg35Grey),
                                           width: 150,
                                           child: Padding(
@@ -149,18 +161,18 @@ class _DocumentsListState extends State<DocumentsList> {
                                                 10, 0, 20, 0),
                                             child: Row(
                                               crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                                  CrossAxisAlignment.center,
                                               mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
+                                                  MainAxisAlignment.spaceAround,
                                               children: [
                                                 const Icon(Icons.label_outline,
                                                     color: icon70Black),
                                                 Text(
-                                                  "Umowa",
+                                                  "${documentCategories.firstWhere((element) => element["id"] == document.kategoria)["nazwa"]}",
                                                   style: const TextStyle(
                                                       fontFamily: "Lato",
                                                       fontWeight:
-                                                      FontWeight.w400),
+                                                          FontWeight.w400),
                                                 )
                                               ],
                                             ),
@@ -172,7 +184,7 @@ class _DocumentsListState extends State<DocumentsList> {
                                         Container(
                                           decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(25),
+                                                  BorderRadius.circular(25),
                                               color: bg35Grey),
                                           width: 150,
                                           child: Padding(
@@ -180,9 +192,9 @@ class _DocumentsListState extends State<DocumentsList> {
                                                 10, 0, 20, 0),
                                             child: Row(
                                               crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                                  CrossAxisAlignment.center,
                                               mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
+                                                  MainAxisAlignment.spaceAround,
                                               children: [
                                                 const Icon(
                                                     Icons
@@ -193,7 +205,7 @@ class _DocumentsListState extends State<DocumentsList> {
                                                   style: const TextStyle(
                                                       fontFamily: "Lato",
                                                       fontWeight:
-                                                      FontWeight.w400),
+                                                          FontWeight.w400),
                                                 )
                                               ],
                                             ),
@@ -232,16 +244,16 @@ class _DocumentsListState extends State<DocumentsList> {
                                               15, 15, 5, 0),
                                           child: Row(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               const SizedBox(
                                                 width: 20,
                                               ),
                                               Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                                    MainAxisAlignment.start,
                                                 crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   // DeleteButton(
                                                   // endpoint:
@@ -255,22 +267,22 @@ class _DocumentsListState extends State<DocumentsList> {
                                                   ElevatedButton(
                                                     style: ElevatedButton
                                                         .styleFrom(
-                                                        padding:
-                                                        EdgeInsets.all(
-                                                            5),
-                                                        primary: Colors
-                                                            .transparent,
-                                                        shadowColor: Colors
-                                                            .transparent,
-                                                        onPrimary:
-                                                        mainColor,
-                                                        shape:
-                                                        RoundedRectangleBorder(
-                                                          borderRadius:
-                                                          BorderRadius
-                                                              .circular(
-                                                              100),
-                                                        )),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5),
+                                                            primary: Colors
+                                                                .transparent,
+                                                            shadowColor: Colors
+                                                                .transparent,
+                                                            onPrimary:
+                                                                mainColor,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          100),
+                                                            )),
                                                     onPressed: () {
                                                       // Navigator.push(
                                                       // context,
@@ -289,8 +301,8 @@ class _DocumentsListState extends State<DocumentsList> {
                                                       height: 50,
                                                       decoration: BoxDecoration(
                                                         borderRadius:
-                                                        BorderRadius
-                                                            .circular(50),
+                                                            BorderRadius
+                                                                .circular(50),
                                                         color: mainColor,
                                                       ),
                                                       child: Icon(
@@ -318,7 +330,7 @@ class _DocumentsListState extends State<DocumentsList> {
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(
+                      const Divider(
                     color: Colors.transparent,
                     height: 10,
                   ),
@@ -337,5 +349,6 @@ class _DocumentsListState extends State<DocumentsList> {
         label: const Text('Dodaj nowy'),
         icon: const Icon(Icons.add),
       ),
-    );  }
+    );
+  }
 }

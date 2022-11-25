@@ -67,6 +67,7 @@ dependencies:
   video_thumbnail: ^0.5.3
   provider: ^6.0.4
   chip_list: ^2.3.3+8
+  dropdown_textfield: ^1.0.7
 dependency_overrides:
   ffi: ^1.0.0
 

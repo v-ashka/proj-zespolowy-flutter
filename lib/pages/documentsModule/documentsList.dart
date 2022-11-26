@@ -258,12 +258,12 @@ class _DocumentsListState extends State<DocumentsList> {
                                               title: "Sprzedawca",
                                               value:
                                                   "${document.sprzedawcaNaFakturze}"),
-                                        if (document.dataWystawieniaFaktury !=
+                                        if (document.dataWystawienia !=
                                             null)
                                           DetailBar(
                                               title: "Faktura z dnia",
                                               value:
-                                                  "${document.dataWystawieniaFaktury}"),
+                                                  "${document.dataWystawienia}"),
                                         if (document.numerFaktury != null)
                                           DetailBar(
                                               title: "Numer faktury",

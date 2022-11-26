@@ -10,10 +10,11 @@ class DocumentModel {
     this.wartoscFaktury,
     this.numerFaktury,
     this.sprzedawcaNaFakturze,
-    this.dataWystawieniaFaktury,
+    this.dataWystawienia,
     this.dataStartu,
     this.dataKonca,
-    this.dataPrzypomnienia
+    this.dataPrzypomnienia,
+    this.wysokoscRachunku
     });
 
 
@@ -25,12 +26,13 @@ class DocumentModel {
   String? numerFaktury;
   String? wartoscFaktury;
   String? sprzedawcaNaFakturze;
-  String? dataWystawieniaFaktury;
+  String? dataWystawienia;
   String? ubezpieczyciel;
   String? wartoscPolisy;
   String? dataStartu;
   String? dataKonca;
   String? dataPrzypomnienia;
+  String? wysokoscRachunku;
 
   Map<String, dynamic> toJson() =>
       {
@@ -40,10 +42,11 @@ class DocumentModel {
         "wartoscFaktury": wartoscFaktury,
         "numerFaktury": numerFaktury,
         "sprzedawcaNaFakturze": sprzedawcaNaFakturze,
-        "dataWystawieniaFaktury": dataWystawieniaFaktury,
+        "dataWystawieniaFaktury": dataWystawienia,
         "dataZakupuPolisy": dataStartu,
         "dataKoncaPolisy": dataKonca,
         "dataPrzypomnienia": dataPrzypomnienia,
+        "wysokoscRachunku": wysokoscRachunku
 
       };
 
@@ -57,10 +60,11 @@ class DocumentModel {
           wartoscFaktury: json["wartoscFaktury"],
           numerFaktury: json["numerFaktury"],
           sprzedawcaNaFakturze: json["sprzedawcaNaFakturze"],
-          dataWystawieniaFaktury: json["dataWystawieniaFaktury"],
+          dataWystawienia: json["dataWystawieniaFaktury"],
           dataStartu: json["dataZakupuPolisy"],
           dataKonca: json["dataKoncaPolisy"],
-          dataPrzypomnienia: json["dataPrzypomnienia"]);
+          dataPrzypomnienia: json["dataPrzypomnienia"],
+          wysokoscRachunku: json["wysokoscRachunku"]);
 }
 
 List<DocumentModel> documentListFromJson(String str) =>

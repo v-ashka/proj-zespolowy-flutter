@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // server ip addr
-const SERVER_IP = "http://10.0.2.2:5151";
+//const SERVER_IP = "http://10.0.2.2:5151";
 
-//const SERVER_IP =
-//"https://be37-5-173-139-92.eu.ngrok.io";
+const SERVER_IP =
+"https://3b3f-94-246-180-198.eu.ngrok.io";
  //basic color app
 
 const primaryColor = Color(0xfff8f8f8);

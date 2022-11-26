@@ -3,9 +3,12 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/components/appbar.dart';
+import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/components/detail_bar.dart';
 import 'package:chip_list/chip_list.dart';
+import 'package:projzespoloey/components/search_bar.dart';
 import 'package:projzespoloey/models/document_model.dart';
+import 'package:projzespoloey/pages/loading.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/document_service.dart';
 import 'package:projzespoloey/utils/http_delete.dart';
@@ -27,33 +30,49 @@ class _DocumentsListState extends State<DocumentsList> {
   }
 
   String? token;
-  List<DocumentModel>? documentList = [];
-  List<DocumentModel>? filteredList = [];
+  List<DocumentModel> documentList = [];
+  List<DocumentModel> filteredList = [];
+  List<DocumentModel> initialList = [];
   DocumentModel document = DocumentModel();
   bool isGetDataFinished = false;
   List documentCategories = [];
   List<String> categoryList = [];
-
   int currentCategory = 0;
+  String query = "";
 
   void getData() async {
     token = await storage.read(key: "token");
     documentList = await DocumentService().getDocumentList(token);
     filteredList = documentList;
+    initialList = filteredList;
     documentCategories = (await DocumentService().getCategories(token));
     categoryList =
         documentCategories.map((e) => e["nazwa"].toString()).toList();
     categoryList.insert(0, "Wszystkie");
     String? categoryName =
         documentCategories.firstWhere((element) => element["id"] == 1)["nazwa"];
-    print(categoryName);
     setState(() {
       isGetDataFinished = true;
     });
   }
-  
+
+  void searchDocument(String filter) {
+    final result = initialList.where((document) {
+      final documentName = document.nazwaDokumentu!.toLowerCase();
+      final input = filter.toLowerCase();
+      return documentName.contains(input);
+    }).toList();
+    setState(() {
+      query = filter;
+      filteredList = result;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if(!isGetDataFinished) {
+      return const LoadingScreen();
+    }
     return Scaffold(
       appBar: myAppBar(context, HeaderTitleType.documentList),
       body: Container(
@@ -62,7 +81,11 @@ class _DocumentsListState extends State<DocumentsList> {
                   image: AssetImage('assets/background.png'),
                   fit: BoxFit.fill)),
           child: Column(
-            children: [
+            children: <Widget>[
+              SearchBar(
+                  text: query,
+                  onChanged: searchDocument,
+                  hintText: "Wyszukaj dokument"),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
                 child: ChipList(
@@ -80,7 +103,7 @@ class _DocumentsListState extends State<DocumentsList> {
                       if (currentCategory == 0) {
                         filteredList = documentList;
                       } else {
-                        filteredList = documentList!
+                        filteredList = initialList = documentList
                             .where((e) => e.kategoria == currentCategory)
                             .toList();
                       }
@@ -92,9 +115,9 @@ class _DocumentsListState extends State<DocumentsList> {
                 child: ListView.separated(
                   // shrinkWrap: true,
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 85),
-                  itemCount: filteredList!.length,
+                  itemCount: filteredList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    document = filteredList![index];
+                    document = filteredList[index];
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Container(
@@ -201,7 +224,7 @@ class _DocumentsListState extends State<DocumentsList> {
                                                         .calendar_month_outlined,
                                                     color: icon70Black),
                                                 Text(
-                                                  "11.04.2022",
+                                                  "${document.dataUtworzenia}",
                                                   style: const TextStyle(
                                                       fontFamily: "Lato",
                                                       fontWeight:
@@ -214,31 +237,65 @@ class _DocumentsListState extends State<DocumentsList> {
                                       ]),
                                       expanded: Column(children: [
                                         DetailBar(
-                                            title: "Data naprawy",
-                                            value: "Data naprawy"),
+                                            title: "Kategoria dokumentu",
+                                            value:
+                                                "${documentCategories.firstWhere((element) => element["id"] == document.kategoria)["nazwa"]}"),
                                         //if (repair.warsztat != null &&
                                         //repair.warsztat != "")
                                         DetailBar(
-                                            title: "Warsztat",
-                                            value: "Warsztat"),
+                                            title: "Data utworzenia",
+                                            value:
+                                                "${document.dataUtworzenia}"),
                                         //if (repair.kosztNaprawy != null)
-                                        DetailBar(
-                                            title: "Koszt naprawy",
-                                            value: "Koszt naprawy"),
-                                        //if (repair.przebieg != null)
-                                        DetailBar(
-                                            title: "Przebieg",
-                                            value: "Koszt naprawy"),
-                                        // if (repair.dataNastepnejWymiany !=
-                                        // null ||
-                                        // repair.liczbaKilometrowDoNastepnejWymiany !=
-                                        // null)
-                                        DetailBar(
-                                            title: "Następna wymiana",
-                                            value: "Następna wymiana"),
-                                        //if (repair.opis != null &&
-                                        //repair.opis != "")
-                                        DetailBar(title: "Opis", value: "Opis"),
+                                        if (document.ubezpieczyciel != null)
+                                          DetailBar(
+                                              title: "Ubezpieczyciel",
+                                              value:
+                                                  "${document.ubezpieczyciel}"),
+                                        if (document.sprzedawcaNaFakturze !=
+                                            null)
+                                          DetailBar(
+                                              title: "Sprzedawca",
+                                              value:
+                                                  "${document.sprzedawcaNaFakturze}"),
+                                        if (document.dataWystawieniaFaktury !=
+                                            null)
+                                          DetailBar(
+                                              title: "Faktura z dnia",
+                                              value:
+                                                  "${document.dataWystawieniaFaktury}"),
+                                        if (document.numerFaktury != null)
+                                          DetailBar(
+                                              title: "Numer faktury",
+                                              value:
+                                                  "${document.numerFaktury}"),
+
+                                        if (document.wartoscPolisy != null)
+                                          DetailBar(
+                                              title: "Koszt polisy",
+                                              value:
+                                                  "${document.wartoscPolisy}"),
+                                        if (document.wartoscFaktury != null)
+                                          DetailBar(
+                                              title: "Kwota na fakturze",
+                                              value:
+                                                  "${document.wartoscFaktury}"),
+                                        if (document.dataStartu != null &&
+                                            document.dataKonca != null)
+                                          DetailBar(
+                                              title: "Okres obowiązywania",
+                                              value:
+                                                  "${document.dataStartu} / ${document.dataStartu}"),
+                                        if (document.dataPrzypomnienia != null)
+                                          DetailBar(
+                                              title: "Data przypomnienia",
+                                              value:
+                                                  "${document.dataPrzypomnienia}"),
+                                        if (document.opis != null &&
+                                            document.opis != "")
+                                          DetailBar(
+                                              title: "Opis",
+                                              value: "${document.opis}"),
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               15, 15, 5, 0),
@@ -255,27 +312,28 @@ class _DocumentsListState extends State<DocumentsList> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  // DeleteButton(
-                                                  // endpoint:
-                                                  // Endpoints.carRepair,
-                                                  // token: token,
-                                                  // id: repair.idNaprawy,
-                                                  // callback: getData,
-                                                  // dialogtype:
-                                                  // AlertDialogType
-                                                  //     .carRepair),
+                                                  DeleteButton(
+                                                      endpoint:
+                                                          Endpoints.document,
+                                                      token: token,
+                                                      id: document.idDokumentu,
+                                                      callback: getData,
+                                                      dialogtype:
+                                                          AlertDialogType
+                                                              .document),
                                                   ElevatedButton(
                                                     style: ElevatedButton
                                                         .styleFrom(
+                                                            foregroundColor:
+                                                                mainColor,
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
                                                             padding:
-                                                                EdgeInsets.all(
+                                                                const EdgeInsets.all(
                                                                     5),
-                                                            primary: Colors
-                                                                .transparent,
                                                             shadowColor: Colors
                                                                 .transparent,
-                                                            onPrimary:
-                                                                mainColor,
                                                             shape:
                                                                 RoundedRectangleBorder(
                                                               borderRadius:
@@ -305,7 +363,7 @@ class _DocumentsListState extends State<DocumentsList> {
                                                                 .circular(50),
                                                         color: mainColor,
                                                       ),
-                                                      child: Icon(
+                                                      child: const Icon(
                                                         Icons.edit_outlined,
                                                         size: 30,
                                                         color: bgSmokedWhite,
@@ -342,7 +400,7 @@ class _DocumentsListState extends State<DocumentsList> {
         onPressed: () {
           Navigator.pushNamed(
             context,
-            "/carForm",
+            "/documentForm",
           ).then((value) {});
         },
         backgroundColor: mainColor,

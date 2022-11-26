@@ -21,7 +21,9 @@ enum HeaderTitleType {
   formEditInspection,
   formEditRepair,
   fileList,
-  documentList
+  documentList,
+  formAddDocument,
+  formEditDocument
 }
 
 extension HeaderTitleExtension on HeaderTitleType {
@@ -65,6 +67,10 @@ extension HeaderTitleExtension on HeaderTitleType {
         return 'Edytuj naprawę';
       case HeaderTitleType.documentList:
         return 'Dokumenty';
+      case HeaderTitleType.formAddDocument:
+        return 'Dodaj nowy dokument';
+      case HeaderTitleType.formEditDocument:
+        return 'Edytuj dokument';
     }
   }
 }

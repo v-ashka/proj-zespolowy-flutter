@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/utils/file_picker.dart';
 
-enum FormType { car, insurance, inspection, carRepair, receipt }
+enum FormType { car, insurance, inspection, carRepair, receipt, document }
 
 extension FormTypeExtension on FormType {
   String get text {
@@ -18,6 +18,8 @@ extension FormTypeExtension on FormType {
         return 'naprawy';
       case FormType.receipt:
         return 'paragonu';
+      case FormType.document:
+        return 'dokumentu';
     }
   }
 }
@@ -25,6 +27,7 @@ extension FormTypeExtension on FormType {
 class AddAttachmentButton extends StatefulWidget {
   final ValueChanged<List<PlatformFile>>? onChanged;
   final FormType formType;
+
   const AddAttachmentButton(
       {Key? key, required this.formType, required this.onChanged})
       : super(key: key);
@@ -32,8 +35,10 @@ class AddAttachmentButton extends StatefulWidget {
   @override
   State<AddAttachmentButton> createState() => _AddAttachmentButtonState();
 }
+
 class _AddAttachmentButtonState extends State<AddAttachmentButton> {
   List<PlatformFile> files = [];
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -60,7 +65,7 @@ class _AddAttachmentButtonState extends State<AddAttachmentButton> {
                   const Icon(Icons.file_upload_outlined),
                   const SizedBox(width: 2),
                   Text(
-                     files.isEmpty
+                      files.isEmpty
                           ? "Dodaj załączniki do ${widget.formType.text}"
                           : files.length == 1
                               ? "Dodano 1 załącznik do ${widget.formType.text}"

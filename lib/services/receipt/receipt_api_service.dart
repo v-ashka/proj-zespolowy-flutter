@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:projzespoloey/models/receipts/receipt_list_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,44 @@ class ReceiptApiService {
       return null;
     } catch (e) {
       return null;
+    }
+  }
+
+  Future getReceiptFormCat(String? token) async {
+    try {
+      var url = Uri.parse("$SERVER_IP/api/receipt/GetRecipeCategories");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer $token"
+      });
+
+      log(response.statusCode.toString());
+      log(response.reasonPhrase.toString());
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future getReceiptFormStores(String? token) async {
+    try {
+      var url = Uri.parse("$SERVER_IP/api/receipt/GetStores");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer $token"
+      });
+
+      log(response.statusCode.toString());
+      log(response.reasonPhrase.toString());
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return [];
+    } catch (e) {
+      return [];
     }
   }
 

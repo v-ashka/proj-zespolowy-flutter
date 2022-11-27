@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dropdown_textfield/dropdown_textfield.dart';
@@ -57,7 +58,8 @@ class _ReceiptFormState extends State<ReceiptForm> {
   ReceiptModelForm receiptItem = ReceiptModelForm();
   List<PlatformFile> files = [];
   List categoryList = [];
-
+  List dropdownCatList = [];
+  List storesList = [];
   final _formKey = GlobalKey<FormState>();
   File? image;
 
@@ -67,15 +69,22 @@ class _ReceiptFormState extends State<ReceiptForm> {
   double _currentGuaranteeSliderVal = 0;
   double _currentRefundSliderVal = 0;
 
+  // late SingleValueDropDownController _cnt;
+
+  // var dropdownlist;
+
   @override
   void initState() {
+    // _cnt = SingleValueDropDownController();
+
     super.initState();
     getData();
   }
 
   getData() async {
     token = await storage.read(key: "token");
-    // categoryList = await ReceiptApiService().getReceiptList(token, id)
+    categoryList = await ReceiptApiService().getReceiptFormCat(token);
+    storesList = await ReceiptApiService().getReceiptFormStores(token);
     // async function to fetch here ...
     if (widget.isEditing) {
       receiptItem = (await ReceiptApiService()
@@ -84,8 +93,20 @@ class _ReceiptFormState extends State<ReceiptForm> {
 
     setState(() {
       isLoading = !isLoading;
+      // dropdownlist = categoryList
+      //     .map(
+      //         (cat) => DropDownValueModel(name: cat["nazwa"], value: cat["id"]))
+      //     .toList();
     });
+
+    // dropdownCatList.add(DropDownValueModel(name: "jajca", value: "test"));
   }
+
+  // @override
+  // void dispose() {
+  //   _cnt.dispose();
+  //   super.dispose();
+  // }
 
   void showAddCarLoadingDialog(isShowing) {
     if (isShowing) {
@@ -181,52 +202,6 @@ class _ReceiptFormState extends State<ReceiptForm> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                    child: Text(
-                                      "Data zakupu",
-                                      style: TextStyle(
-                                        fontFamily: "Roboto",
-                                        letterSpacing: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    initialValue: receiptItem.dataZakupu,
-                                    readOnly: true,
-                                    onTap: () async {
-                                      DateTime? date = await pickDate(context);
-                                      setState(() {
-                                        receiptItem.dataZakupu =
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(date!);
-                                      });
-                                    },
-                                    cursorColor: Colors.black,
-                                    style: const TextStyle(color: Colors.black),
-                                    decoration: InputDecoration(
-                                        prefixIcon: const Icon(
-                                            Icons.event_available_outlined,
-                                            color: Colors.black),
-                                        contentPadding:
-                                            const EdgeInsets.all(15),
-                                        hintText: receiptItem.dataZakupu ??
-                                            "Wybierz datę",
-                                        hintStyle:
-                                            const TextStyle(fontSize: 14),
-                                        fillColor: bg35Grey,
-                                        filled: true,
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          borderSide: BorderSide.none,
-                                        )),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
                                   Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -266,7 +241,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                           )),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'To pole nie może być puste';
+                                          return 'Proszę podać nazwę produktu';
                                         }
                                         return null;
                                       }),
@@ -278,7 +253,131 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                 children: [
                                   Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                        const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                          child: Text(
+                                            "Data zakupu",
+                                            style: TextStyle(
+                                              fontFamily: "Roboto",
+                                              letterSpacing: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 160,
+                                          child: TextFormField(
+                                            initialValue:
+                                                receiptItem.dataZakupu,
+                                            readOnly: true,
+                                            onTap: () async {
+                                              DateTime? date =
+                                                  await pickDate(context);
+                                              setState(() {
+                                                receiptItem.dataZakupu =
+                                                    DateFormat('yyyy-MM-dd')
+                                                        .format(date!);
+                                              });
+                                            },
+                                            cursorColor: Colors.black,
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                            decoration: InputDecoration(
+                                                prefixIcon: const Icon(
+                                                    Icons
+                                                        .event_available_outlined,
+                                                    color: Colors.black),
+                                                contentPadding:
+                                                    const EdgeInsets.all(15),
+                                                hintText:
+                                                    receiptItem.dataZakupu ??
+                                                        "Wybierz datę",
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 13),
+                                                fillColor: bg35Grey,
+                                                filled: true,
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  borderSide: BorderSide.none,
+                                                )),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                        child: Text(
+                                          "Kategoria produktu",
+                                          style: TextStyle(
+                                            fontFamily: "Roboto",
+                                            letterSpacing: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 170,
+                                        child: TextFormField(
+                                          initialValue:
+                                              receiptItem.nazwaKategorii,
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Proszę podać nazwę kategorii produktu';
+                                            }
+                                            return null;
+                                          },
+                                          onSaved: (value) {
+                                            receiptItem.nazwaKategorii = value;
+                                          },
+                                          cursorColor: Colors.black,
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                          decoration: InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.all(15),
+                                              prefixIcon: const Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 1),
+                                                child: Icon(
+                                                  Icons.fmd_good_outlined,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              hintText: "Kategoria produktu",
+                                              hintStyle:
+                                                  TextStyle(fontSize: 14),
+                                              fillColor: bg35Grey,
+                                              filled: true,
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                borderSide: BorderSide.none,
+                                              )),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 10, 0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -295,8 +394,10 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 120,
+                                          width: 150,
                                           child: TextFormField(
+                                              keyboardType: TextInputType
+                                                  .numberWithOptions(),
                                               initialValue:
                                                   receiptItem.cena == null
                                                       ? ("")
@@ -311,7 +412,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                                   color: Colors.black),
                                               decoration: InputDecoration(
                                                   contentPadding:
-                                                      EdgeInsets.all(5),
+                                                      EdgeInsets.all(15),
                                                   prefixIcon: const Padding(
                                                     padding:
                                                         EdgeInsets.only(top: 1),
@@ -322,6 +423,9 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                                     ),
                                                   ),
                                                   hintText: "0,00",
+                                                  suffixText: "PLN",
+                                                  suffixStyle:
+                                                      TextStyle(fontSize: 13),
                                                   fillColor: bg35Grey,
                                                   filled: true,
                                                   border: OutlineInputBorder(
@@ -333,7 +437,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                               validator: (value) {
                                                 if (value == null ||
                                                     value.isEmpty) {
-                                                  return 'To pole nie może być puste';
+                                                  return 'Proszę podać cenę produktu';
                                                 }
                                                 return null;
                                               }),
@@ -349,7 +453,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                         padding:
                                             EdgeInsets.fromLTRB(0, 5, 0, 5),
                                         child: Text(
-                                          "Waluta",
+                                          "Nazwa sklepu",
                                           style: TextStyle(
                                             fontFamily: "Roboto",
                                             letterSpacing: 1,
@@ -357,22 +461,34 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 120,
+                                        width: 180,
                                         child: TextFormField(
+                                          initialValue: receiptItem.nazwaSklepu,
+                                          onSaved: (value) {
+                                            receiptItem.nazwaSklepu = value;
+                                          },
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'To pole nie może być puste';
+                                            }
+                                            return null;
+                                          },
                                           cursorColor: Colors.black,
-                                          style: TextStyle(color: Colors.black),
+                                          style: const TextStyle(
+                                              color: Colors.black),
                                           decoration: InputDecoration(
                                               contentPadding:
-                                                  EdgeInsets.all(15),
-                                              prefixIcon: Padding(
+                                                  const EdgeInsets.all(15),
+                                              prefixIcon: const Padding(
                                                 padding:
                                                     EdgeInsets.only(top: 1),
                                                 child: Icon(
-                                                  Icons.currency_exchange,
+                                                  Icons.fmd_good_outlined,
                                                   color: Colors.black,
                                                 ),
                                               ),
-                                              hintText: "PLN",
+                                              hintText: "Nazwa sklepu",
                                               fillColor: bg35Grey,
                                               filled: true,
                                               border: OutlineInputBorder(
@@ -386,164 +502,83 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                   ),
                                 ],
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                    child: Text(
-                                      "Kategoria",
-                                      style: TextStyle(
-                                        fontFamily: "Roboto",
-                                        letterSpacing: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    cursorColor: Colors.black,
-                                    style: const TextStyle(color: Colors.black),
-                                    decoration: InputDecoration(
-                                        contentPadding:
-                                            const EdgeInsets.all(15),
-                                        prefixIcon: const Padding(
-                                          padding: EdgeInsets.only(top: 1),
-                                          child: Icon(
-                                            Icons.category_outlined,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        hintText: "Wybierz kategorię",
-                                        fillColor: bg35Grey,
-                                        filled: true,
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          borderSide: BorderSide.none,
-                                        )),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                    child: Text(
-                                      "Rodzaj i miejsce zakupu",
-                                      style: TextStyle(
-                                        fontFamily: "Roboto",
-                                        letterSpacing: 1,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // DropDownTextField(dropDownList: dropDownList)
-                                        TextFormField(
-                                            initialValue:
-                                                receiptItem.nazwaKategorii,
-                                            onSaved: (value) {
-                                              receiptItem.nazwaKategorii =
-                                                  value;
-                                            },
-                                            cursorColor: Colors.black,
-                                            style: const TextStyle(
-                                                color: Colors.black),
-                                            decoration: InputDecoration(
-                                                contentPadding:
-                                                    EdgeInsets.all(1),
-                                                prefixIcon: const Padding(
-                                                  padding:
-                                                      EdgeInsets.only(top: 1),
-                                                  child: Icon(
-                                                    Icons.view_module_outlined,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                hintText: "Rodzaj zakupu",
-                                                hintStyle:
-                                                    TextStyle(fontSize: 12),
-                                                fillColor: bg35Grey,
-                                                filled: true,
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  borderSide: BorderSide.none,
-                                                )),
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return 'To pole nie może być puste';
-                                              }
-                                              return null;
-                                            }),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10.0, 0, 0, 0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TextFormField(
-                                              onSaved: (value) {
-                                                receiptItem.nazwaSklepu = value;
-                                              },
-                                              initialValue:
-                                                  receiptItem.nazwaSklepu,
-                                              cursorColor: Colors.black,
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                              decoration: InputDecoration(
-                                                  contentPadding:
-                                                      const EdgeInsets.all(15),
-                                                  prefixIcon: const Padding(
-                                                    padding:
-                                                        EdgeInsets.only(top: 1),
-                                                    child: Icon(
-                                                      Icons.fmd_good_outlined,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                  hintText: "Nazwa sklepu",
-                                                  hintStyle:
-                                                      TextStyle(fontSize: 12),
-                                                  fillColor: bg35Grey,
-                                                  filled: true,
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            50),
-                                                    borderSide: BorderSide.none,
-                                                  )),
-                                              validator: (value) {
-                                                if (value == null ||
-                                                    value.isEmpty) {
-                                                  return 'To pole nie może być puste';
-                                                }
-                                                return null;
-                                              }),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              // DropDownTextField(
+                              //     textFieldDecoration: InputDecoration(
+                              //         contentPadding:
+                              //             const EdgeInsets.all(15),
+                              //         prefixIcon: const Padding(
+                              //           padding: EdgeInsets.only(top: 1),
+                              //           child: Icon(
+                              //             Icons.category_outlined,
+                              //             color: Colors.black,
+                              //           ),
+                              //         ),
+                              //         hintText: "Wybierz kategorię",
+                              //         fillColor: bg35Grey,
+                              //         filled: true,
+                              //         border: OutlineInputBorder(
+                              //           borderRadius:
+                              //               BorderRadius.circular(50),
+                              //           borderSide: BorderSide.none,
+                              //         )),
+                              //     dropDownItemCount: 3,
+                              //     controller: _cnt,
+                              //     readOnly: false,
+                              //     onChanged: (val) {
+                              //       if (val.value == 1)
+                              //         showModalBottomSheet(
+                              //           context: context,
+                              //           builder: (BuildContext context) {
+                              //             return Container(
+                              //               height: 200,
+                              //               color: Colors.amber,
+                              //               child: Center(
+                              //                 child: Column(
+                              //                   mainAxisAlignment:
+                              //                       MainAxisAlignment
+                              //                           .center,
+                              //                   mainAxisSize:
+                              //                       MainAxisSize.min,
+                              //                   children: <Widget>[
+                              //                     const Text(
+                              //                         'Modal BottomSheet'),
+                              //                     ElevatedButton(
+                              //                       child: const Text(
+                              //                           'Close BottomSheet'),
+                              //                       onPressed: () =>
+                              //                           Navigator.pop(
+                              //                               context),
+                              //                     ),
+                              //                   ],
+                              //                 ),
+                              //               ),
+                              //             );
+                              //           },
+                              //         );
+                              //     },
+                              //     clearOption: true,
+                              //     autovalidateMode: AutovalidateMode.always,
+                              //     clearIconProperty:
+                              //         IconProperty(color: fontBlack),
+                              //     searchDecoration: InputDecoration(
+                              //         contentPadding:
+                              //             const EdgeInsets.all(15),
+                              //         prefixIcon: const Padding(
+                              //           padding: EdgeInsets.only(top: 1),
+                              //           child: Icon(
+                              //             Icons.category_outlined,
+                              //             color: Colors.black,
+                              //           ),
+                              //         ),
+                              //         hintText: "Wybierz kategorię",
+                              //         fillColor: bg35Grey,
+                              //         filled: true,
+                              //         border: OutlineInputBorder(
+                              //           borderRadius:
+                              //               BorderRadius.circular(50),
+                              //           borderSide: BorderSide.none,
+                              //         )),
+                              //     dropDownList: dropdownlist),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -558,37 +593,31 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                     ),
                                   ),
                                   TextFormField(
-                                      initialValue: receiptItem.uwagi,
-                                      onSaved: (value) {
-                                        receiptItem.uwagi = value;
-                                      },
-                                      cursorColor: Colors.black,
-                                      style:
-                                          const TextStyle(color: Colors.black),
-                                      decoration: InputDecoration(
-                                          contentPadding:
-                                              const EdgeInsets.all(15),
-                                          prefixIcon: const Padding(
-                                            padding: EdgeInsets.only(top: 1),
-                                            child: Icon(
-                                              Icons.info_outline,
-                                              color: Colors.black,
-                                            ),
+                                    initialValue: receiptItem.uwagi,
+                                    onSaved: (value) {
+                                      receiptItem.uwagi = value;
+                                    },
+                                    cursorColor: Colors.black,
+                                    style: const TextStyle(color: Colors.black),
+                                    decoration: InputDecoration(
+                                        contentPadding:
+                                            const EdgeInsets.all(15),
+                                        prefixIcon: const Padding(
+                                          padding: EdgeInsets.only(top: 1),
+                                          child: Icon(
+                                            Icons.info_outline,
+                                            color: Colors.black,
                                           ),
-                                          hintText: "Wpisz swoje uwagi",
-                                          fillColor: bg35Grey,
-                                          filled: true,
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            borderSide: BorderSide.none,
-                                          )),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'To pole nie może być puste';
-                                        }
-                                        return null;
-                                      }),
+                                        ),
+                                        hintText: "Wpisz swoje uwagi",
+                                        fillColor: bg35Grey,
+                                        filled: true,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          borderSide: BorderSide.none,
+                                        )),
+                                  ),
                                 ],
                               ),
                               Column(
@@ -603,7 +632,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 5, 0, 0),
                                     child: Text(
-                                      "${_currentGuaranteeSliderVal.toInt()} miesięce",
+                                      "${_currentGuaranteeSliderVal.toInt()} dni ",
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontFamily: "Roboto"),
@@ -618,8 +647,8 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                     child: Slider(
                                       min: 0,
                                       value: _currentGuaranteeSliderVal,
-                                      max: 60,
-                                      divisions: 5,
+                                      max: 730,
+                                      divisions: 10,
                                       label:
                                           _currentGuaranteeSliderVal.toString(),
                                       thumbColor: mainColor,
@@ -738,9 +767,12 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                       ),
                                     ),
                                   ]),
-                              if (!widget.isEditing) Text("test"),
-                              // AddAttachmentButton(
-                              //     files: files, formType: FormType.receipt)
+                              if (!widget.isEditing)
+                                AddAttachmentButton(
+                                    formType: FormType.receipt,
+                                    onChanged: (filesList) {
+                                      files = filesList;
+                                    })
                             ],
                           ),
                         ),
@@ -761,34 +793,36 @@ class _ReceiptFormState extends State<ReceiptForm> {
                   : EdgeInsets.zero,
               child: FloatingActionButton.extended(
                 onPressed: () async {
+                  log(_formKey.currentState!.validate().toString());
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     setState(() {
                       isLoadingBtn = true;
                     });
                     showAddCarLoadingDialog(true);
+
+                    if (!widget.isEditing) {
+                      var id = await ReceiptApiService()
+                          .addReceipt(token, receiptItem);
+                      if (image != null) {
+                        await FilesService()
+                            .uploadFile(token, image!.path.toString(), id.body);
+                      }
+                      if (files.isNotEmpty) {
+                        await FilesService().uploadFiles(token, files, id.body);
+                      }
+                    } else {
+                      await ReceiptApiService()
+                          .updateReceipt(token, receiptItem, widget.receiptId);
+                      if (image != null) {
+                        await FilesService().uploadFile(
+                            token, image!.path.toString(), widget.receiptId);
+                      }
+                    }
+                    setState(() {
+                      showAddCarLoadingDialog(false);
+                    });
                   }
-                  if (!widget.isEditing) {
-                    var id = await ReceiptApiService()
-                        .addReceipt(token, receiptItem);
-                    if (image != null) {
-                      await FilesService()
-                          .uploadFile(token, image!.path.toString(), id.body);
-                    }
-                    if (files.isNotEmpty) {
-                      await FilesService().uploadFiles(token, files, id.body);
-                    }
-                  } else {
-                    await ReceiptApiService()
-                        .updateReceipt(token, receiptItem, widget.receiptId);
-                    if (image != null) {
-                      await FilesService().uploadFile(
-                          token, image!.path.toString(), widget.receiptId);
-                    }
-                  }
-                  setState(() {
-                    showAddCarLoadingDialog(false);
-                  });
                 },
                 backgroundColor: mainColor,
                 label: Text(

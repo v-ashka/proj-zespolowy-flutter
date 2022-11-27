@@ -27,8 +27,8 @@ class ReceiptModelForm {
         waznoscGwarancji: json["waznoscGwarancji"],
         dataZakupu: json["dataZakupu"],
         nazwaKategorii: json["nazwaKategorii"],
-        uwagi: json["uwagi"],
         nazwaSklepu: json["nazwaSklepu"],
+        uwagi: json["uwagi"],
       );
 
   Map<String, dynamic> toJson() => {

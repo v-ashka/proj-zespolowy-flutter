@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +47,6 @@ class _CarFormState extends State<CarForm> {
   File? image;
   int? transmission;
   String? token;
-
 
   @override
   void initState() {
@@ -253,7 +253,8 @@ class _CarFormState extends State<CarForm> {
                                         style: const TextStyle(
                                             color: Colors.black),
                                         decoration: InputDecoration(
-                                            contentPadding: const EdgeInsets.all(15),
+                                            contentPadding:
+                                                const EdgeInsets.all(15),
                                             prefixIcon: const Padding(
                                               padding: EdgeInsets.only(top: 1),
                                               child: Icon(
@@ -333,7 +334,8 @@ class _CarFormState extends State<CarForm> {
                                         style: const TextStyle(
                                             color: Colors.black),
                                         decoration: InputDecoration(
-                                            contentPadding: const EdgeInsets.all(15),
+                                            contentPadding:
+                                                const EdgeInsets.all(15),
                                             prefixIcon: const Padding(
                                               padding: EdgeInsets.only(top: 1),
                                               child: Icon(
@@ -1176,26 +1178,25 @@ class _CarFormState extends State<CarForm> {
                             DateTime.now().toString().substring(0, 10);
                       });
                       showAddCarLoadingDialog(true);
+                    }
+                    if (!widget.isEditing) {
+                      var id = await CarApiService().addCar(token, carItem);
+                      if (image != null) {
+                        await FilesService()
+                            .uploadFile(token, image!.path.toString(), id.body);
                       }
-                      if (!widget.isEditing) {
-                        var id =
-                            await CarApiService().addCar(token, carItem);
-                        if (image != null) {
-                          await FilesService().uploadFile(
-                          token, image!.path.toString(), id.body);
-                        }
-                      } else {
-                        await CarApiService()
-                            .updateCar(token, carItem, widget.carId);
-                        if (image != null) {
-                          await FilesService().uploadFile(
-                          token, image!.path.toString(), widget.carId);
-                        }
+                    } else {
+                      await CarApiService()
+                          .updateCar(token, carItem, widget.carId);
+                      if (image != null) {
+                        await FilesService().uploadFile(
+                            token, image!.path.toString(), widget.carId);
                       }
-                      setState(() {
-                        showAddCarLoadingDialog(false);
-                      });
-                    },
+                    }
+                    setState(() {
+                      showAddCarLoadingDialog(false);
+                    });
+                  },
                   backgroundColor: mainColor,
                   label: Text(
                       widget.isEditing ? ("Zapisz pojazd") : ("Dodaj pojazd")),

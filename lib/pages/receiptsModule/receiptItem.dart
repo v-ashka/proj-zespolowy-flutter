@@ -2,13 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:projzespoloey/components/action_box_buttons.dart';
 import 'package:projzespoloey/components/appbar.dart';
+import 'package:projzespoloey/components/info_box.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/main.dart';
+import 'package:projzespoloey/models/file_model.dart';
 import 'package:projzespoloey/models/receipts/receipt_model.dart';
 import 'package:projzespoloey/pages/carsModule/filesView.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/pages/receiptsModule/receiptList.dart';
+import 'package:projzespoloey/pages/receiptsModule/receipt_form.dart';
+import 'package:projzespoloey/services/files_service.dart';
 import 'package:projzespoloey/services/receipt/receipt_api_service.dart';
 import 'package:projzespoloey/utils/http_delete.dart';
 
@@ -24,7 +29,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
   late ReceiptModel? receiptModel = ReceiptModel();
   String? token;
   bool isGetDataFinished = false;
-
+  late List<FileList>? files = [];
   @override
   void initState() {
     super.initState();
@@ -34,6 +39,8 @@ class _ReceiptItemState extends State<ReceiptItem> {
   getData(id) async {
     token = await storage.read(key: "token");
     receiptModel = (await ReceiptApiService().getReceipt(token, id));
+    files = (await FilesService().getFileList(token, id));
+
     setState(() {
       isGetDataFinished = true;
     });
@@ -294,6 +301,8 @@ class _ReceiptItemState extends State<ReceiptItem> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -399,12 +408,12 @@ class _ReceiptItemState extends State<ReceiptItem> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Row(
+                        child: Wrap(
                           children: [
-                            const Expanded(
-                              flex: 4,
+                            const SizedBox(
+                              width: 150,
                               child: Text(
-                                "Rodzaj zakupu i miejsce zakupu:",
+                                "Kategoria produktu i miejsce zakupu:",
                                 style: TextStyle(
                                   fontFamily: "Lato",
                                   fontWeight: FontWeight.w900,
@@ -412,48 +421,40 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                padding: EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: secondaryColor),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 2),
-                                  child: Text("${receiptModel?.sklep}",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: fontBlack)),
-                                ),
+                            Container(
+                              padding: EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: secondaryColor),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text(
+                                    "${receiptModel?.kategoriaParagonu}",
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: fontBlack)),
                               ),
                             ),
                             SizedBox(
-                              width: 5,
+                              width: 10,
                             ),
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                padding: EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: secondaryColor),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 3),
-                                  child: Text("${receiptModel?.sklep}",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: fontBlack)),
-                                ),
+                            Container(
+                              padding: EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: secondaryColor),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text("${receiptModel?.sklep}",
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: fontBlack)),
                               ),
                             ),
                           ],
@@ -461,32 +462,30 @@ class _ReceiptItemState extends State<ReceiptItem> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                "Ilość dodanych dokumentów:",
+                        child: Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Dodatkowe informacje:",
                                 style: TextStyle(
                                   fontFamily: "Lato",
                                   fontWeight: FontWeight.w900,
                                   fontSize: 12,
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Container(
-                                padding: EdgeInsets.all(2),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(2),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
                                     color: secondaryColor),
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 3),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
                                   child: Text("${receiptModel?.uwagi}",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
@@ -495,8 +494,8 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                           color: fontBlack)),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       if (receiptModel?.koniecGwarancji != null) ...[
@@ -548,51 +547,11 @@ class _ReceiptItemState extends State<ReceiptItem> {
               const SizedBox(
                 height: 15,
               ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: Colors.white),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text(
-                              "Zarządzaj swoim paragonem",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "Ten paragon posiada 2 pliki umożliwaiające, przejrzenie skorzytaj z jednej z poniższych opcji aby tego dokonać",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Icon(
-                        Icons.info_outline,
-                        color: bg100Grey,
-                        size: 38,
-                      )
-                    ],
-                  ),
-                ),
+              InfoBox(
+                title: "Zarządzaj swoim paragonem",
+                desc: files!.isNotEmpty
+                    ? "Ten paragon posiada ${files?.length} pliki umożliwaiające, przejrzenie skorzytaj z jednej z poniższych opcji aby tego dokonać"
+                    : "Jeszcze nie dodałeś żadnych plików do swojego paragonu, przejdź do 'Zobacz paragon i pliki' aby dodać nowe dane!",
               ),
               const SizedBox(
                 height: 15,
@@ -609,15 +568,12 @@ class _ReceiptItemState extends State<ReceiptItem> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(0),
-                              backgroundColor: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                              foregroundColor: main25Color,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25))),
-                          onPressed: () {
+                        ActionBoxButton(
+                          icon: Icons.remove_red_eye_outlined,
+                          title: "Zobacz paragon i pliki",
+                          description:
+                              "Wyświetl paragon w postaci zdjęcia bądź PDF.!!",
+                          onPressed: () async {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -625,177 +581,54 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                       objectId: receiptModel!.idParagonu!),
                                 ));
                           },
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: mainColor,
-                                ),
-                                child: const Icon(
-                                  Icons.remove_red_eye_outlined,
-                                  size: 30,
-                                  color: bgSmokedWhite,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Text(
-                                      "Zobacz paragon i pliki",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: fontBlack,
-                                          letterSpacing: 1.1),
-                                    ),
-                                    Text(
-                                      "Wyświetl paragon w postaci zdjęcia bądź PDF.",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: fontGrey,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
                         ),
                         const SizedBox(
                           height: 15,
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(0),
-                              backgroundColor: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                              foregroundColor: main25Color,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25))),
-                          onPressed: () {
-                            print("test");
+                        ActionBoxButton(
+                          icon: Icons.edit_outlined,
+                          title: "Edytuj paragon",
+                          description:
+                              "Jeśli dokument wymaga aktualizacji wybierz tę opcję.",
+                          onPressed: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ReceiptForm(
+                                    receiptId: receiptModel?.idParagonu,
+                                    isEditing: true,
+                                  ),
+                                ));
                           },
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: mainColor,
-                                ),
-                                child: Icon(
-                                  Icons.edit_outlined,
-                                  size: 30,
-                                  color: bgSmokedWhite,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Edytuj paragon",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: fontBlack,
-                                          letterSpacing: 1.1),
-                                    ),
-                                    Text(
-                                      "Jeśli dokument wymaga aktualizacji wybierz tę opcję.",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: fontGrey,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(0),
-                              primary: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                              onPrimary: main25Color,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25))),
-                          onPressed: () {
-                            print("test");
+                        ActionBoxButton(
+                          icon: Icons.file_download_outlined,
+                          title: "Pobierz paragon",
+                          description:
+                              "Pobierz dokument bądź dokumenty bezpośrednio na urządzenie.",
+                          onPressed: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ReceiptForm(
+                                    receiptId: receiptModel?.idParagonu,
+                                    isEditing: true,
+                                  ),
+                                ));
                           },
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: mainColor,
-                                ),
-                                child: Icon(
-                                  Icons.file_download_outlined,
-                                  size: 30,
-                                  color: bgSmokedWhite,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Pobierz paragon",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: fontBlack,
-                                          letterSpacing: 1.1),
-                                    ),
-                                    Text(
-                                      "Pobierz dokument bądź dokumenty bezpośrednio na urządzenie.",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: fontGrey,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(0),
-                              primary: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                              onPrimary: Colors.red[700],
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25))),
+                        ActionBoxButton(
+                          icon: Icons.delete_outline,
+                          title: "Usuń paragon",
+                          description:
+                              "Opcja ta spowoduje całkowtie usunięcie dokumentu z twojego konta.",
+                          backgroundColor: deleteBtn,
                           onPressed: () async {
                             Navigator.of(context).pop();
                             showDeleteDialog(true);
@@ -816,49 +649,9 @@ class _ReceiptItemState extends State<ReceiptItem> {
                               showDeleteDialog(false);
                             }
                           },
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.redAccent,
-                                ),
-                                child: Icon(
-                                  Icons.delete_outline,
-                                  size: 30,
-                                  color: bgSmokedWhite,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Usuń paragon",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: fontBlack,
-                                          letterSpacing: 1.1),
-                                    ),
-                                    Text(
-                                      "Opcja ta spowoduje całkowite usunięcie dokumentu z twojego konta.",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: fontGrey,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
                         ),
                       ],
                     ),

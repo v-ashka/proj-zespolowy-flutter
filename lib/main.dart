@@ -20,6 +20,7 @@ import 'package:projzespoloey/pages/carsModule/inspection_view.dart';
 import 'package:projzespoloey/pages/carsModule/form/car_form.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
 import 'package:projzespoloey/pages/carsModule/form/insuranceForm.dart';
+import 'package:projzespoloey/pages/documentsModule/document_form.dart';
 import 'package:projzespoloey/pages/old_/dashboard.dart';
 import 'package:projzespoloey/pages/documentsModule/documentItem.dart';
 import 'package:projzespoloey/pages/documentsModule/documentsList.dart';
@@ -117,6 +118,7 @@ class MyApp extends StatelessWidget {
         // Documents Routes
         '/documentList': (context) => DocumentsList(),
         '/documentItem': (context) => DocumentItem(),
+        '/documentForm': (context) => DocumentForm(),
         // Home Routes
         '/homeList': (context) => HomeList(),
         '/homeItem': (context) => HomeItem(),

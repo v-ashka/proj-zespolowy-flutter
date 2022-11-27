@@ -28,6 +28,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
   // Form variables
   final formKey = GlobalKey<FormState>();
   bool isValid = false;
+  bool isObscure = true;
   bool isLoading = false;
   String? emailInput = "";
   String? passInput = "";
@@ -121,15 +122,6 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                     ),
                     Form(
                         key: formKey,
-                        onChanged: () {
-                          final formValidation =
-                              formKey.currentState!.validate();
-                          if (isValid != formValidation) {
-                            setState(() {
-                              isValid = formValidation;
-                            });
-                          }
-                        },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -167,7 +159,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                               height: 10,
                             ),
                             TextFormField(
-                              obscureText: true,
+                              obscureText: isObscure,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return "Proszę podać hasło";
@@ -178,9 +170,19 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                 passInput = value;
                               },
                               cursorColor: Colors.black,
-                              style: TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
+                                  contentPadding: const EdgeInsets.all(20),
+                                  suffixIcon: IconButton(
+                                    onPressed: () => setState(() {
+                                      isObscure = !isObscure;
+                                    }),
+                                    padding: const EdgeInsets.fromLTRB(0, 1, 15, 0),
+                                    icon: Icon(
+                                      isObscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.only(top: 1),
                                     child: Icon(

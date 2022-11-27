@@ -10,10 +10,13 @@ class DocumentModel {
     this.wartoscFaktury,
     this.numerFaktury,
     this.sprzedawcaNaFakturze,
-    this.dataWystawieniaFaktury,
+    this.dataWystawienia,
     this.dataStartu,
     this.dataKonca,
-    this.dataPrzypomnienia
+    this.dataPrzypomnienia,
+    this.wysokoscRachunku,
+    this.wartoscPolisy,
+    this.ubezpieczyciel
     });
 
 
@@ -25,12 +28,13 @@ class DocumentModel {
   String? numerFaktury;
   String? wartoscFaktury;
   String? sprzedawcaNaFakturze;
-  String? dataWystawieniaFaktury;
+  String? dataWystawienia;
   String? ubezpieczyciel;
   String? wartoscPolisy;
   String? dataStartu;
   String? dataKonca;
   String? dataPrzypomnienia;
+  String? wysokoscRachunku;
 
   Map<String, dynamic> toJson() =>
       {
@@ -38,12 +42,15 @@ class DocumentModel {
         "kategoria": kategoria,
         "opis": opis,
         "wartoscFaktury": wartoscFaktury,
+        "ubezpieczyciel": ubezpieczyciel,
         "numerFaktury": numerFaktury,
         "sprzedawcaNaFakturze": sprzedawcaNaFakturze,
-        "dataWystawieniaFaktury": dataWystawieniaFaktury,
-        "dataZakupuPolisy": dataStartu,
-        "dataKoncaPolisy": dataKonca,
+        "dataWystawienia": dataWystawienia,
+        "dataStartu": dataStartu,
+        "dataKonca": dataKonca,
         "dataPrzypomnienia": dataPrzypomnienia,
+        "wysokoscRachunku": wysokoscRachunku,
+        "wartoscPolisy": wartoscPolisy
 
       };
 
@@ -53,14 +60,17 @@ class DocumentModel {
           nazwaDokumentu: json["nazwaDokumentu"],
           dataUtworzenia: json["dataUtworzenia"],
           kategoria: json["kategoria"],
+          ubezpieczyciel: json["ubezpieczyciel"],
           opis: json["opis"],
           wartoscFaktury: json["wartoscFaktury"],
           numerFaktury: json["numerFaktury"],
           sprzedawcaNaFakturze: json["sprzedawcaNaFakturze"],
-          dataWystawieniaFaktury: json["dataWystawieniaFaktury"],
-          dataStartu: json["dataZakupuPolisy"],
-          dataKonca: json["dataKoncaPolisy"],
-          dataPrzypomnienia: json["dataPrzypomnienia"]);
+          dataWystawienia: json["dataWystawienia"],
+          dataStartu: json["dataStartu"],
+          dataKonca: json["dataKonca"],
+          dataPrzypomnienia: json["dataPrzypomnienia"],
+          wysokoscRachunku: json["wysokoscRachunku"],
+          wartoscPolisy: json["wartoscPolisy"]);
 }
 
 List<DocumentModel> documentListFromJson(String str) =>

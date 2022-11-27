@@ -8,6 +8,7 @@ import 'package:projzespoloey/components/detail_bar.dart';
 import 'package:chip_list/chip_list.dart';
 import 'package:projzespoloey/components/search_bar.dart';
 import 'package:projzespoloey/models/document_model.dart';
+import 'package:projzespoloey/pages/documentsModule/document_form.dart';
 import 'package:projzespoloey/pages/loading.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/document_service.dart';
@@ -70,7 +71,7 @@ class _DocumentsListState extends State<DocumentsList> {
 
   @override
   Widget build(BuildContext context) {
-    if(!isGetDataFinished) {
+    if (!isGetDataFinished) {
       return const LoadingScreen();
     }
     return Scaffold(
@@ -258,12 +259,16 @@ class _DocumentsListState extends State<DocumentsList> {
                                               title: "Sprzedawca",
                                               value:
                                                   "${document.sprzedawcaNaFakturze}"),
-                                        if (document.dataWystawienia !=
-                                            null)
+                                        if (document.dataWystawienia != null)
                                           DetailBar(
-                                              title: "Faktura z dnia",
+                                              title: "Wystawiono dnia",
                                               value:
                                                   "${document.dataWystawienia}"),
+                                        if (document.wysokoscRachunku != null)
+                                          DetailBar(
+                                              title: "Wysokość rachunku",
+                                              value:
+                                                  "${document.wysokoscRachunku} zł"),
                                         if (document.numerFaktury != null)
                                           DetailBar(
                                               title: "Numer faktury",
@@ -274,18 +279,18 @@ class _DocumentsListState extends State<DocumentsList> {
                                           DetailBar(
                                               title: "Koszt polisy",
                                               value:
-                                                  "${document.wartoscPolisy}"),
+                                                  "${document.wartoscPolisy} zł"),
                                         if (document.wartoscFaktury != null)
                                           DetailBar(
                                               title: "Kwota na fakturze",
                                               value:
-                                                  "${document.wartoscFaktury}"),
+                                                  "${document.wartoscFaktury} zł"),
                                         if (document.dataStartu != null &&
                                             document.dataKonca != null)
                                           DetailBar(
                                               title: "Okres obowiązywania",
                                               value:
-                                                  "${document.dataStartu} / ${document.dataStartu}"),
+                                                  "${document.dataStartu} - ${document.dataKonca}"),
                                         if (document.dataPrzypomnienia != null)
                                           DetailBar(
                                               title: "Data przypomnienia",
@@ -330,8 +335,8 @@ class _DocumentsListState extends State<DocumentsList> {
                                                                 Colors
                                                                     .transparent,
                                                             padding:
-                                                                const EdgeInsets.all(
-                                                                    5),
+                                                                const EdgeInsets
+                                                                    .all(5),
                                                             shadowColor: Colors
                                                                 .transparent,
                                                             shape:
@@ -342,17 +347,16 @@ class _DocumentsListState extends State<DocumentsList> {
                                                                           100),
                                                             )),
                                                     onPressed: () {
-                                                      // Navigator.push(
-                                                      // context,
-                                                      // MaterialPageRoute(
-                                                      // builder: (context) =>
-                                                      // CarRepairForm(
-                                                      // carId: widget.car
-                                                      //     .idSamochodu!,
-                                                      // editModel: repair,
-                                                      // isEditing: true,
-                                                      // ),
-                                                      // ));
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                DocumentForm(
+                                                              document:
+                                                                  document,
+                                                              isEditing: true,
+                                                            ),
+                                                          ));
                                                     },
                                                     child: Container(
                                                       width: 50,

@@ -14,7 +14,9 @@ class DocumentModel {
     this.dataStartu,
     this.dataKonca,
     this.dataPrzypomnienia,
-    this.wysokoscRachunku
+    this.wysokoscRachunku,
+    this.wartoscPolisy,
+    this.ubezpieczyciel
     });
 
 
@@ -40,13 +42,15 @@ class DocumentModel {
         "kategoria": kategoria,
         "opis": opis,
         "wartoscFaktury": wartoscFaktury,
+        "ubezpieczyciel": ubezpieczyciel,
         "numerFaktury": numerFaktury,
         "sprzedawcaNaFakturze": sprzedawcaNaFakturze,
-        "dataWystawieniaFaktury": dataWystawienia,
-        "dataZakupuPolisy": dataStartu,
-        "dataKoncaPolisy": dataKonca,
+        "dataWystawienia": dataWystawienia,
+        "dataStartu": dataStartu,
+        "dataKonca": dataKonca,
         "dataPrzypomnienia": dataPrzypomnienia,
-        "wysokoscRachunku": wysokoscRachunku
+        "wysokoscRachunku": wysokoscRachunku,
+        "wartoscPolisy": wartoscPolisy
 
       };
 
@@ -56,15 +60,17 @@ class DocumentModel {
           nazwaDokumentu: json["nazwaDokumentu"],
           dataUtworzenia: json["dataUtworzenia"],
           kategoria: json["kategoria"],
+          ubezpieczyciel: json["ubezpieczyciel"],
           opis: json["opis"],
           wartoscFaktury: json["wartoscFaktury"],
           numerFaktury: json["numerFaktury"],
           sprzedawcaNaFakturze: json["sprzedawcaNaFakturze"],
-          dataWystawienia: json["dataWystawieniaFaktury"],
-          dataStartu: json["dataZakupuPolisy"],
-          dataKonca: json["dataKoncaPolisy"],
+          dataWystawienia: json["dataWystawienia"],
+          dataStartu: json["dataStartu"],
+          dataKonca: json["dataKonca"],
           dataPrzypomnienia: json["dataPrzypomnienia"],
-          wysokoscRachunku: json["wysokoscRachunku"]);
+          wysokoscRachunku: json["wysokoscRachunku"],
+          wartoscPolisy: json["wartoscPolisy"]);
 }
 
 List<DocumentModel> documentListFromJson(String str) =>

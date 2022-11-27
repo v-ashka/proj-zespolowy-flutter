@@ -797,15 +797,10 @@ class _DocumentFormState extends State<DocumentForm> {
                                                   initialValue:
                                                       document.wartoscFaktury,
                                                   onSaved: (String? value) {
-                                                    document.wartoscFaktury;
+                                                    document.wartoscFaktury = value;
                                                   },
                                                   keyboardType:
                                                       TextInputType.number,
-                                                  inputFormatters: <
-                                                      TextInputFormatter>[
-                                                    FilteringTextInputFormatter
-                                                        .digitsOnly
-                                                  ],
                                                   cursorColor: Colors.black,
                                                   style: TextStyle(
                                                       color: Colors.black),
@@ -923,8 +918,8 @@ class _DocumentFormState extends State<DocumentForm> {
                                                   hintText: document
                                                           .dataWystawienia ??
                                                       "Data wystawienia rachunku",
-                                                  hintStyle:
-                                                      TextStyle(fontSize: 12),
+
+                                                      hintStyle: TextStyle(fontSize: document.dataPrzypomnienia != null ? 14 : 13, color: document.dataPrzypomnienia != null ? Colors.black : Colors.black54),
                                                   fillColor: bg35Grey,
                                                   filled: true,
                                                   border: OutlineInputBorder(
@@ -949,21 +944,16 @@ class _DocumentFormState extends State<DocumentForm> {
                                                   initialValue:
                                                       document.wysokoscRachunku,
                                                   onSaved: (String? value) {
-                                                    document.wysokoscRachunku;
+                                                    document.wysokoscRachunku = value;
                                                   },
                                                   keyboardType:
                                                       TextInputType.number,
-                                                  inputFormatters: <
-                                                      TextInputFormatter>[
-                                                    FilteringTextInputFormatter
-                                                        .digitsOnly
-                                                  ],
                                                   cursorColor: Colors.black,
                                                   style: TextStyle(
                                                       color: Colors.black),
                                                   decoration: InputDecoration(
                                                       contentPadding:
-                                                          EdgeInsets.all(1),
+                                                          EdgeInsets.fromLTRB(1,1,15,1),
                                                       prefixIcon: Padding(
                                                         padding:
                                                             EdgeInsets.only(
@@ -975,8 +965,9 @@ class _DocumentFormState extends State<DocumentForm> {
                                                         ),
                                                       ),
                                                       hintText: "Rachunek",
+                                                      suffixText: "zł",
                                                       hintStyle: TextStyle(
-                                                          fontSize: 12),
+                                                          fontSize: 13),
                                                       fillColor: bg35Grey,
                                                       filled: true,
                                                       border:
@@ -1024,7 +1015,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                           DateTime? date =
                                               await pickDate(context);
                                           setState(() {
-                                            document.dataWystawienia =
+                                            document.dataPrzypomnienia =
                                                 DateFormat('dd-MM-yyyy')
                                                     .format(date!);
                                           });
@@ -1043,6 +1034,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                             hintText:
                                                 document.dataPrzypomnienia ??
                                                     "Ustaw datę przypomnienia",
+                                            hintStyle: TextStyle(color: document.dataPrzypomnienia != null ? Colors.black : Colors.black54),
                                             fillColor: bg35Grey,
                                             filled: true,
                                             border: OutlineInputBorder(
@@ -1054,8 +1046,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                     ],
                                   ),
                                 ],
-                                if (!widget.isEditing &&
-                                    document.kategoria != null) ...[
+                                if (document.kategoria != null) ...[
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1101,6 +1092,8 @@ class _DocumentFormState extends State<DocumentForm> {
                                       ),
                                     ],
                                   ),
+                                ],
+                                if(!widget.isEditing && document.kategoria != null)...[
                                   AddAttachmentButton(
                                       //files: files,
                                       formType: FormType.document,

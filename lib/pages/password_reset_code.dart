@@ -6,24 +6,25 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/main.dart';
 import 'package:http/http.dart' as http;
-import 'package:projzespoloey/pages/password_reset_code.dart';
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 import 'package:projzespoloey/services/UserModel/UserModel.dart';
 
-class UserAuthentication extends StatefulWidget {
-  const UserAuthentication({Key? key}) : super(key: key);
+class PasswordResetCode extends StatefulWidget {
+  const PasswordResetCode({Key? key}) : super(key: key);
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
         encryptedSharedPreferences: true,
       );
   @override
-  State<UserAuthentication> createState() => _UserAuthenticationState();
+  State<PasswordResetCode> createState() => _PasswordResetCodeState();
 }
 
-class _UserAuthenticationState extends State<UserAuthentication> {
+class _PasswordResetCodeState extends State<PasswordResetCode> {
   // Local flutter storage token
   // final storage = new FlutterSecureStorage();
   // Form variables
@@ -81,6 +82,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
+      appBar: myAppBar(context, HeaderTitleType.passwordResetCode),
       body: SafeArea(
         child: Container(
           height: double.infinity,
@@ -90,43 +92,47 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                   image: AssetImage("assets/background.png"),
                   fit: BoxFit.fill)),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
             child: ListView(
               children: [
-                SizedBox(
-                  height: 25,
-                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Center(
-                      child: Image(
-                        width: 200,
-                        height: 200,
-                        image: AssetImage("assets/logo.png"),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
+                      padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
                       child: Text(
-                        "Logowanie",
+                        "Resetowanie hasła",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: fontBlack,
-                          fontSize: 35,
+                          fontSize: 38,
                         ),
                       ),
                     ),
+                    Text(
+                        "Aby zresetować hasło, podaj adres e-mail powiązany z\u{00A0}Twoim kontem. Na podany adres mailowy lub numer telefonu, który został podany przy rejestracji zostanie wysłana wiadomość z\u{00A0}sześciocyfrowym kodem resetowania.",
+                        style: TextStyle(fontSize: 16),
+                        textAlign: TextAlign.left),
+                    SizedBox(height: 80),
+
                     Form(
                         key: formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(5, 8, 0, 8),
+                                  child: Text("Adres e-mail",
+                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: fontBlack)),
+                                )
+                              ],
+                            ),
                             TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -148,7 +154,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  hintText: "Wprowadź email...",
+                                  hintText: "Podaj adres e-mail",
                                   fillColor: bgSmokedWhite,
                                   filled: true,
                                   border: OutlineInputBorder(
@@ -158,46 +164,6 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                             ),
                             SizedBox(
                               height: 10,
-                            ),
-                            TextFormField(
-                              obscureText: isObscure,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Proszę podać hasło";
-                                }
-                                return null;
-                              },
-                              onSaved: (String? value) {
-                                passInput = value;
-                              },
-                              cursorColor: Colors.black,
-                              style: const TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.all(20),
-                                  suffixIcon: IconButton(
-                                    onPressed: () => setState(() {
-                                      isObscure = !isObscure;
-                                    }),
-                                    padding: const EdgeInsets.fromLTRB(0, 1, 15, 0),
-                                    icon: Icon(
-                                      isObscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.only(top: 1),
-                                    child: Icon(
-                                      Icons.fingerprint,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  hintText: "Wprowadź hasło...",
-                                  fillColor: bgSmokedWhite,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide.none,
-                                  )),
                             ),
                             SizedBox(
                               height: 20,
@@ -212,16 +178,17 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                     letterSpacing: 1.2),
                               ),
                               SizedBox(
-                                height: 20,
+                                height: 30,
                               ),
                             ],
+                            SizedBox(height: 15),
                             SizedBox(
-                              width: 200,
+                              width: 320,
                               height: 50,
                               child: ElevatedButton.icon(
                                   style: ElevatedButton.styleFrom(
-                                      onPrimary: mainColor,
-                                      primary: mainColor,
+                                      onPrimary: secondColor,
+                                      primary: secondColor,
                                       onSurface: Colors.amber,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(25),
@@ -247,11 +214,56 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                           ),
                                         )
                                       : Icon(
-                                          Icons.login,
+                                          Icons.mail_outline,
                                           color: bgSmokedWhite,
                                         ),
                                   label: Text(
-                                    "Zaloguj się",
+                                    "Wyślij kod w wiadomości e-mail",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                        color: bgSmokedWhite),
+                                  )),
+                            ),
+                            SizedBox(height: 20),
+                            SizedBox(
+                              width: 320,
+                              height: 50,
+                              child: ElevatedButton.icon(
+                                  
+                                  style: ElevatedButton.styleFrom(
+                                      onPrimary: secondColor,
+                                      primary: secondColor,
+                                      onSurface: Colors.amber,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25),
+                                      )),
+                                  onPressed: () async {
+                                    if (formKey.currentState!.validate()) {
+                                      formKey.currentState!.save();
+                                      // user model
+                                      errorFeedback = "";
+                                      saveData();
+                                      print(
+                                          "email: ${emailInput} pass: ${passInput}");
+                                    }
+                                  },
+                                  icon: isLoading
+                                      ? Container(
+                                          width: 24,
+                                          height: 24,
+                                          padding: EdgeInsets.all(2),
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                            strokeWidth: 3,
+                                          ),
+                                        )
+                                      : Icon(
+                                          Icons.sms_outlined,
+                                          color: bgSmokedWhite,
+                                        ),
+                                  label: Text(
+                                    "Wyślij kod w wiadomości SMS",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 18,
@@ -263,54 +275,6 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                     SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                            style: TextButton.styleFrom(
-                                primary: fontBlack,
-                                onSurface: secondColor,
-                                textStyle: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            onPressed: () {
-                              Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          PasswordResetCode(),
-                                    ));
-                            },
-                            child: Text("Nie pamiętam hasła"))
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Nie masz konta?",
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                        TextButton(
-                            style: TextButton.styleFrom(
-                                primary: fontBlack,
-                                onSurface: secondColor,
-                                textStyle: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(
-                                context,
-                                '/registerUser',
-                              );
-                            },
-                            child: Text("Zarejestruj się"))
-                      ],
-                    )
                   ],
                 )
               ],

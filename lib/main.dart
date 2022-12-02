@@ -7,6 +7,8 @@ import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/_Dashboard.dart';
 import 'package:projzespoloey/pages/_userAuth.dart';
+import 'package:projzespoloey/pages/otp_screen.dart';
+import 'package:projzespoloey/pages/password_reset_code.dart';
 import 'package:projzespoloey/pages/_userAuthRegister.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/carInsuranceHistoryView.dart';
@@ -27,13 +29,13 @@ import 'package:projzespoloey/pages/documentsModule/documentsList.dart';
 import 'package:projzespoloey/pages/homeModule/homeItem.dart';
 // import 'package:projzespoloey/pages/_documentsList.dart';
 import 'package:projzespoloey/pages/homeModule/homeList.dart';
+import 'package:projzespoloey/pages/password_reset_code.dart';
 import 'package:projzespoloey/pages/receiptsModule/receiptItem.dart';
 import 'package:projzespoloey/pages/receiptsModule/receiptList.dart';
 import 'package:projzespoloey/pages/old_/userauth.dart';
 import 'package:projzespoloey/pages/loading.dart';
 import 'package:projzespoloey/pages/form.dart';
 import 'package:projzespoloey/pages/receiptsModule/receipt_form.dart';
-
 import 'pages/carsModule/filesView.dart';
 import 'pages/carsModule/form/inspection_form.dart';
 import 'services/UserModel/UserApiService.dart';
@@ -81,6 +83,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => Loading(),
         // User login page
         '/user_auth': (context) => UserAuthentication(),
+        '/passwordResetCode' :(context) => PasswordResetCode(),
         // User register page
         '/registerUser': (context) => UserAuthenticationRegister(),
         '/dashboard': (context) => DashboardPanel(),

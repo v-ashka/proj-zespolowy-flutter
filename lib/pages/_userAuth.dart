@@ -10,6 +10,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/main.dart';
 import 'package:http/http.dart' as http;
+import 'package:projzespoloey/pages/password_reset_code.dart';
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 import 'package:projzespoloey/services/UserModel/UserModel.dart';
 
@@ -89,7 +90,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                   image: AssetImage("assets/background.png"),
                   fit: BoxFit.fill)),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             child: ListView(
               children: [
                 SizedBox(
@@ -107,7 +108,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 50,
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
@@ -116,7 +117,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: fontBlack,
-                          fontSize: 25,
+                          fontSize: 35,
                         ),
                       ),
                     ),
@@ -260,7 +261,29 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                           ],
                         )),
                     SizedBox(
-                      height: 10,
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                            style: TextButton.styleFrom(
+                                primary: fontBlack,
+                                onSurface: secondColor,
+                                textStyle: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            onPressed: () {
+                              Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          PasswordResetCode(),
+                                    ));
+                            },
+                            child: Text("Nie pamiętam hasła"))
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -268,7 +291,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                         Text(
                           "Nie masz konta?",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 18,
                           ),
                         ),
                         TextButton(
@@ -276,7 +299,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                 primary: fontBlack,
                                 onSurface: secondColor,
                                 textStyle: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 )),
                             onPressed: () {

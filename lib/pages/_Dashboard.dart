@@ -186,8 +186,8 @@ class _DashboardPanelState extends State<DashboardPanel> {
                         height: 15,
                       ),
                       DashboardBox(
-                          title: "Sprzęt domowy",
-                          description: "Ostatnio dodany przedmiot",
+                          title: "Dom",
+                          description: "Liczba dodanych pomieszczeń",
                           routeLink: '/homeList',
                           assetImgPath: 'assets/house.svg',
                           user: userData),

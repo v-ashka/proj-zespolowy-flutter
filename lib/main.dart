@@ -135,7 +135,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Lato',
           colorScheme: ThemeData()
               .colorScheme
-              .copyWith(primary: primaryColor, secondary: secondaryColor),
+              .copyWith(primary: primaryColor, secondary: mainColor),
           appBarTheme: AppBarTheme(
               color: primaryColor,
               titleTextStyle: TextStyle(color: fontBlack, fontFamily: "Lato")),

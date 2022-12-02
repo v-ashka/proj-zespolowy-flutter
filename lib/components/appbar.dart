@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
+import 'package:projzespoloey/components/header.dart';
 import 'package:projzespoloey/constants.dart';
 
 enum HeaderTitleType {
   defaultTitle,
+  settingsTitle,
   carList,
   carDefault,
   carInsurance,
@@ -23,12 +25,14 @@ enum HeaderTitleType {
   fileList,
   documentList,
   formAddDocument,
-  formEditDocument
+  formEditDocument,
 }
 
 extension HeaderTitleExtension on HeaderTitleType {
   String get text {
     switch (this) {
+      case HeaderTitleType.settingsTitle:
+        return 'Ustawienia';
       case HeaderTitleType.fileList:
         return 'Lista plików';
       case HeaderTitleType.defaultTitle:

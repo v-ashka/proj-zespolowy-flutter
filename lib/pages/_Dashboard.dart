@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:projzespoloey/components/dashboardBox.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/settings_view.dart';
 
 class DashboardPanel extends StatefulWidget {
   const DashboardPanel({Key? key}) : super(key: key);
@@ -92,15 +93,23 @@ class _DashboardPanelState extends State<DashboardPanel> {
                             ),
                           ),
                         ),
-                        const IconButton(
-                          onPressed: null,
-                          icon: Icon(Icons.notifications, size: 25),
+                        IconButton(
+                          onPressed: () async {
+                            print("notifications");
+                          },
+                          icon: const Icon(Icons.notifications, size: 25),
                         ),
                       ],
                     ),
-                    const IconButton(
-                      onPressed: null,
-                      icon: Icon(Icons.settings, size: 25),
+                    IconButton(
+                      onPressed: () {
+                        print("settings");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SettingsView()));
+                      },
+                      icon: const Icon(Icons.settings, size: 25),
                     ),
                   ],
                 ),

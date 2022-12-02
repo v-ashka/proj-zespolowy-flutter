@@ -710,64 +710,66 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                   ),
                                 ],
                               ),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 0, 0, 25),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Padding(
-                                            padding:
-                                                EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                            child: Text("Zdjęcie produktu"),
-                                          ),
-                                          ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: secondaryColor,
-                                              padding: image != null
-                                                  ? const EdgeInsets.all(0)
-                                                  : const EdgeInsets.all(35),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25)),
+                              if (!widget.isEditing)
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 0, 0, 25),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  0, 5, 0, 5),
+                                              child: Text("Zdjęcie produktu"),
                                             ),
-                                            onPressed: () async {
-                                              image = await pickImage();
-                                              setState(() {
-                                                image;
-                                              });
-                                            },
-                                            child: image != null
-                                                ? Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
-                                                      color: secondaryColor,
-                                                      image: DecorationImage(
-                                                        image:
-                                                            FileImage(image!),
-                                                        fit: BoxFit.cover,
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: secondaryColor,
+                                                padding: image != null
+                                                    ? const EdgeInsets.all(0)
+                                                    : const EdgeInsets.all(35),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                              ),
+                                              onPressed: () async {
+                                                image = await pickImage();
+                                                setState(() {
+                                                  image;
+                                                });
+                                              },
+                                              child: image != null
+                                                  ? Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25),
+                                                        color: secondaryColor,
+                                                        image: DecorationImage(
+                                                          image:
+                                                              FileImage(image!),
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    width: 100,
-                                                    height: 100,
-                                                  )
-                                                : const Icon(
-                                                    Icons.add_a_photo_outlined,
-                                                    size: 25,
-                                                    color: Colors.black),
-                                          ),
-                                        ],
+                                                      width: 100,
+                                                      height: 100,
+                                                    )
+                                                  : const Icon(
+                                                      Icons
+                                                          .add_a_photo_outlined,
+                                                      size: 25,
+                                                      color: Colors.black),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ]),
+                                    ]),
                               if (!widget.isEditing)
                                 AddAttachmentButton(
                                     formType: FormType.receipt,

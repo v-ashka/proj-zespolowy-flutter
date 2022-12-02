@@ -62,28 +62,61 @@ class UserApiService {
       return {"data": null, "message": "Wystapił błąd połączenia!"};
     }
   }
-  Future <Response> resetPassword(email) async{
+
+  Future<Response> resetPassword(email) async {
     Response response;
-  try{
-    var url = "$SERVER_IP/api/account/resetPassword?email=$email";
-    response = await _dio.post(
-      url,
-    );
-    return response;
-  } on DioError catch (e){
-    throw Exception("Wystąpił błąd");
-  }
+    try {
+      var url = "$SERVER_IP/api/account/resetPassword?email=$email";
+      response = await _dio.post(
+        url,
+      );
+      return response;
+    } on DioError catch (e) {
+      throw Exception("Wystąpił błąd");
+    }
   }
 
-  Future <Response?> verifyCode(String id, int code) async{
+  Future<Response?> verifyCode(String id, int code) async {
     Response response;
-    try{
+    try {
       var url = "$SERVER_IP/api/account/confirmReset?id=$id&code=$code";
       response = await _dio.post(
         url,
       );
       return response;
-    } on DioError catch (e){
+    } on DioError catch (e) {
+      return e.response;
+    }
+  }
+
+  Future changePassword(data) async {
+    try {
+      // check old pass
+      UserLogin userLogin = UserLogin(email: data.email, pass: data.oldPass);
+      var url = Uri.parse("$SERVER_IP/api/account/login");
+      var response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(userLogin),
+      );
+      print(response.statusCode);
+      print(jsonEncode(userLogin));
+      if (response.statusCode == 200) {
+        // var urlPass =
+        //     "$SERVER_IP/api/account/changePassword?newPassword=${data.newPass}";
+        // var responsePass = await _dio.post(
+        //   urlPass,
+        // );
+        var responsePass = 200;
+        print(responsePass);
+        if (responsePass == 200) {
+          return true;
+        }
+      }
+      return false;
+    } on DioError catch (e) {
       return e.response;
     }
   }

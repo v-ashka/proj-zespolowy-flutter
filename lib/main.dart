@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => Loading(),
         // User login page
         '/user_auth': (context) => UserAuthentication(),
-        '/passwordResetCode' :(context) => PasswordResetCode(),
+        '/passwordResetCode': (context) => PasswordResetCode(),
         // User register page
         '/registerUser': (context) => UserAuthenticationRegister(),
         '/dashboard': (context) => DashboardPanel(),
@@ -133,6 +133,15 @@ class MyApp extends StatelessWidget {
             ),
       },
       title: 'OrganizerPRO',
+      darkTheme: ThemeData(
+        primarySwatch: Colors.grey,
+        secondaryHeaderColor: Colors.amber,
+        primaryColor: Colors.red,
+        brightness: Brightness.dark,
+        dividerColor: Colors.black12,
+        scaffoldBackgroundColor: Color(0xFF131313),
+      ),
+      themeMode: ThemeMode.light,
       theme: ThemeData(
           scaffoldBackgroundColor: primaryColor,
           fontFamily: 'Lato',

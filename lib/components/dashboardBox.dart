@@ -10,21 +10,25 @@ import 'package:projzespoloey/pages/carsModule/carList.dart';
 
 class DashboardBox extends StatelessWidget {
   const DashboardBox(
-      {required this.title,
+      {Key? key,
+      required this.title,
       required this.description,
-      required this.routeLink,
+      this.routeLink,
       required this.assetImgPath,
       this.lastAdded,
       this.additionalInfo,
-      required this.user});
+      required this.user,
+      this.onPressed})
+      : super(key: key);
 
   final String title;
   final String description;
-  final String routeLink;
+  final String? routeLink;
   final String assetImgPath;
   final String? lastAdded;
   final String? additionalInfo;
   final String? user;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +39,13 @@ class DashboardBox extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
             foregroundColor: fontBlack,
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25))),
-        onPressed: () {
-          Navigator.pushNamed(context, routeLink, arguments: user);
-        },
+        onPressed: onPressed ??
+            () {
+              Navigator.pushNamed(context, routeLink!, arguments: user);
+            },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
           child: Row(

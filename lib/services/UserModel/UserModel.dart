@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
+
 class UserLogin {
-  UserLogin({required this.email, required this.pass});
+  UserLogin({this.email, this.pass});
   String? email;
   String? pass;
 
@@ -13,8 +15,7 @@ class UserLogin {
 
 class UserRegister {
   UserRegister(
-      {
-      required this.name,
+      {required this.name,
       required this.email,
       required this.pass,
       required this.secondPass});
@@ -36,4 +37,16 @@ class UserRegister {
         "haslo": pass,
         "potwierdzenieHasla": secondPass
       };
+}
+
+class ChangeUserPass {
+  String? oldPass;
+  String? newPass;
+  String? email;
+
+  ChangeUserPass({
+    this.oldPass,
+    this.newPass,
+    this.email,
+  });
 }

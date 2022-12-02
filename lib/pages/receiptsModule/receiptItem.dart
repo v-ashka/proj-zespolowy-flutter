@@ -76,7 +76,8 @@ class _ReceiptItemState extends State<ReceiptItem> {
     if (!isGetDataFinished) return const LoadingScreen();
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: myAppBar(context, HeaderTitleType.receipt),
+      appBar:
+          myAppBar(context, HeaderTitleType.receipt, '-', receiptModel?.nazwa),
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
@@ -411,35 +412,15 @@ class _ReceiptItemState extends State<ReceiptItem> {
                         child: Wrap(
                           children: [
                             const SizedBox(
-                              width: 150,
+                              width: 100,
                               child: Text(
-                                "Kategoria produktu i miejsce zakupu:",
+                                "Miejsce zakupu:",
                                 style: TextStyle(
                                   fontFamily: "Lato",
                                   fontWeight: FontWeight.w900,
                                   fontSize: 12,
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: secondaryColor),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Text(
-                                    "${receiptModel?.kategoriaParagonu}",
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: fontBlack)),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
                             ),
                             Container(
                               padding: EdgeInsets.all(2),
@@ -462,40 +443,38 @@ class _ReceiptItemState extends State<ReceiptItem> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Dodatkowe informacje:",
-                                style: TextStyle(
-                                  fontFamily: "Lato",
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 12,
-                                ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Dodatkowe informacje:",
+                              style: TextStyle(
+                                fontFamily: "Lato",
+                                fontWeight: FontWeight.w900,
+                                fontSize: 12,
                               ),
-                              const SizedBox(
-                                width: 5,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  color: secondaryColor),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text("${receiptModel?.uwagi}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: fontBlack)),
                               ),
-                              Container(
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: secondaryColor),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text("${receiptModel?.uwagi}",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: fontBlack)),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                       if (receiptModel?.koniecGwarancji != null) ...[
@@ -572,7 +551,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                           icon: Icons.remove_red_eye_outlined,
                           title: "Zobacz paragon i pliki",
                           description:
-                              "Wyświetl paragon w postaci zdjęcia bądź PDF.!!",
+                              "Wyświetl paragon w postaci zdjęcia bądź PDF.",
                           onPressed: () async {
                             Navigator.push(
                                 context,
@@ -601,25 +580,25 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                 ));
                           },
                         ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        ActionBoxButton(
-                          icon: Icons.file_download_outlined,
-                          title: "Pobierz paragon",
-                          description:
-                              "Pobierz dokument bądź dokumenty bezpośrednio na urządzenie.",
-                          onPressed: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ReceiptForm(
-                                    receiptId: receiptModel?.idParagonu,
-                                    isEditing: true,
-                                  ),
-                                ));
-                          },
-                        ),
+                        // const SizedBox(
+                        //   height: 15,
+                        // ),
+                        // ActionBoxButton(
+                        //   icon: Icons.file_download_outlined,
+                        //   title: "Pobierz paragon",
+                        //   description:
+                        //       "Pobierz dokument bądź dokumenty bezpośrednio na urządzenie.",
+                        //   onPressed: () async {
+                        //     Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //           builder: (context) => ReceiptForm(
+                        //             receiptId: receiptModel?.idParagonu,
+                        //             isEditing: true,
+                        //           ),
+                        //         ));
+                        //   },
+                        // ),
                         const SizedBox(
                           height: 15,
                         ),

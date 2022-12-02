@@ -351,7 +351,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                                 padding:
                                                     EdgeInsets.only(top: 1),
                                                 child: Icon(
-                                                  Icons.fmd_good_outlined,
+                                                  Icons.category_outlined,
                                                   color: Colors.black,
                                                 ),
                                               ),
@@ -436,8 +436,9 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                                   )),
                                               validator: (value) {
                                                 if (value == null ||
-                                                    value.isEmpty) {
-                                                  return 'Proszę podać cenę produktu';
+                                                    value.isEmpty ||
+                                                    toDouble(value).isNaN) {
+                                                  return 'Proszę podać poprawną cenę produktu';
                                                 }
                                                 return null;
                                               }),

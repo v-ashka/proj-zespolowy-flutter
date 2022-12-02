@@ -283,14 +283,32 @@ class ReceiptListState extends State<ReceiptList> {
                                                       const SizedBox(
                                                         width: 10,
                                                       ),
-                                                      Text(
-                                                        "${receiptItem.koniecZwrotu} dni",
-                                                        style: const TextStyle(
-                                                            fontFamily: "Lato",
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      )
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.all(2),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        25),
+                                                            color:
+                                                                secondaryColor),
+                                                        child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        15),
+                                                            child: Text(
+                                                              "${receiptItem.koniecZwrotu} dni",
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      "Lato",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                            )),
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -307,17 +325,32 @@ class ReceiptListState extends State<ReceiptList> {
                                                     children: [
                                                       const Text(
                                                           "Okres gwarancji:"),
-                                                      const SizedBox(
-                                                        width: 10,
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.all(2),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        25),
+                                                            color:
+                                                                secondaryColor),
+                                                        child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        15),
+                                                            child: Text(
+                                                              "${receiptItem.koniecGwarancji} dni",
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      "Lato",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                            )),
                                                       ),
-                                                      Text(
-                                                        "${receiptItem.koniecGwarancji} dni",
-                                                        style: const TextStyle(
-                                                            fontFamily: "Lato",
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      )
                                                     ],
                                                   ),
                                                 ),
@@ -333,17 +366,32 @@ class ReceiptListState extends State<ReceiptList> {
                                                         MainAxisAlignment.start,
                                                     children: [
                                                       const Text("Cena:"),
-                                                      const SizedBox(
-                                                        width: 10,
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.all(2),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        25),
+                                                            color:
+                                                                secondaryColor),
+                                                        child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        15),
+                                                            child: Text(
+                                                              "${receiptItem.cena} zł",
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      "Lato",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                            )),
                                                       ),
-                                                      Text(
-                                                        "${receiptItem.cena} zł",
-                                                        style: const TextStyle(
-                                                            fontFamily: "Lato",
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      )
                                                     ],
                                                   ),
                                                 )
@@ -354,7 +402,7 @@ class ReceiptListState extends State<ReceiptList> {
                                       ),
                                     ),
                                     Expanded(
-                                      flex: 6,
+                                      flex: 5,
                                       child: SizedBox(
                                         width: 200,
                                         child: Stack(
@@ -398,7 +446,7 @@ class ReceiptListState extends State<ReceiptList> {
                                                   child: Image.network(
                                                     getPhoto(
                                                         receiptItem.idParagonu),
-                                                    width: 150,
+                                                    width: 130,
                                                     height: 150,
                                                     fit: BoxFit.cover,
                                                     alignment:

@@ -33,7 +33,32 @@ class _SettingsViewState extends State<SettingsView> {
 
   void removeUserToken() async {
     await storage.deleteAll();
-    setState(() {});
+    setState(() {
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 2), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+              titlePadding: EdgeInsets.fromLTRB(25, 25, 25, 0),
+              contentPadding: EdgeInsets.fromLTRB(25, 0, 25, 25),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(25.0))),
+              title: Text("Nastąpi wylogowanie z konta.."),
+              content: Container(
+                width: 200,
+                height: 200,
+                child: Center(
+                    child: CircularProgressIndicator(
+                  color: mainColor,
+                )),
+              ),
+            );
+          });
+      print("test");
+    });
   }
 
   void showChangePassDialog(
@@ -76,7 +101,7 @@ class _SettingsViewState extends State<SettingsView> {
                           Text(description),
                           isLoading
                               ? (const Center(
-                                  child: const CircularProgressIndicator(
+                                  child: CircularProgressIndicator(
                                       color: mainColor)))
                               : (Form(
                                   key: formKey,
@@ -349,7 +374,13 @@ class _SettingsViewState extends State<SettingsView> {
                     description:
                         "Przejście do tej sekcji spowoduje wylogowanie się z konta użytkownika",
                     onPressed: () async {
-                      print("val");
+                      // print("val");
+                      removeUserToken();
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/', (Route<dynamic> route) => false);
+                      // Navigator.pop(context);
+                      // Navigator.popUntil(
+                      //     context, ModalRoute.withName('/user_auth'));
                     },
                     assetImgPath: 'assets/logout2.svg',
                     user: userData)

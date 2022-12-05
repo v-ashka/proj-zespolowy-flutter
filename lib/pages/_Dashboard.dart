@@ -32,11 +32,6 @@ class _DashboardPanelState extends State<DashboardPanel> {
 
   @override
   Widget build(BuildContext context) {
-    Map data = {};
-    data = data.isNotEmpty
-        ? data
-        : ModalRoute.of(context)?.settings.arguments as Map;
-
     return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
       body: SafeArea(

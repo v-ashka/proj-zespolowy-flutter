@@ -263,53 +263,53 @@ class _SettingsViewState extends State<SettingsView> {
                                                               25)),
                                                 ),
                                                 onPressed: () async {
-                                                  if (formKey.currentState!
-                                                      .validate()) {
-                                                    formKey.currentState!
-                                                        .save();
-                                                    setState(() {
-                                                      isLoading = true;
-                                                      headlineText =
-                                                          "Zmieniam...";
-                                                      description =
-                                                          "Po zmianie hasła nastąpi wylogowanie...";
-                                                    });
-
-                                                    var res =
-                                                        await UserApiService()
-                                                            .changePassword(
-                                                                data);
-                                                    print("test complete");
-                                                    if (res) {
-                                                      print("testt complete");
-                                                      setState(() {
-                                                        headlineText =
-                                                            "Hasło zostało zmienione!";
-                                                        description =
-                                                            "Wylogowywuję z konta..";
-                                                        removeUserToken();
-                                                      });
-                                                      await Future.delayed(
-                                                          Duration(seconds: 5));
-                                                      Navigator.of(context)
-                                                          .pushNamedAndRemoveUntil(
-                                                              '/',
-                                                              (Route<dynamic>
-                                                                      route) =>
-                                                                  false);
-                                                    } else {
-                                                      setState(() {
-                                                        isLoading = !isLoading;
-                                                        headlineText =
-                                                            "Hasło nie zostało zmienione!";
-                                                        description =
-                                                            "Wystąpił błąd w trakcie zmiany hasła";
-                                                        errorFeedback =
-                                                            "Stare hasło jest nie prawidłowe";
-                                                      });
-                                                      print("dupa");
-                                                    }
-                                                  }
+                                                  // if (formKey.currentState!
+                                                  //     .validate()) {
+                                                  //   formKey.currentState!
+                                                  //       .save();
+                                                  //   setState(() {
+                                                  //     isLoading = true;
+                                                  //     headlineText =
+                                                  //         "Zmieniam...";
+                                                  //     description =
+                                                  //         "Po zmianie hasła nastąpi wylogowanie...";
+                                                  //   });
+                                                  //
+                                                  //   var res =
+                                                  //       await UserApiService()
+                                                  //           .changePassword(
+                                                  //               data);
+                                                  //   print("test complete");
+                                                  //   if (res) {
+                                                  //     print("testt complete");
+                                                  //     setState(() {
+                                                  //       headlineText =
+                                                  //           "Hasło zostało zmienione!";
+                                                  //       description =
+                                                  //           "Wylogowywuję z konta..";
+                                                  //       removeUserToken();
+                                                  //     });
+                                                  //     await Future.delayed(
+                                                  //         Duration(seconds: 5));
+                                                  //     Navigator.of(context)
+                                                  //         .pushNamedAndRemoveUntil(
+                                                  //             '/',
+                                                  //             (Route<dynamic>
+                                                  //                     route) =>
+                                                  //                 false);
+                                                  //   } else {
+                                                  //     setState(() {
+                                                  //       isLoading = !isLoading;
+                                                  //       headlineText =
+                                                  //           "Hasło nie zostało zmienione!";
+                                                  //       description =
+                                                  //           "Wystąpił błąd w trakcie zmiany hasła";
+                                                  //       errorFeedback =
+                                                  //           "Stare hasło jest nieprawidłowe";
+                                                  //     });
+                                                  //     print("dupa");
+                                                  //   }
+                                                  // }
                                                 },
                                                 child: Text("Zapisz zmiany")),
                                           ],

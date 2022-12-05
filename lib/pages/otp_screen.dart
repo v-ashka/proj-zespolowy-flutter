@@ -9,6 +9,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pinput/pinput.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/new_password_view.dart';
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -67,12 +68,6 @@ class _OTPScreenState extends State<OTPScreen> {
       //     ),
       //     ModalRoute.withName("/dashboard"));
     }
-  }
-  bool isNumeric(String s) {
-    if (s == null) {
-      return false;
-    }
-    return double.tryParse(s) != null;
   }
 
   @override
@@ -210,19 +205,18 @@ class _OTPScreenState extends State<OTPScreen> {
                                   if(response?.statusCode == 200)
                                     {
                                       print(response!.data);
-                                      storage.write(key: "token", value: response.data);
+                                      storage.write(key: "resetToken", value: response.data);
                                       showLoadingDialog(false, context);
-                                      print("WSZYSTKO GITARA");
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute<void>(
+                                            builder: (BuildContext context) => NewPasswordView()
+                                          ),
+                                          ModalRoute.withName("/user_auth"));
                                     }else{
                                     var reg = RegExp(r'(?<=:)(.*)(?=\r\n)');
                                     var error = reg.firstMatch(response!.data);
-                                    String? info = "";
-                                    if (error != null) { info = (error.group(0));}
-
-                                    var snackBar = SnackBar(
-                                      content: Text("Wystąpił błąd: Kod stracił ważność"),
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                    print(error?.group(0));
                                   }
                                 }
                               },

@@ -37,10 +37,8 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as Map;
     Size? size = MediaQuery.of(context).size;
 
-    print("isReceiptVisible? :${data['userData']['settings']['receiptVisible']}");
     return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
       body: SafeArea(

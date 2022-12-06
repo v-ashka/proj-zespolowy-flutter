@@ -5,7 +5,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:projzespoloey/components/dashboardBox.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/notifications.dart';
 import 'package:projzespoloey/pages/settings_view.dart';
+import 'package:projzespoloey/services/notification_service.dart';
 
 class DashboardPanel extends StatefulWidget {
   const DashboardPanel({Key? key}) : super(key: key);
@@ -17,6 +19,7 @@ class DashboardPanel extends StatefulWidget {
 class _DashboardPanelState extends State<DashboardPanel> {
   String? userData;
   String? userName;
+  String? notificationCount;
   @override
   void initState() {
     // TODO: implement initState
@@ -27,6 +30,11 @@ class _DashboardPanelState extends State<DashboardPanel> {
   void getUserToken() async {
     userData = await storage.read(key: "token");
     userName = await storage.read(key: "userName");
+    setState(() {});
+  }
+
+  void getNotificationCount() async {
+    notificationCount = await NotificationApiService().getCount(userData);
     setState(() {});
   }
 
@@ -96,6 +104,10 @@ class _DashboardPanelState extends State<DashboardPanel> {
                         IconButton(
                           onPressed: () async {
                             print("notifications");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NotificationView()));
                           },
                           icon: const Icon(Icons.notifications, size: 25),
                         ),

@@ -120,7 +120,7 @@ class ReceiptListState extends State<ReceiptList> {
                                                 BorderRadius.circular(25),
                                           ),
                                           title: const Text(
-                                              "Chcesz usunąć lub edytować ten pojazd?"),
+                                              "Chcesz usunąć lub edytować ten paragon?"),
                                           content: const Text(
                                               "Wybierz jedną z opcji dostępnych poniżej."),
                                           actions: [

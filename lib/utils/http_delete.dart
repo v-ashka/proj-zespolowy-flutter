@@ -12,7 +12,8 @@ enum Endpoints {
   carRepair,
   file,
   receiptDefault,
-  document
+  document,
+  home,
 }
 
 extension EndpointsExtension on Endpoints {
@@ -32,6 +33,8 @@ extension EndpointsExtension on Endpoints {
         return '$SERVER_IP/api/receipt/DeleteRecipt';
       case Endpoints.document:
         return '$SERVER_IP/api/document/DeleteDocument';
+      case Endpoints.home:
+        return "$SERVER_IP/api/home/DeleteHome";
     }
   }
 }

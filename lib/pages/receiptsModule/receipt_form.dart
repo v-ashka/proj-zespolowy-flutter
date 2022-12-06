@@ -829,7 +829,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
                 },
                 backgroundColor: mainColor,
                 label: Text(
-                    widget.isEditing ? ("Zapisz pojazd") : ("Dodaj pojazd")),
+                    widget.isEditing ? ("Zapisz paragon") : ("Dodaj paragon")),
                 icon: const Icon(Icons.check),
               ),
             ),

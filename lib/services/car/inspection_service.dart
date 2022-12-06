@@ -36,7 +36,7 @@ class InspectionApiService {
         },
         body: jsonEncode(data),
       );
-      return response.body;
+      return response;
     } catch (e) {
       log(e.toString());
     }

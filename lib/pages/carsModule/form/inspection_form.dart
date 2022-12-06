@@ -553,7 +553,7 @@ class _InspectionFormState extends State<InspectionForm> {
                         ),
                         if (!widget.isEditing!) ...[
                           AddAttachmentButton(
-                            //files: files,
+                              //files: files,
                               formType: FormType.carRepair,
                               onChanged: (filesList) {
                                 files = filesList;
@@ -579,11 +579,12 @@ class _InspectionFormState extends State<InspectionForm> {
             String? tokenVal = await storage.read(key: "token");
 
             if (!widget.isEditing!) {
-              Response response = await InspectionApiService()
+              var response = await InspectionApiService()
                   .addInspection(tokenVal, inspection, widget.carId);
               if (files.isNotEmpty && response.statusCode == 200 ||
                   response.statusCode == 202) {
-                await FilesService().uploadFiles(tokenVal, files, response.body);
+                await FilesService()
+                    .uploadFiles(tokenVal, files, response.body);
               }
             } else {
               await InspectionApiService().updateInspection(

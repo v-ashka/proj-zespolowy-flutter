@@ -26,7 +26,8 @@ enum HeaderTitleType {
   documentList,
   formAddDocument,
   formEditDocument,
-  passwordResetCode
+  passwordResetCode,
+  notification
 }
 
 extension HeaderTitleExtension on HeaderTitleType {
@@ -78,6 +79,8 @@ extension HeaderTitleExtension on HeaderTitleType {
         return 'Edytuj dokument';
       case HeaderTitleType.passwordResetCode:
         return 'Wróć do logowania';
+      case HeaderTitleType.notification:
+        return 'Powiadomienia';
     }
   }
 }

@@ -5,6 +5,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:projzespoloey/components/dashboardBox.dart';
 import 'package:projzespoloey/constants.dart';
+import 'package:projzespoloey/pages/homeModule/homeList.dart';
+import 'package:projzespoloey/pages/receiptsModule/receiptList.dart';
 import 'package:projzespoloey/pages/notifications.dart';
 import 'package:projzespoloey/pages/settings_view.dart';
 import 'package:projzespoloey/services/notification_service.dart';
@@ -177,8 +179,11 @@ class _DashboardPanelState extends State<DashboardPanel> {
                       DashboardBox(
                           title: "Paragony",
                           description: "Ostatnio dodany paragon",
-                          routeLink: '/receiptList',
                           assetImgPath: 'assets/receipt.svg',
+                          onPressed: () => {Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ReceiptList()))},
                           user: userData),
                       SizedBox(
                         height: 15,
@@ -195,7 +200,10 @@ class _DashboardPanelState extends State<DashboardPanel> {
                       DashboardBox(
                           title: "Dom",
                           description: "Liczba dodanych pomieszczeń",
-                          routeLink: '/homeList',
+                          onPressed: () => {Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeList()))},
                           assetImgPath: 'assets/house.svg',
                           user: userData),
                       SizedBox(

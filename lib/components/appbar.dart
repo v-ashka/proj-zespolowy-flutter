@@ -28,6 +28,8 @@ enum HeaderTitleType {
   formEditDocument,
   passwordResetCode,
   homeList,
+  formAddHome,
+  formEditHome
   notification
 }
 
@@ -82,6 +84,10 @@ extension HeaderTitleExtension on HeaderTitleType {
         return 'Wróć do logowania';
       case HeaderTitleType.homeList:
         return 'Lista domów';
+        case HeaderTitleType.formEditHome:
+        return 'Edytuj dom';
+        case HeaderTitleType.formAddHome:
+        return 'Dodaj dom';
       case HeaderTitleType.notification:
         return 'Powiadomienia';
     }

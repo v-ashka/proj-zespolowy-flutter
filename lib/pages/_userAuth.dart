@@ -374,7 +374,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
         );
       },
     );
-  return exit ?? false;
+  return exit;
 
   }
 }

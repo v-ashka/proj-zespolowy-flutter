@@ -618,6 +618,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                 receiptModel?.idParagonu);
 
                             if (response) {
+                              showDeleteDialog(false);
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute<void>(
@@ -625,7 +626,6 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                         ReceiptList(),
                                   ),
                                   ModalRoute.withName("/dashboard"));
-                              showDeleteDialog(false);
                             }
                           },
                         ),

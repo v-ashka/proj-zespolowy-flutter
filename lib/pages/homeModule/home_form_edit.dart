@@ -23,7 +23,7 @@ import 'package:projzespoloey/utils/date_picker.dart';
 
 class HomeForm extends StatefulWidget {
   final String homeId;
-  final bool? isEditing;
+  final bool isEditing;
   final InspectionModel? editModel;
   const HomeForm(
       {Key? key, required this.homeId, this.isEditing = false, this.editModel})
@@ -41,11 +41,25 @@ class _HomeFormState extends State<HomeForm> {
   void initState() {
     super.initState();
     checkIfEditForm(widget.isEditing, widget.editModel);
+    getData();
   }
 
   HomeModel home = HomeModel();
-
   List<PlatformFile> files = [];
+  List homeTypes = [];
+  bool isLoading = true;
+  String? token = "";
+
+   void getData() async {
+    token = await storage.read(key: "token");
+    homeTypes = (await CarApiService().getModeleMarki(token));
+    if (widget.isEditing) {
+      //carItem = await CarApiService().getCarFormData(token, widget.carId);
+    }
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
 
   void checkIfEditForm(isEdit, editModel) async {
     if (isEdit) {
@@ -129,11 +143,11 @@ class _HomeFormState extends State<HomeForm> {
                               ),
                             ),
                             TextFormField(
-                                initialValue:
-                                    inspection.nazwaStacjiDiagnostycznej ?? "",
-                                onSaved: (String? value) {
-                                  inspection.nazwaStacjiDiagnostycznej = value;
-                                },
+                                // initialValue:
+                                //     inspection.nazwaStacjiDiagnostycznej ?? "",
+                                // onSaved: (String? value) {
+                                //   inspection.nazwaStacjiDiagnostycznej = value;
+                                // },
                                 cursorColor: Colors.black,
                                 style: TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
@@ -204,14 +218,14 @@ class _HomeFormState extends State<HomeForm> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       TextFormField(
-                                          initialValue: widget.isEditing!
-                                              ? (inspection
-                                                  .zarejestrowanyPrzebieg
-                                                  .toString())
-                                              : (''),
+                                          // initialValue: widget.isEditing!
+                                              // ? (inspection
+                                              //     .zarejestrowanyPrzebieg
+                                              //     .toString())
+                                              // : (''),
                                           onSaved: (String? value) {
-                                            inspection.zarejestrowanyPrzebieg =
-                                                int.parse(value!);
+                                            // inspection.zarejestrowanyPrzebieg =
+                                            //     int.parse(value!);
                                           },
                                           keyboardType: TextInputType.number,
                                           inputFormatters: <TextInputFormatter>[
@@ -259,11 +273,11 @@ class _HomeFormState extends State<HomeForm> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextFormField(
-                                            initialValue:
-                                                inspection.numerBadania ?? "",
-                                            onSaved: (String? value) {
-                                              inspection.numerBadania = value;
-                                            },
+                                            // initialValue:
+                                            //     inspection.numerBadania ?? "",
+                                            // onSaved: (String? value) {
+                                            //   inspection.numerBadania = value;
+                                            // },
                                             cursorColor: Colors.black,
                                             style:
                                                 TextStyle(color: Colors.black),
@@ -304,7 +318,7 @@ class _HomeFormState extends State<HomeForm> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
                               child: Text(
-                                "Wynik badania pojazdu",
+                                "Wybierz rodzaj domu",
                                 style: TextStyle(
                                   fontFamily: "Roboto",
                                   letterSpacing: 1,
@@ -407,9 +421,9 @@ class _HomeFormState extends State<HomeForm> {
                                                 DateTime? date =
                                                     await pickDate(context);
                                                 setState(() {
-                                                  inspection.dataPrzegladu =
-                                                      DateFormat('dd-MM-yyyy')
-                                                          .format(date!);
+                                                  // inspection.dataPrzegladu =
+                                                  //     DateFormat('dd-MM-yyyy')
+                                                  //         .format(date!);
                                                 });
                                               },
                                               cursorColor: Colors.black,
@@ -428,9 +442,9 @@ class _HomeFormState extends State<HomeForm> {
                                                       color: Colors.black,
                                                     ),
                                                   ),
-                                                  hintText: inspection
-                                                          .dataPrzegladu ??
-                                                      "Data zatwierdzenia",
+                                                  // hintText: inspection
+                                                  //         .dataPrzegladu ??
+                                                  //     "Data zatwierdzenia",
                                                   fillColor: bg35Grey,
                                                   filled: true,
                                                   border: OutlineInputBorder(
@@ -440,11 +454,11 @@ class _HomeFormState extends State<HomeForm> {
                                                     borderSide: BorderSide.none,
                                                   )),
                                               validator: (date) {
-                                                if (inspection.dataPrzegladu ==
-                                                    null) {
-                                                  return 'To pole nie może być puste';
-                                                }
-                                                return null;
+                                                // if (inspection.dataPrzegladu ==
+                                                //     null) {
+                                                //   return 'To pole nie może być puste';
+                                                // }
+                                                // return null;
                                               }),
                                         ),
                                         SizedBox(
@@ -455,10 +469,10 @@ class _HomeFormState extends State<HomeForm> {
                                                 DateTime? date =
                                                     await pickDate(context);
                                                 setState(() {
-                                                  inspection
-                                                          .koniecWaznosciPrzegladu =
-                                                      DateFormat('dd-MM-yyyy')
-                                                          .format(date!);
+                                                  // inspection
+                                                  //         .koniecWaznosciPrzegladu =
+                                                  //     DateFormat('dd-MM-yyyy')
+                                                  //         .format(date!);
                                                 });
                                               },
                                               cursorColor: Colors.black,
@@ -477,9 +491,9 @@ class _HomeFormState extends State<HomeForm> {
                                                       color: Colors.black,
                                                     ),
                                                   ),
-                                                  hintText: inspection
-                                                          .koniecWaznosciPrzegladu ??
-                                                      "Data kolejnego badania",
+                                                  // hintText: inspection
+                                                  //         .koniecWaznosciPrzegladu ??
+                                                  //     "Data kolejnego badania",
                                                   fillColor: bg35Grey,
                                                   filled: true,
                                                   border: OutlineInputBorder(
@@ -489,12 +503,12 @@ class _HomeFormState extends State<HomeForm> {
                                                     borderSide: BorderSide.none,
                                                   )),
                                               validator: (date) {
-                                                if (inspection
-                                                        .koniecWaznosciPrzegladu ==
-                                                    null) {
-                                                  return 'To pole nie może być puste';
-                                                }
-                                                return null;
+                                                // if (inspection
+                                                //         .koniecWaznosciPrzegladu ==
+                                                //     null) {
+                                                //   return 'To pole nie może być puste';
+                                                // }
+                                                // return null;
                                               }),
                                         ),
                                       ],
@@ -524,10 +538,10 @@ class _HomeFormState extends State<HomeForm> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: TextFormField(
-                                initialValue: inspection.uwagi ?? "",
+                                //initialValue: inspection.uwagi ?? "",
                                 maxLines: 4,
                                 onSaved: (String? value) {
-                                  inspection.uwagi = value;
+                                  //inspection.uwagi = value;
                                 },
                                 cursorColor: Colors.black,
                                 style: TextStyle(color: Colors.black),
@@ -568,33 +582,33 @@ class _HomeFormState extends State<HomeForm> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          print(inspection.toJson());
+         // print(inspection.toJson());
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
             String? tokenVal = await storage.read(key: "token");
 
-            if (!widget.isEditing!) {
-              Response response = await InspectionApiService()
-                  .addInspection(tokenVal, inspection, widget.homeId);
-              if (files.isNotEmpty && response.statusCode == 200 ||
-                  response.statusCode == 202) {
-                await FilesService().uploadFiles(tokenVal, files, response.body);
-              }
-            } else {
-              await InspectionApiService().updateInspection(
-                  tokenVal, inspection, widget.editModel!.idPrzegladu);
-            }
+            // if (!widget.isEditing!) {
+            //   // Response response = await InspectionApiService()
+            //   //     .addInspection(tokenVal, inspection, widget.homeId);
+            //   if (files.isNotEmpty && response.statusCode == 200 ||
+            //       response.statusCode == 202) {
+            //     await FilesService().uploadFiles(tokenVal, files, response.body);
+            //   }
+            // } else {
+            //   await InspectionApiService().updateInspection(
+            //       tokenVal, inspection, widget.editModel!.idPrzegladu);
+            // }
 
-            setState(() {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) =>
-                        CarItem(carId: widget.homeId),
-                  ),
-                  ModalRoute.withName('/dashboard'));
-              // Navigator.pop(context);
-            });
+            // setState(() {
+            //   Navigator.pushAndRemoveUntil(
+            //       context,
+            //       MaterialPageRoute<void>(
+            //         builder: (BuildContext context) =>
+            //             CarItem(carId: widget.homeId),
+            //       ),
+            //       ModalRoute.withName('/dashboard'));
+            //   // Navigator.pop(context);
+            // });
           }
         },
         backgroundColor: mainColor,

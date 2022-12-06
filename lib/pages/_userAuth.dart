@@ -50,32 +50,58 @@ class _UserAuthenticationState extends State<UserAuthentication> {
           isLoading = false;
 
           if (token["data"] != null) {
-            readJson();
             var payload = Jwt.parseJwt(token["data"]);
             storage.write(
                 key: "userName",
                 value: payload[
                     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]);
             // payload = Jwt.parseJwt(token["data"]);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>  DashboardPanel()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => DashboardPanel()));
           } else {
             errorFeedback = token["message"];
           }
         }));
   }
 
-  // temp data for testing purposes
-  Map _userData = {};
-  Future<void> readJson() async {
-    final String response =
-        await rootBundle.loadString('assets/data/temp.json');
-    final data = await json.decode(response);
-    setState(() {
-      _userData = data;
-    });
+  void showAppSettings() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              titlePadding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
+              contentPadding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(25.0))),
+              title: Text("Zmień ustawienia serwera"),
+              content: SizedBox(
+                  height: 300,
+                  width: 300,
+                  child: Container(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                        Text("Wybierz sposób połączenia z serwerem"),
+                        if (isLoading)
+                          const Center(
+                              child:
+                                  CircularProgressIndicator(color: mainColor))
+                        else
+                          Form(
+                            key: formKey,
+                            child: Column(
+                              children: [],
+                            ),
+                          )
+                      ]))),
+            );
+          });
+        });
   }
 
   @override
@@ -96,8 +122,20 @@ class _UserAuthenticationState extends State<UserAuthentication> {
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: ListView(
                 children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: () {
+                        print("settings");
+                      },
+                      icon: const Icon(
+                        Icons.settings,
+                        size: 25,
+                      ),
+                    ),
+                  ),
                   SizedBox(
-                    height: 25,
+                    height: 15,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,9 +219,12 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                       onPressed: () => setState(() {
                                         isObscure = !isObscure;
                                       }),
-                                      padding: const EdgeInsets.fromLTRB(0, 1, 15, 0),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 1, 15, 0),
                                       icon: Icon(
-                                        isObscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                        isObscure
+                                            ? Icons.visibility_outlined
+                                            : Icons.visibility_off_outlined,
                                         color: Colors.black,
                                       ),
                                     ),
@@ -227,7 +268,8 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                         primary: mainColor,
                                         onSurface: Colors.amber,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(25),
+                                          borderRadius:
+                                              BorderRadius.circular(25),
                                         )),
                                     onPressed: () async {
                                       if (formKey.currentState!.validate()) {
@@ -279,11 +321,10 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                   )),
                               onPressed: () {
                                 Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            PasswordResetCode(),
-                                      ));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PasswordResetCode(),
+                                    ));
                               },
                               child: Text("Nie pamiętam hasła"))
                         ],
@@ -325,7 +366,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
     );
   }
 
-  Future <bool> onBackButtonPressed(BuildContext context) async{
+  Future<bool> onBackButtonPressed(BuildContext context) async {
     bool exit = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -335,18 +376,15 @@ class _UserAuthenticationState extends State<UserAuthentication> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
           ),
-          title: Text(
-              "Czy na pewno chcesz wyjść z\u{00A0}aplikacji? "),
-          content: Text(
-              "Mamy nadzieję, że zaraz tutaj wrócisz!"),
+          title: Text("Czy na pewno chcesz wyjść z\u{00A0}aplikacji? "),
+          content: Text("Mamy nadzieję, że zaraz tutaj wrócisz!"),
           actions: [
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     primary: mainColor,
                     onPrimary: mainColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(25),
                     )),
                 onPressed: () {
                   Navigator.of(context).pop(false);
@@ -360,8 +398,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                     primary: deleteBtn,
                     onPrimary: deleteBtn,
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(25),
                     )),
                 onPressed: () async {
                   Navigator.of(context).pop(true);
@@ -374,7 +411,6 @@ class _UserAuthenticationState extends State<UserAuthentication> {
         );
       },
     );
-  return exit;
-
+    return exit;
   }
 }

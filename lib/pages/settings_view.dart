@@ -61,6 +61,60 @@ class _SettingsViewState extends State<SettingsView> {
     });
   }
 
+  void showAboutUsDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            padding: const EdgeInsets.all(5),
+            child: AlertDialog(
+              actionsPadding: const EdgeInsets.all(0),
+              actionsAlignment: MainAxisAlignment.center,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+              title: const Text("Autorzy aplikacji"),
+              content: SizedBox(
+                height: 110,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [
+                    Text("Michał Grabowiec"),
+                    Text("Marcin Wijaszka"),
+                    Text("Sebastian Wiktor"),
+                    Divider(),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Text("Politechnika Lubelska - 2022")),
+                    Divider(),
+                  ],
+                ),
+              ),
+              contentPadding: EdgeInsets.fromLTRB(25, 15, 25, 0),
+              actions: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: mainColor,
+                      foregroundColor: fontWhite,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      )),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Zamknij",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'Lato',
+                          fontWeight: FontWeight.w600)),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   void showChangePassDialog(
     isShowing,
     String headlineText,
@@ -383,6 +437,17 @@ class _SettingsViewState extends State<SettingsView> {
                       //     context, ModalRoute.withName('/user_auth'));
                     },
                     assetImgPath: 'assets/logout2.svg',
+                    user: userData),
+                const SizedBox(
+                  height: 15,
+                ),
+                DashboardBox(
+                    title: "O nas",
+                    description: "Sekcja ta zawiera informacje o autorach",
+                    onPressed: () async {
+                      showAboutUsDialog();
+                    },
+                    assetImgPath: 'assets/aboutus.svg',
                     user: userData)
               ]))),
     );

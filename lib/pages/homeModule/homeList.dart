@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import "package:projzespoloey/components/module_list.dart";
+import 'package:projzespoloey/services/home/home_service.dart';
 
 import '../../constants.dart';
 import '../../models/home/home_model.dart';
@@ -20,7 +21,7 @@ class HomeList extends StatefulWidget {
 }
 
 class _HomeListState extends State<HomeList> {
-  List<CarListView>? carList;
+  List<HomeListView>? homeList;
   String? token;
 
   @override
@@ -31,7 +32,7 @@ class _HomeListState extends State<HomeList> {
 
   void getData() async {
     token = await storage.read(key: "token");
-    carList = (await CarApiService().getCars(token));
+    homeList = (await HomeApiService().getHomeList(token));
     setState(() {});
   }
 
@@ -73,7 +74,7 @@ class _HomeListState extends State<HomeList> {
                   image: AssetImage('assets/background.png'),
                   fit: BoxFit.fill)),
           child: Center(
-              child: carList == null
+              child: homeList == null
                   ? const Center(
                       child: CircularProgressIndicator(
                       color: mainColor,
@@ -82,10 +83,10 @@ class _HomeListState extends State<HomeList> {
                       padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                       child: ListView.separated(
                         padding: const EdgeInsets.all(20),
-                        itemCount: carList!.length,
+                        itemCount: homeList!.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final carItem = carList![index];
-                          if (carList!.isEmpty) {
+                          final homeItem = homeList![index];
+                          if (homeList!.isEmpty) {
                             return const Center(
                               child: Text("Trochę tu pusto..."),
                             );
@@ -96,11 +97,10 @@ class _HomeListState extends State<HomeList> {
                                 //     context,
                                 //     MaterialPageRoute(
                                 //       builder: (context) =>
-                                //           CarItem(carId: carItem.idSamochodu),
+                                //           homeItem(carId: homeItem.idSamochodu),
                                 //     ));
                               },
                               onLongPress: () {
-                                HapticFeedback.vibrate();
                                 SystemSound.play(SystemSoundType.alert);
                                 showDialog(
                                     context: context,
@@ -123,8 +123,8 @@ class _HomeListState extends State<HomeList> {
                                           actions: [
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                  primary: mainColor,
-                                                  onPrimary: mainColor,
+                                                  backgroundColor: mainColor,
+                                                  foregroundColor: mainColor,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -137,12 +137,12 @@ class _HomeListState extends State<HomeList> {
                                                 //     MaterialPageRoute(
                                                 //       builder: (context) =>
                                                 //           CarForm(
-                                                //               carId: carItem
+                                                //               carId: homeItem
                                                 //                   .idSamochodu,
                                                 //               isEditing: true,
                                                 //               brand:
-                                                //               carItem.marka,
-                                                //               make: carItem
+                                                //               homeItem.marka,
+                                                //               make: homeItem
                                                 //                   .model),
                                                 //     ));
                                               },
@@ -184,7 +184,7 @@ class _HomeListState extends State<HomeList> {
                                                 // await deleteRecord(
                                                 //     Endpoints.carDefault,
                                                 //     token,
-                                                //     carItem.idSamochodu);
+                                                //     homeItem.idSamochodu);
                                                 // if (response) {
                                                 //   showDeleteDialog(false);
                                                 //   getData();
@@ -241,8 +241,7 @@ class _HomeListState extends State<HomeList> {
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 10, 10, 0, 0),
-                                            child: Text(
-                                                "${carItem.marka} ${carItem.model}",
+                                            child: Text("DOM SZTYWNY",
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                 ),
@@ -258,94 +257,107 @@ class _HomeListState extends State<HomeList> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                const Text("OKRES WAŻNOŚCI",
+                                                const Text(
+                                                    "PODSTAWOWE INFORMACJE",
                                                     style: TextStyle(
                                                         color: fontGrey,
                                                         fontFamily: "Roboto",
-                                                        fontSize: 12,
+                                                        fontSize: 11,
                                                         fontWeight:
                                                             FontWeight.w300,
                                                         letterSpacing: 1.2)),
                                                 const SizedBox(
-                                                  height: 10,
+                                                  height: 5,
                                                 ),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
-                                                      color: bg35Grey),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(10, 0, 20, 0),
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceAround,
-                                                      children: [
-                                                        const Icon(
-                                                            Icons
-                                                                .text_snippet_outlined,
-                                                            color: icon70Black),
-                                                        Text(
-                                                          carItem.koniecOC !=
-                                                                  null
-                                                              ? "${carItem.koniecOC} dni"
-                                                              : "Brak",
-                                                          style: const TextStyle(
-                                                              fontFamily:
-                                                                  "Lato",
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                        )
-                                                      ],
-                                                    ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 5, 0, 0),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      const Text("Adres:"),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.all(2),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        25),
+                                                            color:
+                                                                secondaryColor),
+                                                        child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        15),
+                                                            child: Text(
+                                                              "${homeItem.ulicaNrDomu}",
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      "Lato",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                            )),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
-                                                      color: bg35Grey),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(10, 0, 20, 0),
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceAround,
-                                                      children: [
-                                                        const Icon(
-                                                            Icons
-                                                                .car_repair_outlined,
-                                                            color: icon70Black),
-                                                        Text(
-                                                          carItem.koniecPrzegladu !=
-                                                                  null
-                                                              ? "${carItem.koniecPrzegladu} dni"
-                                                              : "Brak",
-                                                          style: const TextStyle(
-                                                              fontFamily:
-                                                                  "Lato",
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                        )
-                                                      ],
-                                                    ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 5, 0, 0),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      const Text(
+                                                          "Miejscowość:"),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.all(2),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        25),
+                                                            color:
+                                                                secondaryColor),
+                                                        child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        15),
+                                                            child: Text(
+                                                              "${homeItem.miejscowosc}",
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      "Lato",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                            )),
+                                                      ),
+                                                    ],
                                                   ),
-                                                )
+                                                ),
                                               ],
                                             ),
                                           )
@@ -353,7 +365,7 @@ class _HomeListState extends State<HomeList> {
                                       ),
                                     ),
                                     Expanded(
-                                      flex: 10,
+                                      flex: 4,
                                       child: SizedBox(
                                         width: 200,
                                         child: Stack(
@@ -395,8 +407,7 @@ class _HomeListState extends State<HomeList> {
                                                   borderRadius:
                                                       BorderRadius.circular(25),
                                                   child: Image.network(
-                                                    getPhoto(
-                                                        carItem.idSamochodu),
+                                                    getPhoto(homeItem.idDomu),
                                                     width: 170,
                                                     height: 150,
                                                     fit: BoxFit.cover,
@@ -447,7 +458,7 @@ class _HomeListState extends State<HomeList> {
         onPressed: () {
           Navigator.pushNamed(
             context,
-            "/carForm",
+            "/homeItem",
           ).then((value) {});
         },
         backgroundColor: mainColor,

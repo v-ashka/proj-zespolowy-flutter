@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:projzespoloey/models/notification_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,5 +29,16 @@ class NotificationApiService {
     return [];
   }
 
-  Future getCount(token) async {}
+  Future getCount(token) async {
+    try {
+      var response = await Dio().get('$SERVER_IP/api/notification/GetCount',
+          options: Options(headers: {
+            'Authorization': "Bearer $token",
+          }));
+      log(response.data.toString());
+      return response.data;
+    } on DioError catch (e) {
+      return e.response;
+    }
+  }
 }

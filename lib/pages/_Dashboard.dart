@@ -21,12 +21,14 @@ class DashboardPanel extends StatefulWidget {
 class _DashboardPanelState extends State<DashboardPanel> {
   String? userData;
   String? userName;
-  String? notificationCount;
+  int? notificationCount;
+  bool notificationLoading = true;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUserToken();
+    getNotificationCount();
   }
 
   void getUserToken() async {
@@ -36,8 +38,12 @@ class _DashboardPanelState extends State<DashboardPanel> {
   }
 
   void getNotificationCount() async {
+    notificationLoading = true;
+    userData = await storage.read(key: "token");
     notificationCount = await NotificationApiService().getCount(userData);
-    setState(() {});
+    setState(() {
+      notificationLoading = false;
+    });
   }
 
   @override
@@ -91,8 +97,10 @@ class _DashboardPanelState extends State<DashboardPanel> {
                               color: Colors.red,
                               borderRadius: BorderRadius.circular(50),
                             ),
-                            child: const Text(
-                              "0",
+                            child: Text(
+                              notificationLoading
+                                  ? ("0")
+                                  : ("${notificationCount}"),
                               style:
                                   TextStyle(color: Colors.white, fontSize: 10),
                             ),
@@ -180,10 +188,12 @@ class _DashboardPanelState extends State<DashboardPanel> {
                           title: "Paragony",
                           description: "Ostatnio dodany paragon",
                           assetImgPath: 'assets/receipt.svg',
-                          onPressed: () => {Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ReceiptList()))},
+                          onPressed: () => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ReceiptList()))
+                              },
                           user: userData),
                       SizedBox(
                         height: 15,
@@ -200,10 +210,12 @@ class _DashboardPanelState extends State<DashboardPanel> {
                       DashboardBox(
                           title: "Dom",
                           description: "Liczba dodanych pomieszczeń",
-                          onPressed: () => {Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeList()))},
+                          onPressed: () => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomeList()))
+                              },
                           assetImgPath: 'assets/house.svg',
                           user: userData),
                       SizedBox(

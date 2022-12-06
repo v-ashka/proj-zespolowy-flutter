@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // server ip addr
 // const SERVER_IP = "http://10.0.2.2:5151";
 
-const SERVER_IP = "https://4a1d-87-246-222-206.eu.ngrok.io";
+const SERVER_IP = "https://3c18-5-173-27-99.eu.ngrok.io";
 //basic color app
 
 const primaryColor = Color(0xfff8f8f8);

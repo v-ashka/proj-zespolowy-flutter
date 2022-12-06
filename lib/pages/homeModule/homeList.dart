@@ -1,6 +1,8 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import "package:projzespoloey/components/module_list.dart";
@@ -14,11 +16,11 @@ class HomeList extends StatefulWidget {
   const HomeList({Key? key}) : super(key: key);
 
   @override
-  State<HomeList> createState() => HomeListState();
+  State<HomeList> createState() => _HomeListState();
 }
 
-class HomeListState extends State<HomeList> {
-  List<HomeListView>? homeList;
+class _HomeListState extends State<HomeList> {
+  List<CarListView>? carList;
   String? token;
 
   @override
@@ -29,12 +31,13 @@ class HomeListState extends State<HomeList> {
 
   void getData() async {
     token = await storage.read(key: "token");
-    // homeList = (await HomeApiService().getReceipts(token));
+    carList = (await CarApiService().getCars(token));
     setState(() {});
   }
 
-  String getPhoto(receiptId) {
-    return "$SERVER_IP/api/fileUpload/GetFile/$receiptId?naglowkowy=true";
+  String getPhoto(carId) {
+    var url = '$SERVER_IP/api/fileUpload/GetFile/$carId?naglowkowy=true';
+    return url;
   }
 
   void showDeleteDialog(isShowing) {
@@ -58,11 +61,10 @@ class HomeListState extends State<HomeList> {
     }
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: myAppBar(context, HeaderTitleType.receipt),
+      appBar: myAppBar(context, HeaderTitleType.homeList),
       body: Container(
           height: double.infinity,
           width: double.infinity,
@@ -71,7 +73,7 @@ class HomeListState extends State<HomeList> {
                   image: AssetImage('assets/background.png'),
                   fit: BoxFit.fill)),
           child: Center(
-              child: homeList == null
+              child: carList == null
                   ? const Center(
                       child: CircularProgressIndicator(
                       color: mainColor,
@@ -80,25 +82,26 @@ class HomeListState extends State<HomeList> {
                       padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
                       child: ListView.separated(
                         padding: const EdgeInsets.all(20),
-                        itemCount: homeList!.length,
+                        itemCount: carList!.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final receiptItem = homeList![index];
-                          if (homeList!.isEmpty) {
+                          final carItem = carList![index];
+                          if (carList!.isEmpty) {
                             return const Center(
                               child: Text("Trochę tu pusto..."),
                             );
                           } else {
                             return GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HomeItem(
-                                          // receiptId: receiptItem.idParagonu!,
-                                          ),
-                                    ));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //       builder: (context) =>
+                                //           CarItem(carId: carItem.idSamochodu),
+                                //     ));
                               },
                               onLongPress: () {
+                                HapticFeedback.vibrate();
+                                SystemSound.play(SystemSoundType.alert);
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -114,7 +117,7 @@ class HomeListState extends State<HomeList> {
                                                 BorderRadius.circular(25),
                                           ),
                                           title: const Text(
-                                              "Chcesz usunąć lub edytować ten pojazd?"),
+                                              "Chcesz usunąć lub edytować ten dom?"),
                                           content: const Text(
                                               "Wybierz jedną z opcji dostępnych poniżej."),
                                           actions: [
@@ -128,16 +131,19 @@ class HomeListState extends State<HomeList> {
                                                             25),
                                                   )),
                                               onPressed: () {
-                                                Navigator.pop(context);
+                                                // Navigator.pop(context);
                                                 // Navigator.push(
                                                 //     context,
                                                 //     MaterialPageRoute(
                                                 //       builder: (context) =>
-                                                //           HomeForm(
-                                                //         receiptId: receiptItem
-                                                //             .idParagonu,
-                                                //         isEditing: true,
-                                                //       ),
+                                                //           CarForm(
+                                                //               carId: carItem
+                                                //                   .idSamochodu,
+                                                //               isEditing: true,
+                                                //               brand:
+                                                //               carItem.marka,
+                                                //               make: carItem
+                                                //                   .model),
                                                 //     ));
                                               },
                                               child: RichText(
@@ -164,21 +170,21 @@ class HomeListState extends State<HomeList> {
                                             ),
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                  foregroundColor: deleteBtn,
-                                                  backgroundColor: deleteBtn,
+                                                  primary: deleteBtn,
+                                                  onPrimary: deleteBtn,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             25),
                                                   )),
                                               onPressed: () async {
-                                                Navigator.of(context).pop();
+                                                // Navigator.of(context).pop();
                                                 // showDeleteDialog(true);
                                                 // bool response =
-                                                //     await deleteRecord(
-                                                //         Endpoints.home,
-                                                //         token,
-                                                //         receiptItem.idParagonu);
+                                                // await deleteRecord(
+                                                //     Endpoints.carDefault,
+                                                //     token,
+                                                //     carItem.idSamochodu);
                                                 // if (response) {
                                                 //   showDeleteDialog(false);
                                                 //   getData();
@@ -235,7 +241,8 @@ class HomeListState extends State<HomeList> {
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 10, 10, 0, 0),
-                                            child: Text("receiptItem.nazwa",
+                                            child: Text(
+                                                "${carItem.marka} ${carItem.model}",
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                 ),
@@ -251,141 +258,92 @@ class HomeListState extends State<HomeList> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                const Text(
-                                                    "PODSTAWOWE INFORMACJE",
+                                                const Text("OKRES WAŻNOŚCI",
                                                     style: TextStyle(
                                                         color: fontGrey,
                                                         fontFamily: "Roboto",
-                                                        fontSize: 11,
+                                                        fontSize: 12,
                                                         fontWeight:
-                                                            FontWeight.w400,
+                                                            FontWeight.w300,
                                                         letterSpacing: 1.2)),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 5, 0, 0),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      const Text(
-                                                          "Okres zwrotu:"),
-                                                      const SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Container(
-                                                        padding:
-                                                            EdgeInsets.all(2),
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        25),
-                                                            color:
-                                                                secondaryColor),
-                                                        child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        15),
-                                                            child: Text(
-                                                              "receiptItem.koniecZwrotu} dni",
-                                                              style: const TextStyle(
-                                                                  fontFamily:
-                                                                      "Lato",
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                            )),
-                                                      ),
-                                                    ],
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25),
+                                                      color: bg35Grey),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(10, 0, 20, 0),
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      children: [
+                                                        const Icon(
+                                                            Icons
+                                                                .text_snippet_outlined,
+                                                            color: icon70Black),
+                                                        Text(
+                                                          carItem.koniecOC !=
+                                                                  null
+                                                              ? "${carItem.koniecOC} dni"
+                                                              : "Brak",
+                                                          style: const TextStyle(
+                                                              fontFamily:
+                                                                  "Lato",
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                        )
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 5, 0, 0),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      const Text(
-                                                          "Okres gwarancji:"),
-                                                      Container(
-                                                        padding:
-                                                            EdgeInsets.all(2),
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        25),
-                                                            color:
-                                                                secondaryColor),
-                                                        child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        15),
-                                                            child: Text(
-                                                              "receiptItem.koniecGwarancji} dni",
-                                                              style: const TextStyle(
-                                                                  fontFamily:
-                                                                      "Lato",
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                            )),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                const SizedBox(
+                                                  height: 10,
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 5, 0, 0),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      const Text("Cena:"),
-                                                      Container(
-                                                        padding:
-                                                            EdgeInsets.all(2),
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        25),
-                                                            color:
-                                                                secondaryColor),
-                                                        child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        15),
-                                                            child: Text(
-                                                              "receiptItem.cena} zł",
-                                                              style: const TextStyle(
-                                                                  fontFamily:
-                                                                      "Lato",
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                            )),
-                                                      ),
-                                                    ],
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25),
+                                                      color: bg35Grey),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(10, 0, 20, 0),
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      children: [
+                                                        const Icon(
+                                                            Icons
+                                                                .car_repair_outlined,
+                                                            color: icon70Black),
+                                                        Text(
+                                                          carItem.koniecPrzegladu !=
+                                                                  null
+                                                              ? "${carItem.koniecPrzegladu} dni"
+                                                              : "Brak",
+                                                          style: const TextStyle(
+                                                              fontFamily:
+                                                                  "Lato",
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                        )
+                                                      ],
+                                                    ),
                                                   ),
                                                 )
                                               ],
@@ -395,7 +353,7 @@ class HomeListState extends State<HomeList> {
                                       ),
                                     ),
                                     Expanded(
-                                      flex: 5,
+                                      flex: 10,
                                       child: SizedBox(
                                         width: 200,
                                         child: Stack(
@@ -438,12 +396,12 @@ class HomeListState extends State<HomeList> {
                                                       BorderRadius.circular(25),
                                                   child: Image.network(
                                                     getPhoto(
-                                                        "receiptItem.idParagonu"),
-                                                    width: 130,
+                                                        carItem.idSamochodu),
+                                                    width: 170,
                                                     height: 150,
                                                     fit: BoxFit.cover,
-                                                    alignment:
-                                                        const Alignment(0, 0),
+                                                    alignment: const Alignment(
+                                                        -0.3, 0),
                                                     errorBuilder:
                                                         (BuildContext context,
                                                             Object exception,
@@ -489,7 +447,7 @@ class HomeListState extends State<HomeList> {
         onPressed: () {
           Navigator.pushNamed(
             context,
-            "/receiptForm",
+            "/carForm",
           ).then((value) {});
         },
         backgroundColor: mainColor,

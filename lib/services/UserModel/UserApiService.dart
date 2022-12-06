@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class UserApiService {
-  final _dio = Dio();
+
   Future register(data) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/account/register");
@@ -64,6 +64,7 @@ class UserApiService {
   }
 
   Future<Response> resetPassword(email) async {
+    final _dio = Dio();
     Response response;
     try {
       var url = "$SERVER_IP/api/account/resetPassword?email=$email";
@@ -77,6 +78,7 @@ class UserApiService {
   }
 
   Future<Response?> verifyCode(String id, int code) async {
+    final _dio = Dio();
     Response response;
     try {
       var url = "$SERVER_IP/api/account/confirmReset?id=$id&code=$code";
@@ -89,33 +91,20 @@ class UserApiService {
     }
   }
 
-  Future changePassword(data) async {
+  Future changePassword(password, token) async {
+    final _dio = Dio();
+    Response response;
     try {
-      // check old pass
-      UserLogin userLogin = UserLogin(email: data.email, pass: data.oldPass);
-      var url = Uri.parse("$SERVER_IP/api/account/login");
-      var response = await http.post(
+      var url = "$SERVER_IP/api/account/changePassword?newPassword=$password";
+      response = await _dio.post(
         url,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(userLogin),
+        options: Options(
+          headers: {
+            'Authorization': "Bearer $token",
+          },
+        ),
       );
-      print(response.statusCode);
-      print(jsonEncode(userLogin));
-      if (response.statusCode == 200) {
-        // var urlPass =
-        //     "$SERVER_IP/api/account/changePassword?newPassword=${data.newPass}";
-        // var responsePass = await _dio.post(
-        //   urlPass,
-        // );
-        var responsePass = 200;
-        print(responsePass);
-        if (responsePass == 200) {
-          return true;
-        }
-      }
-      return false;
+      return response;
     } on DioError catch (e) {
       return e.response;
     }

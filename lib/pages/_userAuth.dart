@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +31,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
   // final storage = new FlutterSecureStorage();
   // Form variables
   final formKey = GlobalKey<FormState>();
+  final formServerKey = GlobalKey<FormState>();
   bool isValid = false;
   bool isObscure = true;
   bool isLoading = false;
@@ -65,40 +67,193 @@ class _UserAuthenticationState extends State<UserAuthentication> {
   }
 
   void showAppSettings() {
+    bool isSwitched = false;
+    String? server_ip = "";
+    String? emulatorIp = "http://10.0.2.2:5151";
     showDialog(
-        barrierDismissible: false,
         context: context,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               insetPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              titlePadding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
+              titlePadding: const EdgeInsets.fromLTRB(25, 25, 25, 5),
               contentPadding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25.0))),
-              title: Text("Zmień ustawienia serwera"),
+              title: Text("Ustawienia serwera"),
               content: SizedBox(
-                  height: 300,
+                  height: 280,
                   width: 300,
                   child: Container(
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                        Text("Wybierz sposób połączenia z serwerem"),
-                        if (isLoading)
-                          const Center(
-                              child:
-                                  CircularProgressIndicator(color: mainColor))
-                        else
-                          Form(
-                            key: formKey,
-                            child: Column(
-                              children: [],
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Sposób połączenia",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, color: secondColor),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 9,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Emulator",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    "Połącz się przy pomocy wbudowanego w system emulatora andorid",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: fontGrey,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              ),
                             ),
-                          )
+                            Expanded(
+                              flex: 2,
+                              child: Switch(
+                                  value: isSwitched,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isSwitched = value;
+                                      print(isSwitched);
+                                      if (isSwitched) SERVER_IP = emulatorIp!;
+                                    });
+                                  }),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          "Adres serwera",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, color: secondColor),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        if (!isSwitched) ...[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                ("Podaj adres serwera"),
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                ("Wpisz adres serwera docelowego"),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: fontGrey,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Form(
+                            key: formServerKey,
+                            child: TextFormField(
+                                onSaved: (value) {
+                                  server_ip = value;
+                                },
+                                cursorColor: Colors.black,
+                                style: const TextStyle(color: Colors.black),
+                                decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(15),
+                                    hintText: "Adres serwera",
+                                    fillColor: bg35Grey,
+                                    filled: true,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                      borderSide: BorderSide.none,
+                                    )),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'To pole nie może być puste!';
+                                  }
+                                  return null;
+                                }),
+                          ),
+                        ] else ...[
+                          TextFormField(
+                            initialValue: emulatorIp,
+                            onSaved: (value) {
+                              server_ip = value;
+                            },
+                            readOnly: true,
+                            cursorColor: Colors.black,
+                            style: const TextStyle(color: Colors.black),
+                            decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(15),
+                                hintText: "Adres serwera",
+                                fillColor: bg35Grey,
+                                filled: true,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                  borderSide: BorderSide.none,
+                                )),
+                          ),
+                        ],
                       ]))),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: deleteBtn,
+                          foregroundColor: bgSmokedWhite,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                        ),
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Anuluj")),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: mainColor,
+                          foregroundColor: bgSmokedWhite,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                        ),
+                        onPressed: () {
+                          print("saved");
+                          print(SERVER_IP);
+                          if (!isSwitched &&
+                              formServerKey.currentState!.validate()) {
+                            formServerKey.currentState!.save();
+                            SERVER_IP = server_ip!;
+                          }
+                          print("saved");
+                          print("serverIP: $SERVER_IP");
+                        },
+                        child: Text("Zapisz zmiany")),
+                  ],
+                ),
+              ],
             );
           });
         });
@@ -125,8 +280,9 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                   Align(
                     alignment: Alignment.topRight,
                     child: IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         print("settings");
+                        showAppSettings();
                       },
                       icon: const Icon(
                         Icons.settings,

@@ -19,7 +19,7 @@ class HomeModel {
   String? rokWprowadzenia;
   String? powierzchniaDomu;
   String? powierzchniaDzialki;
-  int? liczbaPokoi;
+  String? liczbaPokoi;
   int? idTypDomu;
 
   Map<String, dynamic> toJson() => {

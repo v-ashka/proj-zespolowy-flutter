@@ -9,6 +9,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:projzespoloey/components/add_attachment_button.dart';
+import 'package:projzespoloey/components/add_photo_button.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/home_model.dart';
@@ -649,123 +650,125 @@ class _HomeFormState extends State<HomeForm> {
                               ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 25),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (!widget.isEditing) ...[
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                      child: Text("Zdjęcie domu"),
-                                    ),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: secondaryColor,
-                                        padding: image != null
-                                            ? const EdgeInsets.all(0)
-                                            : const EdgeInsets.all(35),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25)),
-                                      ),
-                                      onPressed: () async {
-                                        image = await pickImage();
-                                        setState(() {
-                                          image;
-                                        });
-                                      },
-                                      child: image != null
-                                          ? Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                color: secondaryColor,
-                                                image: DecorationImage(
-                                                  image: FileImage(image!),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                              width: 100,
-                                              height: 100,
-                                            )
-                                          : const Icon(
-                                              Icons.add_a_photo_outlined,
-                                              size: 25,
-                                              color: Colors.black),
-                                    ),
-                                  ] else ...[
-                                    const SizedBox(height: 25),
-                                    if (image == null) ...[
-                                      ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: secondColor,
-                                            foregroundColor: bgSmokedWhite,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25)),
-                                          ),
-                                          onPressed: () async {
-                                            image = await pickImage();
-                                            setState(() {
-                                              image;
-                                            });
-                                          },
-                                          child: Row(
-                                            children: const [
-                                              Icon(Icons.image_outlined),
-                                              SizedBox(width: 2),
-                                              Text("Zmień zdjęcie domu",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600))
-                                            ],
-                                          ))
-                                    ] else ...[
-                                      ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: secondaryColor,
-                                            padding: image != null
-                                                ? const EdgeInsets.all(0)
-                                                : const EdgeInsets.all(35),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25)),
-                                          ),
-                                          onPressed: () async {
-                                            image = await pickImage();
-                                            setState(() {
-                                              image;
-                                            });
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                              color: secondaryColor,
-                                              image: DecorationImage(
-                                                image: FileImage(image!),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            width: 100,
-                                            height: 100,
-                                          )),
-                                    ]
-                                  ]
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                        AddPhotoButton(onChanged: (imageChanged) {
+                  image = imageChanged;
+                  }),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   crossAxisAlignment: CrossAxisAlignment.end,
+                        //   children: [
+                        //     Padding(
+                        //       padding: const EdgeInsets.only(bottom: 25),
+                        //       child: Column(
+                        //         crossAxisAlignment: CrossAxisAlignment.start,
+                        //         children: [
+                        //           if (!widget.isEditing) ...[
+                        //             const Padding(
+                        //               padding:
+                        //                   EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        //               child: Text("Zdjęcie domu"),
+                        //             ),
+                        //             ElevatedButton(
+                        //               style: ElevatedButton.styleFrom(
+                        //                 backgroundColor: secondaryColor,
+                        //                 padding: image != null
+                        //                     ? const EdgeInsets.all(0)
+                        //                     : const EdgeInsets.all(35),
+                        //                 shape: RoundedRectangleBorder(
+                        //                     borderRadius:
+                        //                         BorderRadius.circular(25)),
+                        //               ),
+                        //               onPressed: () async {
+                        //                 image = await pickImage();
+                        //                 setState(() {
+                        //                   image;
+                        //                 });
+                        //               },
+                        //               child: image != null
+                        //                   ? Container(
+                        //                       decoration: BoxDecoration(
+                        //                         borderRadius:
+                        //                             BorderRadius.circular(25),
+                        //                         color: secondaryColor,
+                        //                         image: DecorationImage(
+                        //                           image: FileImage(image!),
+                        //                           fit: BoxFit.cover,
+                        //                         ),
+                        //                       ),
+                        //                       width: 100,
+                        //                       height: 100,
+                        //                     )
+                        //                   : const Icon(
+                        //                       Icons.add_a_photo_outlined,
+                        //                       size: 25,
+                        //                       color: Colors.black),
+                        //             ),
+                        //           ] else ...[
+                        //             const SizedBox(height: 25),
+                        //             if (image == null) ...[
+                        //               ElevatedButton(
+                        //                   style: ElevatedButton.styleFrom(
+                        //                     backgroundColor: secondColor,
+                        //                     foregroundColor: bgSmokedWhite,
+                        //                     shape: RoundedRectangleBorder(
+                        //                         borderRadius:
+                        //                             BorderRadius.circular(25)),
+                        //                   ),
+                        //                   onPressed: () async {
+                        //                     image = await pickImage();
+                        //                     setState(() {
+                        //                       image;
+                        //                     });
+                        //                   },
+                        //                   child: Row(
+                        //                     children: const [
+                        //                       Icon(Icons.image_outlined),
+                        //                       SizedBox(width: 2),
+                        //                       Text("Zmień zdjęcie domu",
+                        //                           style: TextStyle(
+                        //                               fontWeight:
+                        //                                   FontWeight.w600))
+                        //                     ],
+                        //                   ))
+                        //             ] else ...[
+                        //               ElevatedButton(
+                        //                   style: ElevatedButton.styleFrom(
+                        //                     backgroundColor: secondaryColor,
+                        //                     padding: image != null
+                        //                         ? const EdgeInsets.all(0)
+                        //                         : const EdgeInsets.all(35),
+                        //                     shape: RoundedRectangleBorder(
+                        //                         borderRadius:
+                        //                             BorderRadius.circular(25)),
+                        //                   ),
+                        //                   onPressed: () async {
+                        //                     image = await pickImage();
+                        //                     setState(() {
+                        //                       image;
+                        //                     });
+                        //                   },
+                        //                   child: Container(
+                        //                     decoration: BoxDecoration(
+                        //                       borderRadius:
+                        //                           BorderRadius.circular(25),
+                        //                       color: secondaryColor,
+                        //                       image: DecorationImage(
+                        //                         image: FileImage(image!),
+                        //                         fit: BoxFit.cover,
+                        //                       ),
+                        //                     ),
+                        //                     width: 100,
+                        //                     height: 100,
+                        //                   )),
+                        //             ]
+                        //           ]
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         if (!widget.isEditing!) ...[
                           AddAttachmentButton(
-                              //files: files,
                               formType: FormType.home,
                               onChanged: (filesList) {
                                 files = filesList;
@@ -795,10 +798,10 @@ class _HomeFormState extends State<HomeForm> {
               if (files.isNotEmpty && response?.statusCode == 200 ||
                   response?.statusCode == 202) {
                 await FilesService().uploadFiles(token, files, response?.data);
-                if (image != null) {
-                  await FilesService().uploadFile(
-                      token, image!.path.toString(), response?.data);
-                }
+              }
+              if (image != null) {
+                await FilesService().uploadFile(
+                    token, image!.path.toString(), response?.data);
               }
             } else {
               await HomeService()

@@ -30,7 +30,11 @@ enum HeaderTitleType {
   homeList,
   formAddHome,
   formEditHome,
-  notification
+  notification,
+  home,
+  rooms,
+  formAddRoom,
+  formEditRoom
 }
 
 extension HeaderTitleExtension on HeaderTitleType {
@@ -90,6 +94,14 @@ extension HeaderTitleExtension on HeaderTitleType {
         return 'Dodaj dom';
       case HeaderTitleType.notification:
         return 'Powiadomienia';
+      case HeaderTitleType.home:
+        return 'Dom';
+      case HeaderTitleType.rooms:
+        return 'Pomieszczenia';
+      case HeaderTitleType.formAddRoom:
+        return 'Dodaj nowe pomieszczenie';
+      case HeaderTitleType.formEditRoom:
+        return 'Edytuj pomieszczenie';
     }
   }
 }

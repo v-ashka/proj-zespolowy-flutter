@@ -97,15 +97,6 @@ class _CarItemState extends State<CarItem> {
                             borderRadius: BorderRadius.circular(25),
                           )),
                       onPressed: () {
-                        // print("ubezpieczenie");
-                        // Navigator.pushNamed(context, "/carInsurance",
-                        //     arguments: {
-                        //       "car": carModel,
-                        //       "data": insuranceData.idUbezpieczenia != null
-                        //           ? (insuranceData)
-                        //           : (null)
-                        //     });
-
                         Navigator.push(
                             context,
                             MaterialPageRoute(

@@ -124,7 +124,7 @@ class MyApp extends StatelessWidget {
         '/documentForm': (context) => DocumentForm(),
         // Home Routes
         '/homeList': (context) => HomeList(),
-        '/homeItem': (context) => HomeItem(),
+        '/homeItem': (context) => HomeItem(homeId: objectId),
         // Receipts Routes
         '/receiptForm': (context) => ReceiptForm(),
         '/receiptList': (context) => ReceiptList(),

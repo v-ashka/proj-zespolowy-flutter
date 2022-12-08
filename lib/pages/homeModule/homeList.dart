@@ -6,10 +6,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import "package:projzespoloey/components/module_list.dart";
+import 'package:projzespoloey/pages/homeModule/home_form.dart';
 import 'package:projzespoloey/services/home/home_service.dart';
+import 'package:projzespoloey/services/home_service.dart';
 
 import '../../constants.dart';
-import '../../models/home/home_model.dart';
+import '../../models/home_model.dart';
 import '../../utils/http_delete.dart';
 import 'homeItem.dart';
 
@@ -32,7 +34,7 @@ class _HomeListState extends State<HomeList> {
 
   void getData() async {
     token = await storage.read(key: "token");
-    homeList = (await HomeApiService().getHomeList(token));
+    homeList = await HomeService().getHomeList(token);
     setState(() {});
   }
 
@@ -93,12 +95,12 @@ class _HomeListState extends State<HomeList> {
                           } else {
                             return GestureDetector(
                               onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //       builder: (context) =>
-                                //           homeItem(carId: homeItem.idSamochodu),
-                                //     ));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          HomeItem(homeId: homeItem.idDomu),
+                                    ));
                               },
                               onLongPress: () {
                                 SystemSound.play(SystemSoundType.alert);
@@ -241,7 +243,7 @@ class _HomeListState extends State<HomeList> {
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 10, 10, 0, 0),
-                                            child: Text("DOM SZTYWNY",
+                                            child: Text("${homeItem.typDomu}",
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                 ),
@@ -299,7 +301,7 @@ class _HomeListState extends State<HomeList> {
                                                                 const EdgeInsets
                                                                         .symmetric(
                                                                     horizontal:
-                                                                        15),
+                                                                        5),
                                                             child: Text(
                                                               "${homeItem.ulicaNrDomu}",
                                                               style: const TextStyle(
@@ -344,7 +346,7 @@ class _HomeListState extends State<HomeList> {
                                                                 const EdgeInsets
                                                                         .symmetric(
                                                                     horizontal:
-                                                                        15),
+                                                                        5),
                                                             child: Text(
                                                               "${homeItem.miejscowosc}",
                                                               style: const TextStyle(
@@ -456,10 +458,10 @@ class _HomeListState extends State<HomeList> {
                     ))),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(
-            context,
-            "/homeItem",
-          ).then((value) {});
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const HomeForm()));
         },
         backgroundColor: mainColor,
         label: const Text('Dodaj nowy'),

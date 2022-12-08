@@ -6,15 +6,18 @@ import 'package:projzespoloey/utils/photo_picker.dart';
 
 
 
-class AddCarPhotoButton extends StatefulWidget {
-  File? image;
-  AddCarPhotoButton({Key? key, required this.image}) : super(key: key);
+class AddPhotoButton extends StatefulWidget {
+  final ValueChanged<File?> onChanged;
+  const AddPhotoButton({Key? key, required this.onChanged}) : super(key: key);
 
   @override
-  State<AddCarPhotoButton> createState() => _AddCarPhotoButtonState();
+  State<AddPhotoButton> createState() => _AddPhotoButtonState();
 }
 
-class _AddCarPhotoButtonState extends State<AddCarPhotoButton> {
+
+
+class _AddPhotoButtonState extends State<AddPhotoButton> {
+  File? image;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -28,31 +31,31 @@ class _AddCarPhotoButtonState extends State<AddCarPhotoButton> {
             children: [
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Text("Zdjęcie pojazdu"),
+                child: Text("Dodaj zdjęcie"),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: secondaryColor,
-                  padding: widget.image != null
+                  padding: image != null
                       ? const EdgeInsets.all(0)
                       : const EdgeInsets.all(35),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25)),
                 ),
                 onPressed: () async{
-                  widget.image = await pickImage();
+                  image = await pickImage();
                   setState(() {
-                  widget.image;
+                  widget.onChanged(image);
                   });
-                  
+
                 },
-                child: widget.image != null
+                child: image != null
                     ? Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
                           color: secondaryColor,
                           image: DecorationImage(
-                            image: FileImage(widget.image!),
+                            image: FileImage(image!),
                             fit: BoxFit.cover,
                           ),
                         ),

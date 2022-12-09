@@ -1,18 +1,10 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:projzespoloey/components/appbar.dart';
-import "package:projzespoloey/components/module_list.dart";
 import 'package:projzespoloey/pages/homeModule/home_form.dart';
-import 'package:projzespoloey/services/home/home_service.dart';
 import 'package:projzespoloey/services/home_service.dart';
-
 import '../../constants.dart';
 import '../../models/home_model.dart';
-import '../../utils/http_delete.dart';
 import 'homeItem.dart';
 
 class HomeList extends StatefulWidget {
@@ -64,6 +56,7 @@ class _HomeListState extends State<HomeList> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -172,8 +165,8 @@ class _HomeListState extends State<HomeList> {
                                             ),
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                  primary: deleteBtn,
-                                                  onPrimary: deleteBtn,
+                                                  foregroundColor: deleteBtn,
+                                                  backgroundColor: deleteBtn,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -288,7 +281,8 @@ class _HomeListState extends State<HomeList> {
                                                       ),
                                                       Container(
                                                         padding:
-                                                            EdgeInsets.all(2),
+                                                            const EdgeInsets
+                                                                .all(2),
                                                         decoration: BoxDecoration(
                                                             borderRadius:
                                                                 BorderRadius
@@ -333,7 +327,7 @@ class _HomeListState extends State<HomeList> {
                                                       ),
                                                       Container(
                                                         padding:
-                                                            EdgeInsets.all(2),
+                                                            const EdgeInsets.all(2),
                                                         decoration: BoxDecoration(
                                                             borderRadius:
                                                                 BorderRadius
@@ -458,10 +452,8 @@ class _HomeListState extends State<HomeList> {
                     ))),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const HomeForm()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const HomeForm()));
         },
         backgroundColor: mainColor,
         label: const Text('Dodaj nowy'),

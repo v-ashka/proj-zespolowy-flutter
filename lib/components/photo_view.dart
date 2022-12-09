@@ -37,58 +37,36 @@ class _ViewPhotosState extends State<ViewPhotos> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: Text(
-          "${currentIndex + 1} out of ${widget.imageList.length}",
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.clear,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-        centerTitle: true,
-        leading: Container(),
-        backgroundColor: Colors.black,
-      ),
-      body: Container(
-          child: Stack(
+      body: Stack(
         children: [
-          PhotoViewGallery.builder(
-            scrollPhysics: const BouncingScrollPhysics(),
-            pageController: pageController,
-            builder: (BuildContext context, int index) {
-              return PhotoViewGalleryPageOptions(
-                imageProvider: NetworkImage(widget.imageList[index]),
-                heroAttributes:
-                    PhotoViewHeroAttributes(tag: "photo${widget.imageIndex}"),
-              );
-            },
-            onPageChanged: onPageChanged,
-            itemCount: widget.imageList.length,
-            loadingBuilder: (context, progress) => Center(
-              child: Container(
-                width: 60.0,
-                height: 60.0,
-                child: (progress == null ||
-                        progress.cumulativeBytesLoaded == null ||
-                        progress.expectedTotalBytes == null)
-                    ? CircularProgressIndicator()
-                    : CircularProgressIndicator(
-                        value: progress.cumulativeBytesLoaded /
-                            progress.expectedTotalBytes!.toDouble(),
-                      ),
-              ),
-            ),
+      PhotoViewGallery.builder(
+        scrollPhysics: const BouncingScrollPhysics(),
+        pageController: pageController,
+        builder: (BuildContext context, int index) {
+          return PhotoViewGalleryPageOptions(
+            imageProvider: NetworkImage(widget.imageList[index]),
+            heroAttributes:
+                PhotoViewHeroAttributes(tag: "photo${widget.imageIndex}"),
+          );
+        },
+        onPageChanged: onPageChanged,
+        itemCount: widget.imageList.length,
+        loadingBuilder: (context, progress) => Center(
+          child: SizedBox(
+            width: 60.0,
+            height: 60.0,
+            child: (progress == null ||
+                    progress.expectedTotalBytes == null)
+                ? const CircularProgressIndicator()
+                : CircularProgressIndicator(
+                    value: progress.cumulativeBytesLoaded /
+                        progress.expectedTotalBytes!.toDouble(),
+                  ),
           ),
+        ),
+      ),
         ],
-      )),
+      ),
     );
   }
 }

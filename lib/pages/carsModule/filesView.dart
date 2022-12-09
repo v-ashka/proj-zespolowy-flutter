@@ -173,7 +173,6 @@ class FilesViewState extends State<FilesView> {
                                               BorderRadius.circular(25),
                                         )),
                                     onPressed: () {
-                                      print("no");
                                       Navigator.of(context).pop();
                                     },
                                     child: Text(

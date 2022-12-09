@@ -34,7 +34,8 @@ enum HeaderTitleType {
   home,
   rooms,
   formAddRoom,
-  formEditRoom
+  formEditRoom,
+  photo
 }
 
 extension HeaderTitleExtension on HeaderTitleType {
@@ -102,6 +103,8 @@ extension HeaderTitleExtension on HeaderTitleType {
         return 'Dodaj nowe pomieszczenie';
       case HeaderTitleType.formEditRoom:
         return 'Edytuj pomieszczenie';
+      case HeaderTitleType.photo:
+        return 'Galeria zdjęć';
     }
   }
 }

@@ -9,3 +9,17 @@ Future <File?> pickImage() async {
   }
   return null; 
 }
+
+Future <List<PlatformFile>> pickImages(List<PlatformFile> fileList) async {
+  FilePickerResult? result =
+  await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.image);
+  if (result != null) {
+    if (fileList.isNotEmpty) {
+      fileList.clear();
+    }
+    return fileList = result.files;
+  } else {
+    return fileList = [];
+  }
+}
+

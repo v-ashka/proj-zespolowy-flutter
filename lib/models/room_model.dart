@@ -4,10 +4,12 @@ class RoomModel {
   RoomModel(
       {this.idPokoju,
         this.nazwaPokoju,
+        this.liczbaDodanychZdjec
       });
 
   String? idPokoju;
   String? nazwaPokoju;
+  int? liczbaDodanychZdjec;
 
   Map<String, dynamic> toJson() => {
     "idPokoju": idPokoju,
@@ -18,6 +20,7 @@ class RoomModel {
       RoomModel(
           idPokoju: json["idPokoju"],
           nazwaPokoju: json["nazwaPokoju"],
+          liczbaDodanychZdjec: json["liczbaDodanychZdjec"]
       );
 }
 

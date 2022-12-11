@@ -230,7 +230,12 @@ class RoomListState extends State<RoomList> {
                       SizedBox(height: 5),
                       Text("${room?.nazwaPokoju}",
                           style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w600))
+                              fontSize: 13, fontWeight: FontWeight.w600)),
+                      Text("${room?.liczbaDodanychZdjec}",
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black54))
                     ],
                   );
                 })),

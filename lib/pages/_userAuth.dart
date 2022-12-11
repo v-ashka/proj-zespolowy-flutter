@@ -175,6 +175,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                           Form(
                             key: formServerKey,
                             child: TextFormField(
+                                initialValue: SERVER_IP,
                                 onSaved: (value) {
                                   server_ip = value;
                                 },
@@ -249,6 +250,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                           }
                           print("saved");
                           print("serverIP: $SERVER_IP");
+                          Navigator.of(context).pop();
                         },
                         child: Text("Zapisz zmiany")),
                   ],

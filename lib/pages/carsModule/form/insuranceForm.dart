@@ -398,7 +398,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
                         if (!widget.isEditing!)
                           AddAttachmentButton(
                             //files: files,
-                              formType: FormType.carRepair,
+                              formType: FormType.insurance,
                               onChanged: (filesList) {
                                 files = filesList;
                               })

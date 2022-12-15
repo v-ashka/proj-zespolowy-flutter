@@ -1,15 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/models/file_model.dart';
 import 'package:projzespoloey/models/home_model.dart';
-import 'package:projzespoloey/models/insurace_model.dart';
+import 'package:projzespoloey/models/home_repair_model.dart';
 
 class HomeService {
   final _dio = Dio();
@@ -53,9 +49,8 @@ class HomeService {
     Response response;
     try {
       var url = "$SERVER_IP/api/home/AddHome";
-      response = await _dio.post(
-        url,
-        data: jsonEncode(data),
+      response = await _dio.post(url,
+          data: jsonEncode(data),
           options: Options(
             headers: {
               'Authorization': "Bearer $token",
@@ -71,8 +66,7 @@ class HomeService {
     Response response;
     try {
       var url = "$SERVER_IP/api/home/AddHome";
-      response = await _dio.post(
-          url,
+      response = await _dio.post(url,
           data: jsonEncode(data),
           options: Options(
             headers: {
@@ -89,8 +83,7 @@ class HomeService {
     Response response;
     try {
       var url = "$SERVER_IP/api/home/UpdateHome/$id";
-      response = await _dio.put(
-          url,
+      response = await _dio.put(url,
           data: jsonEncode(data),
           options: Options(
             headers: {
@@ -112,6 +105,44 @@ class HomeService {
       });
       if (response.statusCode == 200) {
         List<HomeListView> list = homeListViewFromJson(response.body);
+        return list;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return [];
+  }
+
+  Future<Response?> addHomeRepair(
+      String homeId, HomeRepairModel data, String? token) async {
+    Response response;
+    try {
+      var url = "$SERVER_IP/api/home/AddHomeRepair/$homeId";
+      response = await _dio.post(url,
+          data: jsonEncode(data),
+          options: Options(
+            headers: {
+              'Authorization': "Bearer $token",
+            },
+          ));
+      return response;
+    } on DioError catch (e) {
+      return e.response;
+    }
+  }
+
+  Future<List<HomeRepairModel>?> getHomeRepairList(
+      String homeId, String? token) async {
+    try {
+      var url = Uri.parse("$SERVER_IP/api/home/GetRepairsList/$homeId");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer $token",
+      });
+      if (response.statusCode == 200) {
+        List<HomeRepairModel> list = homeRepairListFromJson(response.body);
         return list;
       } else {
         return [];

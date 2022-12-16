@@ -39,6 +39,7 @@ enum HeaderTitleType {
   homeRepairList,
   formAddHomeRepair,
   formEditHomeRepair,
+  createAccount
 }
 
 extension HeaderTitleExtension on HeaderTitleType {
@@ -114,6 +115,8 @@ extension HeaderTitleExtension on HeaderTitleType {
         return 'Dodaj naprawę';
       case HeaderTitleType.formEditHomeRepair:
         return 'Edytuj naprawę';
+      case HeaderTitleType.createAccount:
+        return 'Załóż konto';
     }
   }
 }

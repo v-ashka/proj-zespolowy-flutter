@@ -505,7 +505,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                     fontWeight: FontWeight.bold,
                                   )),
                               onPressed: () {
-                                Navigator.pushReplacementNamed(
+                                Navigator.pushNamed(
                                   context,
                                   '/registerUser',
                                 );

@@ -6,11 +6,15 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 import 'package:projzespoloey/services/UserModel/UserModel.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+
+import '../components/password_requirement.dart';
 
 class UserAuthenticationRegister extends StatefulWidget {
   const UserAuthenticationRegister({Key? key}) : super(key: key);
@@ -24,21 +28,22 @@ class UserAuthenticationRegister extends StatefulWidget {
 
 class _UserAuthenticationRegisterState
     extends State<UserAuthenticationRegister> {
-  // Local flutter storage token
-  final storage = new FlutterSecureStorage();
-
-  // Form variables
   final formKey = GlobalKey<FormState>();
   bool isValid = false;
+  bool isObscure = true;
+  bool isSecondObscure = true;
   bool isLoading = false;
   bool _passValid = false;
 
   String? nameInput = "";
   String? emailInput = "";
-  String? passInput = "";
+  String passInput = "";
   String? secondPassInput = "";
   var testPass1 = TextEditingController();
   var testPass2 = TextEditingController();
+  final TextEditingController controller = TextEditingController();
+  String initialCountry = 'PL';
+  PhoneNumber number = PhoneNumber(isoCode: 'PL');
 
   // Error feedback
   String errorFeedback = "";
@@ -64,6 +69,18 @@ class _UserAuthenticationRegisterState
         }));
   }
 
+  String? validation(String? value) {
+    bool validation =
+        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$')
+            .hasMatch(value!);
+    if (value.isEmpty) {
+      return "Proszę podać hasło!";
+    } else if (!validation) {
+      return "Nie spełniono wymagań dotyczących hasła!";
+    }
+    return null;
+  }
+
   // temp data for testing purposes
   Map _userData = {};
   Future<void> readJson() async {
@@ -79,6 +96,7 @@ class _UserAuthenticationRegisterState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffF8F8F8),
+      appBar: myAppBar(context, HeaderTitleType.createAccount),
       body: SafeArea(
         child: Container(
           height: double.infinity,
@@ -98,45 +116,8 @@ class _UserAuthenticationRegisterState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Center(
-                      child: Image(
-                        width: 200,
-                        height: 200,
-                        image: AssetImage("assets/logo.png"),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
-                      child: Text(
-                        "Zarejestruj się",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: fontBlack,
-                          fontSize: 25,
-                        ),
-                      ),
-                    ),
                     Form(
                         key: formKey,
-                        onChanged: () {
-                          final formValidation =
-                              formKey.currentState!.validate();
-                          if (isValid != formValidation) {
-                            setState(() {
-                              isValid = formValidation;
-                            });
-                          }
-                          setState(() {
-                            if (testPass1.text != testPass2.text) {
-                              passFeedback = "Hasła się nie zgadzają";
-                            } else {
-                              passFeedback = "";
-                            }
-                          });
-                        },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -144,7 +125,7 @@ class _UserAuthenticationRegisterState
                             TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Proszę podać imię";
+                                  return "Proszę podać imię!";
                                 }
                                 return null;
                               },
@@ -162,7 +143,7 @@ class _UserAuthenticationRegisterState
                                       color: Colors.black,
                                     ),
                                   ),
-                                  hintText: "Podaj swoje imię...",
+                                  hintText: "Imię",
                                   fillColor: bgSmokedWhite,
                                   filled: true,
                                   border: OutlineInputBorder(
@@ -176,7 +157,7 @@ class _UserAuthenticationRegisterState
                             TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Proszę podać adres email";
+                                  return "Proszę podać adres e-mail!";
                                 }
                                 return null;
                               },
@@ -194,7 +175,7 @@ class _UserAuthenticationRegisterState
                                       color: Colors.black,
                                     ),
                                   ),
-                                  hintText: "Podaj adres email...",
+                                  hintText: "Adres e-mail",
                                   fillColor: bgSmokedWhite,
                                   filled: true,
                                   border: OutlineInputBorder(
@@ -206,24 +187,68 @@ class _UserAuthenticationRegisterState
                               height: 10,
                             ),
                             TextFormField(
-                              obscureText: true,
-                              controller: testPass1,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Proszę podać hasło";
+                                  return "Proszę podać numer telefonu!";
                                 }
                                 return null;
                               },
-                              onChanged: (String? value) {
-                                passInput = value;
-                              },
                               onSaved: (String? value) {
-                                passInput = value;
+                                //emailInput = value;
+                              },
+                              cursorColor: Colors.black,
+                              style: TextStyle(color: Colors.black),
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(9),
+                              ],
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(20),
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.only(top: 1),
+                                    child: Icon(
+                                      Icons.call_outlined,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  hintText: "Numer telefonu",
+                                  fillColor: bgSmokedWhite,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    borderSide: BorderSide.none,
+                                  )),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              obscureText: isObscure,
+                              controller: testPass1,
+                              validator: validation,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  passInput = value!;
+                                });
                               },
                               cursorColor: Colors.black,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
+                                  suffixIcon: IconButton(
+                                      onPressed: () => setState(() {
+                                        isObscure = !isObscure;
+                                      }),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 1, 15, 0),
+                                      icon: Icon(
+                                        isObscure
+                                            ? Icons.visibility_outlined
+                                            : Icons.visibility_off_outlined,
+                                        color: Colors.black,
+                                      ),
+                                    ),
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.only(top: 1),
                                     child: Icon(
@@ -231,7 +256,7 @@ class _UserAuthenticationRegisterState
                                       color: Colors.black,
                                     ),
                                   ),
-                                  hintText: "Wprowadź hasło...",
+                                  hintText: "Hasło",
                                   fillColor: bgSmokedWhite,
                                   filled: true,
                                   border: OutlineInputBorder(
@@ -242,25 +267,69 @@ class _UserAuthenticationRegisterState
                             SizedBox(
                               height: 10,
                             ),
+                            PasswordRequirement(
+                                regExToCheck: passInput.length >= 8,
+                                requirementText: "Co najmniej",
+                                requirementTextBold: ' 8 znaków'),
+                            PasswordRequirement(
+                              regExToCheck:
+                                  passInput.contains(RegExp(r'[A-Z]')),
+                              requirementText: "Minimum",
+                              requirementTextBold: ' 1 duża litera (A-Z)',
+                            ),
+                            PasswordRequirement(
+                              regExToCheck:
+                                  passInput.contains(RegExp(r'[a-z]')),
+                              requirementText: "Minimum",
+                              requirementTextBold: ' 1 mała litera (a-z)',
+                            ),
+                            PasswordRequirement(
+                              regExToCheck:
+                                  passInput.contains(RegExp(r'[0-9]')),
+                              requirementText: "Minimum",
+                              requirementTextBold: ' 1 cyfra (0-9)',
+                            ),
+                            PasswordRequirement(
+                              regExToCheck: passInput
+                                  .contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')),
+                              requirementText: "Minimum",
+                              requirementTextBold: ' 1 znak specjalny (&-@/.)',
+                            ),
+                            SizedBox(height: 10),
                             TextFormField(
-                              obscureText: true,
+                              obscureText: isSecondObscure,
                               controller: testPass2,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Proszę podać ponownie hasło";
+                                  return "Proszę potwierdzić hasło!";
+                                }
+                                if (passInput != secondPassInput) {
+                                  return "Podane hasła nie są identyczne!";
                                 }
                                 return null;
                               },
-                              onChanged: (String? value) {
-                                secondPassInput = value;
-                              },
-                              onSaved: (String? value) {
-                                secondPassInput = value;
+                              onChanged: (value) {
+                                setState(() {
+                                  secondPassInput = value;
+                                });
                               },
                               cursorColor: Colors.black,
                               style: TextStyle(color: Colors.black),
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(20),
+                                  suffixIcon: IconButton(
+                                      onPressed: () => setState(() {
+                                        isSecondObscure = !isSecondObscure;
+                                      }),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 1, 15, 0),
+                                      icon: Icon(
+                                        isSecondObscure
+                                            ? Icons.visibility_outlined
+                                            : Icons.visibility_off_outlined,
+                                        color: Colors.black,
+                                      ),
+                                    ),
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.only(top: 1),
                                     child: Icon(
@@ -268,7 +337,7 @@ class _UserAuthenticationRegisterState
                                       color: Colors.black,
                                     ),
                                   ),
-                                  hintText: "Wprowadź ponownie hasło...",
+                                  hintText: "Powtórz hasło",
                                   fillColor: bgSmokedWhite,
                                   filled: true,
                                   border: OutlineInputBorder(
@@ -290,7 +359,7 @@ class _UserAuthenticationRegisterState
                               ),
                             ],
                             SizedBox(
-                              height: 10,
+                              height: 60,
                             ),
                             if (!errorFeedback.isEmpty) ...[
                               Text(

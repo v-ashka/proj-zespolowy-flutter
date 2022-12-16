@@ -35,7 +35,10 @@ enum HeaderTitleType {
   rooms,
   formAddRoom,
   formEditRoom,
-  photo
+  photo,
+  homeRepairList,
+  formAddHomeRepair,
+  formEditHomeRepair,
 }
 
 extension HeaderTitleExtension on HeaderTitleType {
@@ -105,6 +108,12 @@ extension HeaderTitleExtension on HeaderTitleType {
         return 'Edytuj pomieszczenie';
       case HeaderTitleType.photo:
         return 'Galeria zdjęć';
+      case HeaderTitleType.homeRepairList:
+        return 'Dziennik napraw';
+      case HeaderTitleType.formAddHomeRepair:
+        return 'Dodaj naprawę';
+      case HeaderTitleType.formEditHomeRepair:
+        return 'Edytuj naprawę';
     }
   }
 }

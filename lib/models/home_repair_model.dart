@@ -2,13 +2,14 @@ import 'dart:convert';
 
 class HomeRepairModel {
   HomeRepairModel(
-      {
+      {this.idNaprawy,
       this.nazwaNaprawy,
       this.wykonawcaNaprawy,
       this.kosztNaprawy,
       this.dataNaprawy,
       this.opis});
 
+  String? idNaprawy;
   String? nazwaNaprawy;
   String? wykonawcaNaprawy;
   String? kosztNaprawy;
@@ -26,6 +27,7 @@ class HomeRepairModel {
 
   factory HomeRepairModel.fromJson(Map<String, dynamic> json) =>
       HomeRepairModel(
+        idNaprawy: json["idNaprawy"],
         nazwaNaprawy: json["nazwaNaprawy"],
         wykonawcaNaprawy: json["wykonawcaNaprawy"],
         kosztNaprawy: json["kosztNaprawy"],

@@ -14,6 +14,7 @@ enum Endpoints {
   receiptDefault,
   document,
   home,
+  homeRepair
 }
 
 extension EndpointsExtension on Endpoints {
@@ -35,6 +36,8 @@ extension EndpointsExtension on Endpoints {
         return '$SERVER_IP/api/document/DeleteDocument';
       case Endpoints.home:
         return "$SERVER_IP/api/home/DeleteHome";
+      case Endpoints.homeRepair:
+        return "$SERVER_IP/api/home/DeleteHomeRepair";
     }
   }
 }
@@ -46,15 +49,9 @@ Future deleteRecord(Endpoints endpoint, token, id) async {
       'Content-Type': 'application/json',
       'Authorization': "Bearer $token",
     });
-    print(id);
-    print(url);
-    print(response.statusCode);
-    print(response.reasonPhrase);
     if (response.statusCode == 200 || response.statusCode == 202) {
-      print("passed");
       return true;
     }
-    ;
     return false;
   } catch (e) {
     log(e.toString());

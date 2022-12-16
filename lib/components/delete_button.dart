@@ -6,7 +6,7 @@ enum AlertDialogType {
   carDefault,
   carInsurance,
   carInspection,
-  carRepair,
+  repair,
   car,
   document
 }
@@ -20,7 +20,7 @@ extension FormTypeExtension on AlertDialogType {
         return 'tą polisę';
       case AlertDialogType.carInspection:
         return 'ten przegląd';
-      case AlertDialogType.carRepair:
+      case AlertDialogType.repair:
         return 'tą naprawę';
       case AlertDialogType.car:
         return 'ten pojazd';

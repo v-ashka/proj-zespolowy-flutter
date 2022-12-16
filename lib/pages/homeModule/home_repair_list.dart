@@ -5,11 +5,14 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/delete_button.dart';
 import 'package:projzespoloey/components/detail_bar.dart';
+import 'package:projzespoloey/components/files_button.dart';
 import 'package:projzespoloey/components/search_bar.dart';
 import 'package:projzespoloey/models/document_model.dart';
+import 'package:projzespoloey/models/home_repair_model.dart';
 import 'package:projzespoloey/pages/homeModule/home_repair_form.dart';
 import 'package:projzespoloey/pages/loadingScreen.dart';
 import 'package:projzespoloey/services/document_service.dart';
+import 'package:projzespoloey/services/home_service.dart';
 import 'package:projzespoloey/utils/http_delete.dart';
 
 import '../../constants.dart';
@@ -31,37 +34,28 @@ class _HomeRepairListState extends State<HomeRepairList> {
   }
 
   String? token;
-  List<DocumentModel> documentList = [];
-  List<DocumentModel> filteredList = [];
-  List<DocumentModel> initialList = [];
-  DocumentModel document = DocumentModel();
+  List<HomeRepairModel> repairList = [];
+  List<HomeRepairModel> filteredList = [];
+  List<HomeRepairModel> initialList = [];
+  HomeRepairModel repair = HomeRepairModel();
   bool isGetDataFinished = false;
-  List documentCategories = [];
-  List<String> categoryList = [];
-  int currentCategory = 0;
   String query = "";
 
   void getData() async {
     token = await storage.read(key: "token");
-    documentList = await DocumentService().getDocumentList(token);
-    filteredList = documentList;
+    repairList = (await HomeService().getHomeRepairList(widget.homeId, token))!;
+    filteredList = repairList;
     initialList = filteredList;
-    documentCategories = (await DocumentService().getCategories(token));
-    categoryList =
-        documentCategories.map((e) => e["nazwa"].toString()).toList();
-    categoryList.insert(0, "Wszystkie");
-    String? categoryName =
-        documentCategories.firstWhere((element) => element["id"] == 1)["nazwa"];
     setState(() {
       isGetDataFinished = true;
     });
   }
 
   void searchRepair(String filter) {
-    final result = initialList.where((document) {
-      final documentName = document.nazwaDokumentu!.toLowerCase();
+    final result = initialList.where((repair) {
+      final repairName = repair.nazwaNaprawy!.toLowerCase();
       final input = filter.toLowerCase();
-      return documentName.contains(input);
+      return repairName.contains(input);
     }).toList();
     setState(() {
       query = filter;
@@ -90,10 +84,10 @@ class _HomeRepairListState extends State<HomeRepairList> {
                 Expanded(
                   child: ListView.separated(
                     // shrinkWrap: true,
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 85),
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 85),
                     itemCount: filteredList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      document = filteredList[index];
+                      repair = filteredList[index];
                       return Padding(
                         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: Container(
@@ -127,7 +121,7 @@ class _HomeRepairListState extends State<HomeRepairList> {
                                                   MainAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  "${document.nazwaDokumentu}",
+                                                  "${repair.nazwaNaprawy}",
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,
@@ -150,140 +144,21 @@ class _HomeRepairListState extends State<HomeRepairList> {
                                             ),
                                           ],
                                         ),
-                                        collapsed: Column(children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                color: bg35Grey),
-                                            width: 150,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      10, 0, 20, 0),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  const Icon(
-                                                      Icons.label_outline,
-                                                      color: icon70Black),
-                                                  Text(
-                                                    "${documentCategories.firstWhere((element) => element["id"] == document.kategoria)["nazwa"]}",
-                                                    style: const TextStyle(
-                                                        fontFamily: "Lato",
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                color: bg35Grey),
-                                            width: 150,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      10, 0, 20, 0),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  const Icon(
-                                                      Icons
-                                                          .calendar_month_outlined,
-                                                      color: icon70Black),
-                                                  Text(
-                                                    "${document.dataUtworzenia}",
-                                                    style: const TextStyle(
-                                                        fontFamily: "Lato",
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        ]),
+                                        collapsed: DetailBar(title: "Data naprawy", value: repair.dataNaprawy!),
                                         expanded: Column(children: [
                                           DetailBar(
-                                              title: "Kategoria dokumentu",
+                                              title: "Data naprawy",
                                               value:
-                                                  "${documentCategories.firstWhere((element) => element["id"] == document.kategoria)["nazwa"]}"),
-                                          //if (repair.warsztat != null &&
-                                          //repair.warsztat != "")
-                                          DetailBar(
-                                              title: "Data utworzenia",
-                                              value:
-                                                  "${document.dataUtworzenia}"),
-                                          //if (repair.kosztNaprawy != null)
-                                          if (document.ubezpieczyciel != null)
+                                                  "${repair.dataNaprawy}"),
+                                          if (repair.kosztNaprawy != null)
                                             DetailBar(
-                                                title: "Ubezpieczyciel",
+                                                title: "Koszt naprawy",
                                                 value:
-                                                    "${document.ubezpieczyciel}"),
-                                          if (document.sprzedawcaNaFakturze !=
-                                              null)
-                                            DetailBar(
-                                                title: "Sprzedawca",
-                                                value:
-                                                    "${document.sprzedawcaNaFakturze}"),
-                                          if (document.dataWystawienia != null)
-                                            DetailBar(
-                                                title: "Wystawiono dnia",
-                                                value:
-                                                    "${document.dataWystawienia}"),
-                                          if (document.wysokoscRachunku != null)
-                                            DetailBar(
-                                                title: "Wysokość rachunku",
-                                                value:
-                                                    "${document.wysokoscRachunku} zł"),
-                                          if (document.numerFaktury != null)
-                                            DetailBar(
-                                                title: "Numer faktury",
-                                                value:
-                                                    "${document.numerFaktury}"),
-
-                                          if (document.wartoscPolisy != null)
-                                            DetailBar(
-                                                title: "Koszt polisy",
-                                                value:
-                                                    "${document.wartoscPolisy} zł"),
-                                          if (document.wartoscFaktury != null)
-                                            DetailBar(
-                                                title: "Kwota na fakturze",
-                                                value:
-                                                    "${document.wartoscFaktury} zł"),
-                                          if (document.dataStartu != null &&
-                                              document.dataKonca != null)
-                                            DetailBar(
-                                                title: "Okres obowiązywania",
-                                                value:
-                                                    "${document.dataStartu} - ${document.dataKonca}"),
-                                          if (document.dataPrzypomnienia !=
-                                              null)
-                                            DetailBar(
-                                                title: "Data przypomnienia",
-                                                value:
-                                                    "${document.dataPrzypomnienia}"),
-                                          if (document.opis != null &&
-                                              document.opis != "")
+                                                    "${repair.kosztNaprawy} zł"),
+                                          if (repair.opis != null && repair.opis != "")
                                             DetailBar(
                                                 title: "Opis",
-                                                value: "${document.opis}"),
+                                                value: "${repair.opis}"),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 15, 15, 5, 0),
@@ -303,14 +178,14 @@ class _HomeRepairListState extends State<HomeRepairList> {
                                                   children: [
                                                     DeleteButton(
                                                         endpoint:
-                                                            Endpoints.document,
+                                                            Endpoints.homeRepair,
                                                         token: token,
-                                                        id: document
-                                                            .idDokumentu,
+                                                        id: repair
+                                                            .idNaprawy,
                                                         callback: getData,
                                                         dialogtype:
                                                             AlertDialogType
-                                                                .document),
+                                                                .repair),
                                                     ElevatedButton(
                                                       style: ElevatedButton
                                                           .styleFrom(
@@ -332,16 +207,16 @@ class _HomeRepairListState extends State<HomeRepairList> {
                                                                             100),
                                                               )),
                                                       onPressed: () {
-                                                        // Navigator.push(
-                                                        //     context,
-                                                        //     MaterialPageRoute(
-                                                        //       builder: (context) =>
-                                                        //           DocumentForm(
-                                                        //         document:
-                                                        //             document,
-                                                        //         isEditing: true,
-                                                        //       ),
-                                                        //     ));
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  HomeRepairForm(
+                                                                homeId: widget.homeId,
+                                                                    repair: repair,
+                                                                isEditing: true,
+                                                              ),
+                                                            ));
                                                       },
                                                       child: Container(
                                                         width: 50,
@@ -360,7 +235,7 @@ class _HomeRepairListState extends State<HomeRepairList> {
                                                         ),
                                                       ),
                                                     ),
-                                                    // FilesButton(objectId: repair!.idNaprawy!)
+                                                    FilesButton(objectId: repair.idNaprawy!)
                                                   ],
                                                 ),
                                               ],

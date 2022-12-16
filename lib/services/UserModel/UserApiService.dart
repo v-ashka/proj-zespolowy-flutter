@@ -9,10 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class UserApiService {
-
   Future register(data) async {
     try {
       var url = Uri.parse("${SERVER_IP}/api/account/register");
+      log(url.toString());
       var response = await http.post(
         url,
         headers: <String, String>{

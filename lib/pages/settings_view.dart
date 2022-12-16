@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -8,6 +12,8 @@ import 'package:projzespoloey/components/dashboardBox.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 import 'package:projzespoloey/services/UserModel/UserModel.dart';
+import 'package:projzespoloey/services/files_service.dart';
+import 'package:projzespoloey/utils/file_picker.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -19,6 +25,7 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   final formKey = GlobalKey<FormState>();
   String? userData;
+  Dio dio = Dio();
 
   @override
   void initState() {
@@ -317,53 +324,52 @@ class _SettingsViewState extends State<SettingsView> {
                                                               25)),
                                                 ),
                                                 onPressed: () async {
-                                                  // if (formKey.currentState!
-                                                  //     .validate()) {
-                                                  //   formKey.currentState!
-                                                  //       .save();
-                                                  //   setState(() {
-                                                  //     isLoading = true;
-                                                  //     headlineText =
-                                                  //         "Zmieniam...";
-                                                  //     description =
-                                                  //         "Po zmianie hasła nastąpi wylogowanie...";
-                                                  //   });
-                                                  //
-                                                  //   var res =
-                                                  //       await UserApiService()
-                                                  //           .changePassword(
-                                                  //               data);
-                                                  //   print("test complete");
-                                                  //   if (res) {
-                                                  //     print("testt complete");
-                                                  //     setState(() {
-                                                  //       headlineText =
-                                                  //           "Hasło zostało zmienione!";
-                                                  //       description =
-                                                  //           "Wylogowywuję z konta..";
-                                                  //       removeUserToken();
-                                                  //     });
-                                                  //     await Future.delayed(
-                                                  //         Duration(seconds: 5));
-                                                  //     Navigator.of(context)
-                                                  //         .pushNamedAndRemoveUntil(
-                                                  //             '/',
-                                                  //             (Route<dynamic>
-                                                  //                     route) =>
-                                                  //                 false);
-                                                  //   } else {
-                                                  //     setState(() {
-                                                  //       isLoading = !isLoading;
-                                                  //       headlineText =
-                                                  //           "Hasło nie zostało zmienione!";
-                                                  //       description =
-                                                  //           "Wystąpił błąd w trakcie zmiany hasła";
-                                                  //       errorFeedback =
-                                                  //           "Stare hasło jest nieprawidłowe";
-                                                  //     });
-                                                  //     print("dupa");
-                                                  //   }
-                                                  // }
+                                                  if (formKey.currentState!
+                                                      .validate()) {
+                                                    formKey.currentState!
+                                                        .save();
+                                                    setState(() {
+                                                      isLoading = true;
+                                                      headlineText =
+                                                          "Zmieniam...";
+                                                      description =
+                                                          "Po zmianie hasła nastąpi wylogowanie...";
+                                                    });
+
+                                                    var res =
+                                                        await UserApiService()
+                                                            .changePassword(
+                                                                data, userData);
+                                                    print("test complete");
+                                                    if (res) {
+                                                      print("testt complete");
+                                                      setState(() {
+                                                        headlineText =
+                                                            "Hasło zostało zmienione!";
+                                                        description =
+                                                            "Wylogowywuję z konta..";
+                                                        removeUserToken();
+                                                      });
+                                                      await Future.delayed(
+                                                          Duration(seconds: 5));
+                                                      Navigator.of(context)
+                                                          .pushNamedAndRemoveUntil(
+                                                              '/',
+                                                              (Route<dynamic>
+                                                                      route) =>
+                                                                  false);
+                                                    } else {
+                                                      setState(() {
+                                                        isLoading = !isLoading;
+                                                        headlineText =
+                                                            "Hasło nie zostało zmienione!";
+                                                        description =
+                                                            "Wystąpił błąd w trakcie zmiany hasła";
+                                                        errorFeedback =
+                                                            "Stare hasło jest nieprawidłowe";
+                                                      });
+                                                    }
+                                                  }
                                                 },
                                                 child: Text("Zapisz zmiany")),
                                           ],
@@ -381,6 +387,201 @@ class _SettingsViewState extends State<SettingsView> {
     }
   }
 
+  void exportFile(String filetype, double downloadProgress) async {
+    String url =
+        "https://downloads.wordpress.org/plugin/google-sitemap-generator.4.1.7.zip";
+    String fileName = "organizerProFiles_${DateTime.now()}.$filetype";
+
+    String path = await getFilePath(fileName);
+
+    await dio.download(
+      url,
+      path,
+      onReceiveProgress: (received, totalSize) {
+        setState(() {
+          downloadProgress = received / totalSize;
+        });
+        print(downloadProgress);
+      },
+      deleteOnError: true,
+    ).then((_) => Navigator.pop(context));
+  }
+
+  void importExportAlert() {
+    bool fileReady = false;
+    List<PlatformFile> files = [];
+    double progress = 0.0;
+    String fileFeedback = "";
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              titlePadding: const EdgeInsets.fromLTRB(25, 25, 25, 5),
+              contentPadding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(25.0))),
+              title: Text("Eksportuj lub importuj pliki"),
+              content: SizedBox(
+                  height: 220,
+                  width: 300,
+                  child: Container(
+                      child: Column(
+                    children: [
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: mainColor,
+                                      shape: CircleBorder(),
+                                      padding: EdgeInsets.all(40),
+                                    ),
+                                    onPressed: fileReady
+                                        ? null
+                                        : () async {
+                                            log(files.isEmpty.toString());
+                                            files = await filePicker(files);
+                                            log(files.isEmpty.toString());
+                                            if (files.isNotEmpty) {
+                                              setState(() {
+                                                fileReady = true;
+                                              });
+                                              var result = await FilesService()
+                                                  .importFiles(
+                                                      userData, files.first);
+                                              log("inside result");
+                                              if (result) {
+                                                log("git");
+                                                setState(() {
+                                                  fileFeedback =
+                                                      "Plik został przesłany";
+                                                });
+                                              } else {
+                                                setState(() {
+                                                  fileFeedback =
+                                                      "Wystapil problem z importem pliku";
+                                                });
+                                              }
+                                            }
+                                            log("files ???");
+                                          },
+                                    child: const Icon(
+                                      Icons.upload_file_outlined,
+                                      size: 50,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Importuj plik",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 25,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: secondColor,
+                                      shape: CircleBorder(),
+                                      padding: EdgeInsets.all(40),
+                                    ),
+                                    onPressed: fileReady
+                                        ? null
+                                        : () async {
+                                            exportFile("json", progress);
+                                          },
+                                    child: const Icon(
+                                      Icons.download,
+                                      size: 50,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "Eksportuj plik",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            ),
+                            LinearProgressIndicator(
+                              value: 12.22,
+                              semanticsLabel: 'Linear progress indicator',
+                            ),
+                          ]),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [],
+                      )
+                    ],
+                  ))),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: deleteBtn,
+                          foregroundColor: bgSmokedWhite,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                        ),
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Anuluj")),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: mainColor,
+                          foregroundColor: bgSmokedWhite,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                        ),
+                        onPressed: () {
+                          print("saved");
+                          print("serverIP: $SERVER_IP");
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Zapisz zmiany")),
+                  ],
+                ),
+              ],
+            );
+          });
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -394,6 +595,17 @@ class _SettingsViewState extends State<SettingsView> {
           child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
               child: ListView(children: [
+                DashboardBox(
+                    title: "O nas",
+                    description: "Sekcja ta zawiera informacje o autorach",
+                    onPressed: () async {
+                      showAboutUsDialog();
+                    },
+                    assetImgPath: 'assets/aboutus.svg',
+                    user: userData),
+                const SizedBox(
+                  height: 15,
+                ),
                 DashboardBox(
                     title: "Zmień hasło",
                     description:
@@ -442,13 +654,14 @@ class _SettingsViewState extends State<SettingsView> {
                   height: 15,
                 ),
                 DashboardBox(
-                    title: "O nas",
-                    description: "Sekcja ta zawiera informacje o autorach",
+                    title: "Import / Eksport plików",
+                    description:
+                        "W tym miesjcu w prosty sposób zaimportujesz lub wyeksportujesz swoje dane!",
                     onPressed: () async {
-                      showAboutUsDialog();
+                      importExportAlert();
                     },
-                    assetImgPath: 'assets/aboutus.svg',
-                    user: userData)
+                    assetImgPath: 'assets/exportimport.svg',
+                    user: userData),
               ]))),
     );
   }

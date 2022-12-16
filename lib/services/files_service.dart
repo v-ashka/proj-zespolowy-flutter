@@ -6,7 +6,6 @@ import 'package:projzespoloey/models/file_model.dart';
 import 'dart:io';
 
 class FilesService {
-
   Future<List<FileList>?> getFileList(token, id) async {
     try {
       var url = Uri.parse("$SERVER_IP/api/fileUpload/GetFileList/$id");
@@ -66,5 +65,26 @@ class FilesService {
       }
     }
     return response;
+  }
+
+  Future importFiles(token, file) async {
+    try {
+      var url = Uri.parse("$SERVER_IP/api/fileUpload/ImportData");
+      var request = http.MultipartRequest(
+        'POST',
+        url,
+      );
+      request.headers['Authorization'] = 'Bearer $token';
+      request.files.add(await http.MultipartFile.fromPath('file', file.path));
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
   }
 }

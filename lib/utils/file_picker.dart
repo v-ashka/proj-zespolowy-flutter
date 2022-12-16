@@ -1,6 +1,10 @@
-import 'package:file_picker/file_picker.dart';
+import 'dart:developer';
 
-Future <List<PlatformFile>> filePicker(List<PlatformFile> fileList) async {
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
+
+Future<List<PlatformFile>> filePicker(List<PlatformFile> fileList) async {
   FilePickerResult? result =
       await FilePicker.platform.pickFiles(allowMultiple: true);
   if (result != null) {
@@ -11,4 +15,11 @@ Future <List<PlatformFile>> filePicker(List<PlatformFile> fileList) async {
   } else {
     return fileList = [];
   }
+}
+
+Future<String> getFilePath(String filename) async {
+  dynamic dir = "";
+  dir = await getApplicationDocumentsDirectory();
+  log("download path: " + dir.toString());
+  return "${dir.path}/$filename";
 }

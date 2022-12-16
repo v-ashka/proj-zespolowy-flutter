@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:open_file/open_file.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/dashboardBox.dart';
 import 'package:projzespoloey/constants.dart';
@@ -26,6 +28,10 @@ class _SettingsViewState extends State<SettingsView> {
   final formKey = GlobalKey<FormState>();
   String? userData;
   Dio dio = Dio();
+  late StateSetter _setStateModal;
+  double progress = 0.0;
+  String fileFeedback = "";
+  bool fileStatus = false;
 
   @override
   void initState() {
@@ -387,10 +393,10 @@ class _SettingsViewState extends State<SettingsView> {
     }
   }
 
-  void exportFile(String filetype, double downloadProgress) async {
+  Future exportFile(String filetype) async {
     String url =
         "https://downloads.wordpress.org/plugin/google-sitemap-generator.4.1.7.zip";
-    String fileName = "organizerProFiles_${DateTime.now()}.$filetype";
+    String fileName = "organizerProFiles_${DateTime.now().year}.$filetype";
 
     String path = await getFilePath(fileName);
 
@@ -399,23 +405,47 @@ class _SettingsViewState extends State<SettingsView> {
       path,
       onReceiveProgress: (received, totalSize) {
         setState(() {
-          downloadProgress = received / totalSize;
+          progress = received / totalSize;
+          print(progress);
         });
-        print(downloadProgress);
       },
       deleteOnError: true,
-    ).then((_) => Navigator.pop(context));
+    ).then((_) {
+      setState(() {
+        progress;
+        fileStatus = false;
+      });
+      return true;
+    });
+  }
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  Future<void> initNotification(filepath) async {
+// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('ic_launcher');
+    final InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (details) {
+        log(details.toString());
+        // OpenFile.open(filepath);
+      },
+    );
   }
 
   void importExportAlert() {
     bool fileReady = false;
     List<PlatformFile> files = [];
-    double progress = 0.0;
-    String fileFeedback = "";
     showDialog(
         context: context,
         builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setStateModal) {
+            this._setStateModal = setStateModal;
             return AlertDialog(
               insetPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -464,12 +494,12 @@ class _SettingsViewState extends State<SettingsView> {
                                               log("inside result");
                                               if (result) {
                                                 log("git");
-                                                setState(() {
+                                                setStateModal(() {
                                                   fileFeedback =
                                                       "Plik został przesłany";
                                                 });
                                               } else {
-                                                setState(() {
+                                                setStateModal(() {
                                                   fileFeedback =
                                                       "Wystapil problem z importem pliku";
                                                 });
@@ -514,7 +544,17 @@ class _SettingsViewState extends State<SettingsView> {
                                     onPressed: fileReady
                                         ? null
                                         : () async {
-                                            exportFile("json", progress);
+                                            setStateModal(() {
+                                              fileStatus = true;
+
+                                              log(progress.toString());
+                                            });
+                                            var export = exportFile("zip");
+                                            if (export == true) {
+                                              setStateModal(() {
+                                                fileStatus = false;
+                                              });
+                                            }
                                           },
                                     child: const Icon(
                                       Icons.download,
@@ -532,18 +572,17 @@ class _SettingsViewState extends State<SettingsView> {
                                 ],
                               ),
                             ),
-                            LinearProgressIndicator(
-                              value: 12.22,
-                              semanticsLabel: 'Linear progress indicator',
-                            ),
                           ]),
                       SizedBox(
                         height: 40,
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [],
-                      )
+                      fileStatus
+                          ? LinearProgressIndicator(
+                              backgroundColor: Colors.grey[200],
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.blue),
+                            )
+                          : (Text(fileFeedback)),
                     ],
                   ))),
               actions: [

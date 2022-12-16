@@ -247,7 +247,7 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                       keyboardType: TextInputType.numberWithOptions(
                                           decimal: true),
                                       inputFormatters: [
-                                        FilteringTextInputFormatter.deny(RegExp("[-. ]"))
+                                        FilteringTextInputFormatter.deny(RegExp("[-, ]"))
                                       ],
                                       cursorColor: Colors.black,
                                       style: TextStyle(color: Colors.black),

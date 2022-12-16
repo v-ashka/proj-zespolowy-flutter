@@ -177,7 +177,7 @@ class _CarRepairHistoryViewState extends State<CarRepairHistoryView> {
                                                       callback: getData,
                                                       dialogtype:
                                                           AlertDialogType
-                                                              .carRepair),
+                                                              .repair),
                                                   ElevatedButton(
                                                     style: ElevatedButton
                                                         .styleFrom(

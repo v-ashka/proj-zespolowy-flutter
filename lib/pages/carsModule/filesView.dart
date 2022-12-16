@@ -221,8 +221,18 @@ class FilesViewState extends State<FilesView> {
                                   ? Image.asset("assets/txt_icon.png",
                                       width: 45, height: 45)
                                   : file.rozszerzenie == ".png"
-                                      ? Image.asset("assets/png_icon.png",
-                                          width: 45, height: 45)
+                                      ? CachedNetworkImage(
+                              imageUrl:
+                              "$SERVER_IP/api/fileUpload/GetFile/${file.idPliku}",
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url,
+                                  error) =>
+                                  Image.asset(
+                                      "assets/jpg_icon.png"),
+                              width: 45,
+                              height: 45,
+                              fit: BoxFit.cover)
                                       : file.rozszerzenie == ".jpg" ||
                                               file.rozszerzenie == ".jpeg"
                                           ? CachedNetworkImage(

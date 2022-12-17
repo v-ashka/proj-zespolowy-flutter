@@ -1,15 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/main.dart';
-import 'package:http/http.dart' as http;
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 import 'package:projzespoloey/services/UserModel/UserModel.dart';
 
@@ -17,9 +9,6 @@ import '../components/password_requirement.dart';
 
 class UserAuthenticationRegister extends StatefulWidget {
   const UserAuthenticationRegister({Key? key}) : super(key: key);
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
   @override
   State<UserAuthenticationRegister> createState() =>
       _UserAuthenticationRegisterState();
@@ -32,7 +21,6 @@ class _UserAuthenticationRegisterState
   bool isObscure = true;
   bool isSecondObscure = true;
   bool isLoading = false;
-  bool _passValid = false;
 
   String? nameInput = "";
   String? emailInput = "";
@@ -43,13 +31,11 @@ class _UserAuthenticationRegisterState
   var testPass2 = TextEditingController();
   final TextEditingController controller = TextEditingController();
   String initialCountry = 'PL';
-  // Error feedback
   String errorFeedback = "";
   String passFeedback = "";
 
   void registerUser() async {
     setState(() => isLoading = true);
-    Map<String, dynamic> payload = {};
     UserRegister data = UserRegister(
         name: nameInput,
         email: emailInput,
@@ -80,27 +66,16 @@ class _UserAuthenticationRegisterState
     return null;
   }
 
-  // temp data for testing purposes
-  Map _userData = {};
-  Future<void> readJson() async {
-    final String response =
-        await rootBundle.loadString('assets/data/temp.json');
-    final data = await json.decode(response);
-    setState(() {
-      _userData = data;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF8F8F8),
+      backgroundColor: const Color(0xffF8F8F8),
       appBar: myAppBar(context, HeaderTitleType.createAccount),
       body: SafeArea(
         child: Container(
           height: double.infinity,
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/background.png"),
                   fit: BoxFit.fill)),
@@ -108,7 +83,7 @@ class _UserAuthenticationRegisterState
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: ListView(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 25,
                 ),
                 Column(
@@ -121,6 +96,20 @@ class _UserAuthenticationRegisterState
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                                  child: Text("Imię",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: fontBlack)),
+                                )
+                              ],
+                            ),
                             TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -132,10 +121,10 @@ class _UserAuthenticationRegisterState
                                 nameInput = value;
                               },
                               cursorColor: Colors.black,
-                              style: TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
-                                  prefixIcon: Padding(
+                                  contentPadding: const EdgeInsets.all(20),
+                                  prefixIcon: const Padding(
                                     padding: EdgeInsets.only(top: 1),
                                     child: Icon(
                                       Icons.account_circle_outlined,
@@ -150,8 +139,22 @@ class _UserAuthenticationRegisterState
                                     borderSide: BorderSide.none,
                                   )),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                                  child: Text("Adres e-mail",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: fontBlack)),
+                                )
+                              ],
                             ),
                             TextFormField(
                               validator: (value) {
@@ -164,10 +167,10 @@ class _UserAuthenticationRegisterState
                                 emailInput = value;
                               },
                               cursorColor: Colors.black,
-                              style: TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
-                                  prefixIcon: Padding(
+                                  contentPadding: const EdgeInsets.all(20),
+                                  prefixIcon: const Padding(
                                     padding: EdgeInsets.only(top: 1),
                                     child: Icon(
                                       Icons.alternate_email,
@@ -182,8 +185,22 @@ class _UserAuthenticationRegisterState
                                     borderSide: BorderSide.none,
                                   )),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                                  child: Text("Numer telefonu",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: fontBlack)),
+                                )
+                              ],
                             ),
                             TextFormField(
                               validator: (value) {
@@ -196,15 +213,15 @@ class _UserAuthenticationRegisterState
                                 phoneNumber = value;
                               },
                               cursorColor: Colors.black,
-                              style: TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                               inputFormatters: <TextInputFormatter>[
                                 FilteringTextInputFormatter.digitsOnly,
                                 LengthLimitingTextInputFormatter(9),
                               ],
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
-                                  prefixIcon: Padding(
+                                  contentPadding: const EdgeInsets.all(20),
+                                  prefixIcon: const Padding(
                                     padding: EdgeInsets.only(top: 1),
                                     child: Icon(
                                       Icons.call_outlined,
@@ -219,8 +236,22 @@ class _UserAuthenticationRegisterState
                                     borderSide: BorderSide.none,
                                   )),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                                  child: Text("Hasło",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: fontBlack)),
+                                )
+                              ],
                             ),
                             TextFormField(
                               obscureText: isObscure,
@@ -232,23 +263,23 @@ class _UserAuthenticationRegisterState
                                 });
                               },
                               cursorColor: Colors.black,
-                              style: TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
+                                  contentPadding: const EdgeInsets.all(20),
                                   suffixIcon: IconButton(
-                                      onPressed: () => setState(() {
-                                        isObscure = !isObscure;
-                                      }),
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 1, 15, 0),
-                                      icon: Icon(
-                                        isObscure
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
-                                        color: Colors.black,
-                                      ),
+                                    onPressed: () => setState(() {
+                                      isObscure = !isObscure;
+                                    }),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 1, 15, 0),
+                                    icon: Icon(
+                                      isObscure
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                      color: Colors.black,
                                     ),
-                                  prefixIcon: Padding(
+                                  ),
+                                  prefixIcon: const Padding(
                                     padding: EdgeInsets.only(top: 1),
                                     child: Icon(
                                       Icons.fingerprint,
@@ -263,7 +294,7 @@ class _UserAuthenticationRegisterState
                                     borderSide: BorderSide.none,
                                   )),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             PasswordRequirement(
@@ -294,7 +325,21 @@ class _UserAuthenticationRegisterState
                               requirementText: "Minimum",
                               requirementTextBold: ' 1 znak specjalny (&-@/.)',
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(5, 0, 0, 5),
+                                  child: Text("Potwierdź hasło",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: fontBlack)),
+                                )
+                              ],
+                            ),
                             TextFormField(
                               obscureText: isSecondObscure,
                               controller: testPass2,
@@ -313,23 +358,23 @@ class _UserAuthenticationRegisterState
                                 });
                               },
                               cursorColor: Colors.black,
-                              style: TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
+                                  contentPadding: const EdgeInsets.all(20),
                                   suffixIcon: IconButton(
-                                      onPressed: () => setState(() {
-                                        isSecondObscure = !isSecondObscure;
-                                      }),
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 1, 15, 0),
-                                      icon: Icon(
-                                        isSecondObscure
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
-                                        color: Colors.black,
-                                      ),
+                                    onPressed: () => setState(() {
+                                      isSecondObscure = !isSecondObscure;
+                                    }),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 1, 15, 0),
+                                    icon: Icon(
+                                      isSecondObscure
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                      color: Colors.black,
                                     ),
-                                  prefixIcon: Padding(
+                                  ),
+                                  prefixIcon: const Padding(
                                     padding: EdgeInsets.only(top: 1),
                                     child: Icon(
                                       Icons.fingerprint_outlined,
@@ -344,68 +389,46 @@ class _UserAuthenticationRegisterState
                                     borderSide: BorderSide.none,
                                   )),
                             ),
-                            if (!passFeedback.isEmpty) ...[
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                "${passFeedback}",
-                                style: TextStyle(
-                                    color: errorColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 1.2),
-                              ),
-                            ],
-                            SizedBox(
-                              height: 60,
+                            const SizedBox(
+                              height: 40,
                             ),
-                            if (!errorFeedback.isEmpty) ...[
-                              Text(
-                                "${errorFeedback}",
-                                style: TextStyle(
-                                    color: errorColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 1.2),
-                              ),
-                            ],
                             SizedBox(
                               width: 200,
                               height: 60,
                               child: ElevatedButton.icon(
                                   style: ElevatedButton.styleFrom(
-                                      onPrimary: mainColor,
-                                      primary: mainColor,
-                                      onSurface: Colors.amber,
+                                      foregroundColor: mainColor,
+                                      backgroundColor: mainColor,
+                                      disabledForegroundColor:
+                                          Colors.amber.withOpacity(0.38),
+                                      disabledBackgroundColor:
+                                          Colors.amber.withOpacity(0.12),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(25),
                                       )),
                                   onPressed: () async {
                                     if (formKey.currentState!.validate()) {
                                       formKey.currentState!.save();
-                                      // user model
                                       errorFeedback = "";
                                       registerUser();
-                                      print(
-                                          "email: ${emailInput} pass: ${passInput}");
                                     }
                                   },
                                   icon: isLoading
                                       ? Container(
                                           width: 24,
                                           height: 24,
-                                          padding: EdgeInsets.all(2),
-                                          child: CircularProgressIndicator(
+                                          padding: const EdgeInsets.all(2),
+                                          child:
+                                              const CircularProgressIndicator(
                                             color: Colors.white,
                                             strokeWidth: 3,
                                           ),
                                         )
-                                      : Icon(
+                                      : const Icon(
                                           Icons.login,
                                           color: bgSmokedWhite,
                                         ),
-                                  label: Text(
+                                  label: const Text(
                                     "Zarejestruj się",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -415,13 +438,13 @@ class _UserAuthenticationRegisterState
                             )
                           ],
                         )),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           "Masz już konto?",
                           style: TextStyle(
                             fontSize: 16,
@@ -429,9 +452,10 @@ class _UserAuthenticationRegisterState
                         ),
                         TextButton(
                             style: TextButton.styleFrom(
-                                primary: fontBlack,
-                                onSurface: secondColor,
-                                textStyle: TextStyle(
+                                foregroundColor: fontBlack,
+                                disabledForegroundColor:
+                                    secondColor.withOpacity(0.38),
+                                textStyle: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 )),
@@ -441,7 +465,7 @@ class _UserAuthenticationRegisterState
                                 '/user_auth',
                               );
                             },
-                            child: Text("Zaloguj się"))
+                            child: const Text("Zaloguj się"))
                       ],
                     )
                   ],

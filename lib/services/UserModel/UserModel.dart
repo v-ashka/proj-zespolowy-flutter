@@ -18,24 +18,28 @@ class UserRegister {
       {required this.name,
       required this.email,
       required this.pass,
-      required this.secondPass});
+      required this.secondPass,
+      required this.numerTelefonu});
   String? name;
   String? email;
   String? pass;
   String? secondPass;
+  String? numerTelefonu;
 
   factory UserRegister.fromJson(Map<String, dynamic> json) => UserRegister(
         name: json["imie"],
         email: json["email"],
         pass: json["haslo"],
         secondPass: json["potwierdzenieHasla"],
+        numerTelefonu: json["numerTelefonu"]
       );
 
   Map<String, dynamic> toJson() => {
         "imie": name,
         "email": email,
         "haslo": pass,
-        "potwierdzenieHasla": secondPass
+        "potwierdzenieHasla": secondPass,
+        "numerTelefonu": numerTelefonu
       };
 }
 

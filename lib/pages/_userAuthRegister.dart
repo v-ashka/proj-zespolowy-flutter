@@ -12,7 +12,6 @@ import 'package:projzespoloey/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 import 'package:projzespoloey/services/UserModel/UserModel.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 import '../components/password_requirement.dart';
 
@@ -39,12 +38,11 @@ class _UserAuthenticationRegisterState
   String? emailInput = "";
   String passInput = "";
   String? secondPassInput = "";
+  String? phoneNumber;
   var testPass1 = TextEditingController();
   var testPass2 = TextEditingController();
   final TextEditingController controller = TextEditingController();
   String initialCountry = 'PL';
-  PhoneNumber number = PhoneNumber(isoCode: 'PL');
-
   // Error feedback
   String errorFeedback = "";
   String passFeedback = "";
@@ -56,7 +54,8 @@ class _UserAuthenticationRegisterState
         name: nameInput,
         email: emailInput,
         pass: passInput,
-        secondPass: secondPassInput);
+        secondPass: secondPassInput,
+        numerTelefonu: phoneNumber);
     var registerProcess = await UserApiService().register(data);
     Future.delayed(const Duration(seconds: 0)).then((value) => setState(() {
           isLoading = false;
@@ -194,7 +193,7 @@ class _UserAuthenticationRegisterState
                                 return null;
                               },
                               onSaved: (String? value) {
-                                //emailInput = value;
+                                phoneNumber = value;
                               },
                               cursorColor: Colors.black,
                               style: TextStyle(color: Colors.black),

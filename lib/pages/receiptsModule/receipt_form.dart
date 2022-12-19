@@ -54,6 +54,8 @@ class _ReceiptFormState extends State<ReceiptForm> {
   bool isLoading = true;
   bool isLoadingBtn = false;
   int purchaseDate = DateTime.now().year;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
 
   ReceiptModelForm receiptItem = ReceiptModelForm();
   List<PlatformFile> files = [];
@@ -93,20 +95,8 @@ class _ReceiptFormState extends State<ReceiptForm> {
 
     setState(() {
       isLoading = !isLoading;
-      // dropdownlist = categoryList
-      //     .map(
-      //         (cat) => DropDownValueModel(name: cat["nazwa"], value: cat["id"]))
-      //     .toList();
     });
-
-    // dropdownCatList.add(DropDownValueModel(name: "jajca", value: "test"));
   }
-
-  // @override
-  // void dispose() {
-  //   _cnt.dispose();
-  //   super.dispose();
-  // }
 
   void showAddCarLoadingDialog(isShowing) {
     if (isShowing) {
@@ -125,13 +115,8 @@ class _ReceiptFormState extends State<ReceiptForm> {
             );
           });
     } else {
+      Navigator.of(context).pop();
       Navigator.of(context, rootNavigator: true).pop();
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => const ReceiptList(),
-          ),
-          ModalRoute.withName("/dashboard"));
     }
   }
 
@@ -503,83 +488,6 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                   ),
                                 ],
                               ),
-                              // DropDownTextField(
-                              //     textFieldDecoration: InputDecoration(
-                              //         contentPadding:
-                              //             const EdgeInsets.all(15),
-                              //         prefixIcon: const Padding(
-                              //           padding: EdgeInsets.only(top: 1),
-                              //           child: Icon(
-                              //             Icons.category_outlined,
-                              //             color: Colors.black,
-                              //           ),
-                              //         ),
-                              //         hintText: "Wybierz kategorię",
-                              //         fillColor: bg35Grey,
-                              //         filled: true,
-                              //         border: OutlineInputBorder(
-                              //           borderRadius:
-                              //               BorderRadius.circular(50),
-                              //           borderSide: BorderSide.none,
-                              //         )),
-                              //     dropDownItemCount: 3,
-                              //     controller: _cnt,
-                              //     readOnly: false,
-                              //     onChanged: (val) {
-                              //       if (val.value == 1)
-                              //         showModalBottomSheet(
-                              //           context: context,
-                              //           builder: (BuildContext context) {
-                              //             return Container(
-                              //               height: 200,
-                              //               color: Colors.amber,
-                              //               child: Center(
-                              //                 child: Column(
-                              //                   mainAxisAlignment:
-                              //                       MainAxisAlignment
-                              //                           .center,
-                              //                   mainAxisSize:
-                              //                       MainAxisSize.min,
-                              //                   children: <Widget>[
-                              //                     const Text(
-                              //                         'Modal BottomSheet'),
-                              //                     ElevatedButton(
-                              //                       child: const Text(
-                              //                           'Close BottomSheet'),
-                              //                       onPressed: () =>
-                              //                           Navigator.pop(
-                              //                               context),
-                              //                     ),
-                              //                   ],
-                              //                 ),
-                              //               ),
-                              //             );
-                              //           },
-                              //         );
-                              //     },
-                              //     clearOption: true,
-                              //     autovalidateMode: AutovalidateMode.always,
-                              //     clearIconProperty:
-                              //         IconProperty(color: fontBlack),
-                              //     searchDecoration: InputDecoration(
-                              //         contentPadding:
-                              //             const EdgeInsets.all(15),
-                              //         prefixIcon: const Padding(
-                              //           padding: EdgeInsets.only(top: 1),
-                              //           child: Icon(
-                              //             Icons.category_outlined,
-                              //             color: Colors.black,
-                              //           ),
-                              //         ),
-                              //         hintText: "Wybierz kategorię",
-                              //         fillColor: bg35Grey,
-                              //         filled: true,
-                              //         border: OutlineInputBorder(
-                              //           borderRadius:
-                              //               BorderRadius.circular(50),
-                              //           borderSide: BorderSide.none,
-                              //         )),
-                              //     dropDownList: dropdownlist),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [

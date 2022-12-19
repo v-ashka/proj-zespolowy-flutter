@@ -362,42 +362,45 @@ class _InsuranceFormState extends State<InsuranceForm> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: TextFormField(
-                                initialValue: widget.isEditing!
-                                    ? (insurance.kosztPolisy.toString())
-                                    : (''),
-                                keyboardType: TextInputType.number,
-                                onSaved: (String? value) {
-                                  insurance.kosztPolisy = int.parse(value!);
-                                },
-                                cursorColor: Colors.black,
-                                style: TextStyle(color: Colors.black),
-                                decoration: InputDecoration(
-
-                                    suffixText: "zł",
-                                    contentPadding:
-                                    EdgeInsets.fromLTRB(
-                                        10, 1, 20, 1),
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.only(top: 1),
-                                      child: Icon(
-                                        Icons.attach_money_outlined,
-                                        color: Colors.black,
+                                  initialValue: widget.isEditing!
+                                      ? (insurance.kosztPolisy.toString())
+                                      : (''),
+                                  keyboardType: TextInputType.number,
+                                  onSaved: (String? value) {
+                                    insurance.kosztPolisy = int.parse(value!);
+                                  },
+                                  cursorColor: Colors.black,
+                                  style: TextStyle(color: Colors.black),
+                                  decoration: InputDecoration(
+                                      suffixText: "zł",
+                                      contentPadding:
+                                          EdgeInsets.fromLTRB(10, 1, 20, 1),
+                                      prefixIcon: Padding(
+                                        padding: EdgeInsets.only(top: 1),
+                                        child: Icon(
+                                          Icons.attach_money_outlined,
+                                          color: Colors.black,
+                                        ),
                                       ),
-                                    ),
-                                    hintText: "Podaj koszt polisy",
-                                    fillColor: bg35Grey,
-                                    filled: true,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                      borderSide: BorderSide.none,
-                                    )),
-                              ),
+                                      hintText: "Podaj koszt polisy",
+                                      fillColor: bg35Grey,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                        borderSide: BorderSide.none,
+                                      )),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'To pole nie może być puste';
+                                    }
+                                    return null;
+                                  }),
                             ),
                           ],
                         ),
                         if (!widget.isEditing!)
                           AddAttachmentButton(
-                            //files: files,
+                              //files: files,
                               formType: FormType.insurance,
                               onChanged: (filesList) {
                                 files = filesList;
@@ -429,13 +432,7 @@ class _InsuranceFormState extends State<InsuranceForm> {
             }
 
             setState(() {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) =>
-                        CarItem(carId: widget.carId!),
-                  ),
-                  ModalRoute.withName('/dashboard'));
+              Navigator.of(context).pop(CarItem(carId: widget.carId!));
             });
           }
         },

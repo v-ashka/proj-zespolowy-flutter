@@ -121,12 +121,28 @@ extension HeaderTitleExtension on HeaderTitleType {
   }
 }
 
-PreferredSizeWidget myAppBar(BuildContext context, HeaderTitleType titleType,
-    [String? additionalChar,
-    String? firstParam,
-    String? secondParam,
-    HeaderTitleType? additionalText]) {
+PreferredSizeWidget myAppBar(
+  BuildContext context,
+  HeaderTitleType titleType, [
+  String? additionalChar,
+  String? firstParam,
+  String? secondParam,
+  HeaderTitleType? additionalText,
+  Future<void>? refreshKey,
+]) {
   return AppBar(
+    actions: [
+      if (refreshKey != null) ...[
+        IconButton(
+            onPressed: () {
+              refreshKey;
+            },
+            icon: const Icon(
+              Icons.refresh,
+              color: mainColor,
+            ))
+      ],
+    ],
     elevation: 0.0,
     leading: ElevatedButton(
       style: ElevatedButton.styleFrom(

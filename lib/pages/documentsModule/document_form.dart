@@ -67,13 +67,8 @@ class _DocumentFormState extends State<DocumentForm> {
             );
           });
     } else {
+      Navigator.of(context).pop();
       Navigator.of(context, rootNavigator: true).pop();
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => const DocumentsList(),
-          ),
-          ModalRoute.withName("/dashboard"));
     }
   }
 
@@ -797,7 +792,8 @@ class _DocumentFormState extends State<DocumentForm> {
                                                   initialValue:
                                                       document.wartoscFaktury,
                                                   onSaved: (String? value) {
-                                                    document.wartoscFaktury = value;
+                                                    document.wartoscFaktury =
+                                                        value;
                                                   },
                                                   keyboardType:
                                                       TextInputType.number,
@@ -918,8 +914,17 @@ class _DocumentFormState extends State<DocumentForm> {
                                                   hintText: document
                                                           .dataWystawienia ??
                                                       "Data wystawienia rachunku",
-
-                                                      hintStyle: TextStyle(fontSize: document.dataPrzypomnienia != null ? 14 : 13, color: document.dataPrzypomnienia != null ? Colors.black : Colors.black54),
+                                                  hintStyle: TextStyle(
+                                                      fontSize:
+                                                          document.dataPrzypomnienia !=
+                                                                  null
+                                                              ? 14
+                                                              : 13,
+                                                      color:
+                                                          document.dataPrzypomnienia !=
+                                                                  null
+                                                              ? Colors.black
+                                                              : Colors.black54),
                                                   fillColor: bg35Grey,
                                                   filled: true,
                                                   border: OutlineInputBorder(
@@ -944,7 +949,8 @@ class _DocumentFormState extends State<DocumentForm> {
                                                   initialValue:
                                                       document.wysokoscRachunku,
                                                   onSaved: (String? value) {
-                                                    document.wysokoscRachunku = value;
+                                                    document.wysokoscRachunku =
+                                                        value;
                                                   },
                                                   keyboardType:
                                                       TextInputType.number,
@@ -953,7 +959,8 @@ class _DocumentFormState extends State<DocumentForm> {
                                                       color: Colors.black),
                                                   decoration: InputDecoration(
                                                       contentPadding:
-                                                          EdgeInsets.fromLTRB(1,1,15,1),
+                                                          EdgeInsets.fromLTRB(
+                                                              1, 1, 15, 1),
                                                       prefixIcon: Padding(
                                                         padding:
                                                             EdgeInsets.only(
@@ -1034,7 +1041,12 @@ class _DocumentFormState extends State<DocumentForm> {
                                             hintText:
                                                 document.dataPrzypomnienia ??
                                                     "Ustaw datę przypomnienia",
-                                            hintStyle: TextStyle(color: document.dataPrzypomnienia != null ? Colors.black : Colors.black54),
+                                            hintStyle: TextStyle(
+                                                color:
+                                                    document.dataPrzypomnienia !=
+                                                            null
+                                                        ? Colors.black
+                                                        : Colors.black54),
                                             fillColor: bg35Grey,
                                             filled: true,
                                             border: OutlineInputBorder(
@@ -1093,7 +1105,8 @@ class _DocumentFormState extends State<DocumentForm> {
                                     ],
                                   ),
                                 ],
-                                if(!widget.isEditing && document.kategoria != null)...[
+                                if (!widget.isEditing &&
+                                    document.kategoria != null) ...[
                                   AddAttachmentButton(
                                       //files: files,
                                       formType: FormType.document,
@@ -1127,17 +1140,18 @@ class _DocumentFormState extends State<DocumentForm> {
                         isLoadingBtn = true;
                       });
                       showAddDocumentLoadingDialog(true);
+
+                      if (!widget.isEditing) {
+                        var id = await DocumentService()
+                            .addDocument(token, document);
+                      } else {
+                        await DocumentService().updateDocument(
+                            token, document, document.idDokumentu);
+                      }
+                      setState(() {
+                        showAddDocumentLoadingDialog(false);
+                      });
                     }
-                    if (!widget.isEditing) {
-                      var id =
-                          await DocumentService().addDocument(token, document);
-                    } else {
-                      await DocumentService().updateDocument(
-                          token, document, document.idDokumentu);
-                    }
-                    setState(() {
-                      showAddDocumentLoadingDialog(false);
-                    });
                   },
                   backgroundColor: mainColor,
                   label: Text(widget.isEditing

@@ -575,14 +575,8 @@ class _CarRepairFormState extends State<CarRepairForm> {
               }
               response.statusCode == 200 || response.statusCode == 202
                   ? setState(() {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                CarItem(carId: widget.carId),
-                          ),
-                          ModalRoute.withName('/dashboard'));
-                      // Navigator.pop(context);
+                      Navigator.of(context).pop(CarItem(carId: widget.carId));
+                      Navigator.of(context, rootNavigator: true).pop();
                     })
                   : print("BŁĄD PRZESYŁANIA DANYCH");
             } else {
@@ -592,14 +586,8 @@ class _CarRepairFormState extends State<CarRepairForm> {
               print(res.reasonPhrase);
               res.statusCode == 200 || res.statusCode == 202
                   ? setState(() {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                CarItem(carId: widget.carId),
-                          ),
-                          ModalRoute.withName('/dashboard'));
-                      // Navigator.pop(context);
+                      Navigator.of(context).pop(CarItem(carId: widget.carId));
+                      Navigator.of(context, rootNavigator: true).pop();
                     })
                   : print("BŁĄD PRZESYŁANIA DANYCH");
             }

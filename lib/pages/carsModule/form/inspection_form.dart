@@ -592,14 +592,7 @@ class _InspectionFormState extends State<InspectionForm> {
             }
 
             setState(() {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) =>
-                        CarItem(carId: widget.carId),
-                  ),
-                  ModalRoute.withName('/dashboard'));
-              // Navigator.pop(context);
+              Navigator.of(context).pop(CarItem(carId: widget.carId));
             });
           }
         },

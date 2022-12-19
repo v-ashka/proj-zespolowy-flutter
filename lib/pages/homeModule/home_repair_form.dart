@@ -69,14 +69,8 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
             );
           });
     } else {
+      Navigator.of(context).pop();
       Navigator.of(context, rootNavigator: true).pop();
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) =>
-                HomeRepairList(homeId: widget.homeId),
-          ),
-          ModalRoute.withName("/dashboard"));
     }
   }
 
@@ -155,8 +149,7 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                         }
                                         return null;
                                       },
-                                      initialValue:
-                                          repair.nazwaNaprawy,
+                                      initialValue: repair.nazwaNaprawy,
                                       onSaved: (String? value) {
                                         repair.nazwaNaprawy = value;
                                       },
@@ -186,8 +179,8 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 5, 0, 5),
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                       child: Text(
                                         "Wykonawca naprawy",
                                         style: TextStyle(
@@ -197,8 +190,7 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                       ),
                                     ),
                                     TextFormField(
-                                      initialValue:
-                                      repair.wykonawcaNaprawy,
+                                      initialValue: repair.wykonawcaNaprawy,
                                       onSaved: (String? value) {
                                         repair.wykonawcaNaprawy = value;
                                       },
@@ -218,7 +210,7 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                           filled: true,
                                           border: OutlineInputBorder(
                                             borderRadius:
-                                            BorderRadius.circular(50),
+                                                BorderRadius.circular(50),
                                             borderSide: BorderSide.none,
                                           )),
                                     ),
@@ -228,8 +220,8 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 5, 0, 5),
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                       child: Text(
                                         "Koszt naprawy",
                                         style: TextStyle(
@@ -239,15 +231,16 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                       ),
                                     ),
                                     TextFormField(
-                                      initialValue:
-                                      repair.kosztNaprawy,
+                                      initialValue: repair.kosztNaprawy,
                                       onSaved: (String? value) {
                                         repair.kosztNaprawy = value;
                                       },
-                                      keyboardType: TextInputType.numberWithOptions(
-                                          decimal: true),
+                                      keyboardType:
+                                          TextInputType.numberWithOptions(
+                                              decimal: true),
                                       inputFormatters: [
-                                        FilteringTextInputFormatter.deny(RegExp("[-, ]"))
+                                        FilteringTextInputFormatter.deny(
+                                            RegExp("[-, ]"))
                                       ],
                                       cursorColor: Colors.black,
                                       style: TextStyle(color: Colors.black),
@@ -265,7 +258,7 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                           filled: true,
                                           border: OutlineInputBorder(
                                             borderRadius:
-                                            BorderRadius.circular(50),
+                                                BorderRadius.circular(50),
                                             borderSide: BorderSide.none,
                                           )),
                                     ),
@@ -307,15 +300,12 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                               color: Colors.black,
                                             ),
                                           ),
-                                          hintText:
-                                              repair.dataNaprawy ??
-                                                  "Data naprawy",
+                                          hintText: repair.dataNaprawy ??
+                                              "Data naprawy",
                                           hintStyle: TextStyle(
-                                              color:
-                                              repair.dataNaprawy !=
-                                                          null
-                                                      ? Colors.black
-                                                      : Colors.black54),
+                                              color: repair.dataNaprawy != null
+                                                  ? Colors.black
+                                                  : Colors.black54),
                                           fillColor: bg35Grey,
                                           filled: true,
                                           border: OutlineInputBorder(
@@ -403,21 +393,22 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                             DateTime.now().toString().substring(0, 10);
                       });
                       showAddDocumentLoadingDialog(true);
-                    if (!widget.isEditing) {
-                      Response? response =
-                          await HomeService().addHomeRepair(widget.homeId, repair, token);
-                      if (files.isNotEmpty && response!.statusCode == 200 ||
-                          response!.statusCode == 202) {
-                        await FilesService().uploadFiles(token, files, response.data);
+                      if (!widget.isEditing) {
+                        Response? response = await HomeService()
+                            .addHomeRepair(widget.homeId, repair, token);
+                        if (files.isNotEmpty && response!.statusCode == 200 ||
+                            response!.statusCode == 202) {
+                          await FilesService()
+                              .uploadFiles(token, files, response.data);
+                        }
+                      } else {
+                        // await DocumentService().updateDocument(
+                        //     token, document, document.idDokumentu);
                       }
-                    } else {
-                      // await DocumentService().updateDocument(
-                      //     token, document, document.idDokumentu);
+                      setState(() {
+                        showAddDocumentLoadingDialog(false);
+                      });
                     }
-                    setState(() {
-                      showAddDocumentLoadingDialog(false);
-                    }
-                        );}
                   },
                   backgroundColor: mainColor,
                   label: Text(widget.isEditing

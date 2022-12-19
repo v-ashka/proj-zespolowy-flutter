@@ -41,7 +41,7 @@ class _DocumentsListState extends State<DocumentsList> {
   int currentCategory = 0;
   String query = "";
 
-  void getData() async {
+  Future getData() async {
     token = await storage.read(key: "token");
     documentList = await DocumentService().getDocumentList(token);
     filteredList = documentList;
@@ -67,6 +67,15 @@ class _DocumentsListState extends State<DocumentsList> {
       query = filter;
       filteredList = result;
     });
+  }
+
+  Future refreshData() async {
+    setState(() {
+      documentList = [];
+      filteredList = [];
+      initialList = [];
+    });
+    await getData();
   }
 
   @override
@@ -113,288 +122,303 @@ class _DocumentsListState extends State<DocumentsList> {
                 ),
               ),
               Expanded(
-                child: ListView.separated(
-                  // shrinkWrap: true,
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 85),
-                  itemCount: filteredList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    document = filteredList[index];
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: Colors.white),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 15, 15, 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    ExpandablePanel(
-                                      header: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "${document.nazwaDokumentu}",
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 20),
-                                              ),
-                                              const Padding(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    0, 5, 0, 10),
-                                                child: Text(
-                                                  "SZCZEGÓŁY DOKUMENTU",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: fontGrey,
-                                                      fontFamily: "Roboto",
+                child: RefreshIndicator(
+                  onRefresh: refreshData,
+                  color: mainColor,
+                  child: ListView.separated(
+                    // shrinkWrap: true,
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 85),
+                    itemCount: filteredList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      document = filteredList[index];
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              color: Colors.white),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 5,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      ExpandablePanel(
+                                        header: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "${document.nazwaDokumentu}",
+                                                  style: const TextStyle(
                                                       fontWeight:
-                                                          FontWeight.w300),
+                                                          FontWeight.w600,
+                                                      fontSize: 20),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      collapsed: Column(children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                              color: bg35Grey),
-                                          width: 150,
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                10, 0, 20, 0),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                const Icon(Icons.label_outline,
-                                                    color: icon70Black),
-                                                Text(
-                                                  "${documentCategories.firstWhere((element) => element["id"] == document.kategoria)["nazwa"]}",
-                                                  style: const TextStyle(
-                                                      fontFamily: "Lato",
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                              color: bg35Grey),
-                                          width: 150,
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                10, 0, 20, 0),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                const Icon(
-                                                    Icons
-                                                        .calendar_month_outlined,
-                                                    color: icon70Black),
-                                                Text(
-                                                  "${document.dataUtworzenia}",
-                                                  style: const TextStyle(
-                                                      fontFamily: "Lato",
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      ]),
-                                      expanded: Column(children: [
-                                        DetailBar(
-                                            title: "Kategoria dokumentu",
-                                            value:
-                                                "${documentCategories.firstWhere((element) => element["id"] == document.kategoria)["nazwa"]}"),
-                                        //if (repair.warsztat != null &&
-                                        //repair.warsztat != "")
-                                        DetailBar(
-                                            title: "Data utworzenia",
-                                            value:
-                                                "${document.dataUtworzenia}"),
-                                        //if (repair.kosztNaprawy != null)
-                                        if (document.ubezpieczyciel != null)
-                                          DetailBar(
-                                              title: "Ubezpieczyciel",
-                                              value:
-                                                  "${document.ubezpieczyciel}"),
-                                        if (document.sprzedawcaNaFakturze !=
-                                            null)
-                                          DetailBar(
-                                              title: "Sprzedawca",
-                                              value:
-                                                  "${document.sprzedawcaNaFakturze}"),
-                                        if (document.dataWystawienia != null)
-                                          DetailBar(
-                                              title: "Wystawiono dnia",
-                                              value:
-                                                  "${document.dataWystawienia}"),
-                                        if (document.wysokoscRachunku != null)
-                                          DetailBar(
-                                              title: "Wysokość rachunku",
-                                              value:
-                                                  "${document.wysokoscRachunku} zł"),
-                                        if (document.numerFaktury != null)
-                                          DetailBar(
-                                              title: "Numer faktury",
-                                              value:
-                                                  "${document.numerFaktury}"),
-
-                                        if (document.wartoscPolisy != null)
-                                          DetailBar(
-                                              title: "Koszt polisy",
-                                              value:
-                                                  "${document.wartoscPolisy} zł"),
-                                        if (document.wartoscFaktury != null)
-                                          DetailBar(
-                                              title: "Kwota na fakturze",
-                                              value:
-                                                  "${document.wartoscFaktury} zł"),
-                                        if (document.dataStartu != null &&
-                                            document.dataKonca != null)
-                                          DetailBar(
-                                              title: "Okres obowiązywania",
-                                              value:
-                                                  "${document.dataStartu} - ${document.dataKonca}"),
-                                        if (document.dataPrzypomnienia != null)
-                                          DetailBar(
-                                              title: "Data przypomnienia",
-                                              value:
-                                                  "${document.dataPrzypomnienia}"),
-                                        if (document.opis != null &&
-                                            document.opis != "")
-                                          DetailBar(
-                                              title: "Opis",
-                                              value: "${document.opis}"),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              15, 15, 5, 0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const SizedBox(
-                                                width: 20,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  DeleteButton(
-                                                      endpoint:
-                                                          Endpoints.document,
-                                                      token: token,
-                                                      id: document.idDokumentu,
-                                                      callback: getData,
-                                                      dialogtype:
-                                                          AlertDialogType
-                                                              .document),
-                                                  ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            foregroundColor:
-                                                                mainColor,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(5),
-                                                            shadowColor: Colors
-                                                                .transparent,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100),
-                                                            )),
-                                                    onPressed: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                DocumentForm(
-                                                              document:
-                                                                  document,
-                                                              isEditing: true,
-                                                            ),
-                                                          ));
-                                                    },
-                                                    child: Container(
-                                                      width: 50,
-                                                      height: 50,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(50),
-                                                        color: mainColor,
-                                                      ),
-                                                      child: const Icon(
-                                                        Icons.edit_outlined,
-                                                        size: 30,
-                                                        color: bgSmokedWhite,
-                                                      ),
-                                                    ),
+                                                const Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      0, 5, 0, 10),
+                                                  child: Text(
+                                                    "SZCZEGÓŁY DOKUMENTU",
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: fontGrey,
+                                                        fontFamily: "Roboto",
+                                                        fontWeight:
+                                                            FontWeight.w300),
                                                   ),
-                                                  // FilesButton(objectId: repair!.idNaprawy!)
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        collapsed: Column(children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                color: bg35Grey),
+                                            width: 150,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      10, 0, 20, 0),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  const Icon(
+                                                      Icons.label_outline,
+                                                      color: icon70Black),
+                                                  Text(
+                                                    "${documentCategories.firstWhere((element) => element["id"] == document.kategoria)["nazwa"]}",
+                                                    style: const TextStyle(
+                                                        fontFamily: "Lato",
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  )
                                                 ],
                                               ),
-                                            ],
+                                            ),
                                           ),
-                                        ),
-                                      ]),
-                                    )
-                                  ],
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                color: bg35Grey),
+                                            width: 150,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      10, 0, 20, 0),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  const Icon(
+                                                      Icons
+                                                          .calendar_month_outlined,
+                                                      color: icon70Black),
+                                                  Text(
+                                                    "${document.dataUtworzenia}",
+                                                    style: const TextStyle(
+                                                        fontFamily: "Lato",
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ]),
+                                        expanded: Column(children: [
+                                          DetailBar(
+                                              title: "Kategoria dokumentu",
+                                              value:
+                                                  "${documentCategories.firstWhere((element) => element["id"] == document.kategoria)["nazwa"]}"),
+                                          //if (repair.warsztat != null &&
+                                          //repair.warsztat != "")
+                                          DetailBar(
+                                              title: "Data utworzenia",
+                                              value:
+                                                  "${document.dataUtworzenia}"),
+                                          //if (repair.kosztNaprawy != null)
+                                          if (document.ubezpieczyciel != null)
+                                            DetailBar(
+                                                title: "Ubezpieczyciel",
+                                                value:
+                                                    "${document.ubezpieczyciel}"),
+                                          if (document.sprzedawcaNaFakturze !=
+                                              null)
+                                            DetailBar(
+                                                title: "Sprzedawca",
+                                                value:
+                                                    "${document.sprzedawcaNaFakturze}"),
+                                          if (document.dataWystawienia != null)
+                                            DetailBar(
+                                                title: "Wystawiono dnia",
+                                                value:
+                                                    "${document.dataWystawienia}"),
+                                          if (document.wysokoscRachunku != null)
+                                            DetailBar(
+                                                title: "Wysokość rachunku",
+                                                value:
+                                                    "${document.wysokoscRachunku} zł"),
+                                          if (document.numerFaktury != null)
+                                            DetailBar(
+                                                title: "Numer faktury",
+                                                value:
+                                                    "${document.numerFaktury}"),
+
+                                          if (document.wartoscPolisy != null)
+                                            DetailBar(
+                                                title: "Koszt polisy",
+                                                value:
+                                                    "${document.wartoscPolisy} zł"),
+                                          if (document.wartoscFaktury != null)
+                                            DetailBar(
+                                                title: "Kwota na fakturze",
+                                                value:
+                                                    "${document.wartoscFaktury} zł"),
+                                          if (document.dataStartu != null &&
+                                              document.dataKonca != null)
+                                            DetailBar(
+                                                title: "Okres obowiązywania",
+                                                value:
+                                                    "${document.dataStartu} - ${document.dataKonca}"),
+                                          if (document.dataPrzypomnienia !=
+                                              null)
+                                            DetailBar(
+                                                title: "Data przypomnienia",
+                                                value:
+                                                    "${document.dataPrzypomnienia}"),
+                                          if (document.opis != null &&
+                                              document.opis != "")
+                                            DetailBar(
+                                                title: "Opis",
+                                                value: "${document.opis}"),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                15, 15, 5, 0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    DeleteButton(
+                                                        endpoint:
+                                                            Endpoints.document,
+                                                        token: token,
+                                                        id: document
+                                                            .idDokumentu,
+                                                        callback: getData,
+                                                        dialogtype:
+                                                            AlertDialogType
+                                                                .document),
+                                                    ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              foregroundColor:
+                                                                  mainColor,
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(5),
+                                                              shadowColor: Colors
+                                                                  .transparent,
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            100),
+                                                              )),
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  DocumentForm(
+                                                                document:
+                                                                    document,
+                                                                isEditing: true,
+                                                              ),
+                                                            ));
+                                                      },
+                                                      child: Container(
+                                                        width: 50,
+                                                        height: 50,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(50),
+                                                          color: mainColor,
+                                                        ),
+                                                        child: const Icon(
+                                                          Icons.edit_outlined,
+                                                          size: 30,
+                                                          color: bgSmokedWhite,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    // FilesButton(objectId: repair!.idNaprawy!)
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ]),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(
-                    color: Colors.transparent,
-                    height: 10,
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(
+                      color: Colors.transparent,
+                      height: 10,
+                    ),
                   ),
                 ),
               ),

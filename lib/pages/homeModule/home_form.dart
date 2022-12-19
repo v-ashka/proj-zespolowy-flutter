@@ -101,13 +101,8 @@ class _HomeFormState extends State<HomeForm> {
             );
           });
     } else {
+      Navigator.of(context).pop();
       Navigator.of(context, rootNavigator: true).pop();
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => const HomeList(),
-          ),
-          ModalRoute.withName("/dashboard"));
     }
   }
 
@@ -651,8 +646,8 @@ class _HomeFormState extends State<HomeForm> {
                           ],
                         ),
                         AddPhotoButton(onChanged: (imageChanged) {
-                  image = imageChanged;
-                  }),
+                          image = imageChanged;
+                        }),
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         //   crossAxisAlignment: CrossAxisAlignment.end,
@@ -800,17 +795,17 @@ class _HomeFormState extends State<HomeForm> {
                 await FilesService().uploadFiles(token, files, response?.data);
               }
               if (image != null) {
-                await FilesService().uploadFile(
-                    token, image!.path.toString(), response?.data);
+                await FilesService()
+                    .uploadFile(token, image!.path.toString(), response?.data);
               }
             } else {
               await HomeService()
                   .updateHome(home, token, widget.editModel!.idDomu);
             }
+            setState(() {
+              showAddHomeDialog(false);
+            });
           }
-          setState(() {
-            showAddHomeDialog(false);
-          });
         },
         backgroundColor: mainColor,
         label: Text(widget.isEditing! ? ("Zapisz dom") : ("Dodaj dom")),

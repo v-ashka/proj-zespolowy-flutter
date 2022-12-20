@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,19 +7,18 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/main.dart';
-import 'package:http/http.dart' as http;
 import 'package:projzespoloey/pages/_Dashboard.dart';
-import 'package:projzespoloey/pages/old_/_dashboard.dart';
 import 'package:projzespoloey/pages/password_reset_code.dart';
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 import 'package:projzespoloey/services/UserModel/UserModel.dart';
 
 class UserAuthentication extends StatefulWidget {
   const UserAuthentication({Key? key}) : super(key: key);
+
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
         encryptedSharedPreferences: true,
       );
+
   @override
   State<UserAuthentication> createState() => _UserAuthenticationState();
 }
@@ -58,17 +55,34 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                 value: payload[
                     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]);
             // payload = Jwt.parseJwt(token["data"]);
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => DashboardPanel()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const DashboardPanel()));
           } else {
             errorFeedback = token["message"];
           }
         }));
   }
 
+  //Funkcja walidująca adres e-mail podany przez użytkownika
+  String? emailValidation(String? value) {
+    bool validation = RegExp(
+            r'(?![_.-])((?![_.-][_.-])[a-zA-Z\d_.-]){0,63}[a-zA-Z\d]@((?!-)'
+            r'((?!--)[a-zA-Z\d-]){0,63}[a-zA-Z\d]\.){1,2}([a-zA-Z]{2,14}\.)?[a-zA-Z]{2,14}')
+        .hasMatch(value!);
+    if (value.isEmpty) {
+      return "Proszę podać adres e-mail!";
+    } else if (!validation) {
+      return "Proszę podać prawidłowy adres e-mail!";
+    }
+    return null;
+  }
+
+  //Funkcja pokazująca AlertDialog z wyborem adresu serwera
   void showAppSettings() {
     bool isSwitched = false;
-    String? server_ip = "";
+    String? serverIp = "";
     String? emulatorIp = "http://10.0.2.2:5151";
     showDialog(
         context: context,
@@ -81,24 +95,23 @@ class _UserAuthenticationState extends State<UserAuthentication> {
               contentPadding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25.0))),
-              title: Text("Ustawienia serwera"),
+              title: const Text("Ustawienia serwera"),
               content: SizedBox(
                   height: 280,
                   width: 300,
-                  child: Container(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                        SizedBox(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          "Sposób połączenia",
+                        const Text(
+                          "Tryb deweloperski",
                           style: TextStyle(
                               fontWeight: FontWeight.w600, color: secondColor),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Row(
@@ -108,7 +121,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: const [
                                   Text(
                                     "Emulator",
                                     style: TextStyle(
@@ -116,7 +129,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   Text(
-                                    "Połącz się przy pomocy wbudowanego w system emulatora andorid",
+                                    "Połącz się z serwerem lokalnym",
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: fontGrey,
@@ -139,22 +152,22 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
-                        Text(
+                        const Text(
                           "Adres serwera",
                           style: TextStyle(
                               fontWeight: FontWeight.w600, color: secondColor),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         if (!isSwitched) ...[
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: const [
                               Text(
                                 ("Podaj adres serwera"),
                                 style: TextStyle(
@@ -169,7 +182,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Form(
@@ -177,7 +190,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                             child: TextFormField(
                                 initialValue: SERVER_IP,
                                 onSaved: (value) {
-                                  server_ip = value;
+                                  serverIp = value;
                                 },
                                 cursorColor: Colors.black,
                                 style: const TextStyle(color: Colors.black),
@@ -201,7 +214,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                           TextFormField(
                             initialValue: emulatorIp,
                             onSaved: (value) {
-                              server_ip = value;
+                              serverIp = value;
                             },
                             readOnly: true,
                             cursorColor: Colors.black,
@@ -217,7 +230,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                 )),
                           ),
                         ],
-                      ]))),
+                      ])),
               actions: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -232,7 +245,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                         onPressed: () async {
                           Navigator.pop(context);
                         },
-                        child: Text("Anuluj")),
+                        child: const Text("Anuluj")),
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: mainColor,
@@ -241,18 +254,14 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                               borderRadius: BorderRadius.circular(25)),
                         ),
                         onPressed: () {
-                          print("saved");
-                          print(SERVER_IP);
                           if (!isSwitched &&
                               formServerKey.currentState!.validate()) {
                             formServerKey.currentState!.save();
-                            SERVER_IP = server_ip!;
+                            SERVER_IP = serverIp!;
                           }
-                          print("saved");
-                          print("serverIP: $SERVER_IP");
                           Navigator.of(context).pop();
                         },
-                        child: Text("Zapisz zmiany")),
+                        child: const Text("Zapisz zmiany")),
                   ],
                 ),
               ],
@@ -266,7 +275,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
     return WillPopScope(
       onWillPop: () => onBackButtonPressed(context),
       child: Scaffold(
-        backgroundColor: Color(0xffF8F8F8),
+        backgroundColor: const Color(0xffF8F8F8),
         body: SafeArea(
           child: Container(
             height: double.infinity,
@@ -292,25 +301,25 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Center(
+                      const Center(
                         child: Image(
                           width: 200,
                           height: 200,
                           image: AssetImage("assets/logo.png"),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 30),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
                         child: Text(
                           "Logowanie",
                           style: TextStyle(
@@ -327,20 +336,12 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TextFormField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Proszę podać adres email";
-                                  }
-                                  return null;
-                                },
-                                onSaved: (String? value) {
-                                  emailInput = value;
-                                },
+                                validator: emailValidation,
                                 cursorColor: Colors.black,
-                                style: TextStyle(color: Colors.black),
+                                style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(20),
-                                    prefixIcon: Padding(
+                                    contentPadding: const EdgeInsets.all(20),
+                                    prefixIcon: const Padding(
                                       padding: EdgeInsets.only(top: 1),
                                       child: Icon(
                                         Icons.alternate_email,
@@ -355,7 +356,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                       borderSide: BorderSide.none,
                                     )),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               TextFormField(
@@ -386,7 +387,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    prefixIcon: Padding(
+                                    prefixIcon: const Padding(
                                       padding: EdgeInsets.only(top: 1),
                                       child: Icon(
                                         Icons.fingerprint,
@@ -401,19 +402,19 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                       borderSide: BorderSide.none,
                                     )),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               if (!errorFeedback.isEmpty) ...[
                                 Text(
                                   "${errorFeedback}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: errorColor,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
                                       letterSpacing: 1.2),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
                               ],
@@ -443,17 +444,18 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                         ? Container(
                                             width: 24,
                                             height: 24,
-                                            padding: EdgeInsets.all(2),
-                                            child: CircularProgressIndicator(
+                                            padding: const EdgeInsets.all(2),
+                                            child:
+                                                const CircularProgressIndicator(
                                               color: Colors.white,
                                               strokeWidth: 3,
                                             ),
                                           )
-                                        : Icon(
+                                        : const Icon(
                                             Icons.login,
                                             color: bgSmokedWhite,
                                           ),
-                                    label: Text(
+                                    label: const Text(
                                       "Zaloguj się",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -463,7 +465,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                               )
                             ],
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Row(
@@ -473,7 +475,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                               style: TextButton.styleFrom(
                                   primary: fontBlack,
                                   onSurface: secondColor,
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   )),
@@ -481,16 +483,17 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => PasswordResetCode(),
+                                      builder: (context) =>
+                                          const PasswordResetCode(),
                                     ));
                               },
-                              child: Text("Nie pamiętam hasła"))
+                              child: const Text("Nie pamiętam hasła"))
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Nie masz konta?",
                             style: TextStyle(
                               fontSize: 18,
@@ -498,9 +501,10 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                           ),
                           TextButton(
                               style: TextButton.styleFrom(
-                                  primary: fontBlack,
-                                  onSurface: secondColor,
-                                  textStyle: TextStyle(
+                                  foregroundColor: fontBlack,
+                                  disabledForegroundColor:
+                                      secondColor.withOpacity(0.38),
+                                  textStyle: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   )),
@@ -510,7 +514,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                   '/registerUser',
                                 );
                               },
-                              child: Text("Zarejestruj się"))
+                              child: const Text("Zarejestruj się"))
                         ],
                       )
                     ],
@@ -529,13 +533,13 @@ class _UserAuthenticationState extends State<UserAuthentication> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          actionsPadding: EdgeInsets.all(0),
+          actionsPadding: const EdgeInsets.all(0),
           actionsAlignment: MainAxisAlignment.center,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
           ),
-          title: Text("Czy na pewno chcesz wyjść z\u{00A0}aplikacji? "),
-          content: Text("Mamy nadzieję, że zaraz tutaj wrócisz!"),
+          title: const Text("Czy na pewno chcesz wyjść z\u{00A0}aplikacji? "),
+          content: const Text("Mamy nadzieję, że zaraz tutaj wrócisz!"),
           actions: [
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -547,7 +551,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                 onPressed: () {
                   Navigator.of(context).pop(false);
                 },
-                child: Text(
+                child: const Text(
                   "Anuluj",
                   style: TextStyle(color: Colors.white),
                 )),
@@ -561,7 +565,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                 onPressed: () async {
                   Navigator.of(context).pop(true);
                 },
-                child: Text(
+                child: const Text(
                   "Wyjdź",
                   style: TextStyle(color: Colors.white),
                 )),

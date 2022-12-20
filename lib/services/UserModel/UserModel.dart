@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-
 class UserLogin {
   UserLogin({this.email, this.pass});
+
   String? email;
   String? pass;
 
@@ -13,32 +12,23 @@ class UserLogin {
   Map<String, dynamic> toJson() => {"email": email, "haslo": pass};
 }
 
+//Model danych wykorzystywany przy rejestracji użytkownika
 class UserRegister {
   UserRegister(
-      {required this.name,
+      {required this.imie,
       required this.email,
-      required this.pass,
-      required this.secondPass,
+      required this.haslo,
       required this.numerTelefonu});
-  String? name;
+
+  String? imie;
   String? email;
-  String? pass;
-  String? secondPass;
+  String? haslo;
   String? numerTelefonu;
 
-  factory UserRegister.fromJson(Map<String, dynamic> json) => UserRegister(
-        name: json["imie"],
-        email: json["email"],
-        pass: json["haslo"],
-        secondPass: json["potwierdzenieHasla"],
-        numerTelefonu: json["numerTelefonu"]
-      );
-
   Map<String, dynamic> toJson() => {
-        "imie": name,
+        "imie": imie,
         "email": email,
-        "haslo": pass,
-        "potwierdzenieHasla": secondPass,
+        "haslo": haslo,
         "numerTelefonu": numerTelefonu
       };
 }

@@ -34,13 +34,13 @@ class _UserAuthenticationRegisterState
   String errorFeedback = "";
   String passFeedback = "";
 
+  //Funkcja odpowiadająca za rejestrację użytkownika
   void registerUser() async {
     setState(() => isLoading = true);
     UserRegister data = UserRegister(
-        name: nameInput,
+        imie: nameInput,
         email: emailInput,
-        pass: passInput,
-        secondPass: secondPassInput,
+        haslo: passInput,
         numerTelefonu: phoneNumber);
     var registerProcess = await UserApiService().register(data);
     Future.delayed(const Duration(seconds: 0)).then((value) => setState(() {
@@ -54,6 +54,7 @@ class _UserAuthenticationRegisterState
         }));
   }
 
+  //Funkcja walidująca hasło użytkownika pod kątem wymagań bezpiecznego hasła
   String? validation(String? value) {
     bool validation =
         RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$')
@@ -62,6 +63,19 @@ class _UserAuthenticationRegisterState
       return "Proszę podać hasło!";
     } else if (!validation) {
       return "Nie spełniono wymagań dotyczących hasła!";
+    }
+    return null;
+  }
+
+  //Funkcja walidująca adres e-mail podany przez użytkownika
+  String? emailValidation(String? value) {
+    bool validation = RegExp('[a-z0-9!#\$%&\'*+/=?^_`{|}~-]+(?:.[a-z0-9!#\$%&\'*+/=?'
+        '^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?')
+        .hasMatch(value!);
+    if (value.isEmpty) {
+      return "Proszę podać adres e-mail!";
+    } else if (!validation) {
+      return "Proszę podać prawidłowy adres e-mail!";
     }
     return null;
   }
@@ -157,15 +171,7 @@ class _UserAuthenticationRegisterState
                               ],
                             ),
                             TextFormField(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Proszę podać adres e-mail!";
-                                }
-                                return null;
-                              },
-                              onSaved: (String? value) {
-                                emailInput = value;
-                              },
+                              validator: emailValidation,
                               cursorColor: Colors.black,
                               style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
@@ -203,15 +209,7 @@ class _UserAuthenticationRegisterState
                               ],
                             ),
                             TextFormField(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Proszę podać numer telefonu!";
-                                }
-                                return null;
-                              },
-                              onSaved: (String? value) {
-                                phoneNumber = value;
-                              },
+                              validator: emailValidation,
                               cursorColor: Colors.black,
                               style: const TextStyle(color: Colors.black),
                               inputFormatters: <TextInputFormatter>[

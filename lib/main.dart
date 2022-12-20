@@ -75,23 +75,23 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('pl', 'PL'), // English, no country code
-        Locale('en', ''), // Spanish, no country code
+        Locale('pl', 'PL'), // Wspieranie języka polskiego jako lokalnego języka
       ],
       initialRoute: '/',
       routes: {
-        '/': (context) => Loading(),
-        // User login page
-        '/user_auth': (context) => UserAuthentication(),
-        '/passwordResetCode': (context) => PasswordResetCode(),
-        // User register page
-        '/registerUser': (context) => UserAuthenticationRegister(),
-        '/dashboard': (context) => DashboardPanel(),
-        '/form': (context) => DataForm(),
-        //File list
+        '/': (context) => const Loading(),
+        // Widok logowania użytkownika
+        '/user_auth': (context) => const UserAuthentication(),
+        //Widok resetowania hasła
+        '/passwordResetCode': (context) => const PasswordResetCode(),
+        // Ekran rejestrowania nowego użytkownika
+        '/registerUser': (context) => const UserAuthenticationRegister(),
+        //Główny ekran aplikacji - dashboard
+        '/dashboard': (context) => const DashboardPanel(),
+        // Widok listy dodanych plików
         '/fileList': (context) => FilesView(objectId: objectId),
-        // Car Routes
-        '/carList': (context) => CarList(),
+        // Sciezki powiązane z modułem samochodu
+        '/carList': (context) => const CarList(),
         '/carItem': (context) => CarItem(carId: objectId),
         '/carInsurance': (context) => CarInsuranceView(
               car: car,

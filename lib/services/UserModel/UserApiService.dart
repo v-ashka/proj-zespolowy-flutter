@@ -12,9 +12,10 @@ import 'package:http/http.dart' as http;
 import '../../models/dashboard_data_model.dart';
 
 class UserApiService {
+
   Future register(data) async {
     try {
-      var url = Uri.parse("${SERVER_IP}/api/account/register");
+      var url = Uri.parse("$SERVER_IP/api/account/register");
       log(url.toString());
       var response = await http.post(
         url,
@@ -23,8 +24,6 @@ class UserApiService {
         },
         body: jsonEncode(data),
       );
-      print(response.statusCode);
-      print(jsonEncode(data));
       if (response.statusCode == 200) {
         return {"data": response.body, "message": "Pomyślnie zarejestrowano!"};
       } else {

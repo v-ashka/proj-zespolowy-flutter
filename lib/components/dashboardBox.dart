@@ -68,12 +68,20 @@ class DashboardBox extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        description,
-                        style: TextStyle(letterSpacing: 1.2),
+                        description.toUpperCase(),
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontFamily: "Roboto",
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 1.2),
                       ),
+                      SizedBox(height: 3),
                       Text(lastAdded ?? additionalInfo ?? "",
                           style: const TextStyle(
-                              letterSpacing: 1.2, fontWeight: FontWeight.w900)),
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Roboto')),
                     ],
                   ),
                 ),

@@ -172,6 +172,9 @@ class _UserAuthenticationRegisterState
                             ),
                             TextFormField(
                               validator: emailValidation,
+                              onSaved: (String? value) {
+                                emailInput = value;
+                              },
                               cursorColor: Colors.black,
                               style: const TextStyle(color: Colors.black),
                               decoration: InputDecoration(
@@ -209,7 +212,15 @@ class _UserAuthenticationRegisterState
                               ],
                             ),
                             TextFormField(
-                              validator: emailValidation,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Proszę podać numer telefonu!";
+                                }
+                                if (value.length != 9){
+                                  return "Numer telefonu powinien składać się z 9 cyfr";
+                                }
+                                return null;
+                              },
                               cursorColor: Colors.black,
                               style: const TextStyle(color: Colors.black),
                               inputFormatters: <TextInputFormatter>[

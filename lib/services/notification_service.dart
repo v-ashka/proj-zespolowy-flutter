@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import '../constants.dart';
 
 class NotificationApiService {
+  
   Future<List<NotificationList>> getNotifications(token) async {
     try {
       var url = Uri.parse("$SERVER_IP/api/notification/GetList");

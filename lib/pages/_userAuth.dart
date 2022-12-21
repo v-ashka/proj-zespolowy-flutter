@@ -337,6 +337,9 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                             children: [
                               TextFormField(
                                 validator: emailValidation,
+                                onSaved: (String? value) {
+                                emailInput = value;
+                                },
                                 cursorColor: Colors.black,
                                 style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(

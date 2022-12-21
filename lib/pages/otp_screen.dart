@@ -119,8 +119,6 @@ class _OTPScreenState extends State<OTPScreen> {
                       ),
                       RichText(
                         text: TextSpan(
-                          // Note: Styles for TextSpans must be explicitly defined.
-                          // Child text spans will inherit styles from parent
                           style: const TextStyle(
                             fontSize: 16,
                             color: Colors.black,

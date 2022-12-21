@@ -32,7 +32,6 @@ class _DashboardPanelState extends State<DashboardPanel> {
     // TODO: implement initState
     super.initState();
     getUserToken();
-    getNotificationCount();
     getDashboardData();
   }
 
@@ -42,22 +41,15 @@ class _DashboardPanelState extends State<DashboardPanel> {
     setState(() {});
   }
 
-  Future<void> getNotificationCount() async {
-    notificationLoading = true;
-    userData = await storage.read(key: "token");
-    notificationCount = await NotificationApiService().getCount(userData);
-    setState(() {
-      notificationLoading = false;
-    });
-  }
-
   Future<void> getDashboardData() async {
     userData = await storage.read(key: "token");
+    notificationCount = await NotificationApiService().getCount(userData);
     var response = await UserApiService().getDashboardData(userData);
     if (response?.statusCode == 200) {
       dashboardData = DashboardData.fromJson(response!.data);
     }
     setState(() {
+      notificationLoading = false;
       dashboardDataLoading = false;
     });
   }
@@ -102,13 +94,22 @@ class _DashboardPanelState extends State<DashboardPanel> {
                     ),
                     Stack(
                       children: [
+                        IconButton(
+                          onPressed: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NotificationView()));
+                          },
+                          icon: const Icon(Icons.notifications, size: 25),
+                        ),
                         if (notificationCount != 0)
                           Positioned(
                             top: 7,
                             left: 25,
                             child: Container(
-                              width: 13,
-                              height: 13,
+                              width: 15,
+                              height: 15,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: Colors.red,
@@ -121,15 +122,6 @@ class _DashboardPanelState extends State<DashboardPanel> {
                               ),
                             ),
                           ),
-                        IconButton(
-                          onPressed: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => NotificationView()));
-                          },
-                          icon: const Icon(Icons.notifications, size: 25),
-                        ),
                       ],
                     ),
                     IconButton(
@@ -156,7 +148,7 @@ class _DashboardPanelState extends State<DashboardPanel> {
                   Expanded(
                     child: RefreshIndicator(
                       backgroundColor: secondColor,
-                      onRefresh: getNotificationCount,
+                      onRefresh: getDashboardData,
                       child: ListView(
                         children: [
                           Column(
@@ -203,7 +195,8 @@ class _DashboardPanelState extends State<DashboardPanel> {
                               description: "Ostatnio dodany dokument",
                               routeLink: '/documentList',
                               assetImgPath: 'assets/my_files.svg',
-                              user: userData),
+                              user: userData,
+                              additionalInfo: dashboardData.ostatniDokument),
                           SizedBox(
                             height: 15,
                           ),
@@ -211,6 +204,7 @@ class _DashboardPanelState extends State<DashboardPanel> {
                               title: "Paragony",
                               description: "Ostatnio dodany paragon",
                               assetImgPath: 'assets/receipt.svg',
+                              lastAdded: dashboardData.ostatniParagon,
                               onPressed: () => {
                                     Navigator.push(
                                         context,
@@ -224,7 +218,9 @@ class _DashboardPanelState extends State<DashboardPanel> {
                           ),
                           DashboardBox(
                               title: "Samochód",
-                              description: "Następny przegląd za",
+                              description: "Następny przegląd pojazdu",
+                              additionalInfo:
+                                  "${dashboardData.markaModelSamochodu} za ${dashboardData.dniDoPrzegladu} dni",
                               routeLink: '/carList',
                               assetImgPath: 'assets/cars.svg',
                               user: userData),
@@ -234,6 +230,7 @@ class _DashboardPanelState extends State<DashboardPanel> {
                           DashboardBox(
                               title: "Dom",
                               description: "Liczba dodanych pomieszczeń",
+                              additionalInfo: dashboardData.liczbaPomieszczen.toString(),
                               onPressed: () => {
                                     Navigator.push(
                                         context,

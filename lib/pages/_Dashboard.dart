@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:projzespoloey/components/dashboardBox.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/models/dashboard_data_model.dart';
@@ -21,35 +17,26 @@ class DashboardPanel extends StatefulWidget {
 }
 
 class _DashboardPanelState extends State<DashboardPanel> {
-  String? userData;
+  String? token;
   String? userName;
   int? notificationCount;
-  bool notificationLoading = true;
   bool dashboardDataLoading = true;
   DashboardData dashboardData = DashboardData();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getUserToken();
     getDashboardData();
   }
 
-  void getUserToken() async {
-    userData = await storage.read(key: "token");
-    userName = await storage.read(key: "userName");
-    setState(() {});
-  }
-
   Future<void> getDashboardData() async {
-    userData = await storage.read(key: "token");
-    notificationCount = await NotificationApiService().getCount(userData);
-    var response = await UserApiService().getDashboardData(userData);
+    userName = await storage.read(key: "userName");
+    token = await storage.read(key: "token");
+    notificationCount = await NotificationApiService().getCount(token);
+    var response = await UserApiService().getDashboardData(token);
     if (response?.statusCode == 200) {
       dashboardData = DashboardData.fromJson(response!.data);
     }
     setState(() {
-      notificationLoading = false;
       dashboardDataLoading = false;
     });
   }
@@ -57,7 +44,7 @@ class _DashboardPanelState extends State<DashboardPanel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF8F8F8),
+      backgroundColor: const Color(0xffF8F8F8),
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
@@ -89,7 +76,7 @@ class _DashboardPanelState extends State<DashboardPanel> {
                                     color: mainColor))
                           ]),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 50,
                     ),
                     Stack(
@@ -99,7 +86,7 @@ class _DashboardPanelState extends State<DashboardPanel> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => NotificationView()));
+                                    builder: (context) => const NotificationView()));
                           },
                           icon: const Icon(Icons.notifications, size: 25),
                         ),
@@ -116,8 +103,8 @@ class _DashboardPanelState extends State<DashboardPanel> {
                                 borderRadius: BorderRadius.circular(50),
                               ),
                               child: Text(
-                                "${notificationCount}",
-                                style: TextStyle(
+                                "$notificationCount",
+                                style: const TextStyle(
                                     color: Colors.white, fontSize: 10),
                               ),
                             ),
@@ -129,7 +116,7 @@ class _DashboardPanelState extends State<DashboardPanel> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SettingsView()));
+                                builder: (context) => const SettingsView()));
                       },
                       icon: const Icon(Icons.settings, size: 25),
                     ),
@@ -177,11 +164,11 @@ class _DashboardPanelState extends State<DashboardPanel> {
                                 "Zarządzaj swoim ekranem głównym, ustawiając moduły do wyświetlenia",
                                 style: TextStyle(fontSize: 18),
                               ),
-                              SizedBox(height: 40),
+                              const SizedBox(height: 40),
                             ],
                           ),
                           const Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
                             child: Text(
                               "Kategorie",
                               style: TextStyle(
@@ -195,51 +182,49 @@ class _DashboardPanelState extends State<DashboardPanel> {
                               description: "Ostatnio dodany dokument",
                               routeLink: '/documentList',
                               assetImgPath: 'assets/my_files.svg',
-                              user: userData,
                               additionalInfo: dashboardData.ostatniDokument),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           DashboardBox(
-                              title: "Paragony",
-                              description: "Ostatnio dodany paragon",
-                              assetImgPath: 'assets/receipt.svg',
-                              lastAdded: dashboardData.ostatniParagon,
-                              onPressed: () => {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ReceiptList()))
-                                  },
-                              user: userData),
-                          SizedBox(
+                            title: "Paragony",
+                            description: "Ostatnio dodany paragon",
+                            assetImgPath: 'assets/receipt.svg',
+                            lastAdded: dashboardData.ostatniParagon,
+                            onPressed: () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ReceiptList()))
+                            },
+                          ),
+                          const SizedBox(
                             height: 15,
                           ),
                           DashboardBox(
-                              title: "Samochód",
-                              description: "Następny przegląd pojazdu",
-                              additionalInfo:
-                                  "${dashboardData.markaModelSamochodu} za ${dashboardData.dniDoPrzegladu} dni",
-                              routeLink: '/carList',
-                              assetImgPath: 'assets/cars.svg',
-                              user: userData),
-                          SizedBox(
+                            title: "Samochód",
+                            description: "Następny przegląd pojazdu",
+                            additionalInfo:
+                                "${dashboardData.markaModelSamochodu} za ${dashboardData.dniDoPrzegladu} dni",
+                            routeLink: '/carList',
+                            assetImgPath: 'assets/cars.svg',
+                          ),
+                          const SizedBox(
                             height: 15,
                           ),
                           DashboardBox(
                               title: "Dom",
                               description: "Liczba dodanych pomieszczeń",
-                              additionalInfo: dashboardData.liczbaPomieszczen.toString(),
+                              additionalInfo:
+                                  dashboardData.liczbaPomieszczen.toString(),
                               onPressed: () => {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => HomeList()))
+                                            builder: (context) => const HomeList()))
                                   },
-                              assetImgPath: 'assets/house.svg',
-                              user: userData),
-                          SizedBox(
+                              assetImgPath: 'assets/house.svg',),
+                          const SizedBox(
                             height: 20,
                           ),
                         ],

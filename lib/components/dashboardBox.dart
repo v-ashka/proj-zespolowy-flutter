@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/pages/_Dashboard.dart';
-import 'package:projzespoloey/pages/carsModule/carList.dart';
 
 class DashboardBox extends StatelessWidget {
   const DashboardBox(
@@ -17,7 +11,6 @@ class DashboardBox extends StatelessWidget {
       required this.assetImgPath,
       this.lastAdded,
       this.additionalInfo,
-      required this.user,
       this.onPressed})
       : super(key: key);
 
@@ -27,12 +20,10 @@ class DashboardBox extends StatelessWidget {
   final String assetImgPath;
   final String? lastAdded;
   final String? additionalInfo;
-  final String? user;
   final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final storage = FlutterSecureStorage();
     return SizedBox(
       height: 120,
       child: ElevatedButton(
@@ -44,7 +35,7 @@ class DashboardBox extends StatelessWidget {
                 borderRadius: BorderRadius.circular(25))),
         onPressed: onPressed ??
             () {
-              Navigator.pushNamed(context, routeLink!, arguments: user);
+              Navigator.pushNamed(context, routeLink!);
             },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
@@ -69,14 +60,14 @@ class DashboardBox extends StatelessWidget {
                       ),
                       Text(
                         description.toUpperCase(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.black87,
                             fontFamily: "Roboto",
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                             letterSpacing: 1.2),
                       ),
-                      SizedBox(height: 3),
+                      const SizedBox(height: 3),
                       Text(lastAdded ?? additionalInfo ?? "",
                           style: const TextStyle(
                               letterSpacing: 0,

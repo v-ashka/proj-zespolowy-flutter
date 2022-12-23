@@ -72,7 +72,7 @@ class _UserAuthenticationRegisterState
                           borderRadius: BorderRadius.all(Radius.circular(25.0))),
                       title: Text('Coś poszło nie tak!'),
                       content: Text('Rejestracja nie powiodła się, spróbuj jeszcze raz.'));});}
-          Navigator.pushNamed(context, '/user_auth', arguments: {"successRegister": true});});
+          Navigator.pushNamed(context, '/user_auth');});
   }
 
   //Funkcja walidująca hasło użytkownika pod kątem wymagań bezpiecznego hasła
@@ -241,6 +241,9 @@ class _UserAuthenticationRegisterState
                                   return "Numer telefonu powinien składać się z 9 cyfr";
                                 }
                                 return null;
+                              },
+                              onSaved: (String? value) {
+                                phoneNumber = value;
                               },
                               cursorColor: Colors.black,
                               style: const TextStyle(color: Colors.black),

@@ -640,8 +640,7 @@ class _SettingsViewState extends State<SettingsView> {
                     onPressed: () async {
                       showAboutUsDialog();
                     },
-                    assetImgPath: 'assets/aboutus.svg',
-                    user: userData),
+                    assetImgPath: 'assets/aboutus.svg'),
                 const SizedBox(
                   height: 15,
                 ),
@@ -657,8 +656,7 @@ class _SettingsViewState extends State<SettingsView> {
                           "Podaj stare i nowe hasło",
                           "secLabel");
                     },
-                    assetImgPath: 'assets/secure_login_pd4.svg',
-                    user: userData),
+                    assetImgPath: 'assets/secure_login_pd4.svg'),
                 const SizedBox(
                   height: 15,
                 ),
@@ -669,8 +667,7 @@ class _SettingsViewState extends State<SettingsView> {
                     onPressed: () async {
                       print("val test2");
                     },
-                    assetImgPath: 'assets/auth_pass.svg',
-                    user: userData),
+                    assetImgPath: 'assets/auth_pass.svg'),
                 const SizedBox(
                   height: 15,
                 ),
@@ -687,8 +684,7 @@ class _SettingsViewState extends State<SettingsView> {
                       // Navigator.popUntil(
                       //     context, ModalRoute.withName('/user_auth'));
                     },
-                    assetImgPath: 'assets/logout2.svg',
-                    user: userData),
+                    assetImgPath: 'assets/logout2.svg'),
                 const SizedBox(
                   height: 15,
                 ),
@@ -699,8 +695,7 @@ class _SettingsViewState extends State<SettingsView> {
                     onPressed: () async {
                       importExportAlert();
                     },
-                    assetImgPath: 'assets/exportimport.svg',
-                    user: userData),
+                    assetImgPath: 'assets/exportimport.svg'),
               ]))),
     );
   }

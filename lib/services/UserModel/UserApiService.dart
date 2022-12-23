@@ -16,7 +16,7 @@ class UserApiService {
   final dio = Dio();
   late Response response;
 
-  Future <Response?>  register(data) async {
+  Future <Response?> register(data) async {
     try {
       var url = "$SERVER_IP/api/account/register";
       response = await dio.post(
@@ -29,25 +29,16 @@ class UserApiService {
     }
   }
 
-  Future login(data) async {
+  Future <Response?> login(data) async {
     try {
-      var url = Uri.parse("$SERVER_IP/api/account/login");
-      var response = await http.post(
+      var url = "$SERVER_IP/api/account/login";
+      var response = await dio.post(
         url,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(data),
+        data: jsonEncode(data),
       );
-      if (response.statusCode == 200) {
-        storage.write(key: "token", value: response.body);
-        return {"data": response.body};
-      } else {
-        return {"data": null, "message": "Podano nie prawidłowe dane!"};
-      }
-    } catch (e) {
-      log(e.toString());
-      return {"data": null, "message": "Wystapił błąd połączenia!"};
+      return response;
+    } on DioError catch (e) {
+      return e.response;
     }
   }
 

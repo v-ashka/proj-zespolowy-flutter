@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
@@ -36,22 +37,42 @@ class _UserAuthenticationRegisterState
 
   //Funkcja odpowiadająca za rejestrację użytkownika
   void registerUser() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25.0))),
+            content: SizedBox(
+              height: 150, width: 150,
+              child: Center(
+                  child: CircularProgressIndicator(color: mainColor))));});
     setState(() => isLoading = true);
-    UserRegister data = UserRegister(
-        imie: nameInput,
-        email: emailInput,
-        haslo: passInput,
-        numerTelefonu: phoneNumber);
-    var registerProcess = await UserApiService().register(data);
-    Future.delayed(const Duration(seconds: 0)).then((value) => setState(() {
+    UserRegister data = UserRegister(imie: nameInput, email: emailInput, haslo: passInput, numerTelefonu: phoneNumber);
+    var response = await UserApiService().register(data);
+    setState(() {
           isLoading = false;
-          if (registerProcess["data"] != null) {
-            Navigator.pushNamed(context, '/user_auth',
-                arguments: {"successRegister": true});
+          Navigator.of(context, rootNavigator: true).pop();
+          if (response!.statusCode == 200) {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                      icon: SvgPicture.asset('assets/success.svg', width: 80, height: 80),
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0))),
+                      title: const Text('Zarejestrowano pomyślnie!'),
+                      content: const Text("Teraz możesz przejść do logowania"));});
           } else {
-            errorFeedback = registerProcess["message"];
-          }
-        }));
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return const AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0))),
+                      title: Text('Coś poszło nie tak!'),
+                      content: Text('Rejestracja nie powiodła się, spróbuj jeszcze raz.'));});}
+          Navigator.pushNamed(context, '/user_auth');});
   }
 
   //Funkcja walidująca hasło użytkownika pod kątem wymagań bezpiecznego hasła
@@ -220,6 +241,9 @@ class _UserAuthenticationRegisterState
                                   return "Numer telefonu powinien składać się z 9 cyfr";
                                 }
                                 return null;
+                              },
+                              onSaved: (String? value) {
+                                phoneNumber = value;
                               },
                               cursorColor: Colors.black,
                               style: const TextStyle(color: Colors.black),

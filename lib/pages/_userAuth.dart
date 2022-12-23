@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -24,9 +25,6 @@ class UserAuthentication extends StatefulWidget {
 }
 
 class _UserAuthenticationState extends State<UserAuthentication> {
-  // Local flutter storage token
-  // final storage = new FlutterSecureStorage();
-  // Form variables
   final formKey = GlobalKey<FormState>();
   final formServerKey = GlobalKey<FormState>();
   bool isValid = false;
@@ -38,31 +36,29 @@ class _UserAuthenticationState extends State<UserAuthentication> {
   // Error feedback
   String errorFeedback = "";
 
-  void saveData() async {
+  //Funkcja logująca użytkownika
+  void loginUser() async {
     setState(() => isLoading = true);
-    Map<String, dynamic> payload = {};
     UserLogin data = UserLogin(email: emailInput, pass: passInput);
-    var token = await UserApiService().login(data);
-    Future.delayed(const Duration(seconds: 0)).then((value) => setState(() {
-          print("token is:");
-          print(token);
+    Response? response = await UserApiService().login(data);
+    setState(() {
           isLoading = false;
-
-          if (token["data"] != null) {
-            var payload = Jwt.parseJwt(token["data"]);
+          if (response?.statusCode == 200) {
+            storage.write(key: "token", value: response!.data);
+            var payload = Jwt.parseJwt(response.data);
             storage.write(
                 key: "userName",
-                value: payload[
-                    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]);
-            // payload = Jwt.parseJwt(token["data"]);
+                value: payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]);
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => const DashboardPanel()));
+          } if (response?.statusCode == 400) {
+            errorFeedback = "Podano nieprawidłowe dane logowania!";
           } else {
-            errorFeedback = token["message"];
+            errorFeedback = "Coś poszło nie tak, spróbuj jeszcze raz!";
           }
-        }));
+        });
   }
 
   //Funkcja walidująca adres e-mail podany przez użytkownika
@@ -438,7 +434,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                         formKey.currentState!.save();
                                         // user model
                                         errorFeedback = "";
-                                        saveData();
+                                        loginUser();
                                         print(
                                             "email: ${emailInput} pass: ${passInput}");
                                       }

@@ -13,37 +13,25 @@ import '../../models/dashboard_data_model.dart';
 
 class UserApiService {
 
-  Future register(data) async {
+  final dio = Dio();
+  late Response response;
+
+  Future <Response?>  register(data) async {
     try {
-      var url = Uri.parse("$SERVER_IP/api/account/register");
-      log(url.toString());
-      var response = await http.post(
+      var url = "$SERVER_IP/api/account/register";
+      response = await dio.post(
         url,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(data),
+        data: jsonEncode(data),
       );
-      if (response.statusCode == 200) {
-        return {"data": response.body, "message": "Pomyślnie zarejestrowano!"};
-      } else {
-        return {
-          "data": null,
-          "message": "Wystapił błąd połączenia z bazą danych!"
-        };
-      }
-    } catch (e) {
-      log(e.toString());
-      return {
-        "data": null,
-        "message": "Nie można zapisać danych, sprawdź połączenie internetowe!"
-      };
+      return response;
+    } on DioError catch (e) {
+      return e.response;
     }
   }
 
   Future login(data) async {
     try {
-      var url = Uri.parse("${SERVER_IP}/api/account/login");
+      var url = Uri.parse("$SERVER_IP/api/account/login");
       var response = await http.post(
         url,
         headers: <String, String>{
@@ -51,9 +39,7 @@ class UserApiService {
         },
         body: jsonEncode(data),
       );
-      print(response.statusCode);
       if (response.statusCode == 200) {
-        // print(response.body);
         storage.write(key: "token", value: response.body);
         return {"data": response.body};
       } else {
@@ -66,11 +52,10 @@ class UserApiService {
   }
 
   Future<Response> resetPassword(email) async {
-    final _dio = Dio();
     Response response;
     try {
       var url = "$SERVER_IP/api/account/resetPassword?email=$email";
-      response = await _dio.post(
+      response = await dio.post(
         url,
       );
       return response;
@@ -80,11 +65,10 @@ class UserApiService {
   }
 
   Future<Response?> verifyCode(String id, int code) async {
-    final _dio = Dio();
     Response response;
     try {
       var url = "$SERVER_IP/api/account/confirmReset?id=$id&code=$code";
-      response = await _dio.post(
+      response = await dio.post(
         url,
       );
       return response;
@@ -94,11 +78,10 @@ class UserApiService {
   }
 
   Future changePassword(password, token) async {
-    final _dio = Dio();
     Response response;
     try {
       var url = "$SERVER_IP/api/account/changePassword?newPassword=$password";
-      response = await _dio.post(
+      response = await Dio().post(
         url,
         options: Options(
           headers: {

@@ -36,7 +36,6 @@ class NotificationApiService {
           options: Options(headers: {
             'Authorization': "Bearer $token",
           }));
-      log(response.data.toString());
       return response.data;
     } on DioError catch (e) {
       return e.response;

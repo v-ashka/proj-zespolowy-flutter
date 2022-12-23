@@ -56,7 +56,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   HttpOverrides.global = PostHttpOverrides();
-  runApp(MaterialApp(home: MyApp()));
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -69,6 +69,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

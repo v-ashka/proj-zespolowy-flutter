@@ -3,10 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projzespoloey/constants.dart';
 
 class DashboardBox extends StatelessWidget {
-  const DashboardBox(
+   DashboardBox(
       {Key? key,
       required this.title,
       required this.description,
+        this.descUpperCase,
       this.routeLink,
       required this.assetImgPath,
       this.lastAdded,
@@ -19,6 +20,7 @@ class DashboardBox extends StatelessWidget {
   final String? routeLink;
   final String assetImgPath;
   final String? lastAdded;
+  bool? descUpperCase=true;
   final String? additionalInfo;
   final void Function()? onPressed;
 
@@ -59,7 +61,7 @@ class DashboardBox extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        description.toUpperCase(),
+                        descUpperCase == true ? description.toUpperCase() : description,
                         style: const TextStyle(
                             color: Colors.black87,
                             fontFamily: "Roboto",

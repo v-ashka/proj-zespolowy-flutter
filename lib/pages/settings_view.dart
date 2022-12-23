@@ -600,19 +600,6 @@ class _SettingsViewState extends State<SettingsView> {
                           Navigator.pop(context);
                         },
                         child: Text("Anuluj")),
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: mainColor,
-                          foregroundColor: bgSmokedWhite,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25)),
-                        ),
-                        onPressed: () {
-                          print("saved");
-                          print("serverIP: $SERVER_IP");
-                          Navigator.of(context).pop();
-                        },
-                        child: Text("Zapisz zmiany")),
                   ],
                 ),
               ],
@@ -635,72 +622,77 @@ class _SettingsViewState extends State<SettingsView> {
               padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
               child: ListView(children: [
                 DashboardBox(
-                    title: "O nas",
-                    description: "Sekcja ta zawiera informacje o autorach",
-                    onPressed: () async {
-                      showAboutUsDialog();
-                    },
-                    assetImgPath: 'assets/aboutus.svg',
-                    user: userData),
+                  title: "O nas",
+                  description: "Przejdź do informacji o autorach aplikacji.",
+                  descUpperCase: false,
+                  onPressed: () async {
+                    showAboutUsDialog();
+                  },
+                  assetImgPath: 'assets/aboutus.svg',
+                ),
                 const SizedBox(
                   height: 15,
                 ),
                 DashboardBox(
-                    title: "Zmień hasło",
-                    description:
-                        "Twoje hasło nie jest w pełni bezpieczne? W tej sekcji zmienisz to w prosty sposób!",
-                    onPressed: () async {
-                      showChangePassDialog(
-                          true,
-                          "Zmień hasło",
-                          "Zmień swoje hasło w 2 krokach",
-                          "Podaj stare i nowe hasło",
-                          "secLabel");
-                    },
-                    assetImgPath: 'assets/secure_login_pd4.svg',
-                    user: userData),
+                  title: "Zmień hasło",
+                  description:
+                      "Twoje hasło nie jest w pełni bezpieczne? Tutaj zmienisz swoje hasło w kilku krokach!",
+                  descUpperCase: false,
+                  onPressed: () async {
+                    showChangePassDialog(
+                        true,
+                        "Zmień hasło",
+                        "Zmień swoje hasło w 2 krokach",
+                        "Podaj stare i nowe hasło",
+                        "secLabel");
+                  },
+                  assetImgPath: 'assets/secure_login_pd4.svg',
+                ),
                 const SizedBox(
                   height: 15,
                 ),
                 DashboardBox(
-                    title: "Zmień sposób walidacji",
-                    description:
-                        "Zmień sposób weryfikacji konta, wrazie gdybyś zapomniał swojego hasła.",
-                    onPressed: () async {
-                      print("val test2");
-                    },
-                    assetImgPath: 'assets/auth_pass.svg',
-                    user: userData),
+                  title: "Zmień sposób walidacji",
+                  description:
+                      "Zmień sposób weryfikacji konta, wrazie gdybyś zapomniał swojego hasła.",
+                  descUpperCase: false,
+                  onPressed: () async {
+                    print("val test2");
+                  },
+                  assetImgPath: 'assets/auth_pass.svg',
+                ),
                 const SizedBox(
                   height: 15,
                 ),
                 DashboardBox(
-                    title: "Wyloguj się",
-                    description:
-                        "Przejście do tej sekcji spowoduje wylogowanie się z konta użytkownika",
-                    onPressed: () async {
-                      // print("val");
-                      removeUserToken();
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/', (Route<dynamic> route) => false);
-                      // Navigator.pop(context);
-                      // Navigator.popUntil(
-                      //     context, ModalRoute.withName('/user_auth'));
-                    },
-                    assetImgPath: 'assets/logout2.svg',
-                    user: userData),
+                  title: "Wyloguj się",
+                  description:
+                      "Przejście do tej sekcji spowoduje wylogowanie się z konta użytkownika",
+                  descUpperCase: false,
+                  onPressed: () async {
+                    // print("val");
+                    removeUserToken();
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/', (Route<dynamic> route) => false);
+                    // Navigator.pop(context);
+                    // Navigator.popUntil(
+                    //     context, ModalRoute.withName('/user_auth'));
+                  },
+                  assetImgPath: 'assets/logout2.svg',
+                ),
                 const SizedBox(
                   height: 15,
                 ),
                 DashboardBox(
-                    title: "Import / Eksport plików",
-                    description:
-                        "W tym miesjcu w prosty sposób zaimportujesz lub wyeksportujesz swoje dane!",
-                    onPressed: () async {
-                      importExportAlert();
-                    },
-                    assetImgPath: 'assets/exportimport.svg',
-                    user: userData),
+                  title: "Import / Eksport plików",
+                  description:
+                      "W tym miesjcu w prosty sposób zaimportujesz lub wyeksportujesz swoje dane!",
+                  descUpperCase: false,
+                  onPressed: () async {
+                    importExportAlert();
+                  },
+                  assetImgPath: 'assets/exportimport.svg',
+                ),
               ]))),
     );
   }

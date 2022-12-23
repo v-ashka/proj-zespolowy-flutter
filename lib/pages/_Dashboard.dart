@@ -86,7 +86,8 @@ class _DashboardPanelState extends State<DashboardPanel> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const NotificationView()));
+                                    builder: (context) =>
+                                        const NotificationView()));
                           },
                           icon: const Icon(Icons.notifications, size: 25),
                         ),
@@ -204,8 +205,9 @@ class _DashboardPanelState extends State<DashboardPanel> {
                           DashboardBox(
                             title: "Samochód",
                             description: "Następny przegląd pojazdu",
-                            additionalInfo:
-                                "${dashboardData.markaModelSamochodu} za ${dashboardData.dniDoPrzegladu} dni",
+                            additionalInfo: dashboardData.dniDoPrzegladu != null
+                                ? "${dashboardData.markaModelSamochodu} za ${dashboardData.dniDoPrzegladu} dni"
+                                : "",
                             routeLink: '/carList',
                             assetImgPath: 'assets/cars.svg',
                           ),
@@ -213,17 +215,18 @@ class _DashboardPanelState extends State<DashboardPanel> {
                             height: 15,
                           ),
                           DashboardBox(
-                              title: "Dom",
-                              description: "Liczba dodanych pomieszczeń",
-                              additionalInfo:
-                                  dashboardData.liczbaPomieszczen.toString(),
-                              onPressed: () => {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => const HomeList()))
-                                  },
-                              assetImgPath: 'assets/house.svg',),
+                            title: "Dom",
+                            description: "Liczba dodanych pomieszczeń",
+                            additionalInfo:
+                                dashboardData.liczbaPomieszczen.toString(),
+                            onPressed: () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomeList()))
+                            },
+                            assetImgPath: 'assets/house.svg',
+                          ),
                           const SizedBox(
                             height: 20,
                           ),

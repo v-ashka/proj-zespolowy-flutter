@@ -30,7 +30,7 @@ class ReceiptModel {
         dataZakupu: json["dataZakupu"],
         kategoriaParagonu: json["kategoriaParagonu"],
         uwagi: json["uwagi"],
-        sklep: json["sklep"],
+        sklep: json["nazwaSklepu"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,6 +42,6 @@ class ReceiptModel {
         "dataZakupu": dataZakupu,
         "kategoriaParagonu": kategoriaParagonu,
         "uwagi": uwagi,
-        "sklep": sklep
+        "nazwaSklepu": sklep
       };
 }

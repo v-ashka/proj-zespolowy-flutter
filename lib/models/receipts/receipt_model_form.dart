@@ -5,7 +5,7 @@ class ReceiptModelForm {
     this.waznoscZwrotu,
     this.waznoscGwarancji,
     this.dataZakupu,
-    this.nazwaKategorii,
+    this.idKategorii,
     this.nazwaSklepu,
     this.uwagi,
   });
@@ -14,7 +14,7 @@ class ReceiptModelForm {
   String? dataZakupu;
   double? cena;
   String? nazwaSklepu;
-  String? nazwaKategorii;
+  int? idKategorii;
   String? uwagi;
   int? waznoscZwrotu;
   int? waznoscGwarancji;
@@ -26,7 +26,7 @@ class ReceiptModelForm {
         waznoscZwrotu: json["waznoscZwrotu"],
         waznoscGwarancji: json["waznoscGwarancji"],
         dataZakupu: json["dataZakupu"],
-        nazwaKategorii: json["nazwaKategorii"],
+        idKategorii: json["idKategorii"],
         nazwaSklepu: json["nazwaSklepu"],
         uwagi: json["uwagi"],
       );
@@ -37,7 +37,7 @@ class ReceiptModelForm {
         "waznoscZwrotu": waznoscZwrotu,
         "waznoscGwarancji": waznoscGwarancji,
         "dataZakupu": dataZakupu,
-        "nazwaKategorii": nazwaKategorii,
+        "idKategorii": idKategorii,
         "uwagi": uwagi,
         "nazwaSklepu": nazwaSklepu
       };

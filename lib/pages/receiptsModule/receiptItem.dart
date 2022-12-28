@@ -4,6 +4,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:projzespoloey/components/action_box_buttons.dart';
 import 'package:projzespoloey/components/appbar.dart';
+import 'package:projzespoloey/components/detail_bar.dart';
 import 'package:projzespoloey/components/info_box.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/main.dart';
@@ -187,36 +188,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                   ],
                                 ),
                               ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Cena: ",
-                                    style: TextStyle(
-                                      fontFamily: "Lato",
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 80,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          color: secondaryColor),
-                                      child: Text("${receiptModel?.cena} zł",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                              color: fontBlack)),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            DetailBar(title: "Cena", value: "${receiptModel!.cena.toString()} zł"),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                 child: RichText(
@@ -341,142 +313,11 @@ class _ReceiptItemState extends State<ReceiptItem> {
                           )
                         ],
                       ),
-                      Row(
-                        children: [
-                          const Text(
-                            "Data zakupu produktu:",
-                            style: TextStyle(
-                              fontFamily: "Lato",
-                              fontWeight: FontWeight.w900,
-                              fontSize: 12,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                                color: secondaryColor),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Text("${receiptModel?.dataZakupu}",
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: fontBlack)),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Row(
-                          children: [
-                            const Text(
-                              "Kategoria produktu:",
-                              style: TextStyle(
-                                fontFamily: "Lato",
-                                fontWeight: FontWeight.w900,
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: secondaryColor),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                child: Text(
-                                    "${receiptModel?.kategoriaParagonu}",
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: fontBlack)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Wrap(
-                          children: [
-                            const SizedBox(
-                              width: 100,
-                              child: Text(
-                                "Miejsce zakupu:",
-                                style: TextStyle(
-                                  fontFamily: "Lato",
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: secondaryColor),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Text("${receiptModel?.sklep}",
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: fontBlack)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Dodatkowe informacje:",
-                              style: TextStyle(
-                                fontFamily: "Lato",
-                                fontWeight: FontWeight.w900,
-                                fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: secondaryColor),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Text("${receiptModel?.uwagi}",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: fontBlack)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      DetailBar(title: "Data zakupu produktu", value: receiptModel!.dataZakupu!),
+                      DetailBar(title: "Kategoria produktu", value: receiptModel!.kategoriaParagonu!),
+                      DetailBar(title: "Miejsce zakupu", value: receiptModel!.sklep!),
+                      if (receiptModel?.uwagi != null && receiptModel?.uwagi != "")
+                        DetailBar(title: "Dodatkowe informacje", value: receiptModel!.uwagi!),
                       if (receiptModel?.koniecGwarancji != null) ...[
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 2),

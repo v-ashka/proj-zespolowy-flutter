@@ -64,7 +64,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
   List storesList = [];
   final _formKey = GlobalKey<FormState>();
   File? image;
-
+  List receiptCategories = [];
   String? token;
 
   // Slider values
@@ -77,22 +77,17 @@ class _ReceiptFormState extends State<ReceiptForm> {
 
   @override
   void initState() {
-    // _cnt = SingleValueDropDownController();
-
     super.initState();
     getData();
   }
 
   getData() async {
     token = await storage.read(key: "token");
-    categoryList = await ReceiptApiService().getReceiptFormCat(token);
-    storesList = await ReceiptApiService().getReceiptFormStores(token);
-    // async function to fetch here ...
+    categoryList = await ReceiptApiService().getCategories(token);
     if (widget.isEditing) {
       receiptItem = (await ReceiptApiService()
           .getReceiptFormData(token, widget.receiptId))!;
     }
-
     setState(() {
       isLoading = !isLoading;
     });
@@ -167,29 +162,14 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                           fontWeight: FontWeight.w600),
                                     ),
                                   ),
-                                  // Expanded(
-                                  //   flex: 3,
-                                  //   child: ElevatedButton(
-                                  //     style: ElevatedButton.styleFrom(
-                                  //       backgroundColor: mainColor,
-                                  //       shape: CircleBorder(),
-                                  //       padding: EdgeInsets.all(10),
-                                  //     ),
-                                  //     onPressed: () {},
-                                  //     child: const Icon(
-                                  //       Icons.qr_code_scanner_rounded,
-                                  //       size: 30,
-                                  //     ),
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
+                                  const Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                        EdgeInsets.fromLTRB(0, 5, 0, 5),
                                     child: Text(
                                       "Nazwa produktu",
                                       style: TextStyle(
@@ -313,44 +293,49 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                       ),
                                       SizedBox(
                                         width: 170,
-                                        child: TextFormField(
-                                          initialValue:
-                                              receiptItem.nazwaKategorii,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Proszę podać nazwę kategorii produktu';
-                                            }
-                                            return null;
-                                          },
-                                          onSaved: (value) {
-                                            receiptItem.nazwaKategorii = value;
-                                          },
-                                          cursorColor: Colors.black,
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                          decoration: InputDecoration(
-                                              contentPadding:
-                                                  const EdgeInsets.all(15),
-                                              prefixIcon: const Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 1),
-                                                child: Icon(
-                                                  Icons.category_outlined,
-                                                  color: Colors.black,
+                                        child:                                       DropdownButtonFormField(
+                                            validator: (value) {
+                                              if (value == null) {
+                                                return 'Wybierz kategorię dokumentu!';
+                                              }
+                                              return null;
+                                            },
+                                            value: receiptItem.idKategorii,
+                                            isExpanded: true,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                receiptItem.idKategorii =
+                                                value as int?;
+                                              });
+                                            },
+                                            items: categoryList
+                                                .map((category) {
+                                              return DropdownMenuItem(
+                                                  value: category['id'],
+                                                  child: Text(category['nazwa']));
+                                            }).toList(),
+                                            decoration: InputDecoration(
+                                                contentPadding:
+                                                const EdgeInsets.fromLTRB(
+                                                    15, 10, 15, 15),
+                                                prefixIcon: const Padding(
+                                                  padding:
+                                                  EdgeInsets.only(top: 1),
+                                                  child: Icon(
+                                                    Icons.category_outlined,
+                                                    color: Colors.black,
+                                                  ),
                                                 ),
-                                              ),
-                                              hintText: "Kategoria produktu",
-                                              hintStyle:
-                                                  TextStyle(fontSize: 14),
-                                              fillColor: bg35Grey,
-                                              filled: true,
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                borderSide: BorderSide.none,
-                                              )),
-                                        ),
+                                                hintText: "Kategoria",
+                                                hintStyle: TextStyle(fontSize: 14),
+                                                fillColor: bg35Grey,
+                                                filled: true,
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(50),
+                                                  borderSide: BorderSide.none,
+                                                )))
+                                        ,
                                       ),
                                     ],
                                   ),

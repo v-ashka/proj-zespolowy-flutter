@@ -72,25 +72,6 @@ class ReceiptApiService {
     }
   }
 
-  Future getReceiptFormCat(String? token) async {
-    try {
-      var url = Uri.parse("$SERVER_IP/api/receipt/GetRecipeCategories");
-      var response = await http.get(url, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': "Bearer $token"
-      });
-
-      log(response.statusCode.toString());
-      log(response.reasonPhrase.toString());
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      }
-      return [];
-    } catch (e) {
-      return [];
-    }
-  }
-
   Future getReceiptFormStores(String? token) async {
     try {
       var url = Uri.parse("$SERVER_IP/api/receipt/GetStores");
@@ -98,9 +79,6 @@ class ReceiptApiService {
         'Content-Type': 'application/json',
         'Authorization': "Bearer $token"
       });
-
-      log(response.statusCode.toString());
-      log(response.reasonPhrase.toString());
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       }
@@ -144,6 +122,22 @@ class ReceiptApiService {
       log(response.statusCode.toString());
       log(response.reasonPhrase.toString());
       return response.statusCode;
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future getCategories(token) async {
+    try {
+      var url = Uri.parse("$SERVER_IP/api/receipt/GetReceiptCategories");
+      var response = await http.get(url, headers: <String, String>{
+        'Content-Type': "application/json",
+        "Authorization": "Bearer $token"
+      });
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
     } catch (e) {
       log(e.toString());
     }

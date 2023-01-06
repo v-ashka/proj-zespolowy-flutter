@@ -600,11 +600,14 @@ class _SettingsViewState extends State<SettingsView> {
   //Funkcja pokazująca AlertDialog z wyborem adresu serwera
   void showValidationSettings() async {
     bool isSwitched = false;
+    // odczytaj klucz o nazwie phone_validation z local storage
     var validationType = await storage.read(key: "phone_validation");
     if (validationType == null) {
+      // jezeli klucz nie istnieje ustaw podstawowa wartosc klucza na false
       await storage.write(
           key: "phone_validation", value: isSwitched.toString());
     } else {
+      // w przeciwnym wypadku zmień stan przycisku wystepujacego w widżecie alertdialog na wartość false
       setState(() {
         bool temp = validationType.toLowerCase() == 'true';
         isSwitched = temp;
@@ -771,6 +774,19 @@ class _SettingsViewState extends State<SettingsView> {
                   height: 15,
                 ),
                 DashboardBox(
+                  title: "Import / Eksport plików",
+                  description:
+                      "W tym miesjcu w prosty sposób zaimportujesz lub wyeksportujesz swoje dane!",
+                  descUpperCase: false,
+                  onPressed: () async {
+                    importExportAlert();
+                  },
+                  assetImgPath: 'assets/exportimport.svg',
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                DashboardBox(
                   title: "Wyloguj się",
                   description:
                       "Przejście do tej sekcji spowoduje wylogowanie się z konta użytkownika",
@@ -780,24 +796,8 @@ class _SettingsViewState extends State<SettingsView> {
                     removeUserToken();
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         '/', (Route<dynamic> route) => false);
-                    // Navigator.pop(context);
-                    // Navigator.popUntil(
-                    //     context, ModalRoute.withName('/user_auth'));
                   },
                   assetImgPath: 'assets/logout2.svg',
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                DashboardBox(
-                  title: "Import / Eksport plików",
-                  description:
-                      "W tym miesjcu w prosty sposób zaimportujesz lub wyeksportujesz swoje dane!",
-                  descUpperCase: false,
-                  onPressed: () async {
-                    importExportAlert();
-                  },
-                  assetImgPath: 'assets/exportimport.svg',
                 ),
               ]))),
     );

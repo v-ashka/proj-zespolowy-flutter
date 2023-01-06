@@ -168,8 +168,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Padding(
-                                    padding:
-                                        EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
                                     child: Text(
                                       "Nazwa produktu",
                                       style: TextStyle(
@@ -293,7 +292,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                       ),
                                       SizedBox(
                                         width: 170,
-                                        child:                                       DropdownButtonFormField(
+                                        child: DropdownButtonFormField(
                                             validator: (value) {
                                               if (value == null) {
                                                 return 'Wybierz kategorię dokumentu!';
@@ -305,37 +304,40 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                             onChanged: (value) {
                                               setState(() {
                                                 receiptItem.idKategorii =
-                                                value as int?;
+                                                    value as int?;
                                               });
                                             },
-                                            items: categoryList
-                                                .map((category) {
+                                            items: categoryList.map((category) {
                                               return DropdownMenuItem(
                                                   value: category['id'],
-                                                  child: Text(category['nazwa']));
+                                                  child: Text(
+                                                    category['nazwa'],
+                                                    style:
+                                                        TextStyle(fontSize: 13),
+                                                  ));
                                             }).toList(),
                                             decoration: InputDecoration(
                                                 contentPadding:
-                                                const EdgeInsets.fromLTRB(
-                                                    15, 10, 15, 15),
+                                                    const EdgeInsets.fromLTRB(
+                                                        15, 10, 15, 15),
                                                 prefixIcon: const Padding(
                                                   padding:
-                                                  EdgeInsets.only(top: 1),
+                                                      EdgeInsets.only(top: 1),
                                                   child: Icon(
                                                     Icons.category_outlined,
                                                     color: Colors.black,
                                                   ),
                                                 ),
                                                 hintText: "Kategoria",
-                                                hintStyle: TextStyle(fontSize: 14),
+                                                hintStyle:
+                                                    TextStyle(fontSize: 14),
                                                 fillColor: bg35Grey,
                                                 filled: true,
                                                 border: OutlineInputBorder(
                                                   borderRadius:
-                                                  BorderRadius.circular(50),
+                                                      BorderRadius.circular(50),
                                                   borderSide: BorderSide.none,
-                                                )))
-                                        ,
+                                                ))),
                                       ),
                                     ],
                                   ),
@@ -381,6 +383,9 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                               style: TextStyle(
                                                   color: Colors.black),
                                               decoration: InputDecoration(
+                                                  errorMaxLines: 50,
+                                                  errorStyle:
+                                                      TextStyle(fontSize: 14),
                                                   contentPadding:
                                                       EdgeInsets.all(15),
                                                   prefixIcon: const Padding(

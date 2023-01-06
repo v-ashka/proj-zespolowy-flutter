@@ -163,11 +163,15 @@ class _SettingsViewState extends State<SettingsView> {
                     child: Container(
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                          SizedBox(
+                            height: 10,
+                          ),
                           Text(description),
                           isLoading
                               ? (const Center(
+                                  heightFactor: 5,
                                   child: CircularProgressIndicator(
                                       color: mainColor)))
                               : (Form(
@@ -419,24 +423,6 @@ class _SettingsViewState extends State<SettingsView> {
     });
   }
 
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  Future<void> initNotification(filepath) async {
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('ic_launcher');
-    final InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (details) {
-        log(details.toString());
-        // OpenFile.open(filepath);
-      },
-    );
-  }
-
   void importExportAlert() {
     bool fileReady = false;
     List<PlatformFile> files = [];
@@ -460,6 +446,9 @@ class _SettingsViewState extends State<SettingsView> {
                   child: Container(
                       child: Column(
                     children: [
+                      SizedBox(
+                        height: 30,
+                      ),
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -574,7 +563,7 @@ class _SettingsViewState extends State<SettingsView> {
                             ),
                           ]),
                       SizedBox(
-                        height: 40,
+                        height: 10,
                       ),
                       fileStatus
                           ? LinearProgressIndicator(
@@ -600,6 +589,122 @@ class _SettingsViewState extends State<SettingsView> {
                           Navigator.pop(context);
                         },
                         child: Text("Anuluj")),
+                  ],
+                ),
+              ],
+            );
+          });
+        });
+  }
+
+  //Funkcja pokazująca AlertDialog z wyborem adresu serwera
+  void showValidationSettings() async {
+    bool isSwitched = false;
+    var validationType = await storage.read(key: "phone_validation");
+    if (validationType == null) {
+      await storage.write(
+          key: "phone_validation", value: isSwitched.toString());
+    } else {
+      setState(() {
+        bool temp = validationType.toLowerCase() == 'true';
+        isSwitched = temp;
+      });
+    }
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              titlePadding: const EdgeInsets.fromLTRB(25, 25, 25, 5),
+              contentPadding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(25.0))),
+              title: const Text("Sposób walidacji"),
+              content: SizedBox(
+                  height: 150,
+                  width: 300,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text(
+                          "Wybierz sposób walidacji",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, color: secondColor),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 9,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text(
+                                    "Walidacja numerem telefonu",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    "Zaznacz tę opcje jeżeli wolisz weryfikować swoje konto przypisanym numerem telefonu",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: fontGrey,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Switch(
+                                  value: isSwitched,
+                                  onChanged: (value) async {
+                                    print("value is $value");
+                                    await storage.write(
+                                        key: "phone_validation",
+                                        value: value == true
+                                            ? ("true")
+                                            : ("false"));
+                                    setState(() {
+                                      isSwitched = value;
+                                      print(isSwitched);
+                                      print(
+                                          'valiationtype is ${validationType}');
+                                    });
+                                  }),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                      ])),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: deleteBtn,
+                          foregroundColor: bgSmokedWhite,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                        ),
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Anuluj")),
                   ],
                 ),
               ],
@@ -658,6 +763,7 @@ class _SettingsViewState extends State<SettingsView> {
                   descUpperCase: false,
                   onPressed: () async {
                     print("val test2");
+                    showValidationSettings();
                   },
                   assetImgPath: 'assets/auth_pass.svg',
                 ),

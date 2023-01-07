@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -42,23 +43,28 @@ class _UserAuthenticationState extends State<UserAuthentication> {
     UserLogin data = UserLogin(email: emailInput, pass: passInput);
     Response? response = await UserApiService().login(data);
     setState(() {
-          isLoading = false;
-          if (response?.statusCode == 200) {
-            storage.write(key: "token", value: response!.data);
-            var payload = Jwt.parseJwt(response.data);
-            storage.write(
-                key: "userName",
-                value: payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const DashboardPanel()));
-          } if (response?.statusCode == 400) {
-            errorFeedback = "Podano nieprawidłowe dane logowania!";
-          } else {
-            errorFeedback = "Coś poszło nie tak, spróbuj jeszcze raz!";
-          }
-        });
+      if (response != null) {
+        isLoading = false;
+        if (response?.statusCode == 200) {
+          storage.write(key: "token", value: response!.data);
+          var payload = Jwt.parseJwt(response.data);
+          storage.write(
+              key: "userName",
+              value: payload[
+                  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const DashboardPanel()));
+        }
+        if (response?.statusCode == 400) {
+          errorFeedback = "Podano nieprawidłowe dane logowania!";
+        } else {
+          errorFeedback = "Coś poszło nie tak, spróbuj jeszcze raz!";
+        }
+      } else {
+        errorFeedback = "Wystąpił problem połączenia internetowego";
+        isLoading = false;
+      }
+    });
   }
 
   //Funkcja walidująca adres e-mail podany przez użytkownika
@@ -334,7 +340,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                               TextFormField(
                                 validator: emailValidation,
                                 onSaved: (String? value) {
-                                emailInput = value;
+                                  emailInput = value;
                                 },
                                 cursorColor: Colors.black,
                                 style: const TextStyle(color: Colors.black),

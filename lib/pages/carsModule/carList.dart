@@ -69,8 +69,8 @@ class _CarListState extends State<CarList> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
-    // data = ModalRoute.of(context)?.settings.arguments as UserDataArguments;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: myAppBar(context, HeaderTitleType.carList),
@@ -112,8 +112,6 @@ class _CarListState extends State<CarList> {
                                       ));
                                 },
                                 onLongPress: () {
-                                  HapticFeedback.vibrate();
-                                  SystemSound.play(SystemSoundType.alert);
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -150,13 +148,10 @@ class _CarListState extends State<CarList> {
                                                       MaterialPageRoute(
                                                         builder: (context) =>
                                                             CarForm(
-                                                                carId: carItem
-                                                                    .idSamochodu,
+                                                                carId: carItem.idSamochodu,
                                                                 isEditing: true,
-                                                                brand: carItem
-                                                                    .marka,
-                                                                make: carItem
-                                                                    .model),
+                                                                brand: carItem.marka,
+                                                                make: carItem.model),
                                                       ));
                                                 },
                                                 child: RichText(

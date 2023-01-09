@@ -70,7 +70,6 @@ class _SettingsViewState extends State<SettingsView> {
               ),
             );
           });
-      print("test");
     });
   }
 
@@ -440,140 +439,140 @@ class _SettingsViewState extends State<SettingsView> {
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25.0))),
               title: Text("Eksportuj lub importuj pliki"),
-              content: SizedBox(
-                  height: 220,
-                  width: 300,
-                  child: Container(
-                      child: Column(
-                    children: [
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: mainColor,
-                                      shape: CircleBorder(),
-                                      padding: EdgeInsets.all(40),
-                                    ),
-                                    onPressed: fileReady
-                                        ? null
-                                        : () async {
-                                            log(files.isEmpty.toString());
-                                            files = await filePicker(files);
-                                            log(files.isEmpty.toString());
-                                            if (files.isNotEmpty) {
-                                              setState(() {
-                                                fileReady = true;
-                                              });
-                                              var result = await FilesService()
-                                                  .importFiles(
-                                                      userData, files.first);
-                                              log("inside result");
-                                              if (result) {
-                                                log("git");
-                                                setStateModal(() {
-                                                  fileFeedback =
-                                                      "Plik został przesłany";
+              content: Padding(
+                padding: const EdgeInsets.only(top: 35),
+                child: SizedBox(
+                    height: 220,
+                    width: 300,
+                    child: Container(
+                        child: Column(
+                      children: [
+                        Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: mainColor,
+                                        shape: CircleBorder(),
+                                        padding: EdgeInsets.all(20),
+                                      ),
+                                      onPressed: fileReady
+                                          ? null
+                                          : () async {
+                                              log(files.isEmpty.toString());
+                                              files = await filePicker(files);
+                                              log(files.isEmpty.toString());
+                                              if (files.isNotEmpty) {
+                                                setState(() {
+                                                  fileReady = true;
                                                 });
-                                              } else {
+                                                var result = await FilesService()
+                                                    .importFiles(
+                                                        userData, files.first);
+                                                log("inside result");
+                                                if (result) {
+                                                  log("git");
+                                                  setStateModal(() {
+                                                    fileFeedback =
+                                                        "Plik został przesłany";
+                                                  });
+                                                } else {
+                                                  setStateModal(() {
+                                                    fileFeedback =
+                                                        "Wystapil problem z importem pliku";
+                                                  });
+                                                }
+                                              }
+                                              log("files ???");
+                                            },
+                                      child: const Icon(
+                                        Icons.upload_file_outlined,
+                                        size: 30,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    const Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Importuj dane",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 25,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: secondColor,
+                                        shape: const CircleBorder(),
+                                        padding: const EdgeInsets.all(20),
+                                      ),
+                                      onPressed: fileReady
+                                          ? null
+                                          : () async {
+                                              setStateModal(() {
+                                                fileStatus = true;
+
+                                                log(progress.toString());
+                                              });
+                                              var export = exportFile("zip");
+                                              if (export == true) {
                                                 setStateModal(() {
-                                                  fileFeedback =
-                                                      "Wystapil problem z importem pliku";
+                                                  fileStatus = false;
                                                 });
                                               }
-                                            }
-                                            log("files ???");
-                                          },
-                                    child: const Icon(
-                                      Icons.upload_file_outlined,
-                                      size: 50,
+                                            },
+                                      child: const Icon(
+                                        Icons.download,
+                                        size: 30,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Importuj plik",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                    SizedBox(
+                                      height: 10,
                                     ),
-                                  )
-                                ],
+                                    Text(
+                                      "Eksportuj dane",
+                                      style:
+                                          TextStyle(fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 25,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: secondColor,
-                                      shape: CircleBorder(),
-                                      padding: EdgeInsets.all(40),
-                                    ),
-                                    onPressed: fileReady
-                                        ? null
-                                        : () async {
-                                            setStateModal(() {
-                                              fileStatus = true;
-
-                                              log(progress.toString());
-                                            });
-                                            var export = exportFile("zip");
-                                            if (export == true) {
-                                              setStateModal(() {
-                                                fileStatus = false;
-                                              });
-                                            }
-                                          },
-                                    child: const Icon(
-                                      Icons.download,
-                                      size: 50,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    "Eksportuj plik",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ]),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      fileStatus
-                          ? LinearProgressIndicator(
-                              backgroundColor: Colors.grey[200],
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.blue),
-                            )
-                          : (Text(fileFeedback)),
-                    ],
-                  ))),
+                            ]),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        fileStatus
+                            ? LinearProgressIndicator(
+                                backgroundColor: Colors.grey[200],
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.blue),
+                              )
+                            : (Text(fileFeedback)),
+                      ],
+                    ))),
+              ),
               actions: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -731,7 +730,7 @@ class _SettingsViewState extends State<SettingsView> {
               child: ListView(children: [
                 DashboardBox(
                   title: "O nas",
-                  description: "Przejdź do informacji o autorach aplikacji.",
+                  description: "Pokaż informacje o autorach aplikacji.",
                   descUpperCase: false,
                   onPressed: () async {
                     showAboutUsDialog();
@@ -744,7 +743,7 @@ class _SettingsViewState extends State<SettingsView> {
                 DashboardBox(
                   title: "Zmień hasło",
                   description:
-                      "Twoje hasło nie jest w pełni bezpieczne? Tutaj zmienisz swoje hasło w kilku krokach!",
+                      "Zmień hasło do konta użytkownika",
                   descUpperCase: false,
                   onPressed: () async {
                     showChangePassDialog(
@@ -759,24 +758,23 @@ class _SettingsViewState extends State<SettingsView> {
                 const SizedBox(
                   height: 15,
                 ),
+                // DashboardBox(
+                //   title: "Zmień sposób walidacji",
+                //   description:
+                //       "Zmień sposób weryfikacji konta, wrazie gdybyś zapomniał swojego hasła.",
+                //   descUpperCase: false,
+                //   onPressed: () async {
+                //     print("val test2");
+                //   },
+                //   assetImgPath: 'assets/auth_pass.svg',
+                // ),
+                // const SizedBox(
+                //   height: 15,
+                // ),
                 DashboardBox(
-                  title: "Zmień sposób walidacji",
+                  title: "Zarządzanie danymi",
                   description:
-                      "Zmień sposób weryfikacji konta, wrazie gdybyś zapomniał swojego hasła.",
-                  descUpperCase: false,
-                  onPressed: () async {
-                    print("val test2");
-                    showValidationSettings();
-                  },
-                  assetImgPath: 'assets/auth_pass.svg',
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                DashboardBox(
-                  title: "Import / Eksport plików",
-                  description:
-                      "W tym miesjcu w prosty sposób zaimportujesz lub wyeksportujesz swoje dane!",
+                      "W tym miejscu zaimportujesz lub wyeksportujesz swoje dane!",
                   descUpperCase: false,
                   onPressed: () async {
                     importExportAlert();
@@ -789,15 +787,17 @@ class _SettingsViewState extends State<SettingsView> {
                 DashboardBox(
                   title: "Wyloguj się",
                   description:
-                      "Przejście do tej sekcji spowoduje wylogowanie się z konta użytkownika",
+                  "Wyloguj się ze swojego konta użytkownika",
                   descUpperCase: false,
                   onPressed: () async {
-                    // print("val");
                     removeUserToken();
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         '/', (Route<dynamic> route) => false);
                   },
                   assetImgPath: 'assets/logout2.svg',
+                ),
+                const SizedBox(
+                  height: 15,
                 ),
               ]))),
     );

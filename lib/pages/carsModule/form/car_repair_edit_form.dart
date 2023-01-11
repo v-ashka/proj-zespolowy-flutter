@@ -192,7 +192,7 @@ class _CarRepairEditFormState extends State<CarRepairEditForm> {
                                           readOnly: true,
                                           onTap: () async {
                                             DateTime? date =
-                                                await pickDate(context);
+                                                await datePicker(context);
                                             setState(() {
                                               carRepair.dataNaprawy =
                                                   DateFormat('dd-MM-yyyy')
@@ -380,7 +380,7 @@ class _CarRepairEditFormState extends State<CarRepairEditForm> {
                                         readOnly: true,
                                         onTap: () async {
                                           DateTime? date =
-                                              await pickDate(context);
+                                              await datePicker(context);
                                           setState(() {
                                             carRepair.dataNastepnejWymiany =
                                                 DateFormat('dd-MM-yyyy')

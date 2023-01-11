@@ -410,7 +410,7 @@ class _InspectionFormState extends State<InspectionForm> {
                                               readOnly: true,
                                               onTap: () async {
                                                 DateTime? date =
-                                                    await pickDate(context);
+                                                    await datePicker(context);
                                                 setState(() {
                                                   inspection.dataPrzegladu =
                                                       DateFormat('dd-MM-yyyy')
@@ -458,7 +458,7 @@ class _InspectionFormState extends State<InspectionForm> {
                                               readOnly: true,
                                               onTap: () async {
                                                 DateTime? date =
-                                                    await pickDate(context);
+                                                    await datePicker(context);
                                                 setState(() {
                                                   inspection
                                                           .koniecWaznosciPrzegladu =

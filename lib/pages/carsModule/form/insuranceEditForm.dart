@@ -255,7 +255,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                                         readOnly: true,
                                         onTap: () async {
                                           DateTime? date =
-                                              await pickDate(context);
+                                              await datePicker(context);
                                           setState(() {
                                             insurance.dataZakupu =
                                                 DateFormat('dd-MM-yyyy')
@@ -304,7 +304,7 @@ class _InsuranceEditFormState extends State<InsuranceEditForm> {
                                           readOnly: true,
                                           onTap: () async {
                                             DateTime? date =
-                                                await pickDate(context);
+                                                await datePicker(context);
                                             setState(() {
                                               insurance.dataKonca =
                                                   DateFormat('dd-MM-yyyy')

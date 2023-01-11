@@ -351,7 +351,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                                 readOnly: true,
                                                 onTap: () async {
                                                   DateTime? date =
-                                                      await pickDate(context);
+                                                      await datePicker(context);
                                                   setState(() {
                                                     document.dataStartu =
                                                         DateFormat('dd-MM-yyyy')
@@ -410,7 +410,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                                   readOnly: true,
                                                   onTap: () async {
                                                     DateTime? date =
-                                                        await pickDate(context);
+                                                        await datePicker(context);
                                                     setState(() {
                                                       document.dataKonca =
                                                           DateFormat(
@@ -492,7 +492,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                                 readOnly: true,
                                                 onTap: () async {
                                                   DateTime? date =
-                                                      await pickDate(context);
+                                                      await datePicker(context);
                                                   setState(() {
                                                     document.dataStartu =
                                                         DateFormat('dd-MM-yyyy')
@@ -551,7 +551,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                                   readOnly: true,
                                                   onTap: () async {
                                                     DateTime? date =
-                                                        await pickDate(context);
+                                                        await datePicker(context);
                                                     setState(() {
                                                       document.dataKonca =
                                                           DateFormat(
@@ -741,7 +741,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                               readOnly: true,
                                               onTap: () async {
                                                 DateTime? date =
-                                                    await pickDate(context);
+                                                    await datePicker(context);
                                                 setState(() {
                                                   document.dataWystawienia =
                                                       DateFormat('dd-MM-yyyy')
@@ -889,7 +889,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                               readOnly: true,
                                               onTap: () async {
                                                 DateTime? date =
-                                                    await pickDate(context);
+                                                    await datePicker(context);
                                                 setState(() {
                                                   document.dataWystawienia =
                                                       DateFormat('dd-MM-yyyy')
@@ -1020,7 +1020,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                         readOnly: true,
                                         onTap: () async {
                                           DateTime? date =
-                                              await pickDate(context);
+                                              await datePicker(context);
                                           setState(() {
                                             document.dataPrzypomnienia =
                                                 DateFormat('dd-MM-yyyy')

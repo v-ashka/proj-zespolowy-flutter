@@ -58,7 +58,7 @@ class _UserAuthenticationRegisterState
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                      icon: SvgPicture.asset('assets/success.svg', width: 80, height: 80),
+                      icon: SvgPicture.asset('assets/success.svg', width: 120, height: 120),
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(25.0))),
                       title: const Text('Zarejestrowano pomyślnie!'),

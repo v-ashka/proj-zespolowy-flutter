@@ -3,14 +3,11 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:projzespoloey/constants.dart';
 import 'package:projzespoloey/pages/_Dashboard.dart';
-import 'package:projzespoloey/pages/password_reset_code.dart';
+import 'package:projzespoloey/pages/password_reset.dart';
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 import 'package:projzespoloey/services/UserModel/UserModel.dart';
 
@@ -489,7 +486,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          const PasswordResetCode(),
+                                          const PasswordReset(),
                                     ));
                               },
                               child: const Text("Nie pamiętam hasła"))

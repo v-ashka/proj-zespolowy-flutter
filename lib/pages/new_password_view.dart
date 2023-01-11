@@ -1,9 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/components/password_requirement.dart';
@@ -12,11 +10,8 @@ import 'package:projzespoloey/pages/_userAuth.dart';
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 
 class NewPasswordView extends StatefulWidget {
-  const NewPasswordView({Key? key}) : super(key: key);
-
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
+  final String resetId;
+  const NewPasswordView({Key? key, required this.resetId}) : super(key: key);
 
   @override
   State<NewPasswordView> createState() => _NewPasswordViewState();
@@ -49,13 +44,14 @@ class _NewPasswordViewState extends State<NewPasswordView> {
 
   void showAcceptedDialog(context) {
     showDialog(
+        barrierDismissible: true,
         context: context,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(25.0))),
             title: SvgPicture.asset("assets/done.svg", width: 80, height: 80),
-            content: SizedBox(
+            content: const SizedBox(
                 height: 25,
                 width: 250,
                 child: Center(
@@ -65,8 +61,8 @@ class _NewPasswordViewState extends State<NewPasswordView> {
               Center(
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: secondColor,
-                        onPrimary: secondColor,
+                        foregroundColor: secondColor,
+                        backgroundColor: secondColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         )),
@@ -75,9 +71,10 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const UserAuthentication()));
+                              builder: (context) =>
+                                  const UserAuthentication()));
                     },
-                    child: Text(
+                    child: const Text(
                       "Przejdź do logowania",
                       style: TextStyle(color: Colors.white),
                     )),
@@ -90,7 +87,7 @@ class _NewPasswordViewState extends State<NewPasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF8F8F8),
+      backgroundColor: const Color(0xffF8F8F8),
       appBar: myAppBar(context, HeaderTitleType.passwordResetCode),
       body: SafeArea(
         child: Container(
@@ -109,8 +106,8 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                         child: Text(
                           "Ustaw nowe hasło",
                           style: TextStyle(
@@ -120,11 +117,11 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                           ),
                         ),
                       ),
-                      Text(
+                      const Text(
                           "Wpisz nowe hasło. Musi ono spełniać warunki, które są podane poniżej. Pamiętaj, aby nikomu nie podawać Twojego hasła! ",
                           style: TextStyle(fontSize: 16),
                           textAlign: TextAlign.left),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       Form(
                           key: formKey,
                           child: Column(
@@ -136,8 +133,7 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: const [
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(5, 8, 0, 8),
+                                    padding: EdgeInsets.fromLTRB(5, 8, 0, 8),
                                     child: Text("Nowe hasło",
                                         style: TextStyle(
                                             fontSize: 16,
@@ -171,7 +167,7 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    prefixIcon: Padding(
+                                    prefixIcon: const Padding(
                                       padding: EdgeInsets.only(top: 1),
                                       child: Icon(
                                         Icons.lock_outline,
@@ -186,22 +182,9 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                                       borderSide: BorderSide.none,
                                     )),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
-                              if (!errorFeedback.isEmpty) ...[
-                                Text(
-                                  "${errorFeedback}",
-                                  style: TextStyle(
-                                      color: errorColor,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: 1.2),
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                              ],
                               PasswordRequirement(
                                   regExToCheck: passInput.length >= 8,
                                   requirementText: "Co najmniej",
@@ -231,7 +214,7 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                                 requirementTextBold:
                                     ' 1 znak specjalny (&-@/.)',
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Row(
@@ -239,8 +222,7 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: const [
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(5, 8, 0, 8),
+                                    padding: EdgeInsets.fromLTRB(5, 8, 0, 8),
                                     child: Text("Potwierdź hasło",
                                         style: TextStyle(
                                             fontSize: 16,
@@ -282,7 +264,7 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    prefixIcon: Padding(
+                                    prefixIcon: const Padding(
                                       padding: EdgeInsets.only(top: 1),
                                       child: Icon(
                                         Icons.lock_outline,
@@ -297,15 +279,18 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                                       borderSide: BorderSide.none,
                                     )),
                               ),
-                              SizedBox(height: 50),
+                              const SizedBox(height: 50),
                               SizedBox(
                                 width: 240,
                                 height: 50,
                                 child: ElevatedButton.icon(
                                     style: ElevatedButton.styleFrom(
-                                        onPrimary: secondColor,
-                                        primary: secondColor,
-                                        onSurface: Colors.amber,
+                                        foregroundColor: secondColor,
+                                        backgroundColor: secondColor,
+                                        disabledForegroundColor:
+                                            Colors.amber.withOpacity(0.38),
+                                        disabledBackgroundColor:
+                                            Colors.amber.withOpacity(0.12),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(25),
@@ -323,18 +308,18 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                                             key: "resetToken");
                                         Response response =
                                             await UserApiService()
-                                                .changePassword(
-                                                    passInput, resetToken);
+                                                .setNewPassword(widget.resetId,
+                                                    resetToken, passInput);
                                         if (response.statusCode == 200) {
                                           showAcceptedDialog(context);
                                         }
                                       }
                                     },
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.published_with_changes_outlined,
                                       color: bgSmokedWhite,
                                     ),
-                                    label: Text(
+                                    label: const Text(
                                       "Zmień hasło",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -342,10 +327,10 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                                           color: bgSmokedWhite),
                                     )),
                               ),
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                             ],
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                     ],

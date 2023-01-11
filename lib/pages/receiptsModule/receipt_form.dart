@@ -241,7 +241,7 @@ class _ReceiptFormState extends State<ReceiptForm> {
                                             readOnly: true,
                                             onTap: () async {
                                               DateTime? date =
-                                                  await pickDate(context);
+                                                  await datePicker(context);
                                               setState(() {
                                                 receiptItem.dataZakupu =
                                                     DateFormat('yyyy-MM-dd')

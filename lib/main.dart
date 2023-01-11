@@ -8,7 +8,7 @@ import 'package:projzespoloey/models/insurace_model.dart';
 import 'package:projzespoloey/pages/_Dashboard.dart';
 import 'package:projzespoloey/pages/_userAuth.dart';
 import 'package:projzespoloey/pages/otp_screen.dart';
-import 'package:projzespoloey/pages/password_reset_code.dart';
+import 'package:projzespoloey/pages/password_reset.dart';
 import 'package:projzespoloey/pages/_userAuthRegister.dart';
 import 'package:projzespoloey/pages/carsModule/Car.dart';
 import 'package:projzespoloey/pages/carsModule/carInsuranceHistoryView.dart';
@@ -29,7 +29,7 @@ import 'package:projzespoloey/pages/documentsModule/documentsList.dart';
 import 'package:projzespoloey/pages/homeModule/homeItem.dart';
 // import 'package:projzespoloey/pages/_documentsList.dart';
 import 'package:projzespoloey/pages/homeModule/homeList.dart';
-import 'package:projzespoloey/pages/password_reset_code.dart';
+import 'package:projzespoloey/pages/password_reset.dart';
 import 'package:projzespoloey/pages/receiptsModule/receiptItem.dart';
 import 'package:projzespoloey/pages/receiptsModule/receiptList.dart';
 import 'package:projzespoloey/pages/old_/userauth.dart';
@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
         // Widok logowania użytkownika
         '/user_auth': (context) => const UserAuthentication(),
         //Widok resetowania hasła
-        '/passwordResetCode': (context) => const PasswordResetCode(),
+        '/passwordResetCode': (context) => const PasswordReset(),
         // Ekran rejestrowania nowego użytkownika
         '/registerUser': (context) => const UserAuthenticationRegister(),
         //Główny ekran aplikacji - dashboard

@@ -1,11 +1,8 @@
-import 'dart:developer';
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pinput/pinput.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
@@ -15,20 +12,19 @@ import 'package:projzespoloey/services/UserModel/UserApiService.dart';
 class OTPScreen extends StatefulWidget {
   final String? email;
   final String resetId;
-  const OTPScreen({Key? key, required this.resetId, this.email}) : super(key: key);
-
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
+  final bool isSMS;
+  const OTPScreen(
+      {Key? key,
+      required this.resetId,
+      required this.email,
+      required this.isSMS})
+      : super(key: key);
 
   @override
   State<OTPScreen> createState() => _OTPScreenState();
 }
 
 class _OTPScreenState extends State<OTPScreen> {
-  // Local flutter storage token
-  // final storage = new FlutterSecureStorage();
-  // Form variables
   final formKey = GlobalKey<FormState>();
   bool isValid = false;
   bool isObscure = true;
@@ -46,7 +42,7 @@ class _OTPScreenState extends State<OTPScreen> {
   void showLoadingDialog(isShowing, context) {
     if (isShowing) {
       showDialog(
-//          barrierDismissible: false,
+          barrierDismissible: false,
           context: context,
           builder: (context) {
             return const AlertDialog(
@@ -61,12 +57,6 @@ class _OTPScreenState extends State<OTPScreen> {
           });
     } else {
       Navigator.of(context, rootNavigator: true).pop();
-      // Navigator.pushAndRemoveUntil(
-      //     context,
-      //     MaterialPageRoute<void>(
-      //       builder: (BuildContext context) => const CarList(),
-      //     ),
-      //     ModalRoute.withName("/dashboard"));
     }
   }
 
@@ -75,9 +65,9 @@ class _OTPScreenState extends State<OTPScreen> {
     final defaultPinTheme = PinTheme(
       width: 55,
       height: 55,
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         fontSize: 22,
-        color: const Color.fromRGBO(30, 60, 87, 1),
+        color: Color.fromRGBO(30, 60, 87, 1),
       ),
       decoration: BoxDecoration(
         color: bgSmokedWhite,
@@ -87,7 +77,7 @@ class _OTPScreenState extends State<OTPScreen> {
     );
 
     return Scaffold(
-      backgroundColor: Color(0xffF8F8F8),
+      backgroundColor: const Color(0xffF8F8F8),
       appBar: myAppBar(context, HeaderTitleType.passwordResetCode),
       body: SafeArea(
         child: Container(
@@ -106,8 +96,8 @@ class _OTPScreenState extends State<OTPScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                         child: Text(
                           "Weryfikacja kodu",
                           style: TextStyle(
@@ -124,19 +114,27 @@ class _OTPScreenState extends State<OTPScreen> {
                             color: Colors.black,
                           ),
                           children: <TextSpan>[
-                            TextSpan(text: 'Na podany adres e-mail '),
+                            !widget.isSMS
+                                ? const TextSpan(text: 'Na adres ')
+                                : const TextSpan(
+                                    text:
+                                        'Na numer telefonu powiązany z adresem e-mail '),
                             TextSpan(
-                                text: 'seba.wiktor@gmail.com ',
+                                text: widget.email,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: secondColor)),
-                            TextSpan(
-                                text:
-                                    'został wysłany sześciocyfrowy kod resetowania hasła. Przejdź do swojej skrzynki pocztowej i\u{00A0}poniżej wpisz otrzymany kod.'),
+                            !widget.isSMS
+                                ? const TextSpan(
+                                    text:
+                                        ' został wysłany sześciocyfrowy kod resetowania hasła. Przejdź do swojej skrzynki pocztowej i\u{00A0}wpisz poniżej otrzymany kod.')
+                                : const TextSpan(
+                                    text:
+                                        ' został wysłany sześciocyfrowy kod resetowania hasła. Przejdź do swojej skrzynki odbiorczej SMS i\u{00A0}wpisz poniżej otrzymany kod.'),
                           ],
                         ),
                       ),
-                      SizedBox(height: 80),
+                      const SizedBox(height: 80),
                       Center(
                           child: Form(
                         key: formKey,
@@ -145,10 +143,9 @@ class _OTPScreenState extends State<OTPScreen> {
                             autofocus: true,
                             length: 6,
                             inputFormatters: <TextInputFormatter>[
-                              // for below version 2 use this
-                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]')),
                               FilteringTextInputFormatter.digitsOnly
-
                             ],
                             onChanged: (pin) => this.pin = pin,
                             forceErrorState: false,
@@ -162,14 +159,12 @@ class _OTPScreenState extends State<OTPScreen> {
                             ),
                             errorPinTheme: defaultPinTheme.copyWith(
                               decoration: BoxDecoration(
-                                color: bgSmokedWhite,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.red)
-                              ),
+                                  color: bgSmokedWhite,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: Colors.red)),
                             ),
                             validator: (pin) {
-                              if (pin == null || pin.length != 6)
-                              {
+                              if (pin == null || pin.length != 6) {
                                 return "Wprowadź kod prawidłowo";
                               }
                               return null;
@@ -182,39 +177,34 @@ class _OTPScreenState extends State<OTPScreen> {
                           height: 50,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  onPrimary: secondColor,
-                                  primary: secondColor,
-                                  onSurface: Colors.amber,
+                                  foregroundColor: secondColor,
+                                  backgroundColor: secondColor,
+                                  disabledForegroundColor:Colors.amber.withOpacity(0.38),
+                                  disabledBackgroundColor:Colors.amber.withOpacity(0.12),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(25),
                                   )),
                               onPressed: () async {
-                                // if (isLoading) {
-                                //   return;
-                                // }
                                 if (formKey.currentState!.validate()) {
                                   setState(() {
                                     isLoading = true;
                                   });
                                   formKey.currentState!.save();
-                                  var code = int.parse(pin!);
                                   showLoadingDialog(true, context);
-                                  Response? response = await UserApiService().verifyCode(widget.resetId, code);
-                                  if(response?.statusCode == 200)
-                                    {
-                                      print(response!.data);
-                                      storage.write(key: "resetToken", value: response.data);
-                                      showLoadingDialog(false, context);
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute<void>(
-                                            builder: (BuildContext context) => NewPasswordView()
-                                          ),
-                                          ModalRoute.withName("/user_auth"));
-                                    }else{
-                                    var reg = RegExp(r'(?<=:)(.*)(?=\r\n)');
-                                    var error = reg.firstMatch(response!.data);
-                                    print(error?.group(0));
+                                  Response? response = await UserApiService()
+                                      .verifyCode(widget.resetId, pin!);
+                                  if (response?.statusCode == 200) {
+                                    storage.write(
+                                        key: "resetToken",
+                                        value: response!.data);
+                                    showLoadingDialog(false, context);
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute<void>(
+                                            builder: (BuildContext context) =>
+                                                NewPasswordView(
+                                                    resetId: widget.resetId)),
+                                        ModalRoute.withName("/user_auth"));
                                   }
                                 }
                               },
@@ -231,7 +221,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Nie otrzymałeś kodu?",
                             style: TextStyle(
                               fontSize: 18,

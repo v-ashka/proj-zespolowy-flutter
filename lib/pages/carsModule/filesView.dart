@@ -104,14 +104,12 @@ class FilesViewState extends State<FilesView> {
     final status = await Permission.storage.request();
     if (status.isGranted) {
       var storageDir = await getStorageDir();
-      final id = FlutterDownloader.enqueue(
+      FlutterDownloader.enqueue(
           url: "$SERVER_IP/api/fileUpload/GetFile/$fileId?naglowkowy=false",
           savedDir: storageDir,
           showNotification: true,
           openFileFromNotification: true,
           saveInPublicStorage: true);
-    } else {
-      print('Permission Denied');
     }
   }
 
@@ -159,8 +157,8 @@ class FilesViewState extends State<FilesView> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25),
                               ),
-                              title: Text(
-                                  "Czy na pewno chcesz usunąć ten plik?"),
+                              title:
+                                  Text("Czy na pewno chcesz usunąć ten plik?"),
                               content: Text(
                                   "Po usunięciu nie możesz cofnąć tej akcji."),
                               actions: [
@@ -215,49 +213,20 @@ class FilesViewState extends State<FilesView> {
                         shadowColor: Colors.white,
                         child: ListTile(
                           leading: (file.rozszerzenie == ".pdf"
-                              ? Image.asset("assets/pdf_icon.png",
-                                  width: 45, height: 45)
+                              ? Image.asset("assets/pdf_icon.png", width: 45, height: 45)
                               : file.rozszerzenie == ".txt"
-                                  ? Image.asset("assets/txt_icon.png",
-                                      width: 45, height: 45)
-                                  : file.rozszerzenie == ".png"
+                                  ? Image.asset("assets/txt_icon.png", width: 45, height: 45)
+                                  : file.rozszerzenie == ".png" || file.rozszerzenie == ".jpg" ||file.rozszerzenie == ".jpeg"
                                       ? CachedNetworkImage(
-                              imageUrl:
-                              "$SERVER_IP/api/fileUpload/GetFile/${file.idPliku}",
-                              placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
-                              errorWidget: (context, url,
-                                  error) =>
-                                  Image.asset(
-                                      "assets/jpg_icon.png"),
-                              width: 45,
-                              height: 45,
-                              fit: BoxFit.cover)
-                                      : file.rozszerzenie == ".jpg" ||
-                                              file.rozszerzenie == ".jpeg"
-                                          ? CachedNetworkImage(
-                                              imageUrl:
-                                                  "$SERVER_IP/api/fileUpload/GetFile/${file.idPliku}",
-                                              placeholder: (context, url) =>
-                                                  CircularProgressIndicator(),
-                                              errorWidget: (context, url,
-                                                      error) =>
-                                                  Image.asset(
-                                                      "assets/jpg_icon.png"),
-                                              width: 45,
-                                              height: 45,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : file.rozszerzenie == ".zip" ||
-                                                  file.rozszerzenie == ".7z"
-                                              ? Image.asset(
-                                                  "assets/zip_icon.png",
-                                                  width: 45,
-                                                  height: 45)
-                                              : Image.asset(
-                                                  "assets/default_icon.png",
-                                                  width: 45,
-                                                  height: 45)),
+                                          imageUrl:
+                                              "$SERVER_IP/api/fileUpload/GetFile/${file.idPliku}",
+                                          placeholder: (context, url) =>
+                                              const CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              Image.asset("assets/jpg_icon.png"), width: 45, height: 45, fit: BoxFit.cover)
+                                      : file.rozszerzenie == ".zip" || file.rozszerzenie == ".7z"
+                                          ? Image.asset("assets/zip_icon.png", width: 45, height: 45)
+                                          : Image.asset( "assets/default_icon.png",width: 45, height: 45)),
                           title: Text(
                             file.nazwaPlikuUzytkownika,
                             maxLines: 1,

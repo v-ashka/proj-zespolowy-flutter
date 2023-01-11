@@ -76,9 +76,9 @@ class _CarFormState extends State<CarForm> {
         return Theme(
             data: Theme.of(context).copyWith(
                 colorScheme: const ColorScheme.light(
-              primary: mainColor, // header background color
-              onPrimary: bgSmokedWhite, // header text color
-              onSurface: Colors.black, // body text color
+              primary: mainColor,
+              onPrimary: bgSmokedWhite,
+              onSurface: Colors.black,
             )),
             child: AlertDialog(
               title: const Text("Wybierz rok produkcji"),
@@ -95,9 +95,7 @@ class _CarFormState extends State<CarForm> {
                       carItem.rokProdukcji = prodDate.toString();
                     });
                     Navigator.pop(context);
-                  },
-                ),
-              ),
+                  }))
             ));
       },
     );
@@ -437,7 +435,7 @@ class _CarFormState extends State<CarForm> {
                                           readOnly: true,
                                           onTap: () async {
                                             DateTime? date =
-                                                await pickDate(context);
+                                                await datePicker(context);
                                             setState(() {
                                               carItem.dataZakupu =
                                                   DateFormat('yyyy-MM-dd')
@@ -1011,9 +1009,7 @@ class _CarFormState extends State<CarForm> {
                                                   : const EdgeInsets.all(35),
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          25)),
-                                            ),
+                                                      BorderRadius.circular(25))),
                                             onPressed: () async {
                                               image = await pickImage();
                                               setState(() {
@@ -1023,24 +1019,19 @@ class _CarFormState extends State<CarForm> {
                                             child: image != null
                                                 ? Container(
                                                     decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25),
+                                                      borderRadius: BorderRadius.circular(25),
                                                       color: secondaryColor,
                                                       image: DecorationImage(
-                                                        image:
-                                                            FileImage(image!),
+                                                        image: FileImage(image!),
                                                         fit: BoxFit.cover,
                                                       ),
                                                     ),
                                                     width: 100,
                                                     height: 100,
                                                   )
-                                                : const Icon(
-                                                    Icons.add_a_photo_outlined,
-                                                    size: 25,
-                                                    color: Colors.black),
-                                          ),
+                                                : const Icon(Icons.add_a_photo_outlined, 
+                                                size: 25,
+                                                color: Colors.black)),
                                         ] else ...[
                                           const SizedBox(height: 25),
                                           if (image == null) ...[
@@ -1075,17 +1066,13 @@ class _CarFormState extends State<CarForm> {
                                           ] else ...[
                                             ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      secondaryColor,
+                                                  backgroundColor: secondaryColor,
                                                   padding: image != null
                                                       ? const EdgeInsets.all(0)
                                                       : const EdgeInsets.all(
                                                           35),
                                                   shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25)),
-                                                ),
+                                                      borderRadius: BorderRadius.circular(25))),
                                                 onPressed: () async {
                                                   image = await pickImage();
                                                   setState(() {
@@ -1094,18 +1081,16 @@ class _CarFormState extends State<CarForm> {
                                                 },
                                                 child: Container(
                                                   decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25),
+                                                    borderRadius: BorderRadius.circular(25),
                                                     color: secondaryColor,
                                                     image: DecorationImage(
                                                       image: FileImage(image!),
-                                                      fit: BoxFit.cover,
+                                                      fit: BoxFit.cover
                                                     ),
                                                   ),
                                                   width: 100,
-                                                  height: 100,
-                                                )),
+                                                  height: 100
+                                                ))
                                           ]
                                         ]
                                       ],
@@ -1125,37 +1110,28 @@ class _CarFormState extends State<CarForm> {
           ],
         ),
       ),
-      floatingActionButton: isLoadingBtn
-          ? (const SizedBox.shrink())
+      floatingActionButton: isLoadingBtn ? (const SizedBox.shrink())
           : Padding(
-              padding: MediaQuery.of(context).viewInsets.bottom != 0
-                  ? const EdgeInsets.fromLTRB(0, 0, 0, 30)
-                  : EdgeInsets.zero,
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 30), 
               child: FloatingActionButton.extended(
                 onPressed: () async {
-                  log(_formKey.currentState!.validate().toString());
-
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     setState(() {
                       isLoadingBtn = true;
                       carItem.rokProdukcji ??= DateTime.now().year.toString();
-                      carItem.dataZakupu ??=
-                          DateTime.now().toString().substring(0, 10);
+                      carItem.dataZakupu ??= DateTime.now().toString().substring(0, 10);
                     });
                     showAddCarLoadingDialog(true);
                     if (!widget.isEditing) {
-                      var id = await CarApiService().addCar(token, carItem);
+                      var response = await CarApiService().addCar(token, carItem);
                       if (image != null) {
-                        await FilesService()
-                            .uploadFile(token, image!.path.toString(), id.body);
+                        await FilesService().uploadFile(token, image!.path.toString(), response.body);
                       }
                     } else {
-                      await CarApiService()
-                          .updateCar(token, carItem, widget.carId);
+                      await CarApiService().updateCar(token, carItem, widget.carId);
                       if (image != null) {
-                        await FilesService().uploadFile(
-                            token, image!.path.toString(), widget.carId);
+                        await FilesService().uploadFile(token, image!.path.toString(), widget.carId);
                       }
                     }
                     setState(() {

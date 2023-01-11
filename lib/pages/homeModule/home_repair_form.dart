@@ -282,7 +282,7 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                       readOnly: true,
                                       onTap: () async {
                                         DateTime? date =
-                                            await pickDate(context);
+                                            await datePicker(context);
                                         setState(() {
                                           repair.dataNaprawy =
                                               DateFormat('dd-MM-yyyy')

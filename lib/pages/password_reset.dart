@@ -1,92 +1,32 @@
-import 'dart:async';
-import 'dart:convert';
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'package:projzespoloey/components/appbar.dart';
 import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/main.dart';
-import 'package:http/http.dart' as http;
 import 'package:projzespoloey/pages/otp_screen.dart';
 import 'package:projzespoloey/services/UserModel/UserApiService.dart';
-import 'package:projzespoloey/services/UserModel/UserModel.dart';
 
-class PasswordResetCode extends StatefulWidget {
-  const PasswordResetCode({Key? key}) : super(key: key);
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
+class PasswordReset extends StatefulWidget {
+  const PasswordReset({Key? key}) : super(key: key);
   @override
-  State<PasswordResetCode> createState() => _PasswordResetCodeState();
+  State<PasswordReset> createState() => _PasswordResetState();
 }
 
-class _PasswordResetCodeState extends State<PasswordResetCode> {
-  // Local flutter storage token
-  // final storage = new FlutterSecureStorage();
-  // Form variables
+class _PasswordResetState extends State<PasswordReset> {
   final formKey = GlobalKey<FormState>();
   bool isValid = false;
   bool isObscure = true;
   bool isEmailLoading = false;
   bool isSMSLoading = false;
-  bool isCodeSent = false;
   String? emailInput = "";
   String? passInput = "";
   String resetId = "";
 
-  // Error feedback
-  String errorFeedback = "";
-
-  // void saveData() async {
-  //   setState(() => isLoading = true);
-  //   Map<String, dynamic> payload = {};
-  //   UserLogin data = UserLogin(email: emailInput, pass: passInput);
-  //   var token = await UserApiService().login(data);
-  //   Future.delayed(const Duration(seconds: 0)).then((value) => setState(() {
-  //         print("token is:");
-  //         print(token);
-  //         isLoading = false;
-  //
-  //         if (token["data"] != null) {
-  //           readJson();
-  //           var payload = Jwt.parseJwt(token["data"]);
-  //           storage.write(
-  //               key: "userName",
-  //               value: payload[
-  //                   "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]);
-  //           // payload = Jwt.parseJwt(token["data"]);
-  //           Navigator.pushNamed(context, '/dashboard', arguments: {
-  //             "userData": _userData,
-  //             // "token": token["data"],
-  //             // "tokenData": payload
-  //           });
-  //         } else {
-  //           errorFeedback = token["message"];
-  //         }
-  //       }));
-  // }
-
-  // temp data for testing purposes
-  Map _userData = {};
-  Future<void> readJson() async {
-    final String response =
-        await rootBundle.loadString('assets/data/temp.json');
-    final data = await json.decode(response);
-    setState(() {
-      _userData = data;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF8F8F8),
+      backgroundColor: const Color(0xffF8F8F8),
       appBar: myAppBar(context, HeaderTitleType.passwordResetCode),
       body: SafeArea(
         child: Container(
@@ -105,8 +45,8 @@ class _PasswordResetCodeState extends State<PasswordResetCode> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                         child: Text(
                           "Resetowanie hasła",
                           style: TextStyle(
@@ -116,12 +56,11 @@ class _PasswordResetCodeState extends State<PasswordResetCode> {
                           ),
                         ),
                       ),
-                      Text(
+                      const Text(
                           "Aby zresetować hasło, podaj adres e-mail powiązany z\u{00A0}Twoim kontem. Na podany adres mailowy lub numer telefonu, który został podany przy rejestracji zostanie wysłana wiadomość z\u{00A0}sześciocyfrowym kodem resetowania.",
                           style: TextStyle(fontSize: 16),
                           textAlign: TextAlign.left),
-                      SizedBox(height: 80),
-
+                      const SizedBox(height: 80),
                       Form(
                           key: formKey,
                           child: Column(
@@ -133,9 +72,12 @@ class _PasswordResetCodeState extends State<PasswordResetCode> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: const [
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(5, 8, 0, 8),
+                                    padding: EdgeInsets.fromLTRB(5, 8, 0, 8),
                                     child: Text("Adres e-mail",
-                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: fontBlack)),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: fontBlack)),
                                   )
                                 ],
                               ),
@@ -150,10 +92,10 @@ class _PasswordResetCodeState extends State<PasswordResetCode> {
                                   emailInput = value;
                                 },
                                 cursorColor: Colors.black,
-                                style: TextStyle(color: Colors.black),
+                                style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(20),
-                                    prefixIcon: Padding(
+                                    contentPadding: const EdgeInsets.all(20),
+                                    prefixIcon: const Padding(
                                       padding: EdgeInsets.only(top: 1),
                                       child: Icon(
                                         Icons.alternate_email,
@@ -168,36 +110,26 @@ class _PasswordResetCodeState extends State<PasswordResetCode> {
                                       borderSide: BorderSide.none,
                                     )),
                               ),
-                              SizedBox(
-                                height: 30,
+                              const SizedBox(
+                                height: 45,
                               ),
-                              if (!errorFeedback.isEmpty) ...[
-                                Text(
-                                  "${errorFeedback}",
-                                  style: TextStyle(
-                                      color: errorColor,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: 1.2),
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                              ],
-                              const SizedBox(height: 15),
                               SizedBox(
                                 width: 320,
                                 height: 50,
                                 child: ElevatedButton.icon(
                                     style: ElevatedButton.styleFrom(
-                                        onPrimary: secondColor,
-                                        primary: secondColor,
-                                        onSurface: Colors.amber,
+                                        foregroundColor: secondColor,
+                                        backgroundColor: secondColor,
+                                        disabledForegroundColor:
+                                            Colors.amber.withOpacity(0.38),
+                                        disabledBackgroundColor:
+                                            Colors.amber.withOpacity(0.12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(25),
+                                          borderRadius:
+                                              BorderRadius.circular(25),
                                         )),
                                     onPressed: () async {
-                                      if(isEmailLoading || isSMSLoading){
+                                      if (isEmailLoading || isSMSLoading) {
                                         return;
                                       }
                                       if (formKey.currentState!.validate()) {
@@ -205,20 +137,22 @@ class _PasswordResetCodeState extends State<PasswordResetCode> {
                                           isEmailLoading = true;
                                         });
                                         formKey.currentState!.save();
-                                        // user model
-                                        errorFeedback = "";
-                                        Response response = await UserApiService().resetPassword(emailInput);
-                                        if(response.statusCode == 200){
+                                        Response? response =
+                                            await UserApiService()
+                                                .resetPassword(emailInput, false);
+                                        if (response!.statusCode == 200) {
                                           setState(() {
                                             resetId = response.data;
-                                            print(resetId);
                                             isEmailLoading = false;
-                                            isCodeSent = true;
                                           });
                                           Navigator.pushAndRemoveUntil(
                                               context,
                                               MaterialPageRoute<void>(
-                                                builder: (BuildContext context) => OTPScreen(resetId: resetId),
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        OTPScreen(resetId: resetId, email: emailInput,
+                                                  isSMS: false,
+                                                ),
                                               ),
                                               ModalRoute.withName("/user_auth"));
                                         }
@@ -228,17 +162,18 @@ class _PasswordResetCodeState extends State<PasswordResetCode> {
                                         ? Container(
                                             width: 24,
                                             height: 24,
-                                            padding: EdgeInsets.all(2),
-                                            child: CircularProgressIndicator(
+                                            padding: const EdgeInsets.all(2),
+                                            child:
+                                                const CircularProgressIndicator(
                                               color: Colors.white,
                                               strokeWidth: 3,
                                             ),
                                           )
-                                        : Icon(
+                                        : const Icon(
                                             Icons.mail_outline,
                                             color: bgSmokedWhite,
                                           ),
-                                    label: Text(
+                                    label: const Text(
                                       "Wyślij kod w wiadomości e-mail",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -246,46 +181,66 @@ class _PasswordResetCodeState extends State<PasswordResetCode> {
                                           color: bgSmokedWhite),
                                     )),
                               ),
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                               SizedBox(
                                 width: 320,
                                 height: 50,
                                 child: ElevatedButton.icon(
-
                                     style: ElevatedButton.styleFrom(
-                                        onPrimary: secondColor,
-                                        primary: secondColor,
-                                        onSurface: Colors.amber,
+                                        foregroundColor: secondColor,
+                                        backgroundColor: secondColor,
+                                        disabledForegroundColor:
+                                            Colors.amber.withOpacity(0.38),
+                                        disabledBackgroundColor:
+                                            Colors.amber.withOpacity(0.12),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(25),
+                                          borderRadius:
+                                              BorderRadius.circular(25),
                                         )),
                                     onPressed: () async {
-                                      if(isEmailLoading || isSMSLoading){
+                                      if (isEmailLoading || isSMSLoading) {
                                         return;
                                       }
                                       if (formKey.currentState!.validate()) {
+                                        setState(() {
+                                          isSMSLoading = true;
+                                        });
                                         formKey.currentState!.save();
-                                        // user model
-                                        errorFeedback = "";
-                                        print(
-                                            "email: ${emailInput} pass: ${passInput}");
+                                        Response? response =
+                                            await UserApiService()
+                                                .resetPassword(emailInput, true);
+                                        if (response!.statusCode == 200) {
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute<void>(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        OTPScreen(
+                                                  resetId: response.data,
+                                                  email: emailInput,
+                                                  isSMS: true,
+                                                ),
+                                              ),
+                                              ModalRoute.withName(
+                                                  "/user_auth"));
+                                        }
                                       }
                                     },
                                     icon: isSMSLoading
                                         ? Container(
                                             width: 24,
                                             height: 24,
-                                            padding: EdgeInsets.all(2),
-                                            child: CircularProgressIndicator(
+                                            padding: const EdgeInsets.all(2),
+                                            child: const CircularProgressIndicator(
                                               color: Colors.white,
                                               strokeWidth: 3,
                                             ),
                                           )
-                                        : Icon(
+                                        : const Icon(
                                             Icons.sms_outlined,
                                             color: bgSmokedWhite,
                                           ),
-                                    label: Text(
+                                    label: const Text(
                                       "Wyślij kod w wiadomości SMS",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -295,7 +250,7 @@ class _PasswordResetCodeState extends State<PasswordResetCode> {
                               )
                             ],
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                     ],

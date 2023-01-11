@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
-import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/models/document_model.dart';
+import 'package:organizerPRO/constants.dart';
+import 'package:organizerPRO/models/document_model.dart';
 
 class DocumentService {
   Future addDocument(token, data) async {

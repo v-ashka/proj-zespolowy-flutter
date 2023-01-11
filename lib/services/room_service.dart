@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/models/room_model.dart';
+import 'package:organizerPRO/constants.dart';
+import 'package:organizerPRO/models/room_model.dart';
 
 class RoomService {
   final _dio = Dio();

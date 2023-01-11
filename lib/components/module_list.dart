@@ -1,15 +1,10 @@
 import 'dart:convert';
-
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:projzespoloey/constants.dart';
+import 'package:organizerPRO/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:projzespoloey/pages/carsModule/Car.dart';
-import 'package:projzespoloey/pages/carsModule/CarApiService.dart';
-import 'package:projzespoloey/pages/old_/_carList.dart';
-import 'package:collection/collection.dart';
+import 'package:organizerPRO/models/car_model.dart';
+import 'package:organizerPRO/services/car_service.dart';
+
 
 class ModuleList extends StatefulWidget {
   const ModuleList({Key? key, required this.data, required this.size})

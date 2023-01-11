@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projzespoloey/constants.dart';
+import 'package:organizerPRO/constants.dart';
 
 class BoxTitleBar extends StatelessWidget {
   final String title;

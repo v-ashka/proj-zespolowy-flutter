@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/utils/file_picker.dart';
+import 'package:organizerPRO/constants.dart';
+import 'package:organizerPRO/utils/file_picker.dart';
 
 enum FormType { car, insurance, inspection, repair, receipt, document, home }
 

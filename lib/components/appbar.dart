@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
-import 'package:projzespoloey/components/header.dart';
-import 'package:projzespoloey/constants.dart';
+import 'package:organizerPRO/constants.dart';
 
 enum HeaderTitleType {
   defaultTitle,

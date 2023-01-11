@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projzespoloey/constants.dart';
+import 'package:organizerPRO/constants.dart';
 
-// item["data"]["car_info"]["image"]
 class CarImageContainer extends StatelessWidget {
   final String image;
   final String brand;

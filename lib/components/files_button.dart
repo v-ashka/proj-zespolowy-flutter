@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/pages/carsModule/filesView.dart';
+import 'package:organizerPRO/constants.dart';
+import 'package:organizerPRO/screens/files_view.dart';
 
 class FilesButton extends StatelessWidget {
   final String objectId;

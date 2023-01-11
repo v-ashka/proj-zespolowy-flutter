@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/utils/http_delete.dart';
+import 'package:organizerPRO/constants.dart';
+import 'package:organizerPRO/utils/http_delete.dart';
 
 enum AlertDialogType {
   carDefault,

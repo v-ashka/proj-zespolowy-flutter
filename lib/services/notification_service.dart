@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:projzespoloey/models/notification_model.dart';
+import 'package:organizerPRO/models/notification_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants.dart';

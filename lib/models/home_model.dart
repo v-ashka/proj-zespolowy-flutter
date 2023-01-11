@@ -12,7 +12,8 @@ class HomeModel {
       this.liczbaPokoi,
       this.idTypDomu,
       this.typDomu,
-      this.liczbaDodanychPomieszczen});
+      this.liczbaDodanychPomieszczen,
+      this.liczbaDodanychNapraw});
 
   String? idDomu;
   String? ulicaNrDomu;
@@ -25,6 +26,7 @@ class HomeModel {
   int? idTypDomu;
   String? typDomu;
   int? liczbaDodanychPomieszczen;
+  int? liczbaDodanychNapraw;
 
   Map<String, dynamic> toJson() => {
         "ulicaNrDomu": ulicaNrDomu,
@@ -37,23 +39,22 @@ class HomeModel {
         "idTypDomu": idTypDomu
       };
 
-  factory HomeModel.fromJson(Map<String, dynamic> json) =>
-      HomeModel(
-        idDomu: json["idDomu"],
-        kodPocztowy: json["kodPocztowy"],
-        ulicaNrDomu: json["ulicaNrDomu"],
-        miejscowosc: json["miejscowosc"],
-        rokWprowadzenia: json["rokWprowadzenia"],
-        powierzchniaDomu: json["powierzchniaDomu"],
-        powierzchniaDzialki: json["powierzchniaDzialki"],
-        liczbaPokoi: json["liczbaPokoi"],
-        typDomu: json["typDomu"],
-        liczbaDodanychPomieszczen: json["liczbaDodanychPomieszczen"]);
+  factory HomeModel.fromJson(Map<String, dynamic> json) => HomeModel(
+      idDomu: json["idDomu"],
+      kodPocztowy: json["kodPocztowy"],
+      ulicaNrDomu: json["ulicaNrDomu"],
+      miejscowosc: json["miejscowosc"],
+      rokWprowadzenia: json["rokWprowadzenia"],
+      powierzchniaDomu: json["powierzchniaDomu"],
+      powierzchniaDzialki: json["powierzchniaDzialki"],
+      liczbaPokoi: json["liczbaPokoi"],
+      typDomu: json["typDomu"],
+      liczbaDodanychPomieszczen: json["liczbaDodanychPomieszczen"],
+      liczbaDodanychNapraw: json["liczbaDodanychNapraw"]);
 }
 
 List<HomeModel> homeListFromJson(String str) =>
-    List<HomeModel>.from(
-        json.decode(str).map((x) => HomeModel.fromJson(x)));
+    List<HomeModel>.from(json.decode(str).map((x) => HomeModel.fromJson(x)));
 
 class HomeListView {
   String? idDomu;
@@ -69,12 +70,11 @@ class HomeListView {
   });
 
   factory HomeListView.fromJson(Map<String, dynamic> json) => HomeListView(
-    idDomu: json["idDomu"],
-    typDomu: json["typDomu"],
-    ulicaNrDomu: json["ulicaNrDomu"],
-    miejscowosc: json["miejscowosc"],
-
-  );
+        idDomu: json["idDomu"],
+        typDomu: json["typDomu"],
+        ulicaNrDomu: json["ulicaNrDomu"],
+        miejscowosc: json["miejscowosc"],
+      );
 }
 
 List<HomeListView> homeListViewFromJson(String str) => List<HomeListView>.from(

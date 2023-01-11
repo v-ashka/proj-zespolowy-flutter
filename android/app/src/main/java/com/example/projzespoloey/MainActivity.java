@@ -1,4 +1,4 @@
-package com.example.projzespoloey;
+package com.example.organizerPRO;
 
 import io.flutter.embedding.android.FlutterActivity;
 

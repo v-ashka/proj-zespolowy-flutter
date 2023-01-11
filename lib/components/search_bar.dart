@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projzespoloey/constants.dart';
+import 'package:organizerPRO/constants.dart';
 
 class SearchBar extends StatefulWidget {
   final String text;
@@ -14,18 +14,16 @@ class SearchBar extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SearchBarState createState() => _SearchBarState();
+  SearchBarState createState() => SearchBarState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class SearchBarState extends State<SearchBar> {
   final controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     const styleActive = TextStyle(color: Colors.black);
     const styleHint = TextStyle(color: Colors.black54);
     final style = widget.text.isEmpty ? styleHint : styleActive;
-
     return Container(
       height: 42,
       margin: const EdgeInsets.fromLTRB(15, 5, 15, 5),

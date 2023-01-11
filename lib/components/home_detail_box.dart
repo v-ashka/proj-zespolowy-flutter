@@ -1,15 +1,12 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:projzespoloey/components/delete_button.dart';
-import 'package:projzespoloey/components/detail_bar.dart';
-import 'package:projzespoloey/components/files_button.dart';
-import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/models/home_model.dart';
-import 'package:projzespoloey/pages/carsModule/Car.dart';
-import 'package:projzespoloey/pages/carsModule/carList.dart';
-import 'package:projzespoloey/pages/carsModule/form/car_form.dart';
-import 'package:projzespoloey/pages/homeModule/homeList.dart';
-import 'package:projzespoloey/utils/http_delete.dart';
+import 'package:organizerPRO/components/delete_button.dart';
+import 'package:organizerPRO/components/detail_bar.dart';
+import 'package:organizerPRO/components/files_button.dart';
+import 'package:organizerPRO/constants.dart';
+import 'package:organizerPRO/models/home_model.dart';
+import 'package:organizerPRO/screens/home_module/home_list_view.dart';
+import 'package:organizerPRO/utils/http_delete.dart';
 
 class HomeDetailBox extends StatelessWidget {
   final HomeModel homeModel;

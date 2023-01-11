@@ -1,47 +1,36 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/models/insurace_model.dart';
-import 'package:projzespoloey/pages/_Dashboard.dart';
-import 'package:projzespoloey/pages/_userAuth.dart';
-import 'package:projzespoloey/pages/otp_screen.dart';
-import 'package:projzespoloey/pages/password_reset.dart';
-import 'package:projzespoloey/pages/_userAuthRegister.dart';
-import 'package:projzespoloey/pages/carsModule/Car.dart';
-import 'package:projzespoloey/pages/carsModule/carInsuranceHistoryView.dart';
-import 'package:projzespoloey/pages/carsModule/car_insurance_view.dart';
-import 'package:projzespoloey/pages/carsModule/carItem.dart';
-import 'package:projzespoloey/pages/carsModule/carList.dart';
-import 'package:projzespoloey/pages/carsModule/car_repair_history_view.dart';
-import 'package:projzespoloey/pages/carsModule/form/car_repair_form.dart';
-import 'package:projzespoloey/pages/carsModule/inspection_history_view.dart';
-import 'package:projzespoloey/pages/carsModule/inspection_view.dart';
-import 'package:projzespoloey/pages/carsModule/form/car_form.dart';
-import 'package:projzespoloey/pages/carsModule/form/insuranceEditForm.dart';
-import 'package:projzespoloey/pages/carsModule/form/insuranceForm.dart';
-import 'package:projzespoloey/pages/documentsModule/document_form.dart';
-import 'package:projzespoloey/pages/old_/dashboard.dart';
-import 'package:projzespoloey/pages/documentsModule/documentItem.dart';
-import 'package:projzespoloey/pages/documentsModule/documentsList.dart';
-import 'package:projzespoloey/pages/homeModule/homeItem.dart';
-// import 'package:projzespoloey/pages/_documentsList.dart';
-import 'package:projzespoloey/pages/homeModule/homeList.dart';
-import 'package:projzespoloey/pages/password_reset.dart';
-import 'package:projzespoloey/pages/receiptsModule/receiptItem.dart';
-import 'package:projzespoloey/pages/receiptsModule/receiptList.dart';
-import 'package:projzespoloey/pages/old_/userauth.dart';
-import 'package:projzespoloey/pages/loading.dart';
-import 'package:projzespoloey/pages/form.dart';
-import 'package:projzespoloey/pages/receiptsModule/receipt_form.dart';
-import 'pages/carsModule/filesView.dart';
-import 'pages/carsModule/form/inspection_form.dart';
-import 'services/UserModel/UserApiService.dart';
+import 'package:organizerPRO/constants.dart';
+import 'package:organizerPRO/models/insurace_model.dart';
+import 'package:organizerPRO/screens/authorization/user_login.dart';
+import 'package:organizerPRO/screens/authorization/user_registration.dart';
+import 'package:organizerPRO/screens/authorization/password_reset.dart';
+import 'package:organizerPRO/models/car_model.dart';
+import 'package:organizerPRO/screens/cars_module/insurance_history_view.dart';
+import 'package:organizerPRO/screens/cars_module/car_item_view.dart';
+import 'package:organizerPRO/screens/cars_module/car_list_view.dart';
+import 'package:organizerPRO/screens/cars_module/car_insurance_view.dart';
+import 'package:organizerPRO/screens/cars_module/car_repair_history_view.dart';
+import 'package:organizerPRO/screens/files_view.dart';
+import 'package:organizerPRO/screens/cars_module/forms/car_form.dart';
+import 'package:organizerPRO/screens/cars_module/forms/car_repair_form.dart';
+import 'package:organizerPRO/screens/cars_module/forms/inspection_form.dart';
+import 'package:organizerPRO/screens/cars_module/forms/insurance_form.dart';
+import 'package:organizerPRO/screens/cars_module/inspection_history_view.dart';
+import 'package:organizerPRO/screens/cars_module/inspection_view.dart';
+import 'package:organizerPRO/screens/dashboard_view.dart';
+import 'package:organizerPRO/screens/documents_module/document_item_view.dart';
+import 'package:organizerPRO/screens/documents_module/document_form.dart';
+import 'package:organizerPRO/screens/documents_module/documents_list_view.dart';
+import 'package:organizerPRO/screens/home_module/home_item_view.dart';
+import 'package:organizerPRO/screens/home_module/home_list_view.dart';
+import 'package:organizerPRO/screens/loading.dart';
+import 'package:organizerPRO/screens/receipt_module/receipt_item_view.dart';
+import 'package:organizerPRO/screens/receipt_module/receipt_list_view.dart';
+import 'package:organizerPRO/screens/receipt_module/receipt_form.dart';
 
-// import 'package:projzespoloey/pages/_carList.dart';
-//projzespoloey
 
 class PostHttpOverrides extends HttpOverrides {
   @override
@@ -60,10 +49,10 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  InsuranceModel model = InsuranceModel();
-  CarModel car = CarModel();
-  String objectId = "";
-  String carModel = "";
+  final InsuranceModel model = InsuranceModel();
+  final CarModel car = CarModel();
+  final String objectId = "";
+  final String carModel = "";
   MyApp({Key? key}) : super(key: key);
 
   @override
@@ -97,8 +86,6 @@ class MyApp extends StatelessWidget {
         '/carInsurance': (context) => CarInsuranceView(
               car: car,
             ),
-        '/carInsuranceEditForm': (context) =>
-            InsuranceEditForm(insurance: model, carId: objectId),
         '/carInsuranceHistory': (context) => CarInsuranceHistoryView(
               car: car,
             ),
@@ -111,7 +98,7 @@ class MyApp extends StatelessWidget {
               car: car,
             ),
         // Car form Route
-        '/carForm': (context) => CarForm(),
+        '/carForm': (context) => const CarForm(),
         '/formCarInsurance': (context) => InsuranceForm(
               carId: objectId,
             ),
@@ -120,15 +107,15 @@ class MyApp extends StatelessWidget {
             ),
         '/formCarRepair': (context) => CarRepairForm(carId: objectId),
         // Documents Routes
-        '/documentList': (context) => DocumentsList(),
-        '/documentItem': (context) => DocumentItem(),
-        '/documentForm': (context) => DocumentForm(),
+        '/documentList': (context) => const DocumentsList(),
+        '/documentItem': (context) => const DocumentItem(),
+        '/documentForm': (context) => const DocumentForm(),
         // Home Routes
-        '/homeList': (context) => HomeList(),
+        '/homeList': (context) => const HomeList(),
         '/homeItem': (context) => HomeItem(homeId: objectId),
         // Receipts Routes
-        '/receiptForm': (context) => ReceiptForm(),
-        '/receiptList': (context) => ReceiptList(),
+        '/receiptForm': (context) => const ReceiptForm(),
+        '/receiptList': (context) => const ReceiptList(),
         '/receiptItem': (context) => ReceiptItem(
               receiptId: objectId,
             ),
@@ -140,7 +127,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.red,
         brightness: Brightness.dark,
         dividerColor: Colors.black12,
-        scaffoldBackgroundColor: Color(0xFF131313),
+        scaffoldBackgroundColor: const Color(0xFF131313),
       ),
       themeMode: ThemeMode.light,
       theme: ThemeData(
@@ -149,7 +136,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ThemeData()
               .colorScheme
               .copyWith(primary: primaryColor, secondary: mainColor),
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
               color: primaryColor,
               titleTextStyle: TextStyle(color: fontBlack, fontFamily: "Lato")),
           visualDensity: VisualDensity.adaptivePlatformDensity),

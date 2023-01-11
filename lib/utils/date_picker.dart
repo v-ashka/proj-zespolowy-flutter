@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projzespoloey/constants.dart';
+import 'package:organizerPRO/constants.dart';
 
 // Funkcja wyświetlająca modal z kalendarzem w języku polskim umożliwiającym wybór konkretnej daty od roku 
 // 1960 do roku następującego 5 lat po roku w którym uruchamiany jest kalendarz. 

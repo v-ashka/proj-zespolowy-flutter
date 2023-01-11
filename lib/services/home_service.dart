@@ -3,9 +3,9 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/models/home_model.dart';
-import 'package:projzespoloey/models/home_repair_model.dart';
+import 'package:organizerPRO/constants.dart';
+import 'package:organizerPRO/models/home_model.dart';
+import 'package:organizerPRO/models/home_repair_model.dart';
 
 class HomeService {
   final _dio = Dio();

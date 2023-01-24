@@ -2,10 +2,10 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:projzespoloey/components/appbar.dart';
-import 'package:projzespoloey/constants.dart';
-import 'package:projzespoloey/pages/otp_screen.dart';
-import 'package:projzespoloey/services/UserModel/UserApiService.dart';
+import 'package:organizerPRO/components/appbar.dart';
+import 'package:organizerPRO/constants.dart';
+import 'package:organizerPRO/screens/authorization/otp_screen.dart';
+import 'package:organizerPRO/services/auth_service.dart';
 
 class PasswordReset extends StatefulWidget {
   const PasswordReset({Key? key}) : super(key: key);

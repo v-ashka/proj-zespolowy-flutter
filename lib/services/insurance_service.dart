@@ -18,6 +18,7 @@ Future<List?> getInsurance(token, id) async {
     } catch (e) {
       log(e.toString());
     }
+    return null;
   }
 
   Future<InsuranceModel> getValidOC(token, id) async {

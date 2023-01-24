@@ -308,8 +308,7 @@ class _NewPasswordViewState extends State<NewPasswordView> {
                                             key: "resetToken");
                                         Response response =
                                             await UserApiService()
-                                                .setNewPassword(widget.resetId,
-                                                    resetToken, passInput);
+                                                .setNewPassword(widget.resetId, resetToken, passInput);
                                         if (response.statusCode == 200) {
                                           showAcceptedDialog(context);
                                         }

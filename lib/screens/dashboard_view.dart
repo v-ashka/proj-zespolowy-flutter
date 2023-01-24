@@ -162,21 +162,11 @@ class _DashboardPanelState extends State<DashboardPanel> {
                                 height: 10,
                               ),
                               const Text(
-                                "Zarządzaj swoim ekranem głównym, ustawiając moduły do wyświetlenia",
+                                "Przechowuj wszystkie Twoje pliki i dokumenty w\u{00A0}jednym miejscu korzystając z dostępnych modułów",
                                 style: TextStyle(fontSize: 18),
                               ),
-                              const SizedBox(height: 40),
+                              const SizedBox(height: 50),
                             ],
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-                            child: Text(
-                              "Kategorie",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                              ),
-                            ),
                           ),
                           DashboardBox(
                               title: "Dokumenty",
@@ -196,7 +186,7 @@ class _DashboardPanelState extends State<DashboardPanel> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ReceiptList()))
+                                      builder: (context) => const ReceiptList()))
                             },
                           ),
                           const SizedBox(

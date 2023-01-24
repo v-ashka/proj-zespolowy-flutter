@@ -1,20 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pinput/pinput.dart';
 import 'package:organizerPRO/components/appbar.dart';
 import 'package:organizerPRO/constants.dart';
+import 'package:pinput/pinput.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key}) : super(key: key);
-
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-    encryptedSharedPreferences: true,
-  );
 
   @override
   State<ChangePassword> createState() => _ChangePasswordState();
@@ -33,6 +24,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   String? emailInput = "";
   String? passInput = "";
   String? pin;
+
   // Error feedback
   String errorFeedback = "";
   final controller = TextEditingController();
@@ -55,22 +47,17 @@ class _ChangePasswordState extends State<ChangePassword> {
           });
     } else {
       Navigator.of(context, rootNavigator: true).pop();
-      // Navigator.pushAndRemoveUntil(
-      //     context,
-      //     MaterialPageRoute<void>(
-      //       builder: (BuildContext context) => const CarList(),
-      //     ),
-      //     ModalRoute.withName("/dashboard"));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
       width: 55,
       height: 55,
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         fontSize: 22,
-        color: const Color.fromRGBO(30, 60, 87, 1),
+        color: Color.fromRGBO(30, 60, 87, 1),
       ),
       decoration: BoxDecoration(
         color: bgSmokedWhite,
@@ -80,7 +67,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     );
 
     return Scaffold(
-      backgroundColor: Color(0xffF8F8F8),
+      backgroundColor: const Color(0xffF8F8F8),
       appBar: myAppBar(context, HeaderTitleType.passwordResetCode),
       body: SafeArea(
         child: Container(
@@ -99,8 +86,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                         child: Text(
                           "Wprowadź nowe hasło",
                           style: TextStyle(
@@ -111,10 +98,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                         ),
                       ),
                       RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           // Note: Styles for TextSpans must be explicitly defined.
                           // Child text spans will inherit styles from parent
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             color: Colors.black,
                           ),
@@ -122,54 +109,52 @@ class _ChangePasswordState extends State<ChangePassword> {
                             TextSpan(text: 'Na podany adres e-mail '),
                             TextSpan(
                                 text: 'seba.wiktor@gmail.com ',
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: secondColor)),
                             TextSpan(
                                 text:
-                                'został wysłany sześciocyfrowy kod resetowania hasła. Przejdź do swojej skrzynki pocztowej i\u{00A0}poniżej wpisz otrzymany kod.'),
+                                    'został wysłany sześciocyfrowy kod resetowania hasła. Przejdź do swojej skrzynki pocztowej i\u{00A0}poniżej wpisz otrzymany kod.'),
                           ],
                         ),
                       ),
-                      SizedBox(height: 80),
+                      const SizedBox(height: 80),
                       Center(
                           child: Form(
-                            key: formKey,
-                            child: Pinput(
-                                hapticFeedbackType: HapticFeedbackType.heavyImpact,
-                                autofocus: true,
-                                length: 6,
-                                inputFormatters: <TextInputFormatter>[
-                                  // for below version 2 use this
-                                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                  FilteringTextInputFormatter.digitsOnly
-
-                                ],
-                                onChanged: (pin) => this.pin = pin,
-                                forceErrorState: false,
-                                defaultPinTheme: defaultPinTheme,
-                                focusedPinTheme: defaultPinTheme.copyWith(
-                                  height: 55,
-                                  width: 55,
-                                  decoration: defaultPinTheme.decoration!.copyWith(
-                                    border: Border.all(color: secondColor),
-                                  ),
-                                ),
-                                errorPinTheme: defaultPinTheme.copyWith(
-                                  decoration: BoxDecoration(
-                                      color: bgSmokedWhite,
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(color: Colors.red)
-                                  ),
-                                ),
-                                validator: (pin) {
-                                  if (pin == null || pin.length != 6)
-                                  {
-                                    return "Wprowadź kod prawidłowo";
-                                  }
-                                  return null;
-                                }),
-                          )),
+                        key: formKey,
+                        child: Pinput(
+                            hapticFeedbackType: HapticFeedbackType.heavyImpact,
+                            autofocus: true,
+                            length: 6,
+                            inputFormatters: <TextInputFormatter>[
+                              // for below version 2 use this
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]')),
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: (pin) => this.pin = pin,
+                            forceErrorState: false,
+                            defaultPinTheme: defaultPinTheme,
+                            focusedPinTheme: defaultPinTheme.copyWith(
+                              height: 55,
+                              width: 55,
+                              decoration: defaultPinTheme.decoration!.copyWith(
+                                border: Border.all(color: secondColor),
+                              ),
+                            ),
+                            errorPinTheme: defaultPinTheme.copyWith(
+                              decoration: BoxDecoration(
+                                  color: bgSmokedWhite,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: Colors.red)),
+                            ),
+                            validator: (pin) {
+                              if (pin == null || pin.length != 6) {
+                                return "Wprowadź kod prawidłowo";
+                              }
+                              return null;
+                            }),
+                      )),
                       const SizedBox(height: 50),
                       Center(
                         child: SizedBox(
@@ -177,9 +162,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                           height: 50,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  onPrimary: secondColor,
-                                  primary: secondColor,
-                                  onSurface: Colors.amber,
+                                  foregroundColor: secondColor,
+                                  backgroundColor: secondColor,
+                                  disabledForegroundColor:
+                                      Colors.amber.withOpacity(0.38),
+                                  disabledBackgroundColor:
+                                      Colors.amber.withOpacity(0.12),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(25),
                                   )),
@@ -200,11 +188,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                               )),
                         ),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Nie otrzymałeś kodu?",
                             style: TextStyle(
                               fontSize: 18,
@@ -212,19 +200,16 @@ class _ChangePasswordState extends State<ChangePassword> {
                           ),
                           TextButton(
                               style: TextButton.styleFrom(
-                                  primary: secondColor,
-                                  onSurface: secondColor,
-                                  textStyle: TextStyle(
+                                  foregroundColor: secondColor,
+                                  disabledForegroundColor:
+                                      secondColor.withOpacity(0.38),
+                                  textStyle: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   )),
                               onPressed: () {
-                                // Navigator.pushReplacementNamed(
-                                //   context,
-                                //   '/registerUser',
-                                // );
                               },
-                              child: Text("Wyślij ponownie"))
+                              child: const Text("Wyślij ponownie"))
                         ],
                       )
                     ],

@@ -5,7 +5,7 @@ class DocumentModel {
     this.idDokumentu,
     this.nazwaDokumentu,
     this.dataUtworzenia,
-    this.kategoria,
+    this.idKategorii,
     this.opis,
     this.wartoscFaktury,
     this.numerFaktury,
@@ -23,7 +23,7 @@ class DocumentModel {
   String? idDokumentu;
   String? nazwaDokumentu;
   String? dataUtworzenia;
-  int? kategoria;
+  int? idKategorii;
   String? opis;
   String? numerFaktury;
   String? wartoscFaktury;
@@ -39,7 +39,7 @@ class DocumentModel {
   Map<String, dynamic> toJson() =>
       {
         "nazwaDokumentu": nazwaDokumentu,
-        "kategoria": kategoria,
+        "idKategorii": idKategorii,
         "opis": opis,
         "wartoscFaktury": wartoscFaktury,
         "ubezpieczyciel": ubezpieczyciel,
@@ -59,7 +59,7 @@ class DocumentModel {
           idDokumentu: json["idDokumentu"],
           nazwaDokumentu: json["nazwaDokumentu"],
           dataUtworzenia: json["dataUtworzenia"],
-          kategoria: json["kategoria"],
+          idKategorii: json["idKategorii"],
           ubezpieczyciel: json["ubezpieczyciel"],
           opis: json["opis"],
           wartoscFaktury: json["wartoscFaktury"],

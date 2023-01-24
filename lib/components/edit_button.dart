@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projzespoloey/constants.dart';
+import 'package:organizerPRO/constants.dart';
 
 class EditButton extends StatelessWidget {
   final Function() callback;

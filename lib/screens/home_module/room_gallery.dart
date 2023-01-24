@@ -3,7 +3,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:organizerPRO/components/appbar.dart';
-import 'package:organizerPRO/components/files_button.dart';
 import 'package:organizerPRO/utils/photo_picker.dart';
 import 'package:organizerPRO/components/photo_view.dart';
 import 'package:organizerPRO/constants.dart';
@@ -148,8 +147,7 @@ class RoomGalleryState extends State<RoomGallery> {
                                     ),
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                          primary: deleteBtn,
-                                          onPrimary: deleteBtn,
+                                          foregroundColor: deleteBtn, backgroundColor: deleteBtn,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                             BorderRadius.circular(
@@ -207,16 +205,14 @@ class RoomGalleryState extends State<RoomGallery> {
                                 },
                                 fullscreenDialog: true));
                       },
-                      child: Container(
-                        child: Hero(
-                            tag: "photo$index",
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: "$SERVER_IP/api/fileUpload/GetFile/${image.idPliku}",
-                              placeholder: (context, url) => const Center(child: CupertinoActivityIndicator()),
-                              errorWidget: (context, url, error) => const Icon(Icons.error),
-                            )),
-                      ),
+                      child: Hero(
+                          tag: "photo$index",
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: "$SERVER_IP/api/fileUpload/GetFile/${image.idPliku}",
+                            placeholder: (context, url) => const Center(child: CupertinoActivityIndicator()),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                          )),
                     );
                   }),
             )),

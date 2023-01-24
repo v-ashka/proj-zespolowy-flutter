@@ -96,11 +96,11 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                   ),
                   child: isLoading
                       ? const Center(
+                          heightFactor: 15,
                           child: CircularProgressIndicator(
                             color: mainColor,
                             strokeWidth: 5,
                           ),
-                          heightFactor: 15,
                         )
                       : Form(
                           key: _formKey,
@@ -128,8 +128,8 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
+                                    const Padding(
+                                      padding: EdgeInsets.fromLTRB(
                                           0, 15, 0, 5),
                                       child: Text(
                                         "Nazwa naprawy",
@@ -151,10 +151,10 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                         repair.nazwaNaprawy = value;
                                       },
                                       cursorColor: Colors.black,
-                                      style: TextStyle(color: Colors.black),
+                                      style: const TextStyle(color: Colors.black),
                                       decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(15),
-                                          prefixIcon: Padding(
+                                          contentPadding: const EdgeInsets.all(15),
+                                          prefixIcon: const Padding(
                                             padding: EdgeInsets.only(top: 1),
                                             child: Icon(
                                               Icons.label_outline,
@@ -175,9 +175,9 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
+                                    const Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                          EdgeInsets.fromLTRB(0, 5, 0, 5),
                                       child: Text(
                                         "Wykonawca naprawy",
                                         style: TextStyle(
@@ -192,10 +192,10 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                         repair.wykonawcaNaprawy = value;
                                       },
                                       cursorColor: Colors.black,
-                                      style: TextStyle(color: Colors.black),
+                                      style: const TextStyle(color: Colors.black),
                                       decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(15),
-                                          prefixIcon: Padding(
+                                          contentPadding: const EdgeInsets.all(15),
+                                          prefixIcon: const Padding(
                                             padding: EdgeInsets.only(top: 1),
                                             child: Icon(
                                               Icons.handyman_outlined,
@@ -216,9 +216,9 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
+                                    const Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                          EdgeInsets.fromLTRB(0, 5, 0, 5),
                                       child: Text(
                                         "Koszt naprawy",
                                         style: TextStyle(
@@ -233,16 +233,16 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                         repair.kosztNaprawy = value;
                                       },
                                       keyboardType:
-                                          TextInputType.numberWithOptions(
+                                          const TextInputType.numberWithOptions(
                                               decimal: true),
                                       inputFormatters: [
                                         FilteringTextInputFormatter.deny(
                                             RegExp("[-, ]"))
                                       ],
                                       cursorColor: Colors.black,
-                                      style: TextStyle(color: Colors.black),
+                                      style: const TextStyle(color: Colors.black),
                                       decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(15),
+                                          contentPadding: const EdgeInsets.all(15),
                                           prefixIcon: const Padding(
                                             padding: EdgeInsets.only(top: 1),
                                             child: Icon(
@@ -264,9 +264,9 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
+                                    const Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                          EdgeInsets.fromLTRB(0, 5, 0, 5),
                                       child: Text(
                                         "Data naprawy",
                                         style: TextStyle(
@@ -287,10 +287,10 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                         });
                                       },
                                       cursorColor: Colors.black,
-                                      style: TextStyle(color: Colors.black),
+                                      style: const TextStyle(color: Colors.black),
                                       decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(15),
-                                          prefixIcon: Padding(
+                                          contentPadding: const EdgeInsets.all(15),
+                                          prefixIcon: const Padding(
                                             padding: EdgeInsets.only(top: 1),
                                             child: Icon(
                                               Icons.calendar_month_outlined,
@@ -316,9 +316,9 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
+                                    const Padding(
                                       padding:
-                                          const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                          EdgeInsets.fromLTRB(0, 5, 0, 5),
                                       child: Text(
                                         "Opis naprawy",
                                         style: TextStyle(
@@ -337,11 +337,11 @@ class _HomeRepairFormState extends State<HomeRepairForm> {
                                           repair.opis = value;
                                         },
                                         cursorColor: Colors.black,
-                                        style: TextStyle(color: Colors.black),
+                                        style: const TextStyle(color: Colors.black),
                                         decoration: InputDecoration(
                                             isDense: true,
                                             contentPadding:
-                                                EdgeInsets.symmetric(
+                                                const EdgeInsets.symmetric(
                                                     horizontal: 10,
                                                     vertical: 10),
                                             hintText:

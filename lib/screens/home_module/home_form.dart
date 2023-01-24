@@ -143,13 +143,13 @@ class _HomeFormState extends State<HomeForm> {
               ? (HeaderTitleType.formEditHome)
               : (HeaderTitleType.formAddHome)),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/background.png'), fit: BoxFit.fill)),
         child: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25),
@@ -165,7 +165,7 @@ class _HomeFormState extends State<HomeForm> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                          children: const [
                             Expanded(
                               flex: 12,
                               child: Text(
@@ -176,14 +176,14 @@ class _HomeFormState extends State<HomeForm> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 15, 0, 5),
                               child: Text(
                                 "Wybierz rodzaj domu",
                                 style: TextStyle(
@@ -212,8 +212,8 @@ class _HomeFormState extends State<HomeForm> {
                                       child: Text("${type["nazwa"]}"));
                                 }).toList(),
                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(15),
-                                    prefixIcon: Padding(
+                                    contentPadding: const EdgeInsets.all(15),
+                                    prefixIcon: const Padding(
                                       padding: EdgeInsets.only(top: 1),
                                       child: Icon(
                                         Icons.home_outlined,
@@ -227,8 +227,8 @@ class _HomeFormState extends State<HomeForm> {
                                       borderRadius: BorderRadius.circular(50),
                                       borderSide: BorderSide.none,
                                     ))),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
                               child: Text(
                                 "Ulica i numer domu",
                                 style: TextStyle(
@@ -243,10 +243,10 @@ class _HomeFormState extends State<HomeForm> {
                                   home.ulicaNrDomu = value;
                                 },
                                 cursorColor: Colors.black,
-                                style: TextStyle(color: Colors.black),
+                                style: const TextStyle(color: Colors.black),
                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(15),
-                                    prefixIcon: Padding(
+                                    contentPadding: const EdgeInsets.all(15),
+                                    prefixIcon: const Padding(
                                       padding: EdgeInsets.only(top: 1),
                                       child: Icon(
                                         Icons.signpost_outlined,
@@ -266,7 +266,7 @@ class _HomeFormState extends State<HomeForm> {
                                   }
                                   return null;
                                 }),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             SizedBox(
@@ -275,7 +275,7 @@ class _HomeFormState extends State<HomeForm> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: [
+                                children: const [
                                   Expanded(
                                     flex: 4,
                                     child: Text(
@@ -299,7 +299,7 @@ class _HomeFormState extends State<HomeForm> {
                                 ],
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Row(
@@ -318,10 +318,12 @@ class _HomeFormState extends State<HomeForm> {
                                           },
                                           keyboardType: TextInputType.number,
                                           cursorColor: Colors.black,
-                                          style: TextStyle(color: Colors.black),
+                                          style: const TextStyle(
+                                              color: Colors.black),
                                           decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.all(1),
-                                              prefixIcon: Padding(
+                                              contentPadding:
+                                                  const EdgeInsets.all(1),
+                                              prefixIcon: const Padding(
                                                 padding:
                                                     EdgeInsets.only(top: 1),
                                                 child: Icon(
@@ -332,7 +334,7 @@ class _HomeFormState extends State<HomeForm> {
                                               ),
                                               hintText: "Kod pocztowy",
                                               hintStyle:
-                                                  TextStyle(fontSize: 12),
+                                                  const TextStyle(fontSize: 12),
                                               fillColor: bg35Grey,
                                               filled: true,
                                               border: OutlineInputBorder(
@@ -365,12 +367,12 @@ class _HomeFormState extends State<HomeForm> {
                                               home.miejscowosc = value;
                                             },
                                             cursorColor: Colors.black,
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                            style: const TextStyle(
+                                                color: Colors.black),
                                             decoration: InputDecoration(
                                                 contentPadding:
-                                                    EdgeInsets.all(15),
-                                                prefixIcon: Padding(
+                                                    const EdgeInsets.all(15),
+                                                prefixIcon: const Padding(
                                                   padding:
                                                       EdgeInsets.only(top: 1),
                                                   child: Icon(
@@ -379,8 +381,8 @@ class _HomeFormState extends State<HomeForm> {
                                                   ),
                                                 ),
                                                 hintText: "Miejscowość",
-                                                hintStyle:
-                                                    TextStyle(fontSize: 12),
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 12),
                                                 fillColor: bg35Grey,
                                                 filled: true,
                                                 border: OutlineInputBorder(
@@ -514,7 +516,7 @@ class _HomeFormState extends State<HomeForm> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         SizedBox(
@@ -523,7 +525,7 @@ class _HomeFormState extends State<HomeForm> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 "Powierzchnia domu",
                                 style: TextStyle(
                                   fontFamily: "Roboto",
@@ -531,7 +533,7 @@ class _HomeFormState extends State<HomeForm> {
                                 ),
                               ),
                               if (home.idTypDomu == 1)
-                                Text(
+                                const Text(
                                   "Powierzchnia działki",
                                   style: TextStyle(
                                     fontFamily: "Roboto",
@@ -541,7 +543,7 @@ class _HomeFormState extends State<HomeForm> {
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Row(
@@ -559,11 +561,13 @@ class _HomeFormState extends State<HomeForm> {
                                       },
                                       keyboardType: TextInputType.number,
                                       cursorColor: Colors.black,
-                                      style: TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                       decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.all(15),
+                                          contentPadding:
+                                              const EdgeInsets.all(15),
                                           suffixText: "m2",
-                                          prefixIcon: Padding(
+                                          prefixIcon: const Padding(
                                             padding: EdgeInsets.only(top: 1),
                                             child: Icon(
                                               Icons.square_foot_outlined,
@@ -571,7 +575,8 @@ class _HomeFormState extends State<HomeForm> {
                                             ),
                                           ),
                                           hintText: "Powierzchnia domu",
-                                          hintStyle: TextStyle(fontSize: 12),
+                                          hintStyle:
+                                              const TextStyle(fontSize: 12),
                                           fillColor: bg35Grey,
                                           filled: true,
                                           border: OutlineInputBorder(
@@ -604,12 +609,13 @@ class _HomeFormState extends State<HomeForm> {
                                             home.powierzchniaDzialki = value;
                                           },
                                           cursorColor: Colors.black,
-                                          style: TextStyle(color: Colors.black),
+                                          style: const TextStyle(
+                                              color: Colors.black),
                                           decoration: InputDecoration(
                                               contentPadding:
-                                                  EdgeInsets.all(15),
+                                                  const EdgeInsets.all(15),
                                               suffixText: "ar",
-                                              prefixIcon: Padding(
+                                              prefixIcon: const Padding(
                                                 padding:
                                                     EdgeInsets.only(top: 1),
                                                 child: Icon(
@@ -619,7 +625,7 @@ class _HomeFormState extends State<HomeForm> {
                                               ),
                                               hintText: "Powierzchnia działki",
                                               hintStyle:
-                                                  TextStyle(fontSize: 12),
+                                                  const TextStyle(fontSize: 12),
                                               fillColor: bg35Grey,
                                               filled: true,
                                               border: OutlineInputBorder(
@@ -757,7 +763,7 @@ class _HomeFormState extends State<HomeForm> {
                         //     ),
                         //   ],
                         // ),
-                        if (!widget.isEditing!) ...[
+                        if (!widget.isEditing) ...[
                           AddAttachmentButton(
                               formType: FormType.home,
                               onChanged: (filesList) {
@@ -770,7 +776,7 @@ class _HomeFormState extends State<HomeForm> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 60,
             )
           ],
@@ -803,8 +809,8 @@ class _HomeFormState extends State<HomeForm> {
           }
         },
         backgroundColor: mainColor,
-        label: Text(widget.isEditing! ? ("Zapisz dom") : ("Dodaj dom")),
-        icon: Icon(Icons.check),
+        label: Text(widget.isEditing ? ("Zapisz dom") : ("Dodaj dom")),
+        icon: const Icon(Icons.check),
       ),
     );
   }

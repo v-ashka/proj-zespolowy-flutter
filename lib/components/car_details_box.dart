@@ -2,6 +2,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:organizerPRO/components/delete_button.dart';
 import 'package:organizerPRO/components/detail_bar.dart';
+import 'package:organizerPRO/components/edit_button.dart';
 import 'package:organizerPRO/components/files_button.dart';
 import 'package:organizerPRO/constants.dart';
 import 'package:organizerPRO/models/car_model.dart';
@@ -28,6 +29,15 @@ class CarDetailBox extends StatelessWidget {
         ),
         ModalRoute.withName("/dashboard"));
   }
+
+  navigatorEditPush() => Navigator.push(
+        context,
+        MaterialPageRoute(
+        builder: (context) => CarForm(
+        carId: carModel.idSamochodu,
+        isEditing: true,
+        brand: carModel.marka,
+        make: carModel.model)));
 
   @override
   Widget build(BuildContext context) {
@@ -95,15 +105,37 @@ class CarDetailBox extends StatelessWidget {
                                 id: carModel.idSamochodu,
                                 dialogtype: AlertDialogType.car,
                                 callback: pushAndRemoveUntil),
-                            EditButton(callback: () => {Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CarForm(
-                                          carId: carModel.idSamochodu,
-                                          isEditing: true,
-                                          brand: carModel.marka,
-                                          make: carModel.model),
-                                    ))}),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            foregroundColor: mainColor,
+                            padding: const EdgeInsets.all(5),
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100),
+                            )),
+                        onPressed: () => {Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CarForm(
+                                    carId: carModel.idSamochodu,
+                                    isEditing: true,
+                                    brand: carModel.marka,
+                                    make: carModel.model)))},
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: mainColor,
+                          ),
+                          child: const Icon(
+                            Icons.edit_outlined,
+                            size: 30,
+                            color: bgSmokedWhite,
+                          ),
+                        ),
+                      ),
                             FilesButton(objectId: carModel.idSamochodu!),
                           ],
                         ),

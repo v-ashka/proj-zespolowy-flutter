@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class DocumentItem extends StatefulWidget {
   const DocumentItem({Key? key}) : super(key: key);
@@ -14,7 +12,7 @@ class _DocumentItemState extends State<DocumentItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Item"),
+        title: const Text("Item"),
       ),
     );
   }

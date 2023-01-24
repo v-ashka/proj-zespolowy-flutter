@@ -44,17 +44,17 @@ class _SettingsViewState extends State<SettingsView> {
       showDialog(
           context: context,
           builder: (context) {
-            Future.delayed(Duration(seconds: 2), () {
+            Future.delayed(const Duration(seconds: 2), () {
               Navigator.of(context).pop(true);
             });
-            return AlertDialog(
+            return const AlertDialog(
               insetPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
               titlePadding: EdgeInsets.fromLTRB(25, 25, 25, 0),
               contentPadding: EdgeInsets.fromLTRB(25, 0, 25, 25),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25.0))),
               title: Text("Nastąpi wylogowanie z konta.."),
-              content: Container(
+              content: SizedBox(
                 width: 200,
                 height: 200,
                 child: Center(
@@ -79,25 +79,50 @@ class _SettingsViewState extends State<SettingsView> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
               ),
-              title: const Text("Autorzy aplikacji"),
+              title: const Text("Informacje o aplikacji"),
               content: SizedBox(
-                height: 110,
+                height: 350,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    Text("Michał Grabowiec"),
-                    Text("Marcin Wijaszka"),
-                    Text("Sebastian Wiktor"),
-                    Divider(),
-                    Align(
+                  children: [
+                    RichText(
+                      text: const TextSpan(
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Niniejsza aplikacja powstała w\u{00A0}ramach pracy inżynierskiej pod tytułem "System wspomagający zarządzanie '
+                                  'sprzętem domowym". Praca została napisana pod kierunkiem '),
+                     TextSpan(
+                              text:
+                              'dr inż. Tomasza Szymczyka.',
+                     style: TextStyle(
+                       fontSize: 16,
+                       color: Colors.black,
+                       fontWeight: FontWeight.bold
+                     ))
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    const Text("Autorzy pracy:"),
+                    const SizedBox(height: 10),
+                    const Text("Michał Grabowiec"),
+                    const Text("Marcin Wijaszka"),
+                    const Text("Sebastian Wiktor"),
+                    const SizedBox(height: 30),
+                    const Divider(),
+                    const Align(
                         alignment: Alignment.center,
-                        child: Text("Politechnika Lubelska - 2022")),
-                    Divider(),
+                        child: Text("Politechnika Lubelska 2023")),
+                    const Divider(),
                   ],
                 ),
               ),
-              contentPadding: EdgeInsets.fromLTRB(25, 15, 25, 0),
+              contentPadding: const EdgeInsets.fromLTRB(25, 15, 25, 0),
               actions: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -153,235 +178,228 @@ class _SettingsViewState extends State<SettingsView> {
                 content: SizedBox(
                     height: 300,
                     width: 300,
-                    child: Container(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(description),
-                          isLoading
-                              ? (const Center(
-                                  heightFactor: 5,
-                                  child: CircularProgressIndicator(
-                                      color: mainColor)))
-                              : (Form(
-                                  key: formKey,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      const SizedBox(
-                                        height: 15,
-                                      ),
-                                      TextFormField(
-                                          obscureText: obscurePass1,
-                                          onSaved: (value) {
-                                            data.oldPass = value;
-                                          },
-                                          cursorColor: Colors.black,
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                          decoration: InputDecoration(
-                                              suffixIcon: IconButton(
-                                                onPressed: () => setState(() {
-                                                  obscurePass1 = !obscurePass1;
-                                                }),
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 1, 15, 0),
-                                                icon: Icon(
-                                                  obscurePass1
-                                                      ? Icons
-                                                          .visibility_outlined
-                                                      : Icons
-                                                          .visibility_off_outlined,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              contentPadding:
-                                                  const EdgeInsets.all(15),
-                                              prefixIcon: const Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 1),
-                                                child: Icon(
-                                                  Icons.password_outlined,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              hintText: "Podaj stare hasło",
-                                              fillColor: bg35Grey,
-                                              filled: true,
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                borderSide: BorderSide.none,
-                                              )),
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'To pole nie może być puste!';
-                                            }
-                                            return null;
-                                          }),
-                                      const SizedBox(
-                                        height: 15,
-                                      ),
-                                      TextFormField(
-                                          obscureText: obscurePass2,
-                                          onSaved: (value) {
-                                            data.newPass = value;
-                                          },
-                                          cursorColor: Colors.black,
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                          decoration: InputDecoration(
-                                              suffixIcon: IconButton(
-                                                onPressed: () => setState(() {
-                                                  print("test");
-                                                  print(obscurePass2);
-                                                  obscurePass2 = !obscurePass2;
-                                                }),
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 1, 15, 0),
-                                                icon: Icon(
-                                                  obscurePass2
-                                                      ? Icons
-                                                          .visibility_outlined
-                                                      : Icons
-                                                          .visibility_off_outlined,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              contentPadding:
-                                                  const EdgeInsets.all(15),
-                                              prefixIcon: const Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 1),
-                                                child: Icon(
-                                                  Icons.password_outlined,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              hintText: "Podaj nowe hasło",
-                                              fillColor: bg35Grey,
-                                              filled: true,
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                borderSide: BorderSide.none,
-                                              )),
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'To pole nie może być puste!';
-                                            }
-                                            return null;
-                                          }),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 5, 0, 0),
-                                        child: Text(
-                                          errorFeedback,
-                                          style: TextStyle(color: errorColor),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                          0,
-                                          15,
-                                          0,
-                                          0,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor: deleteBtn,
-                                                  foregroundColor:
-                                                      bgSmokedWhite,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25)),
-                                                ),
-                                                onPressed: () async {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text("Anuluj")),
-                                            ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor: mainColor,
-                                                  foregroundColor:
-                                                      bgSmokedWhite,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25)),
-                                                ),
-                                                onPressed: () async {
-                                                  if (formKey.currentState!
-                                                      .validate()) {
-                                                    formKey.currentState!
-                                                        .save();
-                                                    setState(() {
-                                                      isLoading = true;
-                                                      headlineText =
-                                                          "Zmieniam...";
-                                                      description =
-                                                          "Po zmianie hasła nastąpi wylogowanie...";
-                                                    });
-
-                                                    var res =
-                                                        await UserApiService()
-                                                            .changePassword(
-                                                                data, userData);
-                                                    print("test complete");
-                                                    if (res) {
-                                                      print("testt complete");
-                                                      setState(() {
-                                                        headlineText =
-                                                            "Hasło zostało zmienione!";
-                                                        description =
-                                                            "Wylogowywuję z konta..";
-                                                        removeUserToken();
-                                                      });
-                                                      await Future.delayed(
-                                                          Duration(seconds: 5));
-                                                      Navigator.of(context)
-                                                          .pushNamedAndRemoveUntil(
-                                                              '/',
-                                                              (Route<dynamic>
-                                                                      route) =>
-                                                                  false);
-                                                    } else {
-                                                      setState(() {
-                                                        isLoading = !isLoading;
-                                                        headlineText =
-                                                            "Hasło nie zostało zmienione!";
-                                                        description =
-                                                            "Wystąpił błąd w trakcie zmiany hasła";
-                                                        errorFeedback =
-                                                            "Stare hasło jest nieprawidłowe";
-                                                      });
-                                                    }
-                                                  }
-                                                },
-                                                child: Text("Zapisz zmiany")),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(description),
+                      isLoading
+                          ? (const Center(
+                              heightFactor: 5,
+                              child: CircularProgressIndicator(
+                                  color: mainColor)))
+                          : (Form(
+                              key: formKey,
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  const SizedBox(
+                                    height: 15,
                                   ),
-                                ))
-                        ]))),
+                                  TextFormField(
+                                      obscureText: obscurePass1,
+                                      onSaved: (value) {
+                                        data.oldPass = value;
+                                      },
+                                      cursorColor: Colors.black,
+                                      style: const TextStyle(
+                                          color: Colors.black),
+                                      decoration: InputDecoration(
+                                          suffixIcon: IconButton(
+                                            onPressed: () => setState(() {
+                                              obscurePass1 = !obscurePass1;
+                                            }),
+                                            padding:
+                                                const EdgeInsets.fromLTRB(
+                                                    0, 1, 15, 0),
+                                            icon: Icon(
+                                              obscurePass1
+                                                  ? Icons
+                                                      .visibility_outlined
+                                                  : Icons
+                                                      .visibility_off_outlined,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.all(15),
+                                          prefixIcon: const Padding(
+                                            padding:
+                                                EdgeInsets.only(top: 1),
+                                            child: Icon(
+                                              Icons.password_outlined,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          hintText: "Podaj stare hasło",
+                                          fillColor: bg35Grey,
+                                          filled: true,
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            borderSide: BorderSide.none,
+                                          )),
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value.isEmpty) {
+                                          return 'To pole nie może być puste!';
+                                        }
+                                        return null;
+                                      }),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  TextFormField(
+                                      obscureText: obscurePass2,
+                                      onSaved: (value) {
+                                        data.newPass = value;
+                                      },
+                                      cursorColor: Colors.black,
+                                      style: const TextStyle(
+                                          color: Colors.black),
+                                      decoration: InputDecoration(
+                                          suffixIcon: IconButton(
+                                            onPressed: () => setState(() {
+                                              obscurePass2 = !obscurePass2;
+                                            }),
+                                            padding:
+                                                const EdgeInsets.fromLTRB(
+                                                    0, 1, 15, 0),
+                                            icon: Icon(
+                                              obscurePass2
+                                                  ? Icons
+                                                      .visibility_outlined
+                                                  : Icons
+                                                      .visibility_off_outlined,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.all(15),
+                                          prefixIcon: const Padding(
+                                            padding:
+                                                EdgeInsets.only(top: 1),
+                                            child: Icon(
+                                              Icons.password_outlined,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          hintText: "Podaj nowe hasło",
+                                          fillColor: bg35Grey,
+                                          filled: true,
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            borderSide: BorderSide.none,
+                                          )),
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value.isEmpty) {
+                                          return 'To pole nie może być puste!';
+                                        }
+                                        return null;
+                                      }),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0, 5, 0, 0),
+                                    child: Text(
+                                      errorFeedback,
+                                      style: const TextStyle(color: errorColor),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      0,
+                                      15,
+                                      0,
+                                      0,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: deleteBtn,
+                                              foregroundColor:
+                                                  bgSmokedWhite,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25)),
+                                            ),
+                                            onPressed: () async {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text("Anuluj")),
+                                        ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: mainColor,
+                                              foregroundColor:
+                                                  bgSmokedWhite,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25)),
+                                            ),
+                                            onPressed: () async {
+                                              if (formKey.currentState!
+                                                  .validate()) {
+                                                formKey.currentState!
+                                                    .save();
+                                                setState(() {
+                                                  isLoading = true;
+                                                  headlineText =
+                                                      "Zmieniam...";
+                                                  description =
+                                                      "Po zmianie hasła nastąpi wylogowanie...";
+                                                });
+
+                                                var res =
+                                                    await UserApiService().changePassword(data, userData);
+                                                if (res) {
+                                                  setState(() {
+                                                    headlineText =
+                                                        "Hasło zostało zmienione!";
+                                                    description =
+                                                        "Wylogowywuję z konta..";
+                                                    removeUserToken();
+                                                  });
+                                                  await Future.delayed(
+                                                      const Duration(seconds: 5));
+                                                  Navigator.of(context)
+                                                      .pushNamedAndRemoveUntil(
+                                                          '/',
+                                                          (Route<dynamic>
+                                                                  route) =>
+                                                              false);
+                                                } else {
+                                                  setState(() {
+                                                    isLoading = !isLoading;
+                                                    headlineText =
+                                                        "Hasło nie zostało zmienione!";
+                                                    description =
+                                                        "Wystąpił błąd w trakcie zmiany hasła";
+                                                    errorFeedback =
+                                                        "Stare hasło jest nieprawidłowe";
+                                                  });
+                                                }
+                                              }
+                                            },
+                                            child: const Text("Zapisz zmiany")),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ))
+                    ])),
               );
             });
           });
@@ -403,7 +421,6 @@ class _SettingsViewState extends State<SettingsView> {
       onReceiveProgress: (received, totalSize) {
         setState(() {
           progress = received / totalSize;
-          print(progress);
         });
       },
       deleteOnError: true,
@@ -424,7 +441,7 @@ class _SettingsViewState extends State<SettingsView> {
         builder: (context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setStateModal) {
-            this._setStateModal = setStateModal;
+            _setStateModal = setStateModal;
             return AlertDialog(
               insetPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -432,140 +449,139 @@ class _SettingsViewState extends State<SettingsView> {
               contentPadding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25.0))),
-              title: Text("Eksportuj lub importuj pliki"),
+              title: const Text("Eksportuj lub importuj pliki"),
               content: Padding(
                 padding: const EdgeInsets.only(top: 35),
                 child: SizedBox(
                     height: 220,
                     width: 300,
-                    child: Container(
-                        child: Column(
+                    child: Column(
                       children: [
-                        Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: mainColor,
-                                        shape: CircleBorder(),
-                                        padding: EdgeInsets.all(20),
-                                      ),
-                                      onPressed: fileReady
-                                          ? null
-                                          : () async {
-                                              log(files.isEmpty.toString());
-                                              files = await filePicker(files);
-                                              log(files.isEmpty.toString());
-                                              if (files.isNotEmpty) {
-                                                setState(() {
-                                                  fileReady = true;
-                                                });
-                                                var result = await FilesService()
-                                                    .importFiles(
-                                                        userData, files.first);
-                                                log("inside result");
-                                                if (result) {
-                                                  log("git");
-                                                  setStateModal(() {
-                                                    fileFeedback =
-                                                        "Plik został przesłany";
-                                                  });
-                                                } else {
-                                                  setStateModal(() {
-                                                    fileFeedback =
-                                                        "Wystapil problem z importem pliku";
-                                                  });
-                                                }
-                                              }
-                                              log("files ???");
-                                            },
-                                      child: const Icon(
-                                        Icons.upload_file_outlined,
-                                        size: 30,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    const Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Importuj dane",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 25,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: secondColor,
-                                        shape: const CircleBorder(),
-                                        padding: const EdgeInsets.all(20),
-                                      ),
-                                      onPressed: fileReady
-                                          ? null
-                                          : () async {
+                    Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: mainColor,
+                                    shape: const CircleBorder(),
+                                    padding: const EdgeInsets.all(20),
+                                  ),
+                                  onPressed: fileReady
+                                      ? null
+                                      : () async {
+                                          log(files.isEmpty.toString());
+                                          files = await filePicker(files);
+                                          log(files.isEmpty.toString());
+                                          if (files.isNotEmpty) {
+                                            setState(() {
+                                              fileReady = true;
+                                            });
+                                            var result = await FilesService()
+                                                .importFiles(
+                                                    userData, files.first);
+                                            log("inside result");
+                                            if (result) {
+                                              log("git");
                                               setStateModal(() {
-                                                fileStatus = true;
-
-                                                log(progress.toString());
+                                                fileFeedback =
+                                                    "Plik został przesłany";
                                               });
-                                              var export = exportFile("zip");
-                                              if (export == true) {
-                                                setStateModal(() {
-                                                  fileStatus = false;
-                                                });
-                                              }
-                                            },
-                                      child: const Icon(
-                                        Icons.download,
-                                        size: 30,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "Eksportuj dane",
-                                      style:
-                                          TextStyle(fontWeight: FontWeight.bold),
-                                    )
-                                  ],
+                                            } else {
+                                              setStateModal(() {
+                                                fileFeedback =
+                                                    "Wystapil problem z importem pliku";
+                                              });
+                                            }
+                                          }
+                                          log("files ???");
+                                        },
+                                  child: const Icon(
+                                    Icons.upload_file_outlined,
+                                    size: 30,
+                                  ),
                                 ),
-                              ),
-                            ]),
-                        SizedBox(
-                          height: 40,
-                        ),
-                        fileStatus
-                            ? LinearProgressIndicator(
-                                backgroundColor: Colors.grey[200],
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.blue),
-                              )
-                            : (Text(fileFeedback)),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Importuj dane",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: secondColor,
+                                    shape: const CircleBorder(),
+                                    padding: const EdgeInsets.all(20),
+                                  ),
+                                  onPressed: fileReady
+                                      ? null
+                                      : () async {
+                                          setStateModal(() {
+                                            fileStatus = true;
+
+                                            log(progress.toString());
+                                          });
+                                          var export = exportFile("zip");
+                                          if (export == true) {
+                                            setStateModal(() {
+                                              fileStatus = false;
+                                            });
+                                          }
+                                        },
+                                  child: const Icon(
+                                    Icons.download,
+                                    size: 30,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Text(
+                                  "Eksportuj dane",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          ),
+                        ]),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    fileStatus
+                        ? LinearProgressIndicator(
+                            backgroundColor: Colors.grey[200],
+                            valueColor:
+                                const AlwaysStoppedAnimation<Color>(Colors.blue),
+                          )
+                        : (Text(fileFeedback)),
                       ],
-                    ))),
+                    )),
               ),
               actions: [
                 Row(
@@ -581,7 +597,7 @@ class _SettingsViewState extends State<SettingsView> {
                         onPressed: () async {
                           Navigator.pop(context);
                         },
-                        child: Text("Anuluj")),
+                        child: const Text("Anuluj")),
                   ],
                 ),
               ],
@@ -666,7 +682,6 @@ class _SettingsViewState extends State<SettingsView> {
                               child: Switch(
                                   value: isSwitched,
                                   onChanged: (value) async {
-                                    print("value is $value");
                                     await storage.write(
                                         key: "phone_validation",
                                         value: value == true
@@ -674,9 +689,6 @@ class _SettingsViewState extends State<SettingsView> {
                                             : ("false"));
                                     setState(() {
                                       isSwitched = value;
-                                      print(isSwitched);
-                                      print(
-                                          'valiationtype is ${validationType}');
                                     });
                                   }),
                             ),

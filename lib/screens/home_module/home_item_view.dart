@@ -10,9 +10,9 @@ import 'package:organizerPRO/services/home_service.dart';
 import '../../components/appbar.dart';
 
 class HomeItem extends StatefulWidget {
-  String? homeId;
+  final String? homeId;
 
-  HomeItem({Key? key, required this.homeId}) : super(key: key);
+  const HomeItem({Key? key, required this.homeId}) : super(key: key);
 
   @override
   State<HomeItem> createState() => _HomeItemState();
@@ -47,13 +47,13 @@ class _HomeItemState extends State<HomeItem> {
       appBar:
           myAppBar(context, HeaderTitleType.home, "-", homeModel!.miejscowosc),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/background.png'), fit: BoxFit.fill)),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
           child: homeModel?.idDomu == null
-              ? ((Center(
+              ? ((const Center(
                   child: CircularProgressIndicator(
                   color: mainColor,
                 ))))
@@ -71,18 +71,19 @@ class _HomeItemState extends State<HomeItem> {
                               borderRadius: BorderRadius.circular(25),
                               color: Colors.white)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    HomeDetailBox(homeModel: homeModel!, token: token!, context: context),
-                    SizedBox(
+                    HomeDetailBox(
+                        homeModel: homeModel!, token: token!, context: context),
+                    const SizedBox(
                       height: 15,
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: bgSmokedWhite,
-                          onPrimary: bg35Grey,
-                          padding: EdgeInsets.all(0),
+                          foregroundColor: bg35Grey,
+                          backgroundColor: bgSmokedWhite,
+                          padding: const EdgeInsets.all(0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           )),
@@ -90,112 +91,116 @@ class _HomeItemState extends State<HomeItem> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  RoomList(homeId: homeModel!.idDomu!, homeLocation: homeModel!.miejscowosc!),
+                              builder: (context) => RoomList(
+                                  homeId: homeModel!.idDomu!,
+                                  homeLocation: homeModel!.miejscowosc!),
                             ));
                       },
-                      child: Container(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Zdjęcia pomieszczeń",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: fontBlack,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 2,
+                                ),
+                                if (homeModel!.liczbaDodanychPomieszczen !=
+                                        null &&
+                                    homeModel!.liczbaDodanychPomieszczen !=
+                                        0) ...[
                                   const Text(
-                                    "Zdjęcia pomieszczeń",
+                                    "ILOŚĆ DODANYCH POMIESZCZEŃ",
                                     style: TextStyle(
-                                      fontSize: 20,
-                                      color: fontBlack,
-                                    ),
+                                        fontSize: 12,
+                                        color: fontGrey,
+                                        fontFamily: "Roboto",
+                                        fontWeight: FontWeight.w300),
                                   ),
                                   const SizedBox(
-                                    height: 2,
+                                    height: 10,
                                   ),
-                                  if (homeModel!.liczbaDodanychPomieszczen != null && homeModel!.liczbaDodanychPomieszczen != 0) ...[
-                                    const Text(
-                                      "ILOŚĆ DODANYCH POMIESZCZEŃ",
-                                      style: TextStyle(
-                                          fontSize: 12,
+                                  Container(
+                                    width: 100,
+                                    padding: const EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      color: secondaryColor,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        const Icon(
+                                          Icons.door_back_door_outlined,
+                                          size: 20,
                                           color: fontGrey,
-                                          fontFamily: "Roboto",
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      width: 100,
-                                      padding: EdgeInsets.all(3),
-                                      decoration: BoxDecoration(
-                                        color: secondaryColor,
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          const Icon(
-                                            Icons.door_back_door_outlined,
-                                            size: 20,
-                                            color: fontGrey,
+                                        ),
+                                        Text(
+                                          homeModel!.liczbaDodanychPomieszczen
+                                              .toString(),
+                                          style: const TextStyle(
+                                            color: fontBlack,
                                           ),
-                                          Text(homeModel!.liczbaDodanychPomieszczen.toString(),
-                                            style: const TextStyle(
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ] else ...[
+                                  SizedBox(
+                                    width: 220,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          "Nie dodałeś jeszcze żadnego pomieszczenia!",
+                                          style: TextStyle(
                                               color: fontBlack,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ] else ...[
-                                    SizedBox(
-                                      width: 220,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Nie dodałeś jeszcze żadnego pomieszczenia!",
-                                            style: TextStyle(
-                                                color: fontBlack,
-                                                fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          "Po dodaniu pomieszczeń w tym miejscu pojawi się ich liczba.",
+                                          style: TextStyle(
+                                            color: fontBlack,
                                           ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "Po dodaniu pomieszczeń w tym miejscu pojawi się ich liczba.",
-                                            style: TextStyle(
-                                              color: fontBlack,
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                        )
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ],
-                              ),
-                              Icon(
-                                Icons.door_back_door_outlined,
-                                size: 82,
-                                color: bg50Grey,
-                              )
-                            ],
-                          ),
+                              ],
+                            ),
+                            const Icon(
+                              Icons.door_back_door_outlined,
+                              size: 82,
+                              color: bg50Grey,
+                            )
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: bgSmokedWhite,
-                          onPrimary: bg35Grey,
-                          padding: EdgeInsets.all(0),
+                          foregroundColor: bg35Grey,
+                          backgroundColor: bgSmokedWhite,
+                          padding: const EdgeInsets.all(0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           )),
@@ -207,102 +212,104 @@ class _HomeItemState extends State<HomeItem> {
                                   HomeRepairList(homeId: homeModel!.idDomu!),
                             ));
                       },
-                      child: Container(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15.0, 10, 15, 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Dziennik napraw",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: fontBlack,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 2,
+                                ),
+                                if (homeModel!.liczbaDodanychNapraw != null &&
+                                    homeModel!.liczbaDodanychNapraw != 0) ...[
                                   const Text(
-                                    "Dziennik napraw",
+                                    "LICZBA DODANYCH NAPRAW",
                                     style: TextStyle(
-                                      fontSize: 20,
-                                      color: fontBlack,
-                                    ),
+                                        fontSize: 12,
+                                        color: fontGrey,
+                                        fontFamily: "Roboto",
+                                        fontWeight: FontWeight.w300),
                                   ),
                                   const SizedBox(
-                                    height: 2,
+                                    height: 10,
                                   ),
-                                  if (homeModel!.liczbaDodanychNapraw != null && homeModel!.liczbaDodanychNapraw != 0) ...[
-                                    const Text(
-                                      "LICZBA DODANYCH NAPRAW",
-                                      style: TextStyle(
-                                          fontSize: 12,
+                                  Container(
+                                    width: 100,
+                                    padding: const EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      color: secondaryColor,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        const Icon(
+                                          Icons.construction_outlined,
+                                          size: 20,
                                           color: fontGrey,
-                                          fontFamily: "Roboto",
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      width: 100,
-                                      padding: EdgeInsets.all(3),
-                                      decoration: BoxDecoration(
-                                        color: secondaryColor,
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          const Icon(
-                                            Icons.construction_outlined,
-                                            size: 20,
-                                            color: fontGrey,
+                                        ),
+                                        Text(
+                                          homeModel!.liczbaDodanychNapraw
+                                              .toString(),
+                                          style: const TextStyle(
+                                            color: fontBlack,
                                           ),
-                                          Text(homeModel!.liczbaDodanychNapraw.toString(),
-                                            style: const TextStyle(
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ] else ...[
+                                  SizedBox(
+                                    width: 240,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          "Nie dodałeś jeszcze żadnych napraw!",
+                                          style: TextStyle(
                                               color: fontBlack,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ] else ...[
-                                    SizedBox(
-                                      width: 240,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Nie dodałeś jeszcze żadnych napraw!",
-                                            style: TextStyle(
-                                                color: fontBlack,
-                                                fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          "Po dodaniu napraw w tym miejscu pojawi się ich liczba.",
+                                          style: TextStyle(
+                                            color: fontBlack,
                                           ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "Po dodaniu napraw w tym miejscu pojawi się ich liczba.",
-                                            style: TextStyle(
-                                              color: fontBlack,
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                        )
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ],
-                              ),
-                              Icon(
-                                Icons.plumbing_outlined,
-                                size: 82,
-                                color: bg50Grey,
-                              )
-                            ],
-                          ),
+                              ],
+                            ),
+                            const Icon(
+                              Icons.plumbing_outlined,
+                              size: 82,
+                              color: bg50Grey,
+                            )
+                          ],
                         ),
                       ),
-                    ), const SizedBox(height: 30)
+                    ),
+                    const SizedBox(height: 30)
                   ],
                 )),
         ),

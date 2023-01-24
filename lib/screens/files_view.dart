@@ -1,20 +1,20 @@
+import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
+import 'package:byte_converter/byte_converter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:open_file/open_file.dart';
 import 'package:organizerPRO/components/appbar.dart';
 import 'package:organizerPRO/constants.dart';
 import 'package:organizerPRO/models/file_model.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:byte_converter/byte_converter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'dart:isolate';
-import 'dart:ui';
-import 'dart:io';
-import 'package:open_file/open_file.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:organizerPRO/services/files_service.dart';
 import 'package:organizerPRO/utils/file_picker.dart';
 import 'package:organizerPRO/utils/http_delete.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class FilesView extends StatefulWidget {
   final String objectId;
@@ -30,7 +30,7 @@ class FilesViewState extends State<FilesView> {
   late List<FileList>? _files = [];
   String? token;
   Map item = {};
-  ReceivePort _port = ReceivePort();
+  final ReceivePort _port = ReceivePort();
   bool isLoading = false;
   String? objectId;
 
@@ -41,9 +41,6 @@ class FilesViewState extends State<FilesView> {
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
       setState(() {});
     });
     FlutterDownloader.registerCallback(downloadCallback);
@@ -113,7 +110,7 @@ class FilesViewState extends State<FilesView> {
     return Scaffold(
       appBar: myAppBar(context, HeaderTitleType.fileList),
       body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('assets/background.png'),
                   fit: BoxFit.fill)),
@@ -147,20 +144,20 @@ class FilesViewState extends State<FilesView> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              actionsPadding: EdgeInsets.all(0),
+                              actionsPadding: const EdgeInsets.all(0),
                               actionsAlignment: MainAxisAlignment.center,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25),
                               ),
-                              title:
-                                  Text("Czy na pewno chcesz usunąć ten plik?"),
-                              content: Text(
+                              title: const Text(
+                                  "Czy na pewno chcesz usunąć ten plik?"),
+                              content: const Text(
                                   "Po usunięciu nie możesz cofnąć tej akcji."),
                               actions: [
                                 ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        primary: mainColor,
-                                        onPrimary: mainColor,
+                                        foregroundColor: mainColor,
+                                        backgroundColor: mainColor,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(25),
@@ -168,14 +165,14 @@ class FilesViewState extends State<FilesView> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       "Anuluj",
                                       style: TextStyle(color: Colors.white),
                                     )),
                                 ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        primary: deleteBtn,
-                                        onPrimary: deleteBtn,
+                                        foregroundColor: deleteBtn,
+                                        backgroundColor: deleteBtn,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(25),
@@ -190,7 +187,7 @@ class FilesViewState extends State<FilesView> {
                                         _showAddCarLoadingDialog(false);
                                       }
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       "Usuń",
                                       style: TextStyle(color: Colors.white),
                                     )),
@@ -208,20 +205,33 @@ class FilesViewState extends State<FilesView> {
                         shadowColor: Colors.white,
                         child: ListTile(
                           leading: (file.rozszerzenie == ".pdf"
-                              ? Image.asset("assets/pdf_icon.png", width: 45, height: 45)
+                              ? Image.asset("assets/pdf_icon.png",
+                                  width: 45, height: 45)
                               : file.rozszerzenie == ".txt"
-                                  ? Image.asset("assets/txt_icon.png", width: 45, height: 45)
-                                  : file.rozszerzenie == ".png" || file.rozszerzenie == ".jpg" ||file.rozszerzenie == ".jpeg"
+                                  ? Image.asset("assets/txt_icon.png",
+                                      width: 45, height: 45)
+                                  : file.rozszerzenie == ".png" ||
+                                          file.rozszerzenie == ".jpg" ||
+                                          file.rozszerzenie == ".jpeg"
                                       ? CachedNetworkImage(
                                           imageUrl:
                                               "$SERVER_IP/api/fileUpload/GetFile/${file.idPliku}",
                                           placeholder: (context, url) =>
                                               const CircularProgressIndicator(),
                                           errorWidget: (context, url, error) =>
-                                              Image.asset("assets/jpg_icon.png"), width: 45, height: 45, fit: BoxFit.cover)
-                                      : file.rozszerzenie == ".zip" || file.rozszerzenie == ".7z"
-                                          ? Image.asset("assets/zip_icon.png", width: 45, height: 45)
-                                          : Image.asset( "assets/default_icon.png",width: 45, height: 45)),
+                                              Image.asset(
+                                                  "assets/jpg_icon.png"),
+                                          width: 45,
+                                          height: 45,
+                                          fit: BoxFit.cover)
+                                      : file.rozszerzenie == ".zip" ||
+                                              file.rozszerzenie == ".7z"
+                                          ? Image.asset("assets/zip_icon.png",
+                                              width: 45, height: 45)
+                                          : Image.asset(
+                                              "assets/default_icon.png",
+                                              width: 45,
+                                              height: 45)),
                           title: Text(
                             file.nazwaPlikuUzytkownika,
                             maxLines: 1,
@@ -246,7 +256,7 @@ class FilesViewState extends State<FilesView> {
           )),
       floatingActionButton: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              primary: secondColor,
+              backgroundColor: secondColor,
               foregroundColor: secondColor,
               shape: const CircleBorder(),
               padding: const EdgeInsets.all(15)),

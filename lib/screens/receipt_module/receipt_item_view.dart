@@ -119,7 +119,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                       child: Text(
                                     "Okres zwrotu: ",
                                     style: TextStyle(
@@ -130,7 +130,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                   )),
                                   Expanded(
                                     child: Container(
-                                      padding: EdgeInsets.all(2),
+                                      padding: const EdgeInsets.all(2),
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(25),
@@ -138,7 +138,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                       child: Text(
                                         "${receiptModel?.koniecZwrotu} dni",
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -167,7 +167,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                     Expanded(
                                       flex: 2,
                                       child: Container(
-                                        padding: EdgeInsets.all(2),
+                                        padding: const EdgeInsets.all(2),
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(25),
@@ -175,7 +175,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                         child: Text(
                                             "${receiptModel?.koniecGwarancji} dni",
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600,
                                             )),
@@ -190,7 +190,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                 child: RichText(
                                   text: TextSpan(
                                       text: "DODANO: ",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 11,
                                         color: fontGrey,
                                         fontFamily: "Roboto",
@@ -200,7 +200,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                       children: [
                                         TextSpan(
                                           text: "${receiptModel?.dataZakupu}",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 11,
                                             color: fontGrey,
                                             fontFamily: "Roboto",
@@ -259,7 +259,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                       ),
                     ]),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Container(
@@ -336,7 +336,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                           child: Row(
                             children: [
                               Container(
-                                padding: EdgeInsets.all(2),
+                                padding: const EdgeInsets.all(2),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
                                     color: secondaryColor),
@@ -346,7 +346,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                   child: Text(
                                       "${receiptModel?.koniecGwarancji} dni",
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
                                           color: fontBlack)),
@@ -460,7 +460,7 @@ class _ReceiptItemState extends State<ReceiptItem> {
                                   context,
                                   MaterialPageRoute<void>(
                                     builder: (BuildContext context) =>
-                                        ReceiptList(),
+                                        const ReceiptList(),
                                   ),
                                   ModalRoute.withName("/dashboard"));
                             }

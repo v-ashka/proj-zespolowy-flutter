@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,27 +37,6 @@ class RoomListState extends State<RoomList> {
     setState(() {
       isGetDataFinished = true;
     });
-  }
-
-  void _showAddCarLoadingDialog(isShowing) {
-    if (isShowing) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(25.0))),
-              title: Text('Usuwam...'),
-              content: SizedBox(
-                  height: 150,
-                  width: 150,
-                  child: Center(
-                      child: CircularProgressIndicator(color: mainColor))),
-            );
-          });
-    } else {
-      Navigator.of(context, rootNavigator: true).pop();
-    }
   }
 
   @override
@@ -157,8 +134,8 @@ class RoomListState extends State<RoomList> {
                                           ),
                                           ElevatedButton(
                                             style: ElevatedButton.styleFrom(
-                                                primary: deleteBtn,
-                                                onPrimary: deleteBtn,
+                                                foregroundColor: deleteBtn,
+                                                backgroundColor: deleteBtn,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(25),

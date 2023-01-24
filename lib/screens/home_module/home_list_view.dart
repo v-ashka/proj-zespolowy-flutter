@@ -26,7 +26,7 @@ class _HomeListState extends State<HomeList> {
 
   Future getData() async {
     token = await storage.read(key: "token");
-    homeList = await HomeService().getHomeList(token);
+    homeList = (await HomeService().getHomeList(token))?.cast<HomeListView>();
     setState(() {});
   }
 

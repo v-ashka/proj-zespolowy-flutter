@@ -55,8 +55,6 @@ class _NotificationViewState extends State<NotificationView> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: myAppBar(context, HeaderTitleType.notification),
@@ -143,7 +141,7 @@ class _NotificationViewState extends State<NotificationView> {
                                               CrossAxisAlignment.start,
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          children: [
+                                          children: const [
                                             Icon(
                                               Icons.history_toggle_off_outlined,
                                               size: 88,

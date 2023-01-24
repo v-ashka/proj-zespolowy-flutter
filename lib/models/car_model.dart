@@ -10,7 +10,7 @@ List<CarListView> carListViewFromJson(String str) => List<CarListView>.from(
 String carModelToJson(List<CarModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class CarModel with ChangeNotifier {
+class CarModel {
   CarModel(
       {this.idSamochodu,
       this.pojemnoscSilnika,

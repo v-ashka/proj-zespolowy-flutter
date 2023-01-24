@@ -3,11 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:organizerPRO/constants.dart';
 
 class DashboardBox extends StatelessWidget {
-   DashboardBox(
+  DashboardBox(
       {Key? key,
       required this.title,
       required this.description,
-        this.descUpperCase,
+      this.descUpperCase,
       this.routeLink,
       required this.assetImgPath,
       this.lastAdded,
@@ -20,7 +20,7 @@ class DashboardBox extends StatelessWidget {
   final String? routeLink;
   final String assetImgPath;
   final String? lastAdded;
-  bool? descUpperCase=true;
+  bool? descUpperCase = true;
   final String? additionalInfo;
   final void Function()? onPressed;
 
@@ -51,7 +51,7 @@ class DashboardBox extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                         child: Text(
                           title,
                           style: const TextStyle(
@@ -61,7 +61,9 @@ class DashboardBox extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        descUpperCase == true ? description.toUpperCase() : description,
+                        descUpperCase == true
+                            ? description.toUpperCase()
+                            : description,
                         style: const TextStyle(
                             color: Colors.black87,
                             fontFamily: "Roboto",

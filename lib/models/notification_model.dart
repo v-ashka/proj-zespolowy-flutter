@@ -10,5 +10,5 @@ class NotificationList {
   NotificationList({this.naglowek, this.opis});
 
   factory NotificationList.fromJson(Map<String, dynamic> json) =>
-      NotificationList(naglowek: json["naglowek"], opis: json["opis"]);
+      NotificationList(naglowek: json["naglowek"], opis: json["tresc"]);
 }

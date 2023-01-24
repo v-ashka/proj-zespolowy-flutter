@@ -1,20 +1,16 @@
 import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:organizerPRO/constants.dart';
-import 'package:organizerPRO/screens/dashboard_view.dart';
-import 'package:organizerPRO/screens/authorization/password_reset.dart';
-import 'package:organizerPRO/services/auth_service.dart';
 import 'package:organizerPRO/models/user_model.dart';
+import 'package:organizerPRO/screens/authorization/password_reset.dart';
+import 'package:organizerPRO/screens/dashboard_view.dart';
+import 'package:organizerPRO/services/auth_service.dart';
 
 class UserAuthentication extends StatefulWidget {
   const UserAuthentication({Key? key}) : super(key: key);
-
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
 
   @override
   State<UserAuthentication> createState() => _UserAuthenticationState();
@@ -142,8 +138,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                   onChanged: (value) {
                                     setState(() {
                                       isSwitched = value;
-                                      print(isSwitched);
-                                      if (isSwitched) SERVER_IP = emulatorIp!;
+                                      if (isSwitched) SERVER_IP = emulatorIp;
                                     });
                                   }),
                             ),
@@ -289,7 +284,6 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                     alignment: Alignment.topRight,
                     child: IconButton(
                       onPressed: () async {
-                        print("settings");
                         showAppSettings();
                       },
                       icon: const Icon(
@@ -405,9 +399,9 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              if (!errorFeedback.isEmpty) ...[
+                              if (errorFeedback.isNotEmpty) ...[
                                 Text(
-                                  "${errorFeedback}",
+                                  errorFeedback,
                                   style: const TextStyle(
                                       color: errorColor,
                                       fontSize: 14,
@@ -423,9 +417,12 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                 height: 50,
                                 child: ElevatedButton.icon(
                                     style: ElevatedButton.styleFrom(
-                                        onPrimary: mainColor,
-                                        primary: mainColor,
-                                        onSurface: Colors.amber,
+                                        foregroundColor: mainColor,
+                                        backgroundColor: mainColor,
+                                        disabledForegroundColor:
+                                            Colors.amber.withOpacity(0.38),
+                                        disabledBackgroundColor:
+                                            Colors.amber.withOpacity(0.12),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(25),
@@ -433,11 +430,8 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                                     onPressed: () async {
                                       if (formKey.currentState!.validate()) {
                                         formKey.currentState!.save();
-                                        // user model
                                         errorFeedback = "";
                                         loginUser();
-                                        print(
-                                            "email: ${emailInput} pass: ${passInput}");
                                       }
                                     },
                                     icon: isLoading
@@ -473,8 +467,9 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                         children: [
                           TextButton(
                               style: TextButton.styleFrom(
-                                  primary: fontBlack,
-                                  onSurface: secondColor,
+                                  foregroundColor: fontBlack,
+                                  disabledForegroundColor:
+                                      secondColor.withOpacity(0.38),
                                   textStyle: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -543,8 +538,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
           actions: [
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: mainColor,
-                    onPrimary: mainColor,
+                    foregroundColor: mainColor, backgroundColor: mainColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     )),
@@ -557,8 +551,7 @@ class _UserAuthenticationState extends State<UserAuthentication> {
                 )),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: deleteBtn,
-                    onPrimary: deleteBtn,
+                    foregroundColor: deleteBtn, backgroundColor: deleteBtn,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     )),

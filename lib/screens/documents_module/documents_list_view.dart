@@ -107,7 +107,7 @@ class _DocumentsListState extends State<DocumentsList> {
                       if (currentCategory == 0) {
                         filteredList = documentList;
                       } else {
-                        filteredList = documentList.where((e) => e.kategoria == currentCategory).toList();
+                        filteredList = documentList.where((e) => e.idKategorii == currentCategory).toList();
                       }
                     });
                   },
@@ -201,7 +201,7 @@ class _DocumentsListState extends State<DocumentsList> {
                                                       Icons.label_outline,
                                                       color: icon70Black),
                                                   Text(
-                                                    "${documentCategories.firstWhere((element) => element["id"] == document.kategoria)["nazwa"]}",
+                                                    "${documentCategories.firstWhere((element) => element["id"] == document.idKategorii)["nazwa"]}",
                                                     style: const TextStyle(
                                                         fontFamily: "Lato",
                                                         fontWeight:
@@ -251,7 +251,7 @@ class _DocumentsListState extends State<DocumentsList> {
                                           DetailBar(
                                               title: "Kategoria dokumentu",
                                               value:
-                                                  "${documentCategories.firstWhere((element) => element["id"] == document.kategoria)["nazwa"]}"),
+                                                  "${documentCategories.firstWhere((element) => element["id"] == document.idKategorii)["nazwa"]}"),
                                           //if (repair.warsztat != null &&
                                           //repair.warsztat != "")
                                           DetailBar(

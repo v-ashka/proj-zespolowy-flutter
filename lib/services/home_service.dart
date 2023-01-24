@@ -27,10 +27,10 @@ class HomeService {
 
   Future<HomeModel?> getHome(id, token) async {
     try {
-      var url = Uri.parse("${SERVER_IP}/api/home/GetHome/${id}");
+      var url = Uri.parse("$SERVER_IP/api/home/GetHome/$id");
       var response = await http.get(url, headers: <String, String>{
         'Content-Type': 'application/json',
-        'Authorization': "Bearer ${token}",
+        'Authorization': "Bearer $token",
       });
 
       log(id.toString());

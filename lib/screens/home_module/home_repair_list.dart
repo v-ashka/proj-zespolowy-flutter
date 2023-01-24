@@ -289,7 +289,7 @@ class _HomeRepairListState extends State<HomeRepairList> {
                 ));
           },
           backgroundColor: secondColor,
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ));
   }
 }

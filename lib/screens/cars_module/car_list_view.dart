@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:organizerPRO/components/appbar.dart';
 import 'package:organizerPRO/models/car_model.dart';
@@ -129,8 +128,7 @@ class _CarListState extends State<CarList> {
                                             actions: [
                                               ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                    primary: mainColor,
-                                                    onPrimary: mainColor,
+                                                    foregroundColor: mainColor, backgroundColor: mainColor,
                                                     shape:
                                                         RoundedRectangleBorder(
                                                       borderRadius:
@@ -175,8 +173,7 @@ class _CarListState extends State<CarList> {
                                               ),
                                               ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                    primary: deleteBtn,
-                                                    onPrimary: deleteBtn,
+                                                    foregroundColor: deleteBtn, backgroundColor: deleteBtn,
                                                     shape:
                                                         RoundedRectangleBorder(
                                                       borderRadius:

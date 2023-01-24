@@ -3,16 +3,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pinput/pinput.dart';
 import 'package:organizerPRO/components/appbar.dart';
 import 'package:organizerPRO/constants.dart';
 import 'package:organizerPRO/screens/authorization/set_new_password.dart';
 import 'package:organizerPRO/services/auth_service.dart';
+import 'package:pinput/pinput.dart';
 
 class OTPScreen extends StatefulWidget {
   final String? email;
   final String resetId;
   final bool isSMS;
+
   const OTPScreen(
       {Key? key,
       required this.resetId,
@@ -34,6 +35,7 @@ class _OTPScreenState extends State<OTPScreen> {
   String? emailInput = "";
   String? passInput = "";
   String? pin;
+
   // Error feedback
   String errorFeedback = "";
   final controller = TextEditingController();
@@ -179,8 +181,10 @@ class _OTPScreenState extends State<OTPScreen> {
                               style: ElevatedButton.styleFrom(
                                   foregroundColor: secondColor,
                                   backgroundColor: secondColor,
-                                  disabledForegroundColor:Colors.amber.withOpacity(0.38),
-                                  disabledBackgroundColor:Colors.amber.withOpacity(0.12),
+                                  disabledForegroundColor:
+                                      Colors.amber.withOpacity(0.38),
+                                  disabledBackgroundColor:
+                                      Colors.amber.withOpacity(0.12),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(25),
                                   )),
@@ -217,7 +221,7 @@ class _OTPScreenState extends State<OTPScreen> {
                               )),
                         ),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -229,9 +233,10 @@ class _OTPScreenState extends State<OTPScreen> {
                           ),
                           TextButton(
                               style: TextButton.styleFrom(
-                                  primary: secondColor,
-                                  onSurface: secondColor,
-                                  textStyle: TextStyle(
+                                  foregroundColor: secondColor,
+                                  disabledForegroundColor:
+                                      secondColor.withOpacity(0.38),
+                                  textStyle: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   )),
@@ -241,7 +246,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                 //   '/registerUser',
                                 // );
                               },
-                              child: Text("Wyślij ponownie"))
+                              child: const Text("Wyślij ponownie"))
                         ],
                       )
                     ],

@@ -186,11 +186,11 @@ class _DocumentFormState extends State<DocumentForm> {
                                             }
                                             return null;
                                           },
-                                          value: document.kategoria,
+                                          value: document.idKategorii,
                                           isExpanded: true,
                                           onChanged: (value) {
                                             setState(() {
-                                              document.kategoria =
+                                              document.idKategorii =
                                                   value as int?;
                                             });
                                           },
@@ -221,9 +221,9 @@ class _DocumentFormState extends State<DocumentForm> {
                                                 borderSide: BorderSide.none,
                                               )))
                                     ]),
-                                if (document.kategoria == null)
+                                if (document.idKategorii == null)
                                   const SizedBox(height: 15),
-                                if (document.kategoria == 1) ...[
+                                if (document.idKategorii == 1) ...[
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -460,7 +460,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                     ],
                                   ),
                                 ],
-                                if (document.kategoria == 2) ...[
+                                if (document.idKategorii == 2) ...[
                                   Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -601,7 +601,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                     ],
                                   ),
                                 ],
-                                if (document.kategoria == 3) ...[
+                                if (document.idKategorii == 3) ...[
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -837,7 +837,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                     ],
                                   ),
                                 ],
-                                if (document.kategoria == 4) ...[
+                                if (document.idKategorii == 4) ...[
                                   Padding(
                                     padding: const EdgeInsets.only(top: 5),
                                     child: Row(
@@ -995,8 +995,8 @@ class _DocumentFormState extends State<DocumentForm> {
                                     ],
                                   ),
                                 ],
-                                if (document.kategoria == 4 ||
-                                    document.kategoria == 5) ...[
+                                if (document.idKategorii == 4 ||
+                                    document.idKategorii == 5) ...[
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1054,7 +1054,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                     ],
                                   ),
                                 ],
-                                if (document.kategoria != null) ...[
+                                if (document.idKategorii != null) ...[
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1102,7 +1102,7 @@ class _DocumentFormState extends State<DocumentForm> {
                                   ),
                                 ],
                                 if (!widget.isEditing &&
-                                    document.kategoria != null) ...[
+                                    document.idKategorii != null) ...[
                                   AddAttachmentButton(
                                       //files: files,
                                       formType: FormType.document,

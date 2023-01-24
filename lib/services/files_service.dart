@@ -17,8 +17,8 @@ class FilesService {
         },
       );
       if (response.statusCode == 200) {
-        List<FileList> _model = fileListFromJson(response.body);
-        return _model;
+        List<FileList> model = fileListFromJson(response.body);
+        return model;
       }
     } catch (e) {
       log(e.toString());
